@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Olive Notepad
+Comment=A native Linux text editor
+GenericName=Text Editor
+Exec=olive-notepad %F
+Icon=olive-notepad
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;Development;
+MimeType=text/plain;text/x-c;text/x-c++;text/x-python;text/html;text/css;application/javascript;application/json;application/xml;text/markdown;
+Keywords=text;editor;code;programming;development;olive;
+StartupNotify=true
+StartupWMClass=olive-notepad
+Actions=NewWindow;
+
+[Desktop Action NewWindow]
+Name=New Window
+Exec=olive-notepad --new-window

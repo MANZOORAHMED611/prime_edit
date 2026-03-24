@@ -1,0 +1,539 @@
+#include "toolbarmanager.h"
+#include "mainwindow.h"
+#include <QStyle>
+#include <QApplication>
+
+ToolbarManager::ToolbarManager(MainWindow *mainWindow, QObject *parent)
+    : QObject(parent)
+    , m_mainWindow(mainWindow)
+    , m_fileToolBar(nullptr)
+    , m_editToolBar(nullptr)
+    , m_searchToolBar(nullptr)
+    , m_viewToolBar(nullptr)
+    , m_formatToolBar(nullptr)
+    , m_macroToolBar(nullptr)
+{
+}
+
+void ToolbarManager::createToolbars()
+{
+    // Create all toolbars in 3 rows
+    createFileToolbar();      // Row 1 (left)
+    createEditToolbar();      // Row 1 (right, same row)
+    m_mainWindow->addToolBarBreak(); // Force new row
+
+    createSearchToolbar();    // Row 2 (left)
+    createViewToolbar();      // Row 2 (right, same row)
+    m_mainWindow->addToolBarBreak(); // Force new row
+
+    createFormatToolbar();    // Row 3 (left)
+    createMacroToolbar();     // Row 3 (right, same row)
+}
+
+QAction* ToolbarManager::createAction(const QString &name, const QString &text,
+                                     const QString &tooltip, const QString &shortcut,
+                                     const char *slot, const QString &iconName)
+{
+    QAction *action = new QAction(text, m_mainWindow);
+    action->setToolTip(tooltip);
+
+    if (!shortcut.isEmpty()) {
+        action->setShortcut(QKeySequence(shortcut));
+    }
+
+    if (!iconName.isEmpty()) {
+        QIcon icon(iconName);
+        if (!icon.isNull()) {
+            action->setIcon(icon);
+        } else {
+            action->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_FileIcon));
+        }
+    }
+
+    if (slot) {
+        connect(action, SIGNAL(triggered()), m_mainWindow, slot);
+    }
+
+    m_actions[name] = action;
+    return action;
+}
+
+void ToolbarManager::createFileToolbar()
+{
+    m_fileToolBar = m_mainWindow->addToolBar(tr("File Operations"));
+    m_fileToolBar->setObjectName("FileToolBar");
+    m_fileToolBar->setIconSize(QSize(20, 20));
+
+    // New
+    QAction *newAction = createAction("new", tr("New"), tr("New File (Ctrl+N)"),
+                                     "Ctrl+N", SLOT(newFile()));
+    newAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_FileIcon));
+    m_fileToolBar->addAction(newAction);
+
+    // Open
+    QAction *openAction = createAction("open", tr("Open"), tr("Open File (Ctrl+O)"),
+                                      "Ctrl+O", SLOT(openFile()));
+    openAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DirOpenIcon));
+    m_fileToolBar->addAction(openAction);
+
+    // Save
+    QAction *saveAction = createAction("save", tr("Save"), tr("Save File (Ctrl+S)"),
+                                      "Ctrl+S", SLOT(saveFile()));
+    saveAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogSaveButton));
+    m_fileToolBar->addAction(saveAction);
+
+    // Save All
+    QAction *saveAllAction = createAction("saveAll", tr("Save All"), tr("Save All Files (Ctrl+Shift+S)"),
+                                         "Ctrl+Shift+S", SLOT(saveAllFiles()));
+    saveAllAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogSaveButton));
+    m_fileToolBar->addAction(saveAllAction);
+
+    m_fileToolBar->addSeparator();
+
+    // Close
+    QAction *closeAction = createAction("close", tr("Close"), tr("Close File (Ctrl+W)"),
+                                       "Ctrl+W", SLOT(closeFile()));
+    closeAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogCloseButton));
+    m_fileToolBar->addAction(closeAction);
+
+    // Close All
+    QAction *closeAllAction = createAction("closeAll", tr("Close All"), tr("Close All Files"),
+                                          "", SLOT(closeAllFiles()));
+    closeAllAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogDiscardButton));
+    m_fileToolBar->addAction(closeAllAction);
+
+    m_fileToolBar->addSeparator();
+
+    // Close Other Tabs
+    QAction *closeOthersAction = createAction("closeOthers", tr("Close Others"),
+                                             tr("Close Other Tabs"), "", SLOT(closeOtherTabs()));
+    m_fileToolBar->addAction(closeOthersAction);
+
+    // Close to Right
+    QAction *closeRightAction = createAction("closeRight", tr("Close Right"),
+                                            tr("Close Tabs to Right"), "", SLOT(closeTabsToRight()));
+    m_fileToolBar->addAction(closeRightAction);
+
+    // Close to Left
+    QAction *closeLeftAction = createAction("closeLeft", tr("Close Left"),
+                                           tr("Close Tabs to Left"), "", SLOT(closeTabsToLeft()));
+    m_fileToolBar->addAction(closeLeftAction);
+
+    m_fileToolBar->addSeparator();
+
+    // Print
+    QAction *printAction = createAction("print", tr("Print"), tr("Print (Ctrl+P)"),
+                                       "Ctrl+P", nullptr);
+    printAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogYesButton));
+    printAction->setEnabled(false);
+    m_fileToolBar->addAction(printAction);
+}
+
+void ToolbarManager::createEditToolbar()
+{
+    m_editToolBar = m_mainWindow->addToolBar(tr("Edit Operations"));
+    m_editToolBar->setObjectName("EditToolBar");
+    m_editToolBar->setIconSize(QSize(20, 20));
+
+    // Undo
+    QAction *undoAction = createAction("undo", tr("Undo"), tr("Undo (Ctrl+Z)"),
+                                      "Ctrl+Z", SLOT(undo()));
+    undoAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowBack));
+    m_editToolBar->addAction(undoAction);
+
+    // Redo
+    QAction *redoAction = createAction("redo", tr("Redo"), tr("Redo (Ctrl+Y)"),
+                                      "Ctrl+Y", SLOT(redo()));
+    redoAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowForward));
+    m_editToolBar->addAction(redoAction);
+
+    m_editToolBar->addSeparator();
+
+    // Cut
+    QAction *cutAction = createAction("cut", tr("Cut"), tr("Cut (Ctrl+X)"),
+                                     "Ctrl+X", SLOT(cut()));
+    cutAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogDiscardButton));
+    m_editToolBar->addAction(cutAction);
+
+    // Copy
+    QAction *copyAction = createAction("copy", tr("Copy"), tr("Copy (Ctrl+C)"),
+                                      "Ctrl+C", SLOT(copy()));
+    copyAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+    m_editToolBar->addAction(copyAction);
+
+    // Paste
+    QAction *pasteAction = createAction("paste", tr("Paste"), tr("Paste (Ctrl+V)"),
+                                       "Ctrl+V", SLOT(paste()));
+    pasteAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogOkButton));
+    m_editToolBar->addAction(pasteAction);
+
+    m_editToolBar->addSeparator();
+
+    // Select All
+    QAction *selectAllAction = createAction("selectAll", tr("Select All"), tr("Select All (Ctrl+A)"),
+                                           "Ctrl+A", SLOT(selectAll()));
+    m_editToolBar->addAction(selectAllAction);
+
+    m_editToolBar->addSeparator();
+
+    // Duplicate Line
+    QAction *dupLineAction = createAction("duplicateLine", tr("Dup Line"),
+                                         tr("Duplicate Line (Ctrl+D)"),
+                                         "Ctrl+D", SLOT(duplicateLine()));
+    m_editToolBar->addAction(dupLineAction);
+
+    // Delete Line
+    QAction *delLineAction = createAction("deleteLine", tr("Del Line"),
+                                         tr("Delete Line (Ctrl+Shift+L)"),
+                                         "Ctrl+Shift+L", SLOT(deleteLine()));
+    m_editToolBar->addAction(delLineAction);
+
+    // Move Line Up
+    QAction *moveUpAction = createAction("moveLineUp", tr("Move ↑"),
+                                        tr("Move Line Up (Ctrl+Shift+Up)"),
+                                        "Ctrl+Shift+Up", SLOT(moveLineUp()));
+    moveUpAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowUp));
+    m_editToolBar->addAction(moveUpAction);
+
+    // Move Line Down
+    QAction *moveDownAction = createAction("moveLineDown", tr("Move ↓"),
+                                          tr("Move Line Down (Ctrl+Shift+Down)"),
+                                          "Ctrl+Shift+Down", SLOT(moveLineDown()));
+    moveDownAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowDown));
+    m_editToolBar->addAction(moveDownAction);
+
+    m_editToolBar->addSeparator();
+
+    // Join Lines
+    QAction *joinAction = createAction("joinLines", tr("Join"), tr("Join Lines"), "", SLOT(joinLines()));
+    m_editToolBar->addAction(joinAction);
+
+    // Split Lines
+    QAction *splitAction = createAction("splitLines", tr("Split"), tr("Split Lines"), "", SLOT(splitLines()));
+    m_editToolBar->addAction(splitAction);
+
+    m_editToolBar->addSeparator();
+
+    // Toggle Comment
+    QAction *toggleCommentAction = createAction("toggleComment", tr("Comment"),
+                                               tr("Toggle Comment (Ctrl+/)"),
+                                               "Ctrl+/", SLOT(toggleComment()));
+    m_editToolBar->addAction(toggleCommentAction);
+
+    // Block Comment
+    QAction *blockCommentAction = createAction("blockComment", tr("Block /**/"),
+                                              tr("Block Comment (Ctrl+Shift+/)"),
+                                              "Ctrl+Shift+/", SLOT(blockComment()));
+    m_editToolBar->addAction(blockCommentAction);
+}
+
+void ToolbarManager::createSearchToolbar()
+{
+    m_searchToolBar = m_mainWindow->addToolBar(tr("Search & Navigation"));
+    m_searchToolBar->setObjectName("SearchToolBar");
+    m_searchToolBar->setIconSize(QSize(20, 20));
+
+    // Find
+    QAction *findAction = createAction("find", tr("Find"), tr("Find (Ctrl+F)"),
+                                      "Ctrl+F", SLOT(find()));
+    findAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_FileDialogContentsView));
+    m_searchToolBar->addAction(findAction);
+
+    // Replace
+    QAction *replaceAction = createAction("replace", tr("Replace"), tr("Replace (Ctrl+H)"),
+                                         "Ctrl+H", SLOT(replace()));
+    replaceAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_BrowserReload));
+    m_searchToolBar->addAction(replaceAction);
+
+    m_searchToolBar->addSeparator();
+
+    // Find Next
+    QAction *findNextAction = createAction("findNext", tr("Next"), tr("Find Next (F3)"),
+                                          "F3", SLOT(findNext()));
+    findNextAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowDown));
+    m_searchToolBar->addAction(findNextAction);
+
+    // Find Previous
+    QAction *findPrevAction = createAction("findPrevious", tr("Previous"),
+                                          tr("Find Previous (Shift+F3)"),
+                                          "Shift+F3", SLOT(findPrevious()));
+    findPrevAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowUp));
+    m_searchToolBar->addAction(findPrevAction);
+
+    m_searchToolBar->addSeparator();
+
+    // Go to Line
+    QAction *gotoLineAction = createAction("gotoLine", tr("Go to"), tr("Go to Line (Ctrl+G)"),
+                                          "Ctrl+G", SLOT(goToLineDialog()));
+    m_searchToolBar->addAction(gotoLineAction);
+
+    m_searchToolBar->addSeparator();
+
+    // Previous Tab
+    QAction *prevTabAction = createAction("prevTab", tr("◄ Tab"), tr("Previous Tab"),
+                                         "Ctrl+PgUp", SLOT(previousTab()));
+    prevTabAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowLeft));
+    m_searchToolBar->addAction(prevTabAction);
+
+    // Next Tab
+    QAction *nextTabAction = createAction("nextTab", tr("Tab ►"), tr("Next Tab"),
+                                         "Ctrl+PgDown", SLOT(nextTab()));
+    nextTabAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_ArrowRight));
+    m_searchToolBar->addAction(nextTabAction);
+
+    m_searchToolBar->addSeparator();
+
+    // Toggle Bookmark
+    QAction *toggleBookmarkAction = createAction("toggleBookmark", tr("★ Mark"),
+                                                tr("Toggle Bookmark (Ctrl+F2)"),
+                                                "Ctrl+F2", SLOT(toggleBookmark()));
+    m_searchToolBar->addAction(toggleBookmarkAction);
+
+    // Next Bookmark
+    QAction *nextBookmarkAction = createAction("nextBookmark", tr("Next ★"),
+                                              tr("Next Bookmark (F2)"),
+                                              "F2", SLOT(nextBookmark()));
+    m_searchToolBar->addAction(nextBookmarkAction);
+
+    // Previous Bookmark
+    QAction *prevBookmarkAction = createAction("previousBookmark", tr("Prev ★"),
+                                              tr("Previous Bookmark (Shift+F2)"),
+                                              "Shift+F2", SLOT(previousBookmark()));
+    m_searchToolBar->addAction(prevBookmarkAction);
+
+    // Clear All Bookmarks
+    QAction *clearBookmarksAction = createAction("clearBookmarks", tr("Clear ★"),
+                                                tr("Clear All Bookmarks"),
+                                                "", SLOT(clearAllBookmarks()));
+    m_searchToolBar->addAction(clearBookmarksAction);
+}
+
+void ToolbarManager::createViewToolbar()
+{
+    m_viewToolBar = m_mainWindow->addToolBar(tr("View & Display"));
+    m_viewToolBar->setObjectName("ViewToolBar");
+    m_viewToolBar->setIconSize(QSize(20, 20));
+
+    // Zoom In
+    QAction *zoomInAction = createAction("zoomIn", tr("Zoom +"), tr("Zoom In (Ctrl++)"),
+                                        "Ctrl++", SLOT(zoomIn()));
+    zoomInAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogYesButton));
+    m_viewToolBar->addAction(zoomInAction);
+
+    // Zoom Out
+    QAction *zoomOutAction = createAction("zoomOut", tr("Zoom −"), tr("Zoom Out (Ctrl+-)"),
+                                         "Ctrl+-", SLOT(zoomOut()));
+    zoomOutAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogNoButton));
+    m_viewToolBar->addAction(zoomOutAction);
+
+    // Reset Zoom
+    QAction *resetZoomAction = createAction("resetZoom", tr("100%"), tr("Reset Zoom (Ctrl+0)"),
+                                           "Ctrl+0", SLOT(resetZoom()));
+    m_viewToolBar->addAction(resetZoomAction);
+
+    m_viewToolBar->addSeparator();
+
+    // Word Wrap
+    QAction *wordWrapAction = createAction("wordWrap", tr("Wrap"), tr("Toggle Word Wrap"),
+                                          "", SLOT(toggleWordWrap()));
+    wordWrapAction->setCheckable(true);
+    m_viewToolBar->addAction(wordWrapAction);
+
+    // Show Whitespace
+    QAction *whitespaceAction = createAction("showWhitespace", tr("Space·"),
+                                            tr("Show Whitespace and TAB"),
+                                            "", SLOT(toggleWhitespace()));
+    whitespaceAction->setCheckable(true);
+    m_viewToolBar->addAction(whitespaceAction);
+
+    // Show EOL
+    QAction *eolAction = createAction("showEOL", tr("¶ EOL"), tr("Show End of Line"),
+                                     "", SLOT(toggleEndOfLine()));
+    eolAction->setCheckable(true);
+    m_viewToolBar->addAction(eolAction);
+
+    // Show Indent Guide
+    QAction *indentAction = createAction("showIndent", tr("Indent"),
+                                        tr("Show Indent Guide"),
+                                        "", SLOT(toggleIndentGuide()));
+    indentAction->setCheckable(true);
+    m_viewToolBar->addAction(indentAction);
+
+    m_viewToolBar->addSeparator();
+
+    // Full Screen
+    QAction *fullScreenAction = createAction("fullScreen", tr("Full"),
+                                            tr("Toggle Full Screen (F11)"),
+                                            "F11", SLOT(toggleFullScreen()));
+    fullScreenAction->setCheckable(true);
+    m_viewToolBar->addAction(fullScreenAction);
+
+    // Distraction Free
+    QAction *distractionFreeAction = createAction("distractionFree", tr("Zen"),
+                                                 tr("Distraction Free Mode"),
+                                                 "", SLOT(toggleDistractionFree()));
+    distractionFreeAction->setCheckable(true);
+    m_viewToolBar->addAction(distractionFreeAction);
+
+    m_viewToolBar->addSeparator();
+
+    // Fold All
+    QAction *foldAllAction = createAction("foldAll", tr("[ ] All"), tr("Fold All"),
+                                         "", SLOT(foldAll()));
+    m_viewToolBar->addAction(foldAllAction);
+
+    // Unfold All
+    QAction *unfoldAllAction = createAction("unfoldAll", tr("[+] All"), tr("Unfold All"),
+                                           "", SLOT(unfoldAll()));
+    m_viewToolBar->addAction(unfoldAllAction);
+
+    // Toggle Fold
+    QAction *toggleFoldAction = createAction("toggleFold", tr("[ ]"),
+                                            tr("Toggle Current Fold"),
+                                            "", SLOT(toggleFold()));
+    m_viewToolBar->addAction(toggleFoldAction);
+}
+
+void ToolbarManager::createFormatToolbar()
+{
+    m_formatToolBar = m_mainWindow->addToolBar(tr("Text Formatting"));
+    m_formatToolBar->setObjectName("FormatToolBar");
+    m_formatToolBar->setIconSize(QSize(20, 20));
+
+    // Uppercase
+    QAction *upperAction = createAction("uppercase", tr("ABC"), tr("Convert to UPPERCASE"),
+                                       "Ctrl+Shift+U", SLOT(toUpperCase()));
+    m_formatToolBar->addAction(upperAction);
+
+    // Lowercase
+    QAction *lowerAction = createAction("lowercase", tr("abc"), tr("Convert to lowercase"),
+                                       "Ctrl+U", SLOT(toLowerCase()));
+    m_formatToolBar->addAction(lowerAction);
+
+    // Title Case
+    QAction *titleAction = createAction("titleCase", tr("Abc"), tr("Convert to Title Case"),
+                                       "", SLOT(toTitleCase()));
+    m_formatToolBar->addAction(titleAction);
+
+    // Invert Case
+    QAction *invertAction = createAction("invertCase", tr("aBc"), tr("Invert Case"),
+                                        "", SLOT(toInvertCase()));
+    m_formatToolBar->addAction(invertAction);
+
+    m_formatToolBar->addSeparator();
+
+    // Trim Trailing
+    QAction *trimTrailAction = createAction("trimTrailing", tr("Trim →"),
+                                           tr("Trim Trailing Whitespace"),
+                                           "", SLOT(trimTrailingWhitespace()));
+    m_formatToolBar->addAction(trimTrailAction);
+
+    // Trim Leading
+    QAction *trimLeadAction = createAction("trimLeading", tr("← Trim"),
+                                          tr("Trim Leading Whitespace"),
+                                          "", SLOT(trimLeadingWhitespace()));
+    m_formatToolBar->addAction(trimLeadAction);
+
+    // Trim Both
+    QAction *trimBothAction = createAction("trimBoth", tr("↔ Trim"),
+                                          tr("Trim Leading and Trailing Whitespace"),
+                                          "", SLOT(trimLeadingAndTrailing()));
+    m_formatToolBar->addAction(trimBothAction);
+
+    m_formatToolBar->addSeparator();
+
+    // TAB to Space
+    QAction *tabToSpaceAction = createAction("tabToSpace", tr("→␣"),
+                                            tr("Convert TABs to Spaces"),
+                                            "", SLOT(tabToSpace()));
+    m_formatToolBar->addAction(tabToSpaceAction);
+
+    // Space to TAB
+    QAction *spaceToTabAction = createAction("spaceToTab", tr("␣→"),
+                                            tr("Convert Spaces to TABs"),
+                                            "", SLOT(spaceToTabAll()));
+    m_formatToolBar->addAction(spaceToTabAction);
+
+    m_formatToolBar->addSeparator();
+
+    // Remove Empty Lines
+    QAction *removeEmptyAction = createAction("removeEmpty", tr("No ␣"),
+                                             tr("Remove Empty Lines"),
+                                             "", SLOT(removeEmptyLines()));
+    m_formatToolBar->addAction(removeEmptyAction);
+
+    // Remove Duplicate Lines
+    QAction *removeDupsAction = createAction("removeDuplicates", tr("No Dup"),
+                                            tr("Remove Duplicate Lines"),
+                                            "", SLOT(removeDuplicateLines()));
+    m_formatToolBar->addAction(removeDupsAction);
+
+    m_formatToolBar->addSeparator();
+
+    // Sort Ascending
+    QAction *sortAscAction = createAction("sortAsc", tr("A→Z"), tr("Sort Lines Ascending"),
+                                         "", SLOT(sortLinesAscending()));
+    m_formatToolBar->addAction(sortAscAction);
+
+    // Sort Descending
+    QAction *sortDescAction = createAction("sortDesc", tr("Z→A"), tr("Sort Lines Descending"),
+                                          "", SLOT(sortLinesDescending()));
+    m_formatToolBar->addAction(sortDescAction);
+}
+
+void ToolbarManager::createMacroToolbar()
+{
+    m_macroToolBar = m_mainWindow->addToolBar(tr("Macro Recording"));
+    m_macroToolBar->setObjectName("MacroToolBar");
+    m_macroToolBar->setIconSize(QSize(20, 20));
+
+    // Start Recording
+    QAction *startRecAction = createAction("startRecording", tr("● Rec"),
+                                          tr("Start Recording Macro (Ctrl+Shift+R)"),
+                                          "Ctrl+Shift+R", SLOT(startRecordingMacro()));
+    startRecAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_MediaPlay));
+    m_macroToolBar->addAction(startRecAction);
+
+    // Stop Recording
+    QAction *stopRecAction = createAction("stopRecording", tr("■ Stop"),
+                                         tr("Stop Recording Macro"),
+                                         "", SLOT(stopRecordingMacro()));
+    stopRecAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_MediaStop));
+    stopRecAction->setEnabled(false);
+    m_macroToolBar->addAction(stopRecAction);
+
+    m_macroToolBar->addSeparator();
+
+    // Playback
+    QAction *playbackAction = createAction("playback", tr("▶ Play"),
+                                          tr("Playback Macro (Ctrl+Shift+P)"),
+                                          "Ctrl+Shift+P", SLOT(playbackMacro()));
+    playbackAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_MediaSeekForward));
+    m_macroToolBar->addAction(playbackAction);
+
+    m_macroToolBar->addSeparator();
+
+    // Save Macro
+    QAction *saveMacroAction = createAction("saveMacro", tr("Save"),
+                                           tr("Save Current Macro"),
+                                           "", SLOT(saveMacro()));
+    saveMacroAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DialogSaveButton));
+    m_macroToolBar->addAction(saveMacroAction);
+
+    // Load Macro
+    QAction *loadMacroAction = createAction("loadMacro", tr("Load"),
+                                           tr("Load Macro from File"),
+                                           "", SLOT(loadMacro()));
+    loadMacroAction->setIcon(m_mainWindow->style()->standardIcon(QStyle::SP_DirOpenIcon));
+    m_macroToolBar->addAction(loadMacroAction);
+}
+
+void ToolbarManager::updateToolbarState()
+{
+    // Update action states based on current editor state
+}
+
+QAction* ToolbarManager::action(const QString &name) const
+{
+    return m_actions.value(name, nullptr);
+}

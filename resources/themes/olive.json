@@ -1,0 +1,38 @@
+{
+  "name": "Olive",
+  "colors": {
+    "editor.background": "#f8f9f5",
+    "editor.foreground": "#3d4a2c",
+    "editor.lineHighlightBackground": "#eef2e6",
+    "editor.selectionBackground": "#c8d5a8",
+    "editorCursor.foreground": "#556b2f",
+    "editorLineNumber.foreground": "#7a8f5c",
+    "editorLineNumber.activeForeground": "#556b2f",
+    "editorGutter.background": "#f3f6ec",
+    "editorWidget.background": "#eef2e6",
+    "editorWidget.border": "#b8c89f",
+    "tab.activeBackground": "#f8f9f5",
+    "tab.inactiveBackground": "#e5e9dc",
+    "tab.activeForeground": "#3d4a2c",
+    "tab.inactiveForeground": "#6b7c58",
+    "statusBar.background": "#6b8e23",
+    "statusBar.foreground": "#ffffff",
+    "sideBar.background": "#eef2e6",
+    "sideBar.foreground": "#3d4a2c",
+    "titleBar.activeBackground": "#dce5c8",
+    "titleBar.activeForeground": "#3d4a2c"
+  },
+  "tokenColors": {
+    "comment": "#7a8f5c",
+    "keyword": "#556b2f",
+    "string": "#9b6b3f",
+    "number": "#6b8e23",
+    "type": "#6b7c58",
+    "function": "#8b7355",
+    "variable": "#4a5a3a",
+    "operator": "#3d4a2c",
+    "preprocessor": "#7a6b54",
+    "tag": "#6b8e23",
+    "attribute": "#8b7355"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Default Light",
+  "colors": {
+    "editor.background": "#ffffff",
+    "editor.foreground": "#000000",
+    "editor.lineHighlightBackground": "#f5f5f5",
+    "editor.selectionBackground": "#add6ff",
+    "editorCursor.foreground": "#000000",
+    "editorLineNumber.foreground": "#237893",
+    "editorLineNumber.activeForeground": "#0b216f",
+    "editorGutter.background": "#ffffff",
+    "editorWidget.background": "#f3f3f3",
+    "editorWidget.border": "#c8c8c8",
+    "tab.activeBackground": "#ffffff",
+    "tab.inactiveBackground": "#ececec",
+    "tab.activeForeground": "#333333",
+    "tab.inactiveForeground": "#777777",
+    "statusBar.background": "#007acc",
+    "statusBar.foreground": "#ffffff",
+    "sideBar.background": "#f3f3f3",
+    "sideBar.foreground": "#333333",
+    "titleBar.activeBackground": "#dddddd",
+    "titleBar.activeForeground": "#333333"
+  },
+  "tokenColors": {
+    "comment": "#008000",
+    "keyword": "#0000ff",
+    "string": "#a31515",
+    "number": "#098658",
+    "type": "#267f99",
+    "function": "#795e26",
+    "variable": "#001080",
+    "operator": "#000000",
+    "preprocessor": "#af00db",
+    "tag": "#800000",
+    "attribute": "#ff0000"
+  }
+}

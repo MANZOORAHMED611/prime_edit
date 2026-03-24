@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requirements Specification - Olive Notepad</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Olive Notepad</h1>
+                <p>Technical Documentation</p>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-section">Overview</li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="requirements.html" class="nav-link active">Requirements</a></li>
+                <li class="nav-item"><a href="architecture.html" class="nav-link">Architecture</a></li>
+
+                <li class="nav-section">Implementation</li>
+                <li class="nav-item"><a href="phase1.html" class="nav-link">Phase 1: Core Editor (MVP)</a></li>
+                <li class="nav-item"><a href="phase2.html" class="nav-link">Phase 2: Power Features</a></li>
+                <li class="nav-item"><a href="phase3.html" class="nav-link">Phase 3: Developer Tools</a></li>
+                <li class="nav-item"><a href="phase4.html" class="nav-link">Phase 4: Ecosystem</a></li>
+
+                <li class="nav-section">Technical Details</li>
+                <li class="nav-item"><a href="api-reference.html" class="nav-link">API Reference</a></li>
+                <li class="nav-item"><a href="data-structures.html" class="nav-link">Data Structures</a></li>
+                <li class="nav-item"><a href="ui-components.html" class="nav-link">UI Components</a></li>
+
+                <li class="nav-section">User Guide</li>
+                <li class="nav-item"><a href="features.html" class="nav-link">Feature List</a></li>
+                <li class="nav-item"><a href="keyboard-shortcuts.html" class="nav-link">Keyboard Shortcuts</a></li>
+                <li class="nav-item"><a href="building.html" class="nav-link">Building & Installing</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Requirements Specification</h1>
+                <p class="subtitle">Complete functional and technical requirements</p>
+            </div>
+
+            <!-- Project Overview -->
+            <section class="section">
+                <h2>1. Project Overview</h2>
+                <p>
+                    Olive Notepad is a native Linux text editor designed to match and exceed Notepad++ functionality
+                    while incorporating modern features from VS Code and Sublime Text. The application must be lightweight,
+                    fast, and deeply integrated with the Linux desktop environment.
+                </p>
+
+                <h3>Core Objectives</h3>
+                <ul>
+                    <li>Full feature parity with Notepad++</li>
+                    <li>Native Linux platform integration (GNOME/KDE)</li>
+                    <li>Lightweight resource consumption</li>
+                    <li>Extensible plugin architecture</li>
+                    <li>Modern developer-focused features (LSP, integrated terminal, Git)</li>
+                </ul>
+            </section>
+
+            <!-- Performance Requirements -->
+            <section class="section">
+                <h2>2. Performance Requirements</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Requirement</th>
+                            <th>Specification</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Startup Time</td>
+                            <td>&lt; 1 second on standard hardware</td>
+                            <td><span class="badge badge-phase1">Met</span></td>
+                        </tr>
+                        <tr>
+                            <td>Large File Handling</td>
+                            <td>Open and scroll files &gt; 1GB without degradation</td>
+                            <td><span class="badge badge-phase2">In Progress</span></td>
+                        </tr>
+                        <tr>
+                            <td>Memory Footprint</td>
+                            <td>&lt; 100MB with 10 files open</td>
+                            <td><span class="badge badge-phase1">Met</span></td>
+                        </tr>
+                        <tr>
+                            <td>Scroll Performance</td>
+                            <td>60 FPS smooth scrolling on large files</td>
+                            <td><span class="badge badge-phase1">Met</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- File and Editing Features -->
+            <section class="section">
+                <h2>3. File and Editing Fundamentals</h2>
+
+                <h3>Tabbed Interface</h3>
+                <div class="feature-list">
+                    <div class="feature-item completed">Multiple documents in single window</div>
+                    <div class="feature-item completed">Drag-and-drop tab reordering</div>
+                    <div class="feature-item completed">Close button on each tab</div>
+                    <div class="feature-item completed">Right-click context menu</div>
+                    <div class="feature-item completed">Modified indicator on unsaved tabs</div>
+                    <div class="feature-item pending">Tab overflow with scroll arrows</div>
+                    <div class="feature-item pending">Tab preview on hover</div>
+                </div>
+
+                <h3>File Encoding Support</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Supported Formats</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Encodings</td>
+                            <td>UTF-8, UTF-8 BOM, UTF-16 LE/BE, UTF-32, ASCII, ISO-8859-1, Windows-1252</td>
+                            <td><span class="badge badge-phase1">Implemented</span></td>
+                        </tr>
+                        <tr>
+                            <td>Line Endings</td>
+                            <td>Unix (LF), Windows (CRLF), Classic Mac (CR)</td>
+                            <td><span class="badge badge-phase1">Implemented</span></td>
+                        </tr>
+                        <tr>
+                            <td>Auto-detection</td>
+                            <td>Automatic encoding and line ending detection</td>
+                            <td><span class="badge badge-phase1">Implemented</span></td>
+                        </tr>
+                        <tr>
+                            <td>Conversion</td>
+                            <td>Convert between encodings/line endings on save</td>
+                            <td><span class="badge badge-phase1">Implemented</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Basic Operations</h3>
+                <ul>
+                    <li>✓ Cut, Copy, Paste with system clipboard</li>
+                    <li>✓ Unlimited Undo/Redo history via piece table</li>
+                    <li>✓ Drag-and-drop file opening</li>
+                    <li>✓ Recent files list with persistence</li>
+                    <li>✓ Auto-save to recovery location (every 5 seconds)</li>
+                    <li>⚙ Drag-and-drop text within documents (Phase 2)</li>
+                </ul>
+            </section>
+
+            <!-- Programming Features -->
+            <section class="section">
+                <h2>4. Programming and Code Features</h2>
+
+                <h3>Syntax Highlighting</h3>
+                <p>Current supported languages (13+):</p>
+                <div class="feature-list">
+                    <div class="feature-item completed">C / C++</div>
+                    <div class="feature-item completed">Python</div>
+                    <div class="feature-item completed">JavaScript / TypeScript</div>
+                    <div class="feature-item completed">Rust</div>
+                    <div class="feature-item completed">Go</div>
+                    <div class="feature-item completed">Java</div>
+                    <div class="feature-item completed">SQL</div>
+                    <div class="feature-item completed">HTML</div>
+                    <div class="feature-item completed">CSS</div>
+                    <div class="feature-item completed">JSON</div>
+                    <div class="feature-item completed">YAML</div>
+                    <div class="feature-item completed">Markdown</div>
+                    <div class="feature-item completed">Bash / Shell</div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Target:</strong> 100+ languages with TextMate grammar support in Phase 4
+                </div>
+
+                <h3>Line Operations (Phase 2 - Completed)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Shortcut</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Duplicate Line</td>
+                            <td><code>Ctrl+Shift+D</code></td>
+                            <td>Copy current line below</td>
+                        </tr>
+                        <tr>
+                            <td>Delete Line</td>
+                            <td><code>Ctrl+Shift+K</code></td>
+                            <td>Remove entire line</td>
+                        </tr>
+                        <tr>
+                            <td>Move Line Up</td>
+                            <td><code>Alt+Up</code></td>
+                            <td>Move line up one position</td>
+                        </tr>
+                        <tr>
+                            <td>Move Line Down</td>
+                            <td><code>Alt+Down</code></td>
+                            <td>Move line down one position</td>
+                        </tr>
+                        <tr>
+                            <td>Toggle Comment</td>
+                            <td><code>Ctrl+/</code></td>
+                            <td>Add/remove line comments</td>
+                        </tr>
+                        <tr>
+                            <td>Sort Lines</td>
+                            <td>-</td>
+                            <td>Alphabetically ascending/descending</td>
+                        </tr>
+                        <tr>
+                            <td>Remove Duplicates</td>
+                            <td>-</td>
+                            <td>Delete duplicate lines in selection</td>
+                        </tr>
+                        <tr>
+                            <td>Join Lines</td>
+                            <td>-</td>
+                            <td>Merge selected lines with space</td>
+                        </tr>
+                        <tr>
+                            <td>Trim Whitespace</td>
+                            <td>-</td>
+                            <td>Remove trailing whitespace</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Case Conversion (Phase 2 - Completed)</h3>
+                <ul>
+                    <li>✓ UPPERCASE - Convert selection to all caps</li>
+                    <li>✓ lowercase - Convert selection to lowercase</li>
+                    <li>✓ Title Case - Capitalize first letter of each word</li>
+                </ul>
+            </section>
+
+            <!-- Search and Manipulation -->
+            <section class="section">
+                <h2>5. Search and Manipulation</h2>
+
+                <h3>Find and Replace (Phase 1 - Completed)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Literal text search</td>
+                            <td><span class="badge badge-phase1">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Regular expressions</td>
+                            <td><span class="badge badge-phase1">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Case sensitive / insensitive</td>
+                            <td><span class="badge badge-phase1">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Whole word matching</td>
+                            <td><span class="badge badge-phase1">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Replace all</td>
+                            <td><span class="badge badge-phase1">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Find in all open files</td>
+                            <td><span class="badge badge-pending">Phase 2</span></td>
+                        </tr>
+                        <tr>
+                            <td>Find in directory</td>
+                            <td><span class="badge badge-pending">Phase 2</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Multi-Cursor Editing (Phase 2 - Planned)</h3>
+                <ul>
+                    <li>Alt + Click to add cursor</li>
+                    <li>Alt + Drag for column/box selection</li>
+                    <li>Ctrl + D to select next occurrence</li>
+                    <li>Ctrl + Shift + L to select all occurrences</li>
+                </ul>
+            </section>
+
+            <!-- Session Management -->
+            <section class="section">
+                <h2>6. Session Management and Recovery</h2>
+
+                <h3>Saved State</h3>
+                <ul>
+                    <li>✓ All open files with paths</li>
+                    <li>✓ Window geometry and position</li>
+                    <li>✓ Active tab index</li>
+                    <li>⚙ Cursor positions per file (Phase 2)</li>
+                    <li>⚙ Scroll positions per file (Phase 2)</li>
+                    <li>⚙ Fold states (Phase 2)</li>
+                </ul>
+
+                <h3>Crash Recovery</h3>
+                <div class="alert alert-success">
+                    <strong>Backup Frequency:</strong> Every 5 seconds (configurable)<br>
+                    <strong>Backup Location:</strong> ~/.local/share/notepad-supreme/recovery/<br>
+                    <strong>Recovery Process:</strong> Automatic detection on startup with restore dialog
+                </div>
+            </section>
+
+            <!-- Implementation Phases -->
+            <section class="section">
+                <h2>7. Implementation Priorities</h2>
+
+                <h3>Phase 1: Core Editor (MVP) ✓ COMPLETED</h3>
+                <ol>
+                    <li>✓ Basic file open/save/edit with tabs</li>
+                    <li>✓ Syntax highlighting (13 major languages)</li>
+                    <li>✓ Find and replace (current file)</li>
+                    <li>✓ Encoding and line ending handling</li>
+                    <li>✓ Undo/redo via piece table</li>
+                    <li>✓ Basic preferences dialog</li>
+                    <li>✓ Session restore</li>
+                    <li>✓ Crash recovery</li>
+                </ol>
+
+                <h3>Phase 2: Power Features ⚙ IN PROGRESS</h3>
+                <ol>
+                    <li>✓ Line operations (duplicate, move, delete, sort, etc.)</li>
+                    <li>✓ Code folding (basic implementation)</li>
+                    <li>✓ Case conversion (UPPER, lower, Title)</li>
+                    <li>⚙ File explorer panel (in progress)</li>
+                    <li>⚙ Multi-cursor editing</li>
+                    <li>⚙ Column/block selection</li>
+                    <li>⚙ Find in files</li>
+                    <li>⚙ Smart language detection</li>
+                </ol>
+
+                <h3>Phase 3: Developer Tools 📋 PLANNED</h3>
+                <ol>
+                    <li>Integrated terminal</li>
+                    <li>LSP integration (code completion, go to definition)</li>
+                    <li>Git status indicators</li>
+                    <li>Command palette (Ctrl+Shift+P)</li>
+                    <li>Macro recording and playback</li>
+                    <li>Bracket matching and auto-close</li>
+                </ol>
+
+                <h3>Phase 4: Ecosystem 📋 PLANNED</h3>
+                <ol>
+                    <li>Plugin architecture with API</li>
+                    <li>Theme editor and additional themes</li>
+                    <li>Markdown live preview</li>
+                    <li>Hex/binary viewer</li>
+                    <li>Remote file editing (SSH/SFTP)</li>
+                    <li>Full Git integration (commit, branch switch)</li>
+                </ol>
+            </section>
+
+            <!-- Success Criteria -->
+            <section class="section">
+                <h2>8. Success Criteria</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criterion</th>
+                            <th>Target</th>
+                            <th>Current Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Phase 1-3 features complete</td>
+                            <td>100%</td>
+                            <td><span class="badge badge-phase1">Phase 1: 100%</span> <span class="badge badge-phase2">Phase 2: 40%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Open 1GB file</td>
+                            <td>&lt; 5 seconds</td>
+                            <td><span class="badge badge-pending">Testing needed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Startup time</td>
+                            <td>&lt; 1 second</td>
+                            <td><span class="badge badge-phase1">✓ Met (~0.5s)</span></td>
+                        </tr>
+                        <tr>
+                            <td>Memory with 10 files</td>
+                            <td>&lt; 100MB</td>
+                            <td><span class="badge badge-phase1">✓ Met (~60-80MB)</span></td>
+                        </tr>
+                        <tr>
+                            <td>Crash recovery</td>
+                            <td>Zero data loss</td>
+                            <td><span class="badge badge-phase1">✓ Implemented</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <footer class="footer">
+                <p>Requirements Specification v1.0 | Last Updated: November 28, 2025</p>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>
