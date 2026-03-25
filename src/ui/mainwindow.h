@@ -37,6 +37,18 @@ public:
     QStringList openFilePaths() const;
 
 public slots:
+    // Encoding operations
+    void convertToANSI();
+    void convertToUTF8();
+    void convertToUTF8BOM();
+    void convertToUCS2BE();
+    void convertToUCS2LE();
+
+    // Line ending operations
+    void convertToWindows();
+    void convertToUnix();
+    void convertToMac();
+
     // File operations
     void newFile();
     void openFile(const QString &filePath = QString());
@@ -129,18 +141,6 @@ private slots:
     void zoomOut();
     void resetZoom();
 
-    // Encoding operations
-    void convertToANSI();
-    void convertToUTF8();
-    void convertToUTF8BOM();
-    void convertToUCS2BE();
-    void convertToUCS2LE();
-
-    // Line ending operations
-    void convertToWindows();
-    void convertToUnix();
-    void convertToMac();
-
     // Help
     void showAbout();
     void showPreferences();
@@ -187,6 +187,18 @@ private slots:
     void columnEditor();
     void beginEndSelect();
 
+    // Run menu
+    void launchInTerminal();
+    void openContainingFolder();
+
+    // Window menu
+    void updateWindowMenu();
+    void switchToTab(int index);
+
+    // View
+    void toggleAlwaysOnTop();
+    void showSummary();
+
 private:
     void setupUi();
     void setupMenus();
@@ -220,6 +232,12 @@ private:
     QMenu *m_toolsMenu;
     QMenu *m_helpMenu;
     QMenu *m_recentFilesMenu;
+    QMenu *m_encodingMenu;
+    QMenu *m_languageMenu;
+    QMenu *m_settingsMenu;
+    QMenu *m_macroMenu;
+    QMenu *m_runMenu;
+    QMenu *m_windowMenu;
 
     // Toolbar
     QToolBar *m_mainToolBar;

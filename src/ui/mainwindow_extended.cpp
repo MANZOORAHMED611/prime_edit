@@ -4,11 +4,17 @@
 #include "mainwindow.h"
 #include "editor.h"
 #include "tabwidget.h"
+#include "core/document.h"
 #include <QMessageBox>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QRandomGenerator>
 #include <QRegularExpression>
+#include <QProcess>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QDir>
+#include <QFileInfo>
 
 // Comment operations
 void MainWindow::blockComment()
@@ -525,4 +531,65 @@ void MainWindow::beginEndSelect()
 {
     // TODO: Implement begin/end select
     statusBar()->showMessage(tr("Begin/End select not yet implemented"), 3000);
+}
+
+void MainWindow::launchInTerminal()
+{
+    Editor *editor = currentEditor();
+    if (!editor || !editor->document()) return;
+    QString dir = QFileInfo(editor->document()->filePath()).absolutePath();
+    if (dir.isEmpty()) dir = QDir::homePath();
+    QProcess::startDetached("x-terminal-emulator", QStringList(), dir);
+}
+
+void MainWindow::openContainingFolder()
+{
+    Editor *editor = currentEditor();
+    if (!editor || !editor->document()) return;
+    QString dir = QFileInfo(editor->document()->filePath()).absolutePath();
+    if (!dir.isEmpty()) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+    }
+}
+
+void MainWindow::updateWindowMenu()
+{
+    m_windowMenu->clear();
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        QString title = m_tabWidget->tabText(i);
+        QAction *action = m_windowMenu->addAction(title);
+        action->setCheckable(true);
+        action->setChecked(i == m_tabWidget->currentIndex());
+        connect(action, &QAction::triggered, this, [this, i]() { m_tabWidget->setCurrentIndex(i); });
+    }
+}
+
+void MainWindow::switchToTab(int index)
+{
+    if (index >= 0 && index < m_tabWidget->count()) {
+        m_tabWidget->setCurrentIndex(index);
+    }
+}
+
+void MainWindow::toggleAlwaysOnTop()
+{
+    Qt::WindowFlags flags = windowFlags();
+    if (flags & Qt::WindowStaysOnTopHint) {
+        setWindowFlags(flags & ~Qt::WindowStaysOnTopHint);
+    } else {
+        setWindowFlags(flags | Qt::WindowStaysOnTopHint);
+    }
+    show();
+}
+
+void MainWindow::showSummary()
+{
+    Editor *editor = currentEditor();
+    if (!editor) return;
+    QString text = editor->toPlainText();
+    int lines = text.count('\n') + 1;
+    int words = text.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts).count();
+    int chars = text.length();
+    QMessageBox::information(this, tr("Summary"),
+        tr("Lines: %1\nWords: %2\nCharacters: %3").arg(lines).arg(words).arg(chars));
 }

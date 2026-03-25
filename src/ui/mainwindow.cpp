@@ -24,11 +24,14 @@
 #include <QMimeData>
 #include <QUrl>
 #include <QAction>
+#include <QActionGroup>
 #include <QShortcut>
 #include <QIcon>
 #include <QStyle>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QPixmap>
+#include <QPainter>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -77,7 +80,9 @@ void MainWindow::setupUi()
 
 void MainWindow::setupMenus()
 {
+    // ============================================================
     // File menu
+    // ============================================================
     m_fileMenu = menuBar()->addMenu(tr("&File"));
 
     QAction *newAction = m_fileMenu->addAction(tr("&New"), this, &MainWindow::newFile);
@@ -109,10 +114,17 @@ void MainWindow::setupMenus()
 
     m_fileMenu->addSeparator();
 
+    QAction *printAction = m_fileMenu->addAction(tr("&Print..."), this, &MainWindow::printFile);
+    printAction->setShortcut(QKeySequence::Print);
+
+    m_fileMenu->addSeparator();
+
     QAction *exitAction = m_fileMenu->addAction(tr("E&xit"), this, &QWidget::close);
     exitAction->setShortcut(QKeySequence::Quit);
 
+    // ============================================================
     // Edit menu
+    // ============================================================
     m_editMenu = menuBar()->addMenu(tr("&Edit"));
 
     QAction *undoAction = m_editMenu->addAction(tr("&Undo"), this, &MainWindow::undo);
@@ -136,6 +148,9 @@ void MainWindow::setupMenus()
 
     QAction *selectAllAction = m_editMenu->addAction(tr("Select &All"), this, &MainWindow::selectAll);
     selectAllAction->setShortcut(QKeySequence::SelectAll);
+
+    QAction *columnEditorAction = m_editMenu->addAction(tr("Column Editor..."), this, &MainWindow::columnEditor);
+    columnEditorAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_C));
 
     m_editMenu->addSeparator();
 
@@ -178,7 +193,9 @@ void MainWindow::setupMenus()
     QAction *preferencesAction = m_editMenu->addAction(tr("&Preferences..."), this, &MainWindow::showPreferences);
     preferencesAction->setShortcut(QKeySequence::Preferences);
 
+    // ============================================================
     // Search menu
+    // ============================================================
     m_searchMenu = menuBar()->addMenu(tr("&Search"));
 
     QAction *findAction = m_searchMenu->addAction(tr("&Find..."), this, &MainWindow::find);
@@ -193,12 +210,26 @@ void MainWindow::setupMenus()
     QAction *replaceAction = m_searchMenu->addAction(tr("&Replace..."), this, &MainWindow::replace);
     replaceAction->setShortcut(QKeySequence::Replace);
 
+    QAction *findInFilesAction = m_searchMenu->addAction(tr("Find in &Files..."));
+    findInFilesAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F));
+    connect(findInFilesAction, &QAction::triggered, this, [this]() {
+        QMessageBox::information(this, tr("Find in Files"), tr("Search dialog coming in Task 13"));
+    });
+
+    QAction *incrementalSearchAction = m_searchMenu->addAction(tr("&Incremental Search"));
+    incrementalSearchAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
+    connect(incrementalSearchAction, &QAction::triggered, this, [this]() {
+        QMessageBox::information(this, tr("Incremental Search"), tr("Incremental search coming in Task 13"));
+    });
+
     m_searchMenu->addSeparator();
 
     QAction *goToLineAction = m_searchMenu->addAction(tr("&Go to Line..."), this, &MainWindow::goToLineDialog);
     goToLineAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_G));
 
+    // ============================================================
     // View menu
+    // ============================================================
     m_viewMenu = menuBar()->addMenu(tr("&View"));
 
     QAction *wordWrapAction = m_viewMenu->addAction(tr("&Word Wrap"));
@@ -227,35 +258,130 @@ void MainWindow::setupMenus()
     QAction *resetZoomAction = m_viewMenu->addAction(tr("&Reset Zoom"), this, &MainWindow::resetZoom);
     resetZoomAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_0));
 
-    // Tools menu
+    m_viewMenu->addSeparator();
+
+    QAction *alwaysOnTopAction = m_viewMenu->addAction(tr("Always on &Top"));
+    alwaysOnTopAction->setCheckable(true);
+    connect(alwaysOnTopAction, &QAction::toggled, this, &MainWindow::toggleAlwaysOnTop);
+
+    QAction *showWhitespaceAction = m_viewMenu->addAction(tr("Show &Whitespace"));
+    showWhitespaceAction->setCheckable(true);
+    connect(showWhitespaceAction, &QAction::toggled, this, &MainWindow::toggleWhitespace);
+
+    QAction *showEolAction = m_viewMenu->addAction(tr("Show &End of Line"));
+    showEolAction->setCheckable(true);
+    connect(showEolAction, &QAction::toggled, this, &MainWindow::toggleEndOfLine);
+
+    QAction *showIndentGuideAction = m_viewMenu->addAction(tr("Show Indent &Guide"));
+    showIndentGuideAction->setCheckable(true);
+    connect(showIndentGuideAction, &QAction::toggled, this, &MainWindow::toggleIndentGuide);
+
+    m_viewMenu->addSeparator();
+
+    m_viewMenu->addAction(tr("Fold All"), this, &MainWindow::foldAll);
+    m_viewMenu->addAction(tr("Unfold All"), this, &MainWindow::unfoldAll);
+
+    m_viewMenu->addSeparator();
+
+    m_viewMenu->addAction(tr("Summary..."), this, &MainWindow::showSummary);
+
+    m_viewMenu->addSeparator();
+
+    QAction *fullScreenAction = m_viewMenu->addAction(tr("&Full Screen"), this, &MainWindow::toggleFullScreen);
+    fullScreenAction->setShortcut(QKeySequence::FullScreen);
+
+    // ============================================================
+    // Encoding menu
+    // ============================================================
+    m_encodingMenu = menuBar()->addMenu(tr("&Encoding"));
+    QActionGroup *encGroup = new QActionGroup(this);
+
+    QAction *encUtf8 = m_encodingMenu->addAction(tr("Encode in UTF-8"), this, &MainWindow::convertToUTF8);
+    encUtf8->setCheckable(true);
+    encUtf8->setChecked(true);
+    encGroup->addAction(encUtf8);
+
+    QAction *encUtf8Bom = m_encodingMenu->addAction(tr("Encode in UTF-8-BOM"), this, &MainWindow::convertToUTF8BOM);
+    encUtf8Bom->setCheckable(true);
+    encGroup->addAction(encUtf8Bom);
+
+    QAction *encAnsi = m_encodingMenu->addAction(tr("Encode in ANSI"), this, &MainWindow::convertToANSI);
+    encAnsi->setCheckable(true);
+    encGroup->addAction(encAnsi);
+
+    QAction *encUcs2Be = m_encodingMenu->addAction(tr("Encode in UCS-2 BE BOM"), this, &MainWindow::convertToUCS2BE);
+    encUcs2Be->setCheckable(true);
+    encGroup->addAction(encUcs2Be);
+
+    QAction *encUcs2Le = m_encodingMenu->addAction(tr("Encode in UCS-2 LE BOM"), this, &MainWindow::convertToUCS2LE);
+    encUcs2Le->setCheckable(true);
+    encGroup->addAction(encUcs2Le);
+
+    // ============================================================
+    // Language menu
+    // ============================================================
+    m_languageMenu = menuBar()->addMenu(tr("&Language"));
+    m_languageMenu->addAction(tr("Auto-detect"));
+    m_languageMenu->addSeparator();
+
+    QStringList langs = LanguageManager::instance().availableLanguages();
+    std::sort(langs.begin(), langs.end());
+    for (const QString &lang : langs) {
+        QAction *a = m_languageMenu->addAction(lang);
+        connect(a, &QAction::triggered, this, [this, lang]() {
+            Editor *e = currentEditor();
+            if (e) e->setLanguage(lang);
+        });
+    }
+
+    // ============================================================
+    // Settings menu
+    // ============================================================
+    m_settingsMenu = menuBar()->addMenu(tr("&Settings"));
+    m_settingsMenu->addAction(tr("&Preferences..."), this, &MainWindow::showPreferences);
+    m_settingsMenu->addAction(tr("&Style Configurator..."));
+    m_settingsMenu->addAction(tr("&Shortcut Mapper..."));
+
+    // ============================================================
+    // Tools menu (Command Palette only)
+    // ============================================================
     m_toolsMenu = menuBar()->addMenu(tr("&Tools"));
 
-    // Command Palette
     QAction *commandPaletteAction = m_toolsMenu->addAction(tr("Command &Palette..."), this, &MainWindow::showCommandPalette);
     commandPaletteAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_P));
 
-    m_toolsMenu->addSeparator();
+    // ============================================================
+    // Macro menu
+    // ============================================================
+    m_macroMenu = menuBar()->addMenu(tr("&Macro"));
+    m_macroMenu->addAction(tr("Start &Recording"), this, &MainWindow::startRecordingMacro, QKeySequence(Qt::Key_F9));
+    m_macroMenu->addAction(tr("&Stop Recording"), this, &MainWindow::stopRecordingMacro, QKeySequence(Qt::SHIFT | Qt::Key_F9));
+    m_macroMenu->addAction(tr("&Playback"), this, &MainWindow::playbackMacro, QKeySequence(Qt::Key_F10));
+    m_macroMenu->addSeparator();
+    m_macroMenu->addAction(tr("Save Macro..."), this, &MainWindow::saveMacro);
+    m_macroMenu->addAction(tr("Load Macro..."), this, &MainWindow::loadMacro);
 
-    // Macro recording
-    QAction *startRecordAction = m_toolsMenu->addAction(tr("Start &Recording Macro"), this, &MainWindow::startRecordingMacro);
-    startRecordAction->setShortcut(QKeySequence(Qt::Key_F9));
+    // ============================================================
+    // Run menu
+    // ============================================================
+    m_runMenu = menuBar()->addMenu(tr("&Run"));
+    m_runMenu->addAction(tr("&Launch in Terminal"), this, &MainWindow::launchInTerminal);
+    m_runMenu->addAction(tr("Open Containing &Folder"), this, &MainWindow::openContainingFolder);
 
-    QAction *stopRecordAction = m_toolsMenu->addAction(tr("&Stop Recording Macro"), this, &MainWindow::stopRecordingMacro);
-    stopRecordAction->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F9));
+    // ============================================================
+    // Window menu (dynamically populated)
+    // ============================================================
+    m_windowMenu = menuBar()->addMenu(tr("&Window"));
+    connect(m_tabWidget, &QTabWidget::currentChanged, this, &MainWindow::updateWindowMenu);
+    updateWindowMenu();
 
-    QAction *playbackAction = m_toolsMenu->addAction(tr("&Playback Macro"), this, &MainWindow::playbackMacro);
-    playbackAction->setShortcut(QKeySequence(Qt::Key_F10));
+    // ============================================================
+    // ? (Help) menu
+    // ============================================================
+    m_helpMenu = menuBar()->addMenu(tr("?"));
 
-    m_toolsMenu->addSeparator();
-
-    m_toolsMenu->addAction(tr("&Save Macro..."), this, &MainWindow::saveMacro);
-    m_toolsMenu->addAction(tr("&Load Macro..."), this, &MainWindow::loadMacro);
-
-    // Help menu
-    m_helpMenu = menuBar()->addMenu(tr("&Help"));
-
-    QAction *aboutAction = m_helpMenu->addAction(tr("&About Olive Notepad"), this, &MainWindow::showAbout);
-    QAction *aboutQtAction = m_helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+    m_helpMenu->addAction(tr("&About Olive Notepad"), this, &MainWindow::showAbout);
+    m_helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
 }
 
 void MainWindow::setupToolBar()
@@ -283,6 +409,7 @@ void MainWindow::newFile()
 
     QString title = tr("Untitled %1").arg(++m_untitledCounter);
     int index = m_tabWidget->addTab(editor, title);
+    m_tabWidget->setTabIcon(index, TabBar::iconForFile(QString()));
     m_tabWidget->setCurrentIndex(index);
 
     updateWindowTitle();
@@ -328,6 +455,7 @@ void MainWindow::openFile(const QString &filePath)
 
     Editor *editor = createEditor(doc);
     int index = m_tabWidget->addTab(editor, doc->displayName());
+    m_tabWidget->setTabIcon(index, TabBar::iconForFile(path));
     m_tabWidget->setCurrentIndex(index);
 
     updateWindowTitle();
@@ -556,6 +684,25 @@ void MainWindow::onDocumentModified(bool modified)
                     title += " *";
                 }
                 m_tabWidget->setTabText(index, title);
+
+                // Update icon: tint red when modified, restore when saved
+                QString filePath = doc->filePath();
+                if (modified) {
+                    QPixmap px(16, 16);
+                    px.fill(QColor("#e53935"));
+                    QPainter p(&px);
+                    QFont f = p.font();
+                    f.setPixelSize(7);
+                    f.setBold(true);
+                    p.setFont(f);
+                    p.setPen(Qt::white);
+                    p.drawText(px.rect(), Qt::AlignCenter, "MOD");
+                    p.end();
+                    m_tabWidget->setTabIcon(index, QIcon(px));
+                } else {
+                    m_tabWidget->setTabIcon(index,
+                        TabBar::iconForFile(filePath));
+                }
             }
         }
         return;
@@ -568,6 +715,25 @@ void MainWindow::onDocumentModified(bool modified)
             title += " *";
         }
         m_tabWidget->setTabText(index, title);
+
+        // Update icon: tint red when modified, restore when saved
+        QString filePath = editor->document()->filePath();
+        if (modified) {
+            QPixmap px(16, 16);
+            px.fill(QColor("#e53935"));
+            QPainter p(&px);
+            QFont f = p.font();
+            f.setPixelSize(7);
+            f.setBold(true);
+            p.setFont(f);
+            p.setPen(Qt::white);
+            p.drawText(px.rect(), Qt::AlignCenter, "MOD");
+            p.end();
+            m_tabWidget->setTabIcon(index, QIcon(px));
+        } else {
+            m_tabWidget->setTabIcon(index,
+                TabBar::iconForFile(filePath));
+        }
     }
 
     updateWindowTitle();
@@ -1192,3 +1358,4 @@ int MainWindow::findEditorIndex(Document *document) const
     }
     return -1;
 }
+

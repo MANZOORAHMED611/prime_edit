@@ -3,6 +3,10 @@
 
 #include <QTabWidget>
 #include <QTabBar>
+#include <QIcon>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QClipboard>
 
 class TabBar : public QTabBar
 {
@@ -10,6 +14,8 @@ class TabBar : public QTabBar
 
 public:
     explicit TabBar(QWidget *parent = nullptr);
+
+    static QIcon iconForFile(const QString &filePath);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -20,6 +26,7 @@ signals:
     void newTabRequested();
     void closeOthersRequested(int index);
     void closeToRightRequested(int index);
+    void closeToLeftRequested(int index);
     void closeAllRequested();
 };
 
@@ -36,6 +43,7 @@ signals:
 private slots:
     void onCloseOthersRequested(int index);
     void onCloseToRightRequested(int index);
+    void onCloseToLeftRequested(int index);
     void onCloseAllRequested();
 
 private:
