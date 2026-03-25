@@ -284,20 +284,26 @@ void MainWindow::toRandomCase()
 // View operations
 void MainWindow::toggleWhitespace()
 {
-    // TODO: Implement whitespace visibility toggle
-    statusBar()->showMessage(tr("Toggle whitespace not yet implemented"), 3000);
+    Editor *editor = currentEditor();
+    if (editor) {
+        editor->setShowWhitespace(!editor->showWhitespace());
+    }
 }
 
 void MainWindow::toggleEndOfLine()
 {
-    // TODO: Implement EOL visibility toggle
-    statusBar()->showMessage(tr("Toggle EOL not yet implemented"), 3000);
+    Editor *editor = currentEditor();
+    if (editor) {
+        editor->setShowEOL(!editor->showEOL());
+    }
 }
 
 void MainWindow::toggleIndentGuide()
 {
-    // TODO: Implement indent guide toggle
-    statusBar()->showMessage(tr("Toggle indent guide not yet implemented"), 3000);
+    Editor *editor = currentEditor();
+    if (editor) {
+        editor->setShowIndentGuide(!editor->showIndentGuide());
+    }
 }
 
 void MainWindow::toggleWrapSymbol()

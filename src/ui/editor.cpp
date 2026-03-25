@@ -8,9 +8,11 @@
 
 #include <QPainter>
 #include <QTextBlock>
+#include <QTextLayout>
 #include <QScrollBar>
 #include <QKeyEvent>
 #include <QWheelEvent>
+#include <QPaintEvent>
 #include <QRegularExpression>
 #include <QSet>
 #include <algorithm>
@@ -1084,4 +1086,158 @@ void Editor::toggleFoldAtCursor()
     QTextBlock block = cursor.block();
     block.setVisible(!block.isVisible());
     viewport()->update();
+}
+
+// Whitespace / EOL / indent guide visualization
+
+void Editor::setShowWhitespace(bool show)
+{
+    m_showWhitespace = show;
+    viewport()->update();
+}
+
+void Editor::setShowEOL(bool show)
+{
+    m_showEOL = show;
+    viewport()->update();
+}
+
+void Editor::setShowIndentGuide(bool show)
+{
+    m_showIndentGuide = show;
+    viewport()->update();
+}
+
+void Editor::paintEvent(QPaintEvent *event)
+{
+    QPlainTextEdit::paintEvent(event);
+
+    if (m_showWhitespace || m_showEOL || m_showIndentGuide) {
+        QPainter painter(viewport());
+        Theme theme = ThemeManager::instance().currentTheme();
+
+        if (m_showIndentGuide) {
+            paintIndentGuides(painter, theme);
+        }
+        if (m_showWhitespace) {
+            paintWhitespace(painter, theme);
+        }
+        if (m_showEOL) {
+            paintEOL(painter, theme);
+        }
+    }
+}
+
+void Editor::paintWhitespace(QPainter &painter, const Theme &theme)
+{
+    painter.setPen(theme.whitespaceColor);
+
+    QTextBlock block = firstVisibleBlock();
+
+    while (block.isValid()) {
+        QRectF blockGeom = blockBoundingGeometry(block).translated(contentOffset());
+        if (blockGeom.top() > viewport()->rect().bottom())
+            break;
+
+        if (block.isVisible() && blockGeom.bottom() >= 0) {
+            QTextLayout *layout = block.layout();
+            QString text = block.text();
+
+            for (int i = 0; i < text.length(); ++i) {
+                QChar ch = text.at(i);
+                if (ch == QLatin1Char(' ') || ch == QLatin1Char('\t')) {
+                    QTextLine line = layout->lineForTextPosition(i);
+                    if (!line.isValid())
+                        continue;
+
+                    qreal x = line.cursorToX(i);
+                    qreal lineY = blockGeom.top() + line.y();
+                    qreal lineH = line.height();
+
+                    if (ch == QLatin1Char(' ')) {
+                        qreal dotX = x + fontMetrics().horizontalAdvance(QLatin1Char(' ')) / 2.0;
+                        qreal dotY = lineY + lineH / 2.0;
+                        painter.drawEllipse(QPointF(dotX, dotY), 1.2, 1.2);
+                    } else {
+                        qreal nextX = line.cursorToX(i + 1);
+                        qreal cy = lineY + lineH / 2.0;
+                        painter.drawLine(QPointF(x + 2, cy), QPointF(nextX - 2, cy));
+                        painter.drawLine(QPointF(nextX - 5, cy - 3), QPointF(nextX - 2, cy));
+                        painter.drawLine(QPointF(nextX - 5, cy + 3), QPointF(nextX - 2, cy));
+                    }
+                }
+            }
+        }
+        block = block.next();
+    }
+}
+
+void Editor::paintEOL(QPainter &painter, const Theme &theme)
+{
+    painter.setPen(theme.whitespaceColor);
+    QFont eolFont = font();
+    eolFont.setPointSizeF(font().pointSizeF() * 0.7);
+    painter.setFont(eolFont);
+
+    QTextBlock block = firstVisibleBlock();
+
+    while (block.isValid()) {
+        QRectF blockGeom = blockBoundingGeometry(block).translated(contentOffset());
+        if (blockGeom.top() > viewport()->rect().bottom())
+            break;
+
+        if (block.isVisible() && blockGeom.bottom() >= 0) {
+            QTextLayout *layout = block.layout();
+            if (layout->lineCount() > 0) {
+                QTextLine lastLine = layout->lineAt(layout->lineCount() - 1);
+                qreal x = lastLine.cursorToX(block.text().length());
+                qreal y = blockGeom.top() + lastLine.y() + lastLine.ascent();
+
+                painter.drawText(QPointF(x + 4, y), QStringLiteral("\u00B6"));
+            }
+        }
+        block = block.next();
+    }
+
+    painter.setFont(font());
+}
+
+void Editor::paintIndentGuides(QPainter &painter, const Theme &theme)
+{
+    QPen pen(theme.indentGuideColor);
+    pen.setStyle(Qt::DotLine);
+    pen.setWidthF(1.0);
+    painter.setPen(pen);
+
+    qreal spaceWidth = fontMetrics().horizontalAdvance(QLatin1Char(' '));
+    qreal tabW = spaceWidth * m_tabWidth;
+
+    QTextBlock block = firstVisibleBlock();
+
+    while (block.isValid()) {
+        QRectF blockGeom = blockBoundingGeometry(block).translated(contentOffset());
+        if (blockGeom.top() > viewport()->rect().bottom())
+            break;
+
+        if (block.isVisible() && blockGeom.bottom() >= 0) {
+            QString text = block.text();
+            int indent = 0;
+            for (int i = 0; i < text.length(); ++i) {
+                if (text.at(i) == QLatin1Char(' '))
+                    indent++;
+                else if (text.at(i) == QLatin1Char('\t'))
+                    indent += m_tabWidth;
+                else
+                    break;
+            }
+
+            int levels = indent / m_tabWidth;
+            for (int level = 1; level <= levels; ++level) {
+                qreal x = level * tabW;
+                painter.drawLine(QPointF(x, blockGeom.top()),
+                                 QPointF(x, blockGeom.bottom()));
+            }
+        }
+        block = block.next();
+    }
 }

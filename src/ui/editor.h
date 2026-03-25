@@ -5,6 +5,8 @@
 #include <QTextDocument>
 #include <QSet>
 
+class QPainter;
+struct Theme;
 class Document;
 class SyntaxHighlighter;
 class LineNumberArea;
@@ -103,6 +105,14 @@ public:
     void unfoldAll();
     void toggleFoldAtCursor();
 
+    // Whitespace / EOL / indent guide visualization
+    void setShowWhitespace(bool show);
+    bool showWhitespace() const { return m_showWhitespace; }
+    void setShowEOL(bool show);
+    bool showEOL() const { return m_showEOL; }
+    void setShowIndentGuide(bool show);
+    bool showIndentGuide() const { return m_showIndentGuide; }
+
 public slots:
     void jumpToMatchingBracket();
 
@@ -113,6 +123,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -141,6 +152,14 @@ private:
     int m_baseFontSize;
 
     bool m_syncing = false;
+
+    // Whitespace / EOL / indent guide visualization
+    bool m_showWhitespace = false;
+    bool m_showEOL = false;
+    bool m_showIndentGuide = false;
+    void paintWhitespace(QPainter &painter, const Theme &theme);
+    void paintEOL(QPainter &painter, const Theme &theme);
+    void paintIndentGuides(QPainter &painter, const Theme &theme);
 
     // Bracket matching
     void matchBrackets();
