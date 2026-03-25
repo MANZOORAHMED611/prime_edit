@@ -480,32 +480,143 @@ void Editor::updateLineNumberArea(const QRect &rect, int dy)
 
 void Editor::highlightCurrentLine()
 {
-    // Prevent recursive calls
-    static bool highlighting = false;
-    if (highlighting) {
+    matchBrackets();
+}
+
+void Editor::matchBrackets()
+{
+    m_bracketSelections.clear();
+
+    QTextCursor cursor = textCursor();
+    int pos = cursor.position();
+    QString text = toPlainText();
+
+    if (text.isEmpty()) {
+        updateExtraSelections();
         return;
     }
-    highlighting = true;
 
-    if (!Settings::instance().highlightCurrentLine()) {
-        setExtraSelections({});
-        highlighting = false;
-        return;
+    auto checkPos = [&](int p) -> bool {
+        if (p < 0 || p >= text.length()) return false;
+        QChar ch = text.at(p);
+
+        struct BracketPair { QChar open; QChar close; bool forward; };
+        QVector<BracketPair> pairs = {
+            {'(', ')', true}, {'[', ']', true}, {'{', '}', true},
+            {')', '(', false}, {']', '[', false}, {'}', '{', false}
+        };
+
+        for (const auto &pair : pairs) {
+            if (ch == pair.open) {
+                int match = findMatchingBracket(p,
+                    pair.forward ? pair.open : pair.close,
+                    pair.forward ? pair.close : pair.open,
+                    pair.forward);
+
+                Theme theme = ThemeManager::instance().currentTheme();
+                QColor bgColor = (match >= 0) ? theme.bracketMatchBackground : theme.bracketErrorBackground;
+
+                QTextEdit::ExtraSelection sel;
+                sel.format.setBackground(bgColor);
+                sel.cursor = textCursor();
+                sel.cursor.setPosition(p);
+                sel.cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                m_bracketSelections.append(sel);
+
+                if (match >= 0) {
+                    QTextEdit::ExtraSelection matchSel;
+                    matchSel.format.setBackground(bgColor);
+                    matchSel.cursor = textCursor();
+                    matchSel.cursor.setPosition(match);
+                    matchSel.cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                    m_bracketSelections.append(matchSel);
+                }
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if (!checkPos(pos)) {
+        checkPos(pos - 1);
     }
 
-    QList<QTextEdit::ExtraSelection> extraSelections;
+    updateExtraSelections();
+}
 
-    QTextEdit::ExtraSelection selection;
-    QColor lineColor = QColor(230, 230, 230);  // Light gray for current line
+int Editor::findMatchingBracket(int position, QChar open, QChar close, bool forward) const
+{
+    QString text = toPlainText();
+    int depth = 0;
+    int i = position;
+    int step = forward ? 1 : -1;
 
-    selection.format.setBackground(lineColor);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    selection.cursor = textCursor();
-    selection.cursor.clearSelection();
-    extraSelections.append(selection);
+    while (i >= 0 && i < text.length()) {
+        QChar ch = text.at(i);
+        if (ch == open) depth++;
+        else if (ch == close) depth--;
 
-    setExtraSelections(extraSelections);
-    highlighting = false;
+        if (depth == 0) return i;
+        i += step;
+    }
+
+    return -1;
+}
+
+void Editor::updateExtraSelections()
+{
+    QList<QTextEdit::ExtraSelection> allSelections;
+
+    if (!isReadOnly() && Settings::instance().highlightCurrentLine()) {
+        QTextEdit::ExtraSelection lineHighlight;
+        Theme theme = ThemeManager::instance().currentTheme();
+        lineHighlight.format.setBackground(theme.currentLineBackground);
+        lineHighlight.format.setProperty(QTextFormat::FullWidthSelection, true);
+        lineHighlight.cursor = textCursor();
+        lineHighlight.cursor.clearSelection();
+        allSelections.append(lineHighlight);
+    }
+
+    allSelections.append(m_bracketSelections);
+
+    setExtraSelections(allSelections);
+}
+
+void Editor::jumpToMatchingBracket()
+{
+    int pos = textCursor().position();
+    QString text = toPlainText();
+
+    auto tryJump = [&](int p) -> bool {
+        if (p < 0 || p >= text.length()) return false;
+        QChar ch = text.at(p);
+
+        struct BracketPair { QChar open; QChar close; bool forward; };
+        QVector<BracketPair> pairs = {
+            {'(', ')', true}, {'[', ']', true}, {'{', '}', true},
+            {')', '(', false}, {']', '[', false}, {'}', '{', false}
+        };
+
+        for (const auto &pair : pairs) {
+            if (ch == pair.open) {
+                int match = findMatchingBracket(p,
+                    pair.forward ? pair.open : pair.close,
+                    pair.forward ? pair.close : pair.open,
+                    pair.forward);
+                if (match >= 0) {
+                    QTextCursor cursor = textCursor();
+                    cursor.setPosition(match + 1);
+                    setTextCursor(cursor);
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    if (!tryJump(pos)) {
+        tryJump(pos - 1);
+    }
 }
 
 void Editor::onTextChanged()

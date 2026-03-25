@@ -103,6 +103,9 @@ public:
     void unfoldAll();
     void toggleFoldAtCursor();
 
+public slots:
+    void jumpToMatchingBracket();
+
 signals:
     void cursorPositionChanged();
 
@@ -138,6 +141,12 @@ private:
     int m_baseFontSize;
 
     bool m_syncing = false;
+
+    // Bracket matching
+    void matchBrackets();
+    int findMatchingBracket(int position, QChar open, QChar close, bool forward) const;
+    void updateExtraSelections();
+    QList<QTextEdit::ExtraSelection> m_bracketSelections;
 
     QString getCommentString() const;
 };

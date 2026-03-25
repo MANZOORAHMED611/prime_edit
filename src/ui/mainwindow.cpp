@@ -399,7 +399,12 @@ void MainWindow::setupStatusBar()
 
 void MainWindow::setupShortcuts()
 {
-    // Additional shortcuts not covered by menu actions
+    // Bracket matching: Ctrl+B jumps to matching bracket
+    QShortcut *bracketShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_B), this);
+    connect(bracketShortcut, &QShortcut::activated, this, [this]() {
+        Editor *e = currentEditor();
+        if (e) e->jumpToMatchingBracket();
+    });
 }
 
 void MainWindow::newFile()
