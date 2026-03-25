@@ -3,6 +3,7 @@
 
 #include <QPlainTextEdit>
 #include <QTextDocument>
+#include <QMap>
 #include <QSet>
 
 class QPainter;
@@ -104,6 +105,12 @@ public:
     void foldAll();
     void unfoldAll();
     void toggleFoldAtCursor();
+    void foldAt(int blockNumber);
+    void unfoldAt(int blockNumber);
+    void toggleFoldAt(int blockNumber);
+    bool isFoldableLine(int blockNumber) const;
+    bool isFoldedLine(int blockNumber) const;
+    QMap<int, QStringList> foldedRegions() const { return m_foldedRegions; }
 
     // Whitespace / EOL / indent guide visualization
     void setShowWhitespace(bool show);
@@ -152,6 +159,10 @@ private:
     int m_baseFontSize;
 
     bool m_syncing = false;
+
+    // Code folding
+    QMap<int, QStringList> m_foldedRegions;
+    int findFoldEnd(int blockNumber) const;
 
     // Whitespace / EOL / indent guide visualization
     bool m_showWhitespace = false;

@@ -35,6 +35,16 @@ void LineNumberArea::mousePressEvent(QMouseEvent *event)
 
             if (x < m_editor->bookmarkMarginWidth()) {
                 m_editor->toggleBookmark(line);
+                return;
+            }
+
+            // Check if click is in fold margin
+            int foldMarginStart =
+                m_editor->lineNumberAreaWidth() - m_editor->foldMarginWidth();
+            if (x >= foldMarginStart &&
+                x < m_editor->lineNumberAreaWidth()) {
+                m_editor->toggleFoldAt(block.blockNumber());
+                return;
             }
             return;
         }

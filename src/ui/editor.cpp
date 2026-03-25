@@ -181,7 +181,33 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
                                 Qt::AlignRight, number);
             }
 
-            // Section 3: Fold margin — background only for now
+            // Section 3: Fold margin indicators
+            if (m_foldMarginVisible) {
+                int foldX = bmWidth + lineNumWidth;
+                if (isFoldableLine(blockNumber) ||
+                    isFoldedLine(blockNumber)) {
+                    int midY = top + (bottom - top) / 2;
+                    int boxSize = 9;
+                    int boxX = foldX + (FOLD_MARGIN_WIDTH - boxSize) / 2;
+                    int boxY = midY - boxSize / 2;
+
+                    painter.setPen(QPen(QColor(128, 128, 128)));
+                    painter.setBrush(theme.foldMarginBackground);
+                    painter.drawRect(boxX, boxY, boxSize, boxSize);
+
+                    // Horizontal minus sign (always present)
+                    painter.drawLine(
+                        boxX + 2, midY,
+                        boxX + boxSize - 2, midY);
+
+                    // Vertical line for [+] when folded
+                    if (isFoldedLine(blockNumber)) {
+                        painter.drawLine(
+                            boxX + boxSize / 2, boxY + 2,
+                            boxX + boxSize / 2, boxY + boxSize - 2);
+                    }
+                }
+            }
         }
 
         block = block.next();
@@ -1055,37 +1081,184 @@ void Editor::toTitleCase()
 void Editor::setFoldingEnabled(bool enabled)
 {
     m_foldingEnabled = enabled;
-    // Note: Full folding implementation requires custom gutter widget
-    // This is a simplified version
+    m_foldMarginVisible = enabled;
+    updateLineNumberAreaWidth(0);
+    m_lineNumberArea->update();
+}
+
+bool Editor::isFoldableLine(int blockNumber) const
+{
+    if (m_foldedRegions.contains(blockNumber)) return true;
+
+    QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(blockNumber);
+    if (!block.isValid()) return false;
+
+    QString text = block.text().trimmed();
+    if (text.endsWith('{')) return true;
+    if (text == "{") return true;
+
+    return false;
+}
+
+bool Editor::isFoldedLine(int blockNumber) const
+{
+    return m_foldedRegions.contains(blockNumber);
+}
+
+int Editor::findFoldEnd(int blockNumber) const
+{
+    QTextBlock block =
+        QPlainTextEdit::document()->findBlockByNumber(blockNumber);
+    if (!block.isValid()) return -1;
+
+    int depth = 0;
+    int currentBlock = blockNumber;
+
+    while (block.isValid()) {
+        QString text = block.text();
+        for (int i = 0; i < text.length(); ++i) {
+            QChar ch = text.at(i);
+            if (ch == '{') depth++;
+            else if (ch == '}') {
+                depth--;
+                if (depth == 0) return currentBlock;
+            }
+        }
+        block = block.next();
+        currentBlock++;
+    }
+
+    return -1;
+}
+
+void Editor::foldAt(int blockNumber)
+{
+    if (m_foldedRegions.contains(blockNumber)) return;
+
+    int foldEnd = findFoldEnd(blockNumber);
+    if (foldEnd <= blockNumber) return;
+
+    // Cache the lines to be folded (blockNumber+1 through foldEnd)
+    QStringList cachedLines;
+    for (int i = blockNumber + 1; i <= foldEnd; ++i) {
+        QTextBlock block =
+            QPlainTextEdit::document()->findBlockByNumber(i);
+        if (!block.isValid()) break;
+        cachedLines.append(block.text());
+    }
+
+    if (cachedLines.isEmpty()) return;
+
+    m_foldedRegions[blockNumber] = cachedLines;
+
+    // Remove the cached lines from the document
+    bool oldSyncing = m_syncing;
+    m_syncing = true;
+
+    QTextBlock startBlock =
+        QPlainTextEdit::document()->findBlockByNumber(blockNumber + 1);
+    QTextBlock endBlock =
+        QPlainTextEdit::document()->findBlockByNumber(
+            blockNumber + cachedLines.size());
+
+    if (startBlock.isValid() && endBlock.isValid()) {
+        QTextCursor cursor = textCursor();
+        // Select from end of header block to end of last folded block
+        cursor.setPosition(startBlock.position() - 1);
+        cursor.setPosition(
+            endBlock.position() + endBlock.length() - 1,
+            QTextCursor::KeepAnchor);
+        cursor.beginEditBlock();
+        cursor.removeSelectedText();
+        cursor.endEditBlock();
+    }
+
+    // Add fold indicator to the header line
+    QTextBlock headerBlock =
+        QPlainTextEdit::document()->findBlockByNumber(blockNumber);
+    if (headerBlock.isValid()) {
+        QTextCursor cursor(headerBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        cursor.beginEditBlock();
+        cursor.insertText(" [...]");
+        cursor.endEditBlock();
+    }
+
+    m_syncing = oldSyncing;
+    m_lineNumberArea->update();
+}
+
+void Editor::unfoldAt(int blockNumber)
+{
+    if (!m_foldedRegions.contains(blockNumber)) return;
+
+    QStringList cachedLines = m_foldedRegions.take(blockNumber);
+
+    bool oldSyncing = m_syncing;
+    m_syncing = true;
+
+    QTextBlock headerBlock =
+        QPlainTextEdit::document()->findBlockByNumber(blockNumber);
+    if (!headerBlock.isValid()) {
+        m_syncing = oldSyncing;
+        return;
+    }
+
+    // Remove [...] indicator from header line
+    QString headerText = headerBlock.text();
+    if (headerText.endsWith(" [...]")) {
+        QTextCursor cursor(headerBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        // " [...]" = 6 chars
+        cursor.movePosition(
+            QTextCursor::Left, QTextCursor::KeepAnchor, 6);
+        cursor.beginEditBlock();
+        cursor.removeSelectedText();
+
+        // Re-insert cached lines
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        for (const QString &line : cachedLines) {
+            cursor.insertText("\n" + line);
+        }
+        cursor.endEditBlock();
+    }
+
+    m_syncing = oldSyncing;
+    m_lineNumberArea->update();
+}
+
+void Editor::toggleFoldAt(int blockNumber)
+{
+    if (m_foldedRegions.contains(blockNumber)) {
+        unfoldAt(blockNumber);
+    } else if (isFoldableLine(blockNumber)) {
+        foldAt(blockNumber);
+    }
 }
 
 void Editor::foldAll()
 {
-    // Simplified folding - would need proper implementation with fold regions
-    QTextBlock block = QPlainTextEdit::document()->begin();
-    while (block.isValid()) {
-        block.setVisible(true);
-        block = block.next();
+    for (int i = 0; i < QPlainTextEdit::document()->blockCount(); ++i) {
+        if (isFoldableLine(i) && !isFoldedLine(i)) {
+            foldAt(i);
+        }
     }
 }
 
 void Editor::unfoldAll()
 {
-    QTextBlock block = QPlainTextEdit::document()->begin();
-    while (block.isValid()) {
-        block.setVisible(true);
-        block = block.next();
+    QList<int> foldedKeys = m_foldedRegions.keys();
+    std::sort(foldedKeys.begin(), foldedKeys.end(),
+              std::greater<int>());
+    for (int key : foldedKeys) {
+        unfoldAt(key);
     }
-    viewport()->update();
 }
 
 void Editor::toggleFoldAtCursor()
 {
-    // Simplified - would need proper fold region detection
-    QTextCursor cursor = textCursor();
-    QTextBlock block = cursor.block();
-    block.setVisible(!block.isVisible());
-    viewport()->update();
+    int blockNum = textCursor().blockNumber();
+    toggleFoldAt(blockNum);
 }
 
 // Whitespace / EOL / indent guide visualization
