@@ -13,7 +13,7 @@ Transform Olive Notepad's visual identity, editor core, and search system to mat
 
 ### Current State
 
-- ~14,700 lines of C++/Qt across 40+ source files
+- ~14,700 lines of C++/Qt across 60+ source/header files
 - Compiled binary exists (ELF 64-bit, ~5.8MB)
 - Architecture: PieceTable buffer, Document/Editor separation, TabWidget, ToolbarManager, ThemeManager, SyntaxHighlighter, SessionManager, MacroRecorder
 - Three-row toolbar with SVG icons, basic Find/Replace dialog, olive-green custom theme
@@ -55,11 +55,23 @@ Default editor font: Consolas 10pt (fallback: Courier New, monospace).
 
 Keyword/syntax colors follow Notepad++ defaults:
 - Keyword: `#0000ff` (blue)
-- String: `#808080` (grey)
+- String: `#808080` (grey) — matches Notepad++ default; same value as line number foreground, which is faithful but low-contrast for strings
 - Comment: `#008000` (green)
 - Number: `#ff8000` (orange)
 - Operator: `#000080` (dark blue)
 - Preprocessor: `#804000` (brown)
+
+**New Theme struct fields** (added to `src/ui/theme.h`):
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `indentGuideColor` | `QColor` | Vertical indent guide lines |
+| `whitespaceColor` | `QColor` | Space dots, tab arrows, EOL symbols |
+| `foldMarginBackground` | `QColor` | Fold margin gutter background |
+| `bookmarkMarginBackground` | `QColor` | Bookmark margin gutter background |
+| `markHighlightColor` | `QColor` | Search mark highlight background |
+| `bracketMatchBackground` | `QColor` | Matched bracket highlight |
+| `bracketErrorBackground` | `QColor` | Unmatched bracket highlight (red) |
 
 ### 1.2 Single-Row Toolbar
 
@@ -89,6 +101,8 @@ Modify `TabBar`/`TabWidget` to match Notepad++ tab behavior:
 - **Tab overflow** — scroll arrows when tabs exceed window width (Notepad++ behavior)
 
 **Files modified:** `src/ui/tabwidget.cpp`, `src/ui/tabwidget.h`
+
+**Specific changes to `tabwidget.h`:** Add `closeToLeftRequested(int index)` signal and `onCloseToLeftRequested(int index)` slot. Add file-type icon mapping. Add close-button-on-hover behavior.
 
 ### 1.4 Notepad++ Menu Structure
 
@@ -180,7 +194,7 @@ static constexpr qint64 VIEWPORT_BLOCK_SIZE = 64 * 1024;               // 64KB
   - Insert text at column position across selected lines
   - Insert sequential numbers (start, step, leading zeros option)
 
-Implementation: override `mouseMoveEvent`, `paintEvent` (for column selection highlight), and `keyPressEvent` in Editor. Store column selection as `{startLine, startCol, endLine, endCol}` separate from QTextCursor.
+Implementation: override `mouseMoveEvent` and `keyPressEvent` in Editor. For column selection visual highlight, install an event filter on `viewport()` via `viewport()->installEventFilter(this)` and handle `QEvent::Paint` in `eventFilter()` — direct `paintEvent` override on the Editor class draws behind the viewport and produces nothing visible. Store column selection as `{startLine, startCol, endLine, endCol}` separate from QTextCursor.
 
 **Files modified:** `src/ui/editor.cpp`, `src/ui/editor.h`
 **New file:** `src/ui/columneditor.h`, `src/ui/columneditor.cpp`
@@ -231,7 +245,7 @@ Implementation: custom painting in `paintEvent` overlay, not by inserting actual
 - **Persistent fold state** — save/restore fold state with session.
 - **Folded text indicator** — when a block is folded, show `[...]` inline after the fold line.
 
-Implementation: use `QTextBlock::setVisible(false)` for folded blocks. Store fold state as a set of folded block numbers in the Editor. Fold margin rendering in `LineNumberArea::paintEvent`.
+**Implementation note:** `QTextBlock::setVisible(false)` is unreliable in Qt6's `QPlainTextEdit` — it leaves visual gaps instead of reflowing the layout. Instead, use the block-caching approach: on fold, remove folded blocks from the QTextDocument and cache their content in a `QMap<int, QStringList>` keyed on the header block number; on unfold, re-insert the cached blocks. The fold header line gets a `[...]` suffix appended while folded. Store the fold map and a set of folded block numbers in the Editor. Fold margin rendering in `LineNumberArea::paintEvent`.
 
 **Files modified:** `src/ui/editor.cpp`, `src/ui/editor.h`, `src/ui/linenumberarea.cpp`
 
@@ -366,7 +380,7 @@ Implementation: use `QTextEdit::ExtraSelection` with a dedicated mark style stor
 
 ### 3.6 Incremental Search Bar
 
-A slim toolbar-style bar that appears below the main toolbar (or above the editor area) when triggered by Ctrl+Alt+I:
+A slim toolbar-style bar that appears below the main toolbar (or above the editor area) when triggered by Ctrl+I (note: Notepad++ uses Ctrl+Alt+I on Windows, but Ctrl+Alt combos conflict with Linux WM shortcuts on GNOME/KDE; Ctrl+I is the safer default, user-configurable via Preferences):
 
 ```
 [Search: [_______________] [v] [^] [X close]]
@@ -395,7 +409,7 @@ Current `Editor::findNext` uses `QTextDocument::find(QString)`. Add a parallel p
 
 ## Files Summary
 
-### New Files (10)
+### New Files (13)
 | File | Purpose |
 |------|---------|
 | `src/core/largefile.h` | Large file memory-mapped reader |
@@ -412,34 +426,38 @@ Current `Editor::findNext` uses `QTextDocument::find(QString)`. Add a parallel p
 | `src/ui/columneditor.cpp` | Column editor implementation |
 | `resources/themes/notepadpp.json` | Notepad++ classic theme |
 
-### Modified Files (13)
+### Modified Files (17)
 | File | Changes |
 |------|---------|
-| `src/ui/mainwindow.h` | New menu pointers, search dialog, search results panel |
-| `src/ui/mainwindow.cpp` | Menu restructure, new signal/slot connections |
+| `src/ui/mainwindow.h` | Remove `FindDialog *m_findDialog` member and forward decl; add `SearchDialog *m_searchDialog`, `SearchResultsPanel *m_searchResultsPanel`, `IncrementalSearchBar *m_incrementalSearchBar`; remove six `QToolBar*` members, replace with single `QToolBar *m_mainToolBar`; add new menu pointers for Encoding, Language, Settings, Run, Window menus |
+| `src/ui/mainwindow.cpp` | Remove `#include "finddialog.h"`, add new includes; menu restructure to Notepad++ layout; new signal/slot connections for all new UI components |
 | `src/ui/mainwindow_extended.cpp` | New slot implementations for added menu items |
-| `src/ui/toolbarmanager.h` | Single toolbar reference instead of six |
-| `src/ui/toolbarmanager.cpp` | Single-row toolbar layout |
-| `src/ui/tabwidget.h` | File-type icons, close button behavior, context menu extensions |
-| `src/ui/tabwidget.cpp` | Tab bar enhancements |
-| `src/ui/statusbar.h` | New sections, clickable indicators |
-| `src/ui/statusbar.cpp` | Enhanced status bar layout |
-| `src/ui/editor.h` | Column selection, bracket matching, folding, whitespace, bookmarks, marks |
-| `src/ui/editor.cpp` | Core editor enhancements |
-| `src/ui/linenumberarea.h` | Three-column gutter |
+| `src/ui/toolbarmanager.h` | Single `QToolBar*` member instead of six; remove per-toolbar accessors |
+| `src/ui/toolbarmanager.cpp` | Single-row toolbar layout, remove `addToolBarBreak()` calls |
+| `src/ui/tabwidget.h` | Add `closeToLeftRequested(int)` signal, `onCloseToLeftRequested(int)` slot; file-type icon mapping; close-button-on-hover behavior |
+| `src/ui/tabwidget.cpp` | Tab bar enhancements, extended context menu |
+| `src/ui/statusbar.h` | New sections (doc type, length/lines, sel count, INS/OVR), clickable indicators |
+| `src/ui/statusbar.cpp` | Enhanced status bar layout with sunken panel borders |
+| `src/ui/editor.h` | Column selection, bracket matching, folding (fold map), whitespace rendering, bookmarks, marks, viewport event filter |
+| `src/ui/editor.cpp` | Core editor enhancements, viewport event filter for column selection overlay |
+| `src/ui/linenumberarea.h` | Three-column gutter (bookmark, line numbers, fold margin) |
 | `src/ui/linenumberarea.cpp` | Bookmark margin, fold margin rendering |
-| `src/ui/theme.h` | New color fields (indent guide, whitespace, fold, bookmark, mark) |
-| `src/ui/theme.cpp` | New theme fields + notepadpp theme |
-| `src/core/document.h` | Large file threshold constants |
-| `src/core/document.cpp` | Large file mode detection |
-| `CMakeLists.txt` | Add new source files |
-| `resources/resources.qrc` | Add new theme file |
+| `src/ui/theme.h` | New color fields: `indentGuideColor`, `whitespaceColor`, `foldMarginBackground`, `bookmarkMarginBackground`, `markHighlightColor`, `bracketMatchBackground`, `bracketErrorBackground` |
+| `src/ui/theme.cpp` | New theme fields, JSON serialization, notepadpp theme |
+| `src/core/document.h` | Large file threshold constants, `LargeFileReader *m_largeFileReader = nullptr` member, `bool isLargeFile() const` accessor |
+| `src/core/document.cpp` | Large file mode detection in `load()`, delegate to LargeFileReader when threshold exceeded |
+| `src/core/session.h` | Add serialization for per-document fold state (`QMap<int, bool>`) and bookmark set (`QSet<int>`) |
+| `src/core/session.cpp` | Persist fold state and bookmarks in session JSON |
+| `CMakeLists.txt` | Add new source files, remove finddialog sources |
+| `resources/resources.qrc` | Add `notepadpp.json` theme entry |
 
-### Removed Files (2)
+### Removed Files (4)
 | File | Reason |
 |------|--------|
 | `src/ui/finddialog.h` | Replaced by SearchDialog |
 | `src/ui/finddialog.cpp` | Replaced by SearchDialog |
+| `src/ui/toolbarmanager_old.cpp` | Dead code — stale backup not in CMakeLists.txt |
+| `src/ui/toolbarmanager.cpp.backup` | Dead code — stale backup not in CMakeLists.txt |
 
 ---
 
@@ -464,8 +482,8 @@ Current `Editor::findNext` uses `QTextDocument::find(QString)`. Add a parallel p
 
 1. **Theme + toolbar** — lowest risk, immediately visible, validates the build system still works
 2. **Tab bar + status bar + menu restructure** — completes the UI chrome
-3. **Gutter (bookmark + fold margins)** — sets up the visual structure needed by editor features
-4. **Editor core** — bracket matching, indent guides, whitespace rendering, bookmarks (no external dependencies)
+3. **Gutter + bookmarks** — three-column gutter (bookmark margin, line numbers, fold margin) AND bookmark data model (`QSet<int>` in Editor, F2 navigation, click-to-toggle). Bookmark visual and data must land together.
+4. **Editor core** — bracket matching, indent guides, whitespace rendering (no external dependencies)
 5. **Code folding** — depends on gutter fold margin being in place
 6. **Column selection + column editor** — independent editor feature
 7. **Large file mode** — independent, can be tested with generated large files
