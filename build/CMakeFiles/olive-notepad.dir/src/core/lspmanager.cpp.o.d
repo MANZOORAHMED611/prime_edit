@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/core/lspmanager.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/lspmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/lspmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
@@ -275,7 +275,7 @@ CMakeFiles/olive-notepad.dir/src/core/lspmanager.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qshareddata_impl.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qiodevice.h \

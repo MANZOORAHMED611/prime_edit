@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -359,10 +359,10 @@ CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextDocument \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/linenumberarea.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
@@ -394,15 +394,15 @@ CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/piecetable.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/macrorecorder.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QKeyEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/syntax/highlighter.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QSyntaxHighlighter \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qsyntaxhighlighter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextobject.h \
@@ -410,7 +410,7 @@ CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextformat.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \

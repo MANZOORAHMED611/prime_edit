@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/themeeditor.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/themeeditor.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/themeeditor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -343,7 +343,7 @@ CMakeFiles/olive-notepad.dir/src/ui/themeeditor.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/theme.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \

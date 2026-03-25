@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/linenumberarea.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/linenumberarea.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -311,7 +311,7 @@ CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcursor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qbitmap.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qkeysequence.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \

@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/fileexplorer.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/fileexplorer.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/fileexplorer.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -392,7 +392,7 @@ CMakeFiles/olive-notepad.dir/src/ui/fileexplorer.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpicture.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitstatusdelegate.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStyledItemDelegate \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyleditemdelegate.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \

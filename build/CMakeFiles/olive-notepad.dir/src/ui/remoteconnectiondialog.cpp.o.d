@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/remoteconnectiondialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/remoteconnectiondialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -355,7 +355,7 @@ CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qitemselectionmodel.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/../core/remoteconnection.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/remoteconnection.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \

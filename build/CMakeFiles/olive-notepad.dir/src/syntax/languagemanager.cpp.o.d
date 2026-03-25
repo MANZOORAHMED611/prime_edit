@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/syntax/languagemanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/syntax/languagemanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h \

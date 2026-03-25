@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/tabwidget.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/tabwidget.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/tabwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \

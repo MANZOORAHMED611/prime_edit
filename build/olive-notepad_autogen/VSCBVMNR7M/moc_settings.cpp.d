@@ -1,5 +1,5 @@
-/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/VSCBVMNR7M/moc_settings.cpp: /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
-  /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/moc_predefs.h \
+/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/VSCBVMNR7M/moc_settings.cpp: /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
+  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/moc_predefs.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

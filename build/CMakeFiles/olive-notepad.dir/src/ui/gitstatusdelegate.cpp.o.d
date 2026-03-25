@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/gitstatusdelegate.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitstatusdelegate.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitstatusdelegate.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStyledItemDelegate \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyleditemdelegate.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \

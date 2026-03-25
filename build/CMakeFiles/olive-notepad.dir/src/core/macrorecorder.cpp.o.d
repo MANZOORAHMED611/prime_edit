@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/core/macrorecorder.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/macrorecorder.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/macrorecorder.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
@@ -331,7 +331,7 @@ CMakeFiles/olive-notepad.dir/src/core/macrorecorder.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qkeysequence.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \

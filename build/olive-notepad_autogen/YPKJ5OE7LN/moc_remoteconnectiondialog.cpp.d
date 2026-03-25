@@ -1,6 +1,6 @@
-/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_remoteconnectiondialog.cpp: /home/abusulaiman/dev/repository/notepad_supreme/src/ui/remoteconnectiondialog.h \
-  /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/moc_predefs.h \
-  /home/abusulaiman/dev/repository/notepad_supreme/src/core/remoteconnection.h \
+/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_remoteconnectiondialog.cpp: /home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.h \
+  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/moc_predefs.h \
+  /home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

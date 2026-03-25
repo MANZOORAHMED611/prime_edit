@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/core/lspclient.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/lspclient.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \

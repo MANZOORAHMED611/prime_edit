@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/theme.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/theme.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/theme.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h \

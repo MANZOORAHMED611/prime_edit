@@ -1,15 +1,63 @@
 {
-	"BUILD_DIR" : "/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen",
-	"CMAKE_BINARY_DIR" : "/home/abusulaiman/dev/repository/notepad_supreme/build",
-	"CMAKE_CURRENT_BINARY_DIR" : "/home/abusulaiman/dev/repository/notepad_supreme/build",
-	"CMAKE_CURRENT_SOURCE_DIR" : "/home/abusulaiman/dev/repository/notepad_supreme",
+	"BUILD_DIR" : "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen",
+	"CMAKE_BINARY_DIR" : "/home/abusulaiman/dev/repository/olive_notepad/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/abusulaiman/dev/repository/olive_notepad/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/abusulaiman/dev/repository/olive_notepad",
 	"CMAKE_EXECUTABLE" : "/usr/bin/cmake",
 	"CMAKE_LIST_FILES" : 
 	[
-		"/home/abusulaiman/dev/repository/notepad_supreme/CMakeLists.txt",
-		"/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/3.22.1/CMakeSystem.cmake",
+		"/home/abusulaiman/dev/repository/olive_notepad/CMakeLists.txt",
+		"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeSystem.cmake.in",
+		"/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/3.22.1/CMakeSystem.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeUnixFindMake.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake",
-		"/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeDetermineCXXCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Platform/Linux-Determine-CXX.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompilerId.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeCompilerIdDetection.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/ADSP-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/ARMCC-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/ARMClang-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/AppleClang-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompilerInternal.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Borland-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompilerInternal.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Cray-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Embarcadero-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Fujitsu-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/GHS-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/HP-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/IAR-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Intel-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/MSVC-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/NVHPC-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/NVIDIA-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/PGI-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/PathScale-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/SCO-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/TI-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/Watcom-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/XL-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake",
+		"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeCXXCompiler.cmake.in",
+		"/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake",
@@ -23,6 +71,18 @@
 		"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake",
 		"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeTestCompilerCommon.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompilerABI.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeParseImplicitIncludeInfo.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeParseLibraryArchitecture.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeTestCompilerCommon.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp",
+		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompileFeatures.cmake",
+		"/usr/share/cmake-3.22/Modules/Internal/FeatureTesting.cmake",
+		"/usr/share/cmake-3.22/Modules/CMakeCXXCompiler.cmake.in",
+		"/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersion.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersionImpl.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6Config.cmake",
@@ -51,6 +111,7 @@
 		"/usr/share/cmake-3.22/Modules/CheckLibraryExists.cmake",
 		"/usr/share/cmake-3.22/Modules/CheckIncludeFileCXX.cmake",
 		"/usr/share/cmake-3.22/Modules/CheckCXXSourceCompiles.cmake",
+		"/usr/share/cmake-3.22/Modules/CheckIncludeFile.cxx.in",
 		"/usr/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake",
 		"/usr/share/cmake-3.22/Modules/FindPackageMessage.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreConfigVersion.cmake",
@@ -358,221 +419,221 @@
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Svg/Qt6SvgTargets-none.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Svg/Qt6SvgAdditionalTargetInfo.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Svg/Qt6SvgVersionlessTargets.cmake",
-		"/home/abusulaiman/dev/repository/notepad_supreme/resources/resources.qrc"
+		"/home/abusulaiman/dev/repository/olive_notepad/resources/resources.qrc"
 	],
-	"CMAKE_SOURCE_DIR" : "/home/abusulaiman/dev/repository/notepad_supreme",
+	"CMAKE_SOURCE_DIR" : "/home/abusulaiman/dev/repository/olive_notepad",
 	"DEP_FILE" : "",
 	"DEP_FILE_RULE_NAME" : "",
 	"HEADERS" : 
 	[
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/document.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/document.h",
 			"MU",
 			"PRMOGMWJPH/moc_document.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/documentmanager.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.h",
 			"MU",
 			"PRMOGMWJPH/moc_documentmanager.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/encoding.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.h",
 			"MU",
 			"PRMOGMWJPH/moc_encoding.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/lspclient.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h",
 			"MU",
 			"PRMOGMWJPH/moc_lspclient.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/lspmanager.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.h",
 			"MU",
 			"PRMOGMWJPH/moc_lspmanager.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/macrorecorder.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.h",
 			"MU",
 			"PRMOGMWJPH/moc_macrorecorder.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/piecetable.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h",
 			"MU",
 			"PRMOGMWJPH/moc_piecetable.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/plugininterface.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/plugininterface.h",
 			"MU",
 			"PRMOGMWJPH/moc_plugininterface.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/pluginmanager.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.h",
 			"MU",
 			"PRMOGMWJPH/moc_pluginmanager.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/remoteconnection.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.h",
 			"MU",
 			"PRMOGMWJPH/moc_remoteconnection.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/session.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/session.h",
 			"MU",
 			"PRMOGMWJPH/moc_session.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/syntax/highlighter.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.h",
 			"MU",
 			"SKMTTJJW33/moc_highlighter.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/syntax/languagemanager.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.h",
 			"MU",
 			"SKMTTJJW33/moc_languagemanager.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/commandpalette.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.h",
 			"MU",
 			"YPKJ5OE7LN/moc_commandpalette.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/completionpopup.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h",
 			"MU",
 			"YPKJ5OE7LN/moc_completionpopup.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h",
 			"MU",
 			"YPKJ5OE7LN/moc_editor.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/fileexplorer.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.h",
 			"MU",
 			"YPKJ5OE7LN/moc_fileexplorer.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/finddialog.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/finddialog.h",
 			"MU",
 			"YPKJ5OE7LN/moc_finddialog.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitdiffviewer.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.h",
 			"MU",
 			"YPKJ5OE7LN/moc_gitdiffviewer.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitstatusdelegate.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.h",
 			"MU",
 			"YPKJ5OE7LN/moc_gitstatusdelegate.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/hexviewer.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.h",
 			"MU",
 			"YPKJ5OE7LN/moc_hexviewer.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/linenumberarea.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.h",
 			"MU",
 			"YPKJ5OE7LN/moc_linenumberarea.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.h",
 			"MU",
 			"YPKJ5OE7LN/moc_mainwindow.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/markdownpreview.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.h",
 			"MU",
 			"YPKJ5OE7LN/moc_markdownpreview.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/preferencesdialog.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.h",
 			"MU",
 			"YPKJ5OE7LN/moc_preferencesdialog.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/remoteconnectiondialog.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.h",
 			"MU",
 			"YPKJ5OE7LN/moc_remoteconnectiondialog.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/statusbar.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.h",
 			"MU",
 			"YPKJ5OE7LN/moc_statusbar.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/tabwidget.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.h",
 			"MU",
 			"YPKJ5OE7LN/moc_tabwidget.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/terminalwidget.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.h",
 			"MU",
 			"YPKJ5OE7LN/moc_terminalwidget.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/theme.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h",
 			"MU",
 			"YPKJ5OE7LN/moc_theme.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/themeeditor.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.h",
 			"MU",
 			"YPKJ5OE7LN/moc_themeeditor.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/toolbarmanager.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.h",
 			"MU",
 			"YPKJ5OE7LN/moc_toolbarmanager.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/utils/fileutils.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.h",
 			"MU",
 			"VSCBVMNR7M/moc_fileutils.cpp",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h",
 			"MU",
 			"VSCBVMNR7M/moc_settings.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/include",
-	"MOC_COMPILATION_FILE" : "/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/include",
+	"MOC_COMPILATION_FILE" : "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
 		"QT_CORE_LIB",
@@ -592,7 +653,7 @@
 	],
 	"MOC_INCLUDES" : 
 	[
-		"/home/abusulaiman/dev/repository/notepad_supreme/src",
+		"/home/abusulaiman/dev/repository/olive_notepad/src",
 		"/usr/include/x86_64-linux-gnu/qt6/QtCore",
 		"/usr/include/x86_64-linux-gnu/qt6",
 		"/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++",
@@ -620,191 +681,191 @@
 		"-c",
 		"/usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : [],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 40,
-	"PARSE_CACHE_FILE" : "/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/olive-notepad_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "/usr/lib/qt6/libexec/moc",
 	"QT_UIC_EXECUTABLE" : "/usr/lib/qt6/libexec/uic",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 2,
-	"SETTINGS_FILE" : "/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/olive-notepad_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/document.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/documentmanager.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/encoding.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/lspclient.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/lspmanager.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/macrorecorder.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/piecetable.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/pluginmanager.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/remoteconnection.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/core/session.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/main.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/main.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/syntax/highlighter.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/syntax/languagemanager.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/commandpalette.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/completionpopup.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/fileexplorer.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/finddialog.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/finddialog.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitdiffviewer.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitstatusdelegate.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/hexviewer.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/linenumberarea.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow_extended.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/markdownpreview.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/preferencesdialog.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/remoteconnectiondialog.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/statusbar.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/tabwidget.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/terminalwidget.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/theme.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/themeeditor.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/ui/toolbarmanager.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/utils/fileutils.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp",
 			"MU",
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.cpp",
+			"/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp",
 			"MU",
 			null
 		]

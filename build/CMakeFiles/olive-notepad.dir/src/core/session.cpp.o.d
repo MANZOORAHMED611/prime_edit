@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/core/session.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/session.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/session.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/session.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h \
@@ -304,7 +304,7 @@ CMakeFiles/olive-notepad.dir/src/core/session.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \

@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/core/pluginmanager.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/pluginmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/pluginmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
@@ -312,7 +312,7 @@ CMakeFiles/olive-notepad.dir/src/core/pluginmanager.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/plugininterface.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/plugininterface.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDir \

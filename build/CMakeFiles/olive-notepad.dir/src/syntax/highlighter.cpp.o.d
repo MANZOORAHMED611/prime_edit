@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/syntax/highlighter.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/syntax/highlighter.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QSyntaxHighlighter \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qsyntaxhighlighter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiglobal.h \

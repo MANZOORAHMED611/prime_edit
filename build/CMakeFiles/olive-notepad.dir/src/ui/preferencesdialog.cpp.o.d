@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/preferencesdialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/preferencesdialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -351,7 +351,7 @@ CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
@@ -364,7 +364,7 @@ CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/encoding.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout \

@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/mocs_compilation.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/mocs_compilation.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_document.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_document.cpp \
  /usr/include/c++/11/memory /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -117,7 +117,7 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/c++/11/backward/auto_ptr.h \
  /usr/include/c++/11/pstl/glue_memory_defs.h \
  /usr/include/c++/11/pstl/execution_defs.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/document.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
@@ -326,19 +326,19 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/piecetable.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/piecetable.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_documentmanager.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/documentmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_documentmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/documentmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QTimer \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/document.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_lspclient.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_lspclient.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/lspclient.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
@@ -354,11 +354,11 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_lspmanager.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/lspmanager.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/lspclient.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_macrorecorder.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/macrorecorder.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_lspmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/lspmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_macrorecorder.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/macrorecorder.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QKeyEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiglobal.h \
@@ -389,24 +389,24 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qline.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qnativeinterface.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qkeysequence.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_pluginmanager.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/pluginmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_pluginmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/pluginmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QPluginLoader \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpluginloader.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlibrary.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/plugininterface.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_remoteconnection.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/remoteconnection.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/plugininterface.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_remoteconnection.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/../../../src/core/remoteconnection.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QByteArray \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearray.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QTemporaryFile \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtemporaryfile.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDateTime \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/SKMTTJJW33/moc_highlighter.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/SKMTTJJW33/../../../src/syntax/highlighter.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/SKMTTJJW33/moc_highlighter.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/SKMTTJJW33/../../../src/syntax/highlighter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QSyntaxHighlighter \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qsyntaxhighlighter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextobject.h \
@@ -433,8 +433,8 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextformat.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_commandpalette.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/commandpalette.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_commandpalette.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/commandpalette.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -479,19 +479,19 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QAction \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qaction.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_completionpopup.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/completionpopup.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/../core/lspclient.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_editor.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/editor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_completionpopup.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/completionpopup.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/../core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_editor.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/editor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qabstracttextdocumentlayout.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextDocument \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_fileexplorer.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/fileexplorer.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_fileexplorer.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/fileexplorer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTreeView \
@@ -504,14 +504,14 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QToolButton \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtoolbutton.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_finddialog.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/finddialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_finddialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/finddialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QCheckBox \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcheckbox.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_gitdiffviewer.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/gitdiffviewer.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_gitdiffviewer.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/gitdiffviewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTextEdit \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTreeWidget \
@@ -520,12 +520,12 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtreewidgetitemiterator.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSplitter \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_gitstatusdelegate.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/gitstatusdelegate.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_gitstatusdelegate.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/gitstatusdelegate.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStyledItemDelegate \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyleditemdelegate.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_hexviewer.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/hexviewer.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_hexviewer.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/hexviewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QScrollArea \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qscrollarea.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QPaintEvent \
@@ -533,10 +533,10 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QWheelEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_linenumberarea.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/linenumberarea.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_mainwindow.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/mainwindow.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_linenumberarea.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/linenumberarea.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_mainwindow.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/mainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabWidget \
@@ -553,12 +553,12 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstatusbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdockwidget.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_markdownpreview.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/markdownpreview.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_markdownpreview.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/markdownpreview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTextBrowser \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextbrowser.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_preferencesdialog.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/preferencesdialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_preferencesdialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/preferencesdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSpinBox \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qspinbox.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QComboBox \
@@ -566,27 +566,27 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QFontComboBox \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qfontcombobox.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcombobox.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_remoteconnectiondialog.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/remoteconnectiondialog.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/../core/remoteconnection.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_statusbar.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/statusbar.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_tabwidget.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/tabwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_remoteconnectiondialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/remoteconnectiondialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/../core/remoteconnection.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_statusbar.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/statusbar.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_tabwidget.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/tabwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabBar \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_terminalwidget.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/terminalwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_terminalwidget.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/terminalwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_themeeditor.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/themeeditor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_themeeditor.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/themeeditor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/theme.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_toolbarmanager.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/toolbarmanager.h \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/VSCBVMNR7M/moc_settings.cpp \
- /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/VSCBVMNR7M/../../../src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/theme.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_toolbarmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/toolbarmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/VSCBVMNR7M/moc_settings.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/VSCBVMNR7M/../../../src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h

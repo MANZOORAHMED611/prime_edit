@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/abusulaiman/dev/repository/notepad_supreme
+CMAKE_SOURCE_DIR = /home/abusulaiman/dev/repository/olive_notepad
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/abusulaiman/dev/repository/notepad_supreme/build
+CMAKE_BINARY_DIR = /home/abusulaiman/dev/repository/olive_notepad/build
 
 # Utility rule file for olive-notepad_autogen.
 
@@ -67,8 +67,8 @@ include CMakeFiles/olive-notepad_autogen.dir/compiler_depend.make
 include CMakeFiles/olive-notepad_autogen.dir/progress.make
 
 CMakeFiles/olive-notepad_autogen:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target olive-notepad"
-	/usr/bin/cmake -E cmake_autogen /home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/olive-notepad_autogen.dir/AutogenInfo.json ""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target olive-notepad"
+	/usr/bin/cmake -E cmake_autogen /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir/AutogenInfo.json ""
 
 olive-notepad_autogen: CMakeFiles/olive-notepad_autogen
 olive-notepad_autogen: CMakeFiles/olive-notepad_autogen.dir/build.make
@@ -83,6 +83,6 @@ CMakeFiles/olive-notepad_autogen.dir/clean:
 .PHONY : CMakeFiles/olive-notepad_autogen.dir/clean
 
 CMakeFiles/olive-notepad_autogen.dir/depend:
-	cd /home/abusulaiman/dev/repository/notepad_supreme/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/abusulaiman/dev/repository/notepad_supreme /home/abusulaiman/dev/repository/notepad_supreme /home/abusulaiman/dev/repository/notepad_supreme/build /home/abusulaiman/dev/repository/notepad_supreme/build /home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/olive-notepad_autogen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/abusulaiman/dev/repository/olive_notepad/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/abusulaiman/dev/repository/olive_notepad /home/abusulaiman/dev/repository/olive_notepad /home/abusulaiman/dev/repository/olive_notepad/build /home/abusulaiman/dev/repository/olive_notepad/build /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/olive-notepad_autogen.dir/depend
 

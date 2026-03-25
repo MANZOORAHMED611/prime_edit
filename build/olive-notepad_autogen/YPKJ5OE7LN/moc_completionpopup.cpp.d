@@ -1,6 +1,6 @@
-/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/YPKJ5OE7LN/moc_completionpopup.cpp: /home/abusulaiman/dev/repository/notepad_supreme/src/ui/completionpopup.h \
-  /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/moc_predefs.h \
-  /home/abusulaiman/dev/repository/notepad_supreme/src/core/lspclient.h \
+/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_completionpopup.cpp: /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
+  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/moc_predefs.h \
+  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow_extended.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -346,7 +346,7 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdockwidget.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \
@@ -383,7 +383,7 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextDocument \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/tabwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabBar \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMessageBox \

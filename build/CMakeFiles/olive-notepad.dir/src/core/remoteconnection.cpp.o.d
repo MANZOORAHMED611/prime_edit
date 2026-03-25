@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/remoteconnection.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/remoteconnection.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \

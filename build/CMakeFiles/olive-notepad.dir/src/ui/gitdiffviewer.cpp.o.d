@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/gitdiffviewer.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitdiffviewer.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/gitdiffviewer.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \

@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/completionpopup.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/completionpopup.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/completionpopup.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistview.h \
@@ -342,7 +342,7 @@ CMakeFiles/olive-notepad.dir/src/ui/completionpopup.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/../core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/lspclient.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \

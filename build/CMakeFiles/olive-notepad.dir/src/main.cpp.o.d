@@ -1,5 +1,5 @@
 CMakeFiles/olive-notepad.dir/src/main.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/main.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/main.cpp \
  /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h \
@@ -357,7 +357,7 @@ CMakeFiles/olive-notepad.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QIcon \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qicon.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
@@ -392,7 +392,7 @@ CMakeFiles/olive-notepad.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdockwidget.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/theme.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
@@ -408,11 +408,11 @@ CMakeFiles/olive-notepad.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/session.h
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/session.h

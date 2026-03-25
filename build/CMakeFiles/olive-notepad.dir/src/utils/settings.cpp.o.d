@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \

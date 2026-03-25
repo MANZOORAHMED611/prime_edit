@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -346,10 +346,10 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdockwidget.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/tabwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabBar \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \
@@ -386,8 +386,8 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextDocument \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/statusbar.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/finddialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/finddialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit \
@@ -397,7 +397,7 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/preferencesdialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSpinBox \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qspinbox.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h \
@@ -417,7 +417,7 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QFontComboBox \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qfontcombobox.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcombobox.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/commandpalette.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistview.h \
@@ -435,7 +435,7 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QKeyEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/terminalwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTextEdit \
@@ -446,11 +446,11 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtoolbutton.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/toolbarmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
@@ -480,23 +480,23 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/c++/11/bits/fs_dir.h /usr/include/c++/11/bits/fs_ops.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/piecetable.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/documentmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QTimer \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/document.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/macrorecorder.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/fileutils.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/syntax/languagemanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication.h \

@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/terminalwidget.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/terminalwidget.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/terminalwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \

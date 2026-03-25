@@ -1,8 +1,8 @@
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/olive-notepad.dir
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/edit_cache.dir
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/rebuild_cache.dir
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/list_install_components.dir
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/install.dir
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/install/local.dir
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/install/strip.dir
-/home/abusulaiman/dev/repository/notepad_supreme/build/CMakeFiles/olive-notepad_autogen.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/edit_cache.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/rebuild_cache.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/list_install_components.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/install.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/install/local.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/install/strip.dir
+/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir

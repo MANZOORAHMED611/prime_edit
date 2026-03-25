@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/markdownpreview.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/markdownpreview.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/markdownpreview.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \

@@ -1,6 +1,6 @@
-/home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/PRMOGMWJPH/moc_document.cpp: /home/abusulaiman/dev/repository/notepad_supreme/src/core/document.h \
-  /home/abusulaiman/dev/repository/notepad_supreme/build/olive-notepad_autogen/moc_predefs.h \
-  /home/abusulaiman/dev/repository/notepad_supreme/src/core/piecetable.h \
+/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/PRMOGMWJPH/moc_document.cpp: /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
+  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/moc_predefs.h \
+  /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

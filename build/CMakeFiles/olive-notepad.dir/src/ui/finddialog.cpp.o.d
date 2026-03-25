@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/finddialog.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/finddialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/finddialog.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/finddialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/finddialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \

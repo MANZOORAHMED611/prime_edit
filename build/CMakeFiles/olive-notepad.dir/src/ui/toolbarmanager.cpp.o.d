@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/toolbarmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/toolbarmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
@@ -329,7 +329,7 @@ CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qaction.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/mainwindow.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmainwindow.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabwidget.h \

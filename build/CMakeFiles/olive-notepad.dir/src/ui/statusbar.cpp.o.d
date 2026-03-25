@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/ui/statusbar.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/statusbar.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/statusbar.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStatusBar \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstatusbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -328,7 +328,7 @@ CMakeFiles/olive-notepad.dir/src/ui/statusbar.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcontiguouscache.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/ui/editor.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \
@@ -365,7 +365,7 @@ CMakeFiles/olive-notepad.dir/src/ui/statusbar.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextDocument \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
@@ -397,6 +397,6 @@ CMakeFiles/olive-notepad.dir/src/ui/statusbar.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/piecetable.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h

@@ -1,7 +1,7 @@
 CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o: \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/documentmanager.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp \
  /usr/include/stdc-predef.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/documentmanager.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
@@ -275,7 +275,7 @@ CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
@@ -327,10 +327,10 @@ CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/core/piecetable.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
- /home/abusulaiman/dev/repository/notepad_supreme/src/utils/settings.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
