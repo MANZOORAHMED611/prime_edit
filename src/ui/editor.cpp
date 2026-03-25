@@ -1,5 +1,6 @@
 #include "editor.h"
 #include "linenumberarea.h"
+#include "theme.h"
 #include "core/document.h"
 #include "core/macrorecorder.h"
 #include "syntax/highlighter.h"
@@ -93,30 +94,60 @@ void Editor::applySettings()
 
 int Editor::lineNumberAreaWidth() const
 {
-    if (!m_lineNumbersVisible) {
-        return 0;
+    int width = 0;
+    if (m_bookmarkMarginVisible) width += BOOKMARK_MARGIN_WIDTH;
+    if (m_lineNumbersVisible) {
+        int digits = 1;
+        int max = qMax(1, blockCount());
+        while (max >= 10) { max /= 10; ++digits; }
+        width += 10 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
     }
+    if (m_foldMarginVisible) width += FOLD_MARGIN_WIDTH;
+    return width;
+}
 
-    int digits = 1;
-    int max = qMax(1, blockCount());
-    while (max >= 10) {
-        max /= 10;
-        ++digits;
-    }
+int Editor::bookmarkMarginWidth() const
+{
+    return m_bookmarkMarginVisible ? BOOKMARK_MARGIN_WIDTH : 0;
+}
 
-    int space = 10 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
-    return space;
+int Editor::foldMarginWidth() const
+{
+    return m_foldMarginVisible ? FOLD_MARGIN_WIDTH : 0;
 }
 
 void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    if (!m_lineNumbersVisible) {
-        return;
+    Theme theme = ThemeManager::instance().currentTheme();
+    QPainter painter(m_lineNumberArea);
+
+    int bmWidth = bookmarkMarginWidth();
+    int fmWidth = foldMarginWidth();
+
+    // Calculate line number section width
+    int lineNumWidth = 0;
+    if (m_lineNumbersVisible) {
+        int digits = 1;
+        int max = qMax(1, blockCount());
+        while (max >= 10) { max /= 10; ++digits; }
+        lineNumWidth = 10 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
     }
 
-    QPainter painter(m_lineNumberArea);
-    painter.fillRect(event->rect(), QColor(45, 45, 45));
+    // Paint section backgrounds
+    if (m_bookmarkMarginVisible) {
+        QRect bmRect(0, event->rect().top(), bmWidth, event->rect().height());
+        painter.fillRect(bmRect, theme.bookmarkMarginBackground);
+    }
+    if (m_lineNumbersVisible) {
+        QRect lnRect(bmWidth, event->rect().top(), lineNumWidth, event->rect().height());
+        painter.fillRect(lnRect, theme.lineNumberBackground);
+    }
+    if (m_foldMarginVisible) {
+        QRect fmRect(bmWidth + lineNumWidth, event->rect().top(), fmWidth, event->rect().height());
+        painter.fillRect(fmRect, theme.foldMarginBackground);
+    }
 
+    // Paint per-block elements
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
     int top = qRound(blockBoundingGeometry(block).translated(contentOffset()).top());
@@ -124,16 +155,31 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
-            QString number = QString::number(blockNumber + 1);
-            painter.setPen(QColor(150, 150, 150));
+            int lineHeight = qRound(blockBoundingRect(block).height());
 
-            // Highlight current line number
-            if (blockNumber == textCursor().blockNumber()) {
-                painter.setPen(QColor(255, 255, 255));
+            // Section 1: Bookmark indicators
+            if (m_bookmarkMarginVisible && m_bookmarks.contains(blockNumber + 1)) {
+                painter.setRenderHint(QPainter::Antialiasing, true);
+                painter.setBrush(QColor(0x33, 0x99, 0xFF));
+                painter.setPen(Qt::NoPen);
+                int cx = bmWidth / 2;
+                int cy = top + lineHeight / 2;
+                painter.drawEllipse(QPoint(cx, cy), 5, 5);
+                painter.setRenderHint(QPainter::Antialiasing, false);
             }
 
-            painter.drawText(0, top, m_lineNumberArea->width() - 5, fontMetrics().height(),
-                            Qt::AlignRight, number);
+            // Section 2: Line numbers
+            if (m_lineNumbersVisible) {
+                QString number = QString::number(blockNumber + 1);
+                painter.setPen(theme.lineNumberForeground);
+                if (blockNumber == textCursor().blockNumber()) {
+                    painter.setPen(theme.foreground);
+                }
+                painter.drawText(bmWidth, top, lineNumWidth - 5, fontMetrics().height(),
+                                Qt::AlignRight, number);
+            }
+
+            // Section 3: Fold margin — background only for now
         }
 
         block = block.next();
@@ -141,6 +187,45 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
         bottom = top + qRound(blockBoundingRect(block).height());
         ++blockNumber;
     }
+}
+
+void Editor::toggleBookmark(int line)
+{
+    if (m_bookmarks.contains(line))
+        m_bookmarks.remove(line);
+    else
+        m_bookmarks.insert(line);
+    m_lineNumberArea->update();
+}
+
+void Editor::nextBookmark()
+{
+    if (m_bookmarks.isEmpty()) return;
+    int current = currentLine();
+    QList<int> sorted = m_bookmarks.values();
+    std::sort(sorted.begin(), sorted.end());
+    for (int bm : sorted) {
+        if (bm > current) { goToLine(bm); return; }
+    }
+    goToLine(sorted.first());
+}
+
+void Editor::previousBookmark()
+{
+    if (m_bookmarks.isEmpty()) return;
+    int current = currentLine();
+    QList<int> sorted = m_bookmarks.values();
+    std::sort(sorted.begin(), sorted.end());
+    for (int i = sorted.size() - 1; i >= 0; --i) {
+        if (sorted[i] < current) { goToLine(sorted[i]); return; }
+    }
+    goToLine(sorted.last());
+}
+
+void Editor::clearBookmarks()
+{
+    m_bookmarks.clear();
+    m_lineNumberArea->update();
 }
 
 void Editor::setLineNumbersVisible(bool visible)

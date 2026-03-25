@@ -3,6 +3,7 @@
 
 #include <QPlainTextEdit>
 #include <QTextDocument>
+#include <QSet>
 
 class Document;
 class SyntaxHighlighter;
@@ -13,6 +14,9 @@ class Editor : public QPlainTextEdit
     Q_OBJECT
 
 public:
+    static constexpr int BOOKMARK_MARGIN_WIDTH = 16;
+    static constexpr int FOLD_MARGIN_WIDTH = 16;
+
     explicit Editor(Document *document, QWidget *parent = nullptr);
     ~Editor() override;
 
@@ -23,6 +27,23 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void setLineNumbersVisible(bool visible);
     bool lineNumbersVisible() const { return m_lineNumbersVisible; }
+
+    // Bookmarks
+    void toggleBookmark(int line);
+    void nextBookmark();
+    void previousBookmark();
+    void clearBookmarks();
+    QSet<int> bookmarks() const { return m_bookmarks; }
+
+    // Gutter section widths
+    int bookmarkMarginWidth() const;
+    int foldMarginWidth() const;
+
+    // Expose protected QPlainTextEdit methods for LineNumberArea
+    using QPlainTextEdit::firstVisibleBlock;
+    using QPlainTextEdit::blockBoundingGeometry;
+    using QPlainTextEdit::blockBoundingRect;
+    using QPlainTextEdit::contentOffset;
 
     // Settings
     void setWordWrapEnabled(bool enabled);
@@ -104,6 +125,10 @@ private:
     Document *m_document;
     SyntaxHighlighter *m_highlighter;
     LineNumberArea *m_lineNumberArea;
+
+    QSet<int> m_bookmarks;
+    bool m_bookmarkMarginVisible = true;
+    bool m_foldMarginVisible = true;
 
     int m_tabWidth = 4;
     bool m_insertSpaces = true;

@@ -2,6 +2,7 @@
 #define LINENUMBERAREA_H
 
 #include <QWidget>
+#include <QMouseEvent>
 
 class Editor;
 
@@ -16,6 +17,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
 private:
     Editor *m_editor;
