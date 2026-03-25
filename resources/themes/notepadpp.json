@@ -1,0 +1,38 @@
+{
+  "name": "Notepad++",
+  "colors": {
+    "editor.background": "#ffffff",
+    "editor.foreground": "#000000",
+    "editor.lineHighlightBackground": "#e8e8ff",
+    "editor.selectionBackground": "#0078d7",
+    "editorCursor.foreground": "#000000",
+    "editorLineNumber.foreground": "#808080",
+    "editorLineNumber.activeForeground": "#000000",
+    "editorGutter.background": "#e4e4e4",
+    "editorWidget.background": "#f0f0f0",
+    "editorWidget.border": "#c0c0c0",
+    "tab.activeBackground": "#ffffff",
+    "tab.inactiveBackground": "#e8e8e8",
+    "tab.activeForeground": "#000000",
+    "tab.inactiveForeground": "#808080",
+    "statusBar.background": "#f0f0f0",
+    "statusBar.foreground": "#000000",
+    "sideBar.background": "#f0f0f0",
+    "sideBar.foreground": "#000000",
+    "titleBar.activeBackground": "#f0f0f0",
+    "titleBar.activeForeground": "#000000"
+  },
+  "tokenColors": {
+    "comment": "#008000",
+    "keyword": "#0000ff",
+    "string": "#808080",
+    "number": "#ff8000",
+    "type": "#0000ff",
+    "function": "#000080",
+    "variable": "#000000",
+    "operator": "#000080",
+    "preprocessor": "#804000",
+    "tag": "#0000ff",
+    "attribute": "#ff0000"
+  }
+}

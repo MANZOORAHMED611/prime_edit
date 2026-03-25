@@ -46,6 +46,17 @@ struct Theme {
     QColor accentSecondary;
     QColor borderColor;
 
+    // Gutter colors
+    QColor foldMarginBackground;
+    QColor bookmarkMarginBackground;
+
+    // Editor feature colors
+    QColor indentGuideColor;
+    QColor whitespaceColor;
+    QColor markHighlightColor;
+    QColor bracketMatchBackground;
+    QColor bracketErrorBackground;
+
     // Diagnostic colors
     QColor errorForeground;
     QColor warningForeground;
@@ -68,6 +79,7 @@ struct Theme {
     static Theme monokai();
     static Theme dracula();
     static Theme nord();
+    static Theme notepadpp();
 };
 
 class ThemeManager {

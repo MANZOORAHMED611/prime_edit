@@ -51,6 +51,17 @@ QJsonObject Theme::toJson() const
     obj["accentSecondary"] = colorToString(accentSecondary);
     obj["borderColor"] = colorToString(borderColor);
 
+    // Gutter colors
+    obj["foldMarginBackground"] = colorToString(foldMarginBackground);
+    obj["bookmarkMarginBackground"] = colorToString(bookmarkMarginBackground);
+
+    // Editor feature colors
+    obj["indentGuideColor"] = colorToString(indentGuideColor);
+    obj["whitespaceColor"] = colorToString(whitespaceColor);
+    obj["markHighlightColor"] = colorToString(markHighlightColor);
+    obj["bracketMatchBackground"] = colorToString(bracketMatchBackground);
+    obj["bracketErrorBackground"] = colorToString(bracketErrorBackground);
+
     // Diagnostic colors
     obj["errorForeground"] = colorToString(errorForeground);
     obj["warningForeground"] = colorToString(warningForeground);
@@ -99,6 +110,15 @@ Theme Theme::fromJson(const QJsonObject &json)
     theme.accentPrimary = stringToColor(json["accentPrimary"].toString());
     theme.accentSecondary = stringToColor(json["accentSecondary"].toString());
     theme.borderColor = stringToColor(json["borderColor"].toString());
+
+    theme.foldMarginBackground = stringToColor(json["foldMarginBackground"].toString());
+    theme.bookmarkMarginBackground = stringToColor(json["bookmarkMarginBackground"].toString());
+
+    theme.indentGuideColor = stringToColor(json["indentGuideColor"].toString());
+    theme.whitespaceColor = stringToColor(json["whitespaceColor"].toString());
+    theme.markHighlightColor = stringToColor(json["markHighlightColor"].toString());
+    theme.bracketMatchBackground = stringToColor(json["bracketMatchBackground"].toString());
+    theme.bracketErrorBackground = stringToColor(json["bracketErrorBackground"].toString());
 
     theme.errorForeground = stringToColor(json["errorForeground"].toString());
     theme.warningForeground = stringToColor(json["warningForeground"].toString());
@@ -165,6 +185,14 @@ Theme Theme::defaultDark()
     t.accentSecondary = QColor("#00a0ff");
     t.borderColor = QColor("#3e3e3e");
 
+    t.foldMarginBackground = QColor("#2d2d2d");
+    t.bookmarkMarginBackground = QColor("#1e1e1e");
+    t.indentGuideColor = QColor("#404040");
+    t.whitespaceColor = QColor("#3b3b3b");
+    t.markHighlightColor = QColor("#613214");
+    t.bracketMatchBackground = QColor("#0d5e0d");
+    t.bracketErrorBackground = QColor("#5e0d0d");
+
     t.errorForeground = QColor("#f48771");
     t.warningForeground = QColor("#cca700");
     t.infoForeground = QColor("#75beff");
@@ -209,6 +237,14 @@ Theme Theme::defaultLight()
     t.accentPrimary = QColor("#007acc");
     t.accentSecondary = QColor("#0098ff");
     t.borderColor = QColor("#d4d4d4");
+
+    t.foldMarginBackground = QColor("#f3f3f3");
+    t.bookmarkMarginBackground = QColor("#ffffff");
+    t.indentGuideColor = QColor("#d0d0d0");
+    t.whitespaceColor = QColor("#c8c8c8");
+    t.markHighlightColor = QColor("#ffff00");
+    t.bracketMatchBackground = QColor("#90ee90");
+    t.bracketErrorBackground = QColor("#ff6666");
 
     t.errorForeground = QColor("#e51400");
     t.warningForeground = QColor("#bf8803");
@@ -255,6 +291,14 @@ Theme Theme::olive()
     t.accentSecondary = QColor("#8fbc8f");
     t.borderColor = QColor("#b8c89f");
 
+    t.foldMarginBackground = QColor("#eef2e6");
+    t.bookmarkMarginBackground = QColor("#f3f6ec");
+    t.indentGuideColor = QColor("#c8d5a8");
+    t.whitespaceColor = QColor("#b8c89f");
+    t.markHighlightColor = QColor("#e6db74");
+    t.bracketMatchBackground = QColor("#a8d98a");
+    t.bracketErrorBackground = QColor("#d4765b");
+
     t.errorForeground = QColor("#a0522d");
     t.warningForeground = QColor("#cd853f");
     t.infoForeground = QColor("#6b8e23");
@@ -299,6 +343,14 @@ Theme Theme::monokai()
     t.accentPrimary = QColor("#f92672");
     t.accentSecondary = QColor("#a6e22e");
     t.borderColor = QColor("#49483e");
+
+    t.foldMarginBackground = QColor("#2d2d2d");
+    t.bookmarkMarginBackground = QColor("#272822");
+    t.indentGuideColor = QColor("#464741");
+    t.whitespaceColor = QColor("#3e3d32");
+    t.markHighlightColor = QColor("#544f19");
+    t.bracketMatchBackground = QColor("#2e5e1a");
+    t.bracketErrorBackground = QColor("#6e1a1a");
 
     t.errorForeground = QColor("#f92672");
     t.warningForeground = QColor("#e6db74");
@@ -345,6 +397,14 @@ Theme Theme::dracula()
     t.accentSecondary = QColor("#bd93f9");
     t.borderColor = QColor("#44475a");
 
+    t.foldMarginBackground = QColor("#21222c");
+    t.bookmarkMarginBackground = QColor("#282a36");
+    t.indentGuideColor = QColor("#44475a");
+    t.whitespaceColor = QColor("#3b3e50");
+    t.markHighlightColor = QColor("#4a4520");
+    t.bracketMatchBackground = QColor("#1a5e2a");
+    t.bracketErrorBackground = QColor("#5e1a1a");
+
     t.errorForeground = QColor("#ff5555");
     t.warningForeground = QColor("#ffb86c");
     t.infoForeground = QColor("#8be9fd");
@@ -389,6 +449,14 @@ Theme Theme::nord()
     t.accentPrimary = QColor("#88c0d0");
     t.accentSecondary = QColor("#81a1c1");
     t.borderColor = QColor("#434c5e");
+
+    t.foldMarginBackground = QColor("#3b4252");
+    t.bookmarkMarginBackground = QColor("#2e3440");
+    t.indentGuideColor = QColor("#434c5e");
+    t.whitespaceColor = QColor("#3b4252");
+    t.markHighlightColor = QColor("#4a4520");
+    t.bracketMatchBackground = QColor("#1a5e3a");
+    t.bracketErrorBackground = QColor("#5e2a2a");
 
     t.errorForeground = QColor("#bf616a");
     t.warningForeground = QColor("#ebcb8b");
@@ -435,6 +503,14 @@ Theme Theme::solarizedDark()
     t.accentSecondary = QColor("#2aa198");
     t.borderColor = QColor("#073642");
 
+    t.foldMarginBackground = QColor("#073642");
+    t.bookmarkMarginBackground = QColor("#002b36");
+    t.indentGuideColor = QColor("#0a4a5a");
+    t.whitespaceColor = QColor("#073642");
+    t.markHighlightColor = QColor("#3a4a00");
+    t.bracketMatchBackground = QColor("#0a4a2a");
+    t.bracketErrorBackground = QColor("#5e1a1a");
+
     t.errorForeground = QColor("#dc322f");
     t.warningForeground = QColor("#b58900");
     t.infoForeground = QColor("#268bd2");
@@ -480,10 +556,71 @@ Theme Theme::solarizedLight()
     t.accentSecondary = QColor("#2aa198");
     t.borderColor = QColor("#eee8d5");
 
+    t.foldMarginBackground = QColor("#eee8d5");
+    t.bookmarkMarginBackground = QColor("#fdf6e3");
+    t.indentGuideColor = QColor("#d6cdb5");
+    t.whitespaceColor = QColor("#d6cdb5");
+    t.markHighlightColor = QColor("#e6db74");
+    t.bracketMatchBackground = QColor("#b4deb4");
+    t.bracketErrorBackground = QColor("#e8a0a0");
+
     t.errorForeground = QColor("#dc322f");
     t.warningForeground = QColor("#b58900");
     t.infoForeground = QColor("#268bd2");
     t.hintForeground = QColor("#93a1a1");
+
+    return t;
+}
+
+Theme Theme::notepadpp()
+{
+    Theme t;
+    t.name = "Notepad++";
+    t.author = "Classic";
+    t.isDark = false;
+
+    t.background = QColor("#ffffff");
+    t.foreground = QColor("#000000");
+    t.selectionBackground = QColor("#0078d7");
+    t.selectionForeground = QColor("#ffffff");
+    t.currentLineBackground = QColor("#e8e8ff");
+    t.lineNumberForeground = QColor("#808080");
+    t.lineNumberBackground = QColor("#e4e4e4");
+
+    t.keyword = QColor("#0000ff");
+    t.string = QColor("#808080");
+    t.comment = QColor("#008000");
+    t.number = QColor("#ff8000");
+    t.function = QColor("#000080");
+    t.type = QColor("#0000ff");
+    t.variable = QColor("#000000");
+    t.operator_ = QColor("#000080");
+
+    t.menuBackground = QColor("#f0f0f0");
+    t.menuForeground = QColor("#000000");
+    t.toolbarBackground = QColor("#f0f0f0");
+    t.statusBarBackground = QColor("#f0f0f0");
+    t.statusBarForeground = QColor("#000000");
+    t.tabActiveBackground = QColor("#ffffff");
+    t.tabInactiveBackground = QColor("#e8e8e8");
+    t.tabForeground = QColor("#000000");
+
+    t.accentPrimary = QColor("#0078d7");
+    t.accentSecondary = QColor("#005a9e");
+    t.borderColor = QColor("#c0c0c0");
+
+    t.foldMarginBackground = QColor("#f0f0f0");
+    t.bookmarkMarginBackground = QColor("#e4e4e4");
+    t.indentGuideColor = QColor("#d0d0d0");
+    t.whitespaceColor = QColor("#c0c0c0");
+    t.markHighlightColor = QColor("#ffff00");
+    t.bracketMatchBackground = QColor("#90ee90");
+    t.bracketErrorBackground = QColor("#ff6666");
+
+    t.errorForeground = QColor("#ff0000");
+    t.warningForeground = QColor("#ff8000");
+    t.infoForeground = QColor("#0000ff");
+    t.hintForeground = QColor("#808080");
 
     return t;
 }
@@ -515,6 +652,7 @@ void ThemeManager::loadBuiltInThemes()
     m_themes["Nord"] = Theme::nord();
     m_themes["Solarized Dark"] = Theme::solarizedDark();
     m_themes["Solarized Light"] = Theme::solarizedLight();
+    m_themes["Notepad++"] = Theme::notepadpp();
 }
 
 void ThemeManager::loadThemes()
@@ -558,7 +696,7 @@ bool ThemeManager::deleteTheme(const QString &name)
 {
     // Don't delete built-in themes
     QStringList builtIn = {"Default Dark", "Default Light", "Monokai", "Dracula", "Nord",
-                            "Solarized Dark", "Solarized Light"};
+                            "Solarized Dark", "Solarized Light", "Notepad++"};
     if (builtIn.contains(name)) {
         return false;
     }

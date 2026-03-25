@@ -221,13 +221,8 @@ private:
     QMenu *m_helpMenu;
     QMenu *m_recentFilesMenu;
 
-    // Toolbars
-    QToolBar *m_fileToolBar;
-    QToolBar *m_editToolBar;
-    QToolBar *m_searchToolBar;
-    QToolBar *m_viewToolBar;
-    QToolBar *m_formatToolBar;
-    QToolBar *m_macroToolBar;
+    // Toolbar
+    QToolBar *m_mainToolBar;
 
     // Actions for toolbar
     QAction *m_newAction;

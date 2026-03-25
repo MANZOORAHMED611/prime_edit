@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     // Load and apply Olive theme
     ThemeManager::instance().loadThemes();
-    ThemeManager::instance().applyTheme("Olive");
+    ThemeManager::instance().applyTheme("Notepad++");
 
     // Apply theme stylesheet to application
     app.setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());

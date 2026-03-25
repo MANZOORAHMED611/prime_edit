@@ -260,17 +260,9 @@ void MainWindow::setupMenus()
 
 void MainWindow::setupToolBar()
 {
-    // Use ToolbarManager to create all toolbars
     ToolbarManager *toolbarMgr = new ToolbarManager(this, this);
     toolbarMgr->createToolbars();
-
-    // Store references to toolbars
-    m_fileToolBar = toolbarMgr->fileToolbar();
-    m_editToolBar = toolbarMgr->editToolbar();
-    m_searchToolBar = toolbarMgr->searchToolbar();
-    m_viewToolBar = toolbarMgr->viewToolbar();
-    m_formatToolBar = toolbarMgr->formatToolbar();
-    m_macroToolBar = toolbarMgr->macroToolbar();
+    m_mainToolBar = toolbarMgr->toolbar();
 }
 
 void MainWindow::setupStatusBar()

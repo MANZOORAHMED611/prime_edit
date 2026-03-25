@@ -19,38 +19,18 @@ public:
     void createToolbars();
     void updateToolbarState();
 
-    // Get toolbars
-    QToolBar* fileToolbar() const { return m_fileToolBar; }
-    QToolBar* editToolbar() const { return m_editToolBar; }
-    QToolBar* searchToolbar() const { return m_searchToolBar; }
-    QToolBar* viewToolbar() const { return m_viewToolBar; }
-    QToolBar* formatToolbar() const { return m_formatToolBar; }
-    QToolBar* macroToolbar() const { return m_macroToolBar; }
+    QToolBar* toolbar() const { return m_toolbar; }
 
     // Get actions
     QAction* action(const QString &name) const;
 
 private:
-    void createFileToolbar();
-    void createEditToolbar();
-    void createSearchToolbar();
-    void createViewToolbar();
-    void createFormatToolbar();
-    void createMacroToolbar();
-
     QAction* createAction(const QString &name, const QString &text,
                          const QString &tooltip, const QString &shortcut,
                          const char *slot, const QString &iconName = QString());
 
     MainWindow *m_mainWindow;
-
-    QToolBar *m_fileToolBar;
-    QToolBar *m_editToolBar;
-    QToolBar *m_searchToolBar;
-    QToolBar *m_viewToolBar;
-    QToolBar *m_formatToolBar;
-    QToolBar *m_macroToolBar;
-
+    QToolBar *m_toolbar;
     QMap<QString, QAction*> m_actions;
 };
 
