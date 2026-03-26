@@ -6,6 +6,8 @@
 #include <QMap>
 #include <QSet>
 
+#include "core/searchengine.h"
+
 class QPainter;
 struct Theme;
 class Document;
@@ -71,6 +73,11 @@ public:
     bool findPrevious(const QString &text, QTextDocument::FindFlags flags = QTextDocument::FindFlags());
     int replaceAll(const QString &findText, const QString &replaceText,
                    QTextDocument::FindFlags flags = QTextDocument::FindFlags());
+
+    // Mark system
+    void markAll(const QString &pattern, const SearchEngine::Options &opts);
+    void clearMarks();
+    int markCount() const { return m_markSelections.size(); }
 
     // Selection
     QString selectedText() const;
@@ -194,6 +201,7 @@ private:
     int findMatchingBracket(int position, QChar open, QChar close, bool forward) const;
     void updateExtraSelections();
     QList<QTextEdit::ExtraSelection> m_bracketSelections;
+    QList<QTextEdit::ExtraSelection> m_markSelections;
 
     QString getCommentString() const;
 };

@@ -621,8 +621,45 @@ void Editor::updateExtraSelections()
     }
 
     allSelections.append(m_bracketSelections);
+    allSelections.append(m_markSelections);
 
     setExtraSelections(allSelections);
+}
+
+void Editor::markAll(const QString &pattern, const SearchEngine::Options &opts)
+{
+    m_markSelections.clear();
+
+    if (pattern.isEmpty()) {
+        updateExtraSelections();
+        return;
+    }
+
+    SearchEngine engine;
+    QVector<SearchResult> results = engine.findAll(toPlainText(), pattern, opts);
+
+    Theme theme = ThemeManager::instance().currentTheme();
+
+    for (const SearchResult &r : results) {
+        QTextEdit::ExtraSelection sel;
+        sel.format.setBackground(theme.markHighlightColor);
+
+        QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(r.line - 1);
+        if (!block.isValid()) continue;
+
+        sel.cursor = QTextCursor(block);
+        sel.cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, r.column);
+        sel.cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, r.length);
+        m_markSelections.append(sel);
+    }
+
+    updateExtraSelections();
+}
+
+void Editor::clearMarks()
+{
+    m_markSelections.clear();
+    updateExtraSelections();
 }
 
 void Editor::jumpToMatchingBracket()

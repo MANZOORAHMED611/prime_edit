@@ -35,6 +35,9 @@ public:
     void setCurrentTabIndex(int index);
     Editor *currentEditor() const;
 
+    // Tab access
+    TabWidget *tabWidget() const { return m_tabWidget; }
+
     // Session
     QStringList openFilePaths() const;
 

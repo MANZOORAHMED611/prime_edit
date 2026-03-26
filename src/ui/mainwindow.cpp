@@ -1061,6 +1061,16 @@ void MainWindow::find()
         connect(m_searchDialog, &SearchDialog::findAllInCurrent, this, &MainWindow::onFindAllInCurrent);
         connect(m_searchDialog, &SearchDialog::findAllInAllOpen, this, &MainWindow::onFindAllInAllOpen);
         connect(m_searchDialog, &SearchDialog::findInFiles, this, &MainWindow::onFindInFiles);
+        connect(m_searchDialog, &SearchDialog::markAll, this, [this]() {
+            Editor *e = currentEditor();
+            if (e && m_searchDialog) {
+                e->markAll(m_searchDialog->searchText(), m_searchDialog->searchOptions());
+            }
+        });
+        connect(m_searchDialog, &SearchDialog::clearMarks, this, [this]() {
+            Editor *e = currentEditor();
+            if (e) e->clearMarks();
+        });
     }
     Editor *e = currentEditor();
     if (e && !e->selectedText().isEmpty()) {
