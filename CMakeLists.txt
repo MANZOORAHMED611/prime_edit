@@ -44,6 +44,8 @@ set(CORE_SOURCES
     src/core/lspmanager.cpp
     src/core/pluginmanager.cpp
     src/core/remoteconnection.cpp
+    src/core/largefile.cpp
+    src/core/searchengine.cpp
 )
 
 set(UI_SOURCES
@@ -67,6 +69,7 @@ set(UI_SOURCES
     src/ui/remoteconnectiondialog.cpp
     src/ui/gitdiffviewer.cpp
     src/ui/toolbarmanager.cpp
+    src/ui/columneditor.cpp
 )
 
 set(SYNTAX_SOURCES
@@ -91,6 +94,8 @@ set(HEADERS
     src/core/plugininterface.h
     src/core/pluginmanager.h
     src/core/remoteconnection.h
+    src/core/largefile.h
+    src/core/searchengine.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h
@@ -110,6 +115,7 @@ set(HEADERS
     src/ui/remoteconnectiondialog.h
     src/ui/gitdiffviewer.h
     src/ui/toolbarmanager.h
+    src/ui/columneditor.h
     src/syntax/highlighter.h
     src/syntax/languagemanager.h
     src/utils/fileutils.h

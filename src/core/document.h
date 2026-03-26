@@ -7,6 +7,8 @@
 #include <memory>
 #include "piecetable.h"
 
+class LargeFileReader;
+
 class Document : public QObject
 {
     Q_OBJECT
@@ -17,6 +19,9 @@ public:
         Windows,    // CRLF (\r\n)
         ClassicMac  // CR (\r)
     };
+
+    static constexpr qint64 LARGE_FILE_THRESHOLD = 10 * 1024 * 1024;      // 10MB
+    static constexpr qint64 READONLY_FILE_THRESHOLD = 100 * 1024 * 1024;   // 100MB
 
     explicit Document(QObject *parent = nullptr);
     ~Document() override;
@@ -64,6 +69,10 @@ public:
     bool isReadOnly() const { return m_readOnly; }
     void setReadOnly(bool readOnly);
 
+    // Large file support
+    bool isLargeFile() const { return m_largeFileReader != nullptr; }
+    LargeFileReader *largeFileReader() const { return m_largeFileReader; }
+
     // Recovery
     bool hasRecoveryFile() const;
     bool loadRecovery();
@@ -90,6 +99,7 @@ private:
     QString m_language;
     bool m_modified = false;
     bool m_readOnly = false;
+    LargeFileReader *m_largeFileReader = nullptr;
 
     static QString detectEncoding(const QByteArray &data);
     static LineEnding detectLineEnding(const QString &text);

@@ -76,6 +76,10 @@ public:
     QString selectedText() const;
     void replaceSelection(const QString &text);
 
+    // Column/block selection
+    bool isColumnSelectionActive() const { return m_columnSelection.active; }
+    void clearColumnSelection();
+
     // Language
     void setLanguage(const QString &language);
     QString language() const;
@@ -131,6 +135,9 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -163,6 +170,16 @@ private:
     // Code folding
     QMap<int, QStringList> m_foldedRegions;
     int findFoldEnd(int blockNumber) const;
+
+    // Column/block selection
+    struct ColumnSelection {
+        int startLine = -1, startCol = -1;
+        int endLine = -1, endCol = -1;
+        bool active = false;
+    };
+    ColumnSelection m_columnSelection;
+    void paintColumnSelection();
+    void insertTextAtColumn(const QString &text);
 
     // Whitespace / EOL / indent guide visualization
     bool m_showWhitespace = false;

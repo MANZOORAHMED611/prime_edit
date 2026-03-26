@@ -1,4 +1,5 @@
 #include "document.h"
+#include "largefile.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -19,6 +20,31 @@ Document::~Document()
 
 bool Document::load(const QString &filePath)
 {
+    QFileInfo fi(filePath);
+
+    // Large file mode
+    if (fi.size() > LARGE_FILE_THRESHOLD) {
+        m_largeFileReader = new LargeFileReader(this);
+        if (!m_largeFileReader->open(filePath)) {
+            delete m_largeFileReader;
+            m_largeFileReader = nullptr;
+            // Fall through to normal loading
+        } else {
+            m_filePath = filePath;
+            m_encoding = m_largeFileReader->encoding();
+            if (fi.size() > READONLY_FILE_THRESHOLD) {
+                setReadOnly(true);
+            }
+            // Load first 1000 lines into piece table for display
+            QStringList firstLines = m_largeFileReader->lines(0, 1000);
+            m_content.setText(firstLines.join('\n'));
+            m_modified = false;
+            emit filePathChanged(m_filePath);
+            emit encodingChanged(m_encoding);
+            return true;
+        }
+    }
+
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
         return false;

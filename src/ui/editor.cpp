@@ -11,6 +11,7 @@
 #include <QTextLayout>
 #include <QScrollBar>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QRegularExpression>
@@ -412,6 +413,20 @@ void Editor::resizeEvent(QResizeEvent *event)
 
 void Editor::keyPressEvent(QKeyEvent *event)
 {
+    // Column selection: typing inserts at each line
+    if (m_columnSelection.active && !event->text().isEmpty() && event->text().at(0).isPrint()) {
+        insertTextAtColumn(event->text());
+        m_columnSelection.active = false;
+        viewport()->update();
+        return;
+    }
+    // Escape cancels column selection
+    if (m_columnSelection.active && event->key() == Qt::Key_Escape) {
+        m_columnSelection.active = false;
+        viewport()->update();
+        return;
+    }
+
     // Record macro event
     MacroRecorder::instance().recordKeyEvent(event);
 
@@ -1299,6 +1314,10 @@ void Editor::paintEvent(QPaintEvent *event)
             paintEOL(painter, theme);
         }
     }
+
+    if (m_columnSelection.active) {
+        paintColumnSelection();
+    }
 }
 
 void Editor::paintWhitespace(QPainter &painter, const Theme &theme)
@@ -1413,4 +1432,108 @@ void Editor::paintIndentGuides(QPainter &painter, const Theme &theme)
         }
         block = block.next();
     }
+}
+
+// --- Column/block selection ---
+
+void Editor::mousePressEvent(QMouseEvent *event)
+{
+    if (event->modifiers() & Qt::AltModifier && event->button() == Qt::LeftButton) {
+        QTextCursor cursor = cursorForPosition(event->pos());
+        m_columnSelection.active = true;
+        m_columnSelection.startLine = cursor.blockNumber();
+        m_columnSelection.startCol = cursor.columnNumber();
+        m_columnSelection.endLine = m_columnSelection.startLine;
+        m_columnSelection.endCol = m_columnSelection.startCol;
+        viewport()->update();
+        return;
+    }
+
+    if (m_columnSelection.active) {
+        m_columnSelection.active = false;
+        viewport()->update();
+    }
+
+    QPlainTextEdit::mousePressEvent(event);
+}
+
+void Editor::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_columnSelection.active) {
+        QTextCursor cursor = cursorForPosition(event->pos());
+        m_columnSelection.endLine = cursor.blockNumber();
+        m_columnSelection.endCol = cursor.columnNumber();
+        viewport()->update();
+        return;
+    }
+    QPlainTextEdit::mouseMoveEvent(event);
+}
+
+void Editor::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (m_columnSelection.active && event->button() == Qt::LeftButton) {
+        return;
+    }
+    QPlainTextEdit::mouseReleaseEvent(event);
+}
+
+void Editor::paintColumnSelection()
+{
+    if (!m_columnSelection.active) return;
+
+    QPainter painter(viewport());
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+    int startLine = qMin(m_columnSelection.startLine, m_columnSelection.endLine);
+    int endLine = qMax(m_columnSelection.startLine, m_columnSelection.endLine);
+    int startCol = qMin(m_columnSelection.startCol, m_columnSelection.endCol);
+    int endCol = qMax(m_columnSelection.startCol, m_columnSelection.endCol);
+
+    QColor selColor(0, 120, 215, 80);
+
+    for (int line = startLine; line <= endLine; ++line) {
+        QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(line);
+        if (!block.isValid() || !block.isVisible()) continue;
+
+        QRectF blockGeom = blockBoundingGeometry(block).translated(contentOffset());
+        if (blockGeom.bottom() < 0 || blockGeom.top() > viewport()->height()) continue;
+
+        QTextLayout *layout = block.layout();
+        if (layout->lineCount() == 0) continue;
+        QTextLine textLine = layout->lineAt(0);
+
+        qreal x1 = textLine.cursorToX(qMin(startCol, block.text().length()));
+        qreal x2 = textLine.cursorToX(qMin(endCol, block.text().length()));
+
+        QRectF rect(x1, blockGeom.top(), x2 - x1, blockGeom.height());
+        painter.fillRect(rect, selColor);
+    }
+}
+
+void Editor::insertTextAtColumn(const QString &text)
+{
+    int startLine = qMin(m_columnSelection.startLine, m_columnSelection.endLine);
+    int endLine = qMax(m_columnSelection.startLine, m_columnSelection.endLine);
+    int col = qMin(m_columnSelection.startCol, m_columnSelection.endCol);
+
+    QTextCursor cursor = textCursor();
+    cursor.beginEditBlock();
+
+    for (int line = startLine; line <= endLine; ++line) {
+        QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(line);
+        if (!block.isValid()) continue;
+
+        int pos = block.position() + qMin(col, block.text().length());
+        cursor.setPosition(pos);
+        cursor.insertText(text);
+    }
+
+    cursor.endEditBlock();
+    setTextCursor(cursor);
+}
+
+void Editor::clearColumnSelection()
+{
+    m_columnSelection.active = false;
+    viewport()->update();
 }
