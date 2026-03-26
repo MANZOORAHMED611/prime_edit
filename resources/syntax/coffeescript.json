@@ -1,0 +1,13 @@
+{
+  "name": "CoffeeScript",
+  "keywords": ["and", "break", "by", "catch", "class", "continue", "debugger", "delete", "do", "else", "extends", "false", "finally", "for", "if", "in", "instanceof", "is", "isnt", "loop", "new", "no", "not", "null", "of", "off", "on", "or", "own", "return", "super", "switch", "then", "this", "throw", "true", "try", "typeof", "undefined", "unless", "until", "void", "when", "while", "yes", "yield"],
+  "types": ["Array", "Boolean", "Date", "Error", "Function", "Math", "Number", "Object", "RegExp", "String", "Symbol", "Map", "Set", "WeakMap", "WeakSet", "Promise"],
+  "builtins": ["console", "process", "require", "module", "exports", "setTimeout", "setInterval", "clearTimeout", "clearInterval", "JSON", "parseInt", "parseFloat", "isNaN", "isFinite", "alert", "confirm", "prompt"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "###",
+  "multiLineCommentEnd": "###",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_$][a-zA-Z0-9_$]*)\\s*[=:]",
+  "foldBased": "indent"
+}

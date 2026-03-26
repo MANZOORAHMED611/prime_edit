@@ -358,6 +358,11 @@
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Svg/Qt6SvgTargets-none.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Svg/Qt6SvgAdditionalTargetInfo.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Svg/Qt6SvgVersionlessTargets.cmake",
+		"/usr/share/cmake-3.22/Modules/FindICU.cmake",
+		"/usr/share/cmake-3.22/Modules/SelectLibraryConfigurations.cmake",
+		"/usr/share/cmake-3.22/Modules/SelectLibraryConfigurations.cmake",
+		"/usr/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake",
+		"/usr/share/cmake-3.22/Modules/FindPackageMessage.cmake",
 		"/home/abusulaiman/dev/repository/olive_notepad/resources/resources.qrc"
 	],
 	"CMAKE_SOURCE_DIR" : "/home/abusulaiman/dev/repository/olive_notepad",
@@ -365,6 +370,12 @@
 	"DEP_FILE_RULE_NAME" : "",
 	"HEADERS" : 
 	[
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.h",
+			"MU",
+			"PRMOGMWJPH/moc_charsetdetector.cpp",
+			null
+		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/document.h",
 			"MU",
@@ -528,9 +539,21 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.h",
+			"MU",
+			"YPKJ5OE7LN/moc_notificationbar.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.h",
 			"MU",
 			"YPKJ5OE7LN/moc_preferencesdialog.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.h",
+			"MU",
+			"YPKJ5OE7LN/moc_recoverydialog.cpp",
 			null
 		],
 		[
@@ -605,6 +628,7 @@
 	"MOC_COMPILATION_FILE" : "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
+		"HAVE_ICU=1",
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
 		"QT_NETWORK_LIB",
@@ -663,6 +687,11 @@
 	"SETTINGS_FILE" : "/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp",
+			"MU",
+			null
+		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp",
 			"MU",
@@ -804,7 +833,17 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp",
 			"MU",
 			null
 		],

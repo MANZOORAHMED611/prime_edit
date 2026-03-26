@@ -1,0 +1,14 @@
+{
+  "name": "Python",
+  "keywords": ["and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise", "return", "try", "while", "with", "yield", "True", "False", "None"],
+  "types": ["int", "float", "str", "list", "dict", "tuple", "set", "bool", "bytes", "type", "object", "range", "enumerate", "zip", "map", "filter", "print", "len", "super", "property", "staticmethod", "classmethod", "frozenset", "bytearray", "complex", "memoryview", "Exception"],
+  "builtins": ["abs", "all", "any", "bin", "callable", "chr", "compile", "delattr", "dir", "divmod", "eval", "exec", "format", "getattr", "globals", "hasattr", "hash", "help", "hex", "id", "input", "isinstance", "issubclass", "iter", "locals", "max", "min", "next", "oct", "open", "ord", "pow", "repr", "reversed", "round", "setattr", "slice", "sorted", "sum", "vars"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "preprocessorPrefix": "@",
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?[jJ]?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "indent"
+}

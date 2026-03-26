@@ -235,6 +235,30 @@ olive-notepad_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.s
 .PHONY : olive-notepad_autogen/mocs_compilation.cpp.s
 
+src/core/charsetdetector.o: src/core/charsetdetector.cpp.o
+.PHONY : src/core/charsetdetector.o
+
+# target to build an object file
+src/core/charsetdetector.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.o
+.PHONY : src/core/charsetdetector.cpp.o
+
+src/core/charsetdetector.i: src/core/charsetdetector.cpp.i
+.PHONY : src/core/charsetdetector.i
+
+# target to preprocess a source file
+src/core/charsetdetector.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.i
+.PHONY : src/core/charsetdetector.cpp.i
+
+src/core/charsetdetector.s: src/core/charsetdetector.cpp.s
+.PHONY : src/core/charsetdetector.s
+
+# target to generate assembly for a file
+src/core/charsetdetector.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.s
+.PHONY : src/core/charsetdetector.cpp.s
+
 src/core/document.o: src/core/document.cpp.o
 .PHONY : src/core/document.o
 
@@ -907,6 +931,30 @@ src/ui/markdownpreview.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/markdownpreview.cpp.s
 .PHONY : src/ui/markdownpreview.cpp.s
 
+src/ui/notificationbar.o: src/ui/notificationbar.cpp.o
+.PHONY : src/ui/notificationbar.o
+
+# target to build an object file
+src/ui/notificationbar.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.o
+.PHONY : src/ui/notificationbar.cpp.o
+
+src/ui/notificationbar.i: src/ui/notificationbar.cpp.i
+.PHONY : src/ui/notificationbar.i
+
+# target to preprocess a source file
+src/ui/notificationbar.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.i
+.PHONY : src/ui/notificationbar.cpp.i
+
+src/ui/notificationbar.s: src/ui/notificationbar.cpp.s
+.PHONY : src/ui/notificationbar.s
+
+# target to generate assembly for a file
+src/ui/notificationbar.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.s
+.PHONY : src/ui/notificationbar.cpp.s
+
 src/ui/preferencesdialog.o: src/ui/preferencesdialog.cpp.o
 .PHONY : src/ui/preferencesdialog.o
 
@@ -930,6 +978,30 @@ src/ui/preferencesdialog.s: src/ui/preferencesdialog.cpp.s
 src/ui/preferencesdialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.s
 .PHONY : src/ui/preferencesdialog.cpp.s
+
+src/ui/recoverydialog.o: src/ui/recoverydialog.cpp.o
+.PHONY : src/ui/recoverydialog.o
+
+# target to build an object file
+src/ui/recoverydialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.o
+.PHONY : src/ui/recoverydialog.cpp.o
+
+src/ui/recoverydialog.i: src/ui/recoverydialog.cpp.i
+.PHONY : src/ui/recoverydialog.i
+
+# target to preprocess a source file
+src/ui/recoverydialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.i
+.PHONY : src/ui/recoverydialog.cpp.i
+
+src/ui/recoverydialog.s: src/ui/recoverydialog.cpp.s
+.PHONY : src/ui/recoverydialog.s
+
+# target to generate assembly for a file
+src/ui/recoverydialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.s
+.PHONY : src/ui/recoverydialog.cpp.s
 
 src/ui/remoteconnectiondialog.o: src/ui/remoteconnectiondialog.cpp.o
 .PHONY : src/ui/remoteconnectiondialog.o
@@ -1215,6 +1287,9 @@ help:
 	@echo "... olive-notepad_autogen/mocs_compilation.o"
 	@echo "... olive-notepad_autogen/mocs_compilation.i"
 	@echo "... olive-notepad_autogen/mocs_compilation.s"
+	@echo "... src/core/charsetdetector.o"
+	@echo "... src/core/charsetdetector.i"
+	@echo "... src/core/charsetdetector.s"
 	@echo "... src/core/document.o"
 	@echo "... src/core/document.i"
 	@echo "... src/core/document.s"
@@ -1299,9 +1374,15 @@ help:
 	@echo "... src/ui/markdownpreview.o"
 	@echo "... src/ui/markdownpreview.i"
 	@echo "... src/ui/markdownpreview.s"
+	@echo "... src/ui/notificationbar.o"
+	@echo "... src/ui/notificationbar.i"
+	@echo "... src/ui/notificationbar.s"
 	@echo "... src/ui/preferencesdialog.o"
 	@echo "... src/ui/preferencesdialog.i"
 	@echo "... src/ui/preferencesdialog.s"
+	@echo "... src/ui/recoverydialog.o"
+	@echo "... src/ui/recoverydialog.i"
+	@echo "... src/ui/recoverydialog.s"
 	@echo "... src/ui/remoteconnectiondialog.o"
 	@echo "... src/ui/remoteconnectiondialog.i"
 	@echo "... src/ui/remoteconnectiondialog.s"

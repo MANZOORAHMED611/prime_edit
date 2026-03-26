@@ -1,0 +1,15 @@
+{
+  "name": "CSS",
+  "keywords": ["important", "inherit", "initial", "unset", "revert", "auto", "none", "block", "inline", "flex", "grid", "absolute", "relative", "fixed", "sticky", "static", "hidden", "visible", "scroll", "solid", "dashed", "dotted", "double", "center", "left", "right", "top", "bottom"],
+  "types": [],
+  "builtins": ["rgb", "rgba", "hsl", "hsla", "calc", "var", "url", "linear-gradient", "radial-gradient", "attr", "counter", "min", "max", "clamp", "rotate", "scale", "translate", "skew", "matrix", "perspective"],
+  "singleLineComment": "",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]*)?(px|em|rem|%|vh|vw|vmin|vmax|pt|cm|mm|in|ch|ex|deg|rad|turn|s|ms)?\\b|#[0-9A-Fa-f]{3,8}\\b",
+  "functionPattern": "\\b([a-zA-Z-]+)\\s*\\(",
+  "selectorPattern": "[.#]?[A-Za-z_-][A-Za-z0-9_-]*(?=\\s*[{,])",
+  "propertyPattern": "[A-Za-z-]+(?=\\s*:)",
+  "foldBased": "brace"
+}

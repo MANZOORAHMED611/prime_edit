@@ -1,0 +1,13 @@
+{
+  "name": "JavaScript",
+  "keywords": ["var", "let", "const", "function", "return", "if", "else", "for", "while", "do", "switch", "case", "break", "continue", "new", "delete", "typeof", "instanceof", "this", "class", "extends", "super", "import", "export", "from", "default", "async", "await", "yield", "try", "catch", "finally", "throw", "of", "in", "true", "false", "null", "undefined", "NaN", "Infinity", "void", "with", "debugger", "enum", "static"],
+  "types": ["Array", "Object", "String", "Number", "Boolean", "Map", "Set", "Promise", "Date", "RegExp", "Error", "Symbol", "BigInt", "WeakMap", "WeakSet", "Int8Array", "Uint8Array", "Float32Array", "Float64Array", "ArrayBuffer", "DataView", "Proxy", "Reflect"],
+  "builtins": ["console", "Math", "JSON", "parseInt", "parseFloat", "isNaN", "isFinite", "encodeURI", "decodeURI", "encodeURIComponent", "decodeURIComponent", "setTimeout", "setInterval", "clearTimeout", "clearInterval", "fetch", "require", "module", "exports", "globalThis", "window", "document"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_$][a-zA-Z0-9_$]*)\\s*\\(",
+  "foldBased": "brace"
+}

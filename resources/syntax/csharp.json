@@ -1,0 +1,14 @@
+{
+  "name": "C#",
+  "keywords": ["abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "record", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "var", "virtual", "void", "volatile", "while", "async", "await", "dynamic", "global", "nameof", "notnull", "unmanaged", "value", "when", "where", "with", "yield", "init", "required", "file", "scoped"],
+  "types": ["String", "Object", "List", "Dictionary", "HashSet", "Queue", "Stack", "LinkedList", "SortedList", "SortedDictionary", "SortedSet", "Array", "ArrayList", "Hashtable", "IEnumerable", "ICollection", "IList", "IDictionary", "IQueryable", "Task", "Func", "Action", "Predicate", "Nullable", "Tuple", "ValueTuple", "Span", "Memory", "ReadOnlySpan", "ReadOnlyMemory", "CancellationToken", "IDisposable", "IAsyncDisposable", "Exception", "EventHandler"],
+  "builtins": ["Console", "Math", "Convert", "Environment", "GC", "Activator", "Type", "Enum", "Buffer", "BitConverter", "DateTime", "TimeSpan", "Guid", "Uri", "Path", "File", "Directory", "Stream", "StringBuilder", "Regex"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "preprocessorPrefix": "#",
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?[fFdDmMlLuU]?\\b|\\b0[xX][0-9a-fA-F]+[lLuU]?\\b|\\b0[bB][01_]+[lLuU]?\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "brace"
+}

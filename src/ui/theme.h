@@ -1,6 +1,7 @@
 #ifndef THEME_H
 #define THEME_H
 
+#include <QObject>
 #include <QString>
 #include <QColor>
 #include <QFont>
@@ -82,7 +83,8 @@ struct Theme {
     static Theme notepadpp();
 };
 
-class ThemeManager {
+class ThemeManager : public QObject {
+    Q_OBJECT
 public:
     static ThemeManager& instance();
 
@@ -104,11 +106,12 @@ public:
     bool importTheme(const QString &filePath);
     bool exportTheme(const QString &name, const QString &filePath);
 
+signals:
+    void themeChanged(const Theme &theme);
+
 private:
     ThemeManager();
     ~ThemeManager();
-    ThemeManager(const ThemeManager&) = delete;
-    ThemeManager& operator=(const ThemeManager&) = delete;
 
     QString themesDirectory() const;
     void loadBuiltInThemes();

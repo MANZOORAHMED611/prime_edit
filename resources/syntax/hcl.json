@@ -1,0 +1,13 @@
+{
+  "name": "HCL",
+  "keywords": ["for", "in", "if", "else", "true", "false", "null"],
+  "types": ["string", "number", "bool", "list", "map", "set", "object", "tuple", "any"],
+  "builtins": ["abs", "ceil", "floor", "log", "max", "min", "pow", "chomp", "format", "formatlist", "indent", "join", "lower", "regex", "replace", "split", "substr", "title", "trim", "upper", "compact", "concat", "contains", "distinct", "element", "flatten", "keys", "length", "lookup", "merge", "range", "reverse", "sort", "values", "zipmap", "base64decode", "base64encode", "csvdecode", "jsondecode", "jsonencode", "yamldecode", "yamlencode", "file", "fileexists", "fileset", "templatefile"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "brace"
+}

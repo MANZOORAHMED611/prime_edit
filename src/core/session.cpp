@@ -7,7 +7,10 @@
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QStandardPaths>
+#include <QUuid>
+#include <QScrollBar>
 
 Session &Session::instance()
 {
@@ -45,6 +48,9 @@ void Session::restore(MainWindow *window)
     }
 
     jsonToWindow(doc.object(), window);
+
+    // Restore any unsaved documents from the cache
+    restoreUnsavedDocuments(window);
 }
 
 QStringList Session::savedSessions() const
@@ -201,4 +207,109 @@ void Session::jsonToWindow(const QJsonObject &json, MainWindow *window)
     if (json.contains("activeTab")) {
         window->setCurrentTabIndex(json["activeTab"].toInt());
     }
+}
+
+QString Session::unsavedCacheDir() const
+{
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+           + "/sessions/unsaved";
+}
+
+void Session::saveUnsavedDocuments(MainWindow *window)
+{
+    QDir dir(unsavedCacheDir());
+    if (dir.exists()) {
+        dir.removeRecursively();
+    }
+    dir.mkpath(".");
+
+    TabWidget *tabs = window->tabWidget();
+    for (int i = 0; i < tabs->count(); ++i) {
+        Editor *editor = qobject_cast<Editor *>(tabs->widget(i));
+        if (!editor || !editor->document()) {
+            continue;
+        }
+
+        Document *doc = editor->document();
+        bool hasContent = !doc->text().isEmpty();
+        bool isModifiedOrUntitledWithContent =
+            doc->isModified() || (doc->isUntitled() && hasContent);
+
+        if (!isModifiedOrUntitledWithContent) {
+            continue;
+        }
+
+        QJsonObject obj;
+        obj["text"] = doc->text();
+        obj["cursorPosition"] = editor->textCursor().position();
+        obj["scrollPosition"] = editor->verticalScrollBar()->value();
+        obj["title"] = tabs->tabText(i);
+        obj["originalFilePath"] = doc->filePath();
+        obj["encoding"] = doc->encoding();
+        obj["language"] = doc->language();
+
+        QString fileName = QUuid::createUuid().toString(QUuid::Id128)
+                           + ".json";
+        QFile file(unsavedCacheDir() + "/" + fileName);
+        if (file.open(QIODevice::WriteOnly)) {
+            file.write(QJsonDocument(obj).toJson());
+        }
+    }
+}
+
+void Session::restoreUnsavedDocuments(MainWindow *window)
+{
+    QDir dir(unsavedCacheDir());
+    if (!dir.exists()) {
+        return;
+    }
+
+    QStringList cacheFiles =
+        dir.entryList(QStringList() << "*.json", QDir::Files);
+    if (cacheFiles.isEmpty()) {
+        return;
+    }
+
+    for (const QString &fileName : cacheFiles) {
+        QFile file(dir.absoluteFilePath(fileName));
+        if (!file.open(QIODevice::ReadOnly)) {
+            continue;
+        }
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
+        file.close();
+
+        if (jsonDoc.isNull()) {
+            continue;
+        }
+
+        QJsonObject obj = jsonDoc.object();
+        QString originalPath = obj["originalFilePath"].toString();
+        QString cachedText = obj["text"].toString();
+
+        if (!originalPath.isEmpty() && QFile::exists(originalPath)) {
+            window->openFile(originalPath);
+        } else {
+            window->newFile();
+        }
+
+        Editor *editor = window->currentEditor();
+        if (!editor || !editor->document()) {
+            continue;
+        }
+
+        editor->document()->setText(cachedText);
+        editor->syncFromDocument();
+        editor->document()->setModified(true);
+
+        // Remove the cache file after restoring
+        QFile::remove(dir.absoluteFilePath(fileName));
+    }
+}
+
+void Session::clearUnsavedCache()
+{
+    QDir dir(unsavedCacheDir());
+    dir.removeRecursively();
+    dir.mkpath(".");
 }

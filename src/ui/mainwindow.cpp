@@ -10,8 +10,10 @@
 #include "commandpalette.h"
 #include "terminalwidget.h"
 #include "toolbarmanager.h"
+#include "notificationbar.h"
 #include "core/document.h"
 #include "core/documentmanager.h"
+#include "core/session.h"
 #include "core/macrorecorder.h"
 #include "utils/settings.h"
 #include "utils/fileutils.h"
@@ -37,6 +39,7 @@
 #include <QPrintDialog>
 #include <QPixmap>
 #include <QPainter>
+#include <QFileInfo>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -77,7 +80,9 @@ void MainWindow::setupUi()
     centralLayout->setSpacing(0);
     m_incrementalSearchBar = new IncrementalSearchBar(centralContainer);
     m_incrementalSearchBar->hide();
+    m_notificationBar = new NotificationBar(centralContainer);
     centralLayout->addWidget(m_incrementalSearchBar);
+    centralLayout->addWidget(m_notificationBar);
     centralLayout->addWidget(m_tabWidget);
     setCentralWidget(centralContainer);
 
@@ -106,6 +111,33 @@ void MainWindow::setupUi()
     m_terminalDock->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
     addDockWidget(Qt::BottomDockWidgetArea, m_terminalDock);
     m_terminalDock->hide();  // Hidden by default
+
+    // File change monitoring
+    connect(&DocumentManager::instance(),
+            &DocumentManager::fileExternallyModified,
+            this, [this](const QString &path) {
+        m_notificationBar->setProperty("reloadPath", path);
+        m_notificationBar->showMessage(
+            tr("The file \"%1\" has been modified by another "
+               "program. Reload?")
+                .arg(QFileInfo(path).fileName()));
+    });
+    connect(m_notificationBar, &NotificationBar::accepted,
+            this, [this]() {
+        QString path = m_notificationBar->property("reloadPath")
+                           .toString();
+        if (path.isEmpty()) return;
+        Document *doc =
+            DocumentManager::instance().findDocument(path);
+        if (doc) {
+            doc->load(path);
+            // Sync editor if this doc is currently displayed
+            Editor *e = currentEditor();
+            if (e && e->document() == doc) {
+                e->syncFromDocument();
+            }
+        }
+    });
 }
 
 void MainWindow::setupMenus()
@@ -134,6 +166,9 @@ void MainWindow::setupMenus()
 
     QAction *saveAllAction = m_fileMenu->addAction(tr("Save A&ll"), this, &MainWindow::saveAllFiles);
     saveAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+
+    QAction *reloadAction = m_fileMenu->addAction(tr("Reload from Disk"), this, &MainWindow::reloadFromDisk);
+    reloadAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
 
     m_fileMenu->addSeparator();
 
@@ -566,6 +601,29 @@ void MainWindow::saveAllFiles()
     }
 }
 
+void MainWindow::reloadFromDisk()
+{
+    Editor *editor = currentEditor();
+    if (!editor || !editor->document() || editor->document()->isUntitled()) {
+        return;
+    }
+
+    if (editor->document()->isModified()) {
+        int ret = QMessageBox::question(
+            this, tr("Reload"),
+            tr("Are you sure? Unsaved changes will be lost."),
+            QMessageBox::Yes | QMessageBox::No);
+        if (ret != QMessageBox::Yes) {
+            return;
+        }
+    }
+
+    QString filePath = editor->document()->filePath();
+    editor->document()->load(filePath);
+    editor->syncFromDocument();
+    updateWindowTitle();
+}
+
 bool MainWindow::closeFile(int index)
 {
     if (index < 0) {
@@ -667,11 +725,9 @@ QStringList MainWindow::openFilePaths() const
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (closeAllFiles()) {
-        event->accept();
-    } else {
-        event->ignore();
-    }
+    Session::instance().saveUnsavedDocuments(this);
+    m_closingAll = true;
+    event->accept();
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

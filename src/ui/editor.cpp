@@ -44,6 +44,11 @@ Editor::Editor(Document *document, QWidget *parent)
         m_highlighter->setLanguage(lang);
     });
 
+    connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this, [this]() {
+        m_highlighter->setupFormats();
+        m_highlighter->rehighlight();
+    });
+
     // Connect settings
     connect(&Settings::instance(), &Settings::fontChanged, this, &Editor::applySettings);
     connect(&Settings::instance(), &Settings::tabSettingsChanged, this, &Editor::applySettings);

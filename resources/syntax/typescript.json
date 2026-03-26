@@ -1,0 +1,13 @@
+{
+  "name": "TypeScript",
+  "keywords": ["var", "let", "const", "function", "return", "if", "else", "for", "while", "do", "switch", "case", "break", "continue", "new", "delete", "typeof", "instanceof", "this", "class", "extends", "super", "import", "export", "from", "default", "async", "await", "yield", "try", "catch", "finally", "throw", "of", "in", "true", "false", "null", "undefined", "NaN", "Infinity", "void", "with", "debugger", "enum", "static", "implements", "interface", "abstract", "declare", "module", "namespace", "type", "keyof", "readonly", "as", "is", "infer", "satisfies", "override"],
+  "types": ["Array", "Object", "String", "Number", "Boolean", "Map", "Set", "Promise", "Date", "RegExp", "Error", "Symbol", "BigInt", "Record", "Partial", "Required", "Readonly", "Pick", "Omit", "Exclude", "Extract", "NonNullable", "ReturnType", "Parameters", "InstanceType", "Awaited", "unknown", "never", "any", "string", "number", "boolean", "symbol", "bigint", "object", "undefined", "null", "void"],
+  "builtins": ["console", "Math", "JSON", "parseInt", "parseFloat", "isNaN", "isFinite", "setTimeout", "setInterval", "clearTimeout", "clearInterval", "fetch", "require", "module", "exports", "globalThis", "window", "document"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_$][a-zA-Z0-9_$]*)\\s*\\(",
+  "foldBased": "brace"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Vim",
+  "keywords": ["if", "else", "elseif", "endif", "while", "endwhile", "for", "endfor", "in", "do", "continue", "break", "try", "catch", "finally", "endtry", "throw", "function", "endfunction", "return", "call", "let", "unlet", "set", "setlocal", "setglobal", "echom", "echomsg", "echoerr", "execute", "normal", "silent", "source", "runtime", "command", "autocmd", "augroup", "syntax", "highlight", "hi", "match", "map", "nmap", "vmap", "imap", "noremap", "nnoremap", "vnoremap", "inoremap", "abbrev", "finish", "scriptencoding", "filetype", "plugin", "indent"],
+  "types": [],
+  "builtins": ["abs", "add", "and", "append", "argc", "argidx", "arglistid", "argv", "assert_equal", "assert_exception", "assert_fails", "assert_false", "assert_true", "browse", "bufadd", "bufexists", "buflisted", "bufload", "bufloaded", "bufname", "bufnr", "bufwinid", "bufwinnr", "byte2line", "byteidx", "call", "ceil", "changenr", "char2nr", "clearmatches", "col", "complete", "confirm", "copy", "count", "cscope_connection", "cursor", "deepcopy", "delete", "diff_filler", "diff_hlID", "empty", "escape", "eval", "eventhandler", "executable", "execute", "exists", "exp", "expand", "extend", "feedkeys", "filereadable", "filewritable", "filter", "finddir", "findfile", "float2nr", "floor", "fmod", "fnameescape", "fnamemodify", "foldclosed", "foldclosedend", "foldlevel", "foldtext", "foldtextresult", "foreground", "funcref", "function", "garbagecollect", "get", "getbufinfo", "getbufline", "getbufvar", "getchangelist", "getchar", "getcharmod", "getcmdline", "getcmdpos", "getcmdtype", "getcurpos", "getcwd", "getenv", "getfontname", "getfperm", "getfsize", "getftime", "getftype", "getline", "getloclist", "getmatches", "getpid", "getpos", "getqflist", "getreg", "getregtype", "gettabinfo", "gettabvar", "gettabwinvar", "gettagstack", "getwininfo", "getwinpos", "getwinposx", "getwinposy", "getwinvar", "glob", "glob2regpat", "globpath", "has", "has_key", "haslocaldir", "hasmapto", "histadd", "histdel", "histget", "histnr", "hlID", "hlexists", "hostname", "iconv", "indent", "index", "input", "inputdialog", "inputlist", "inputrestore", "inputsave", "inputsecret", "insert", "invert", "isdirectory"],
+  "singleLineComment": "\"",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b",
+  "functionPattern": "",
+  "variablePattern": "[bgwtsla]:[A-Za-z_][A-Za-z0-9_]*",
+  "foldBased": "keyword"
+}

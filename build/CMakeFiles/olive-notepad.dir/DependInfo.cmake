@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp" "CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/mocs_compilation.cpp" "CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o.d"
+  "/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp" "CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp" "CMakeFiles/olive-notepad.dir/src/core/document.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/document.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp" "CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp" "CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.o.d"
@@ -38,7 +39,9 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp" "CMakeFiles/olive-notepad.dir/src/ui/markdownpreview.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/markdownpreview.cpp.o.d"
+  "/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp" "CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp" "CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.o.d"
+  "/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp" "CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp" "CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp" "CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp" "CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.o.d"

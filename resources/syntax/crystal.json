@@ -1,0 +1,13 @@
+{
+  "name": "Crystal",
+  "keywords": ["abstract", "alias", "annotation", "as", "as?", "asm", "begin", "break", "case", "class", "def", "do", "else", "elsif", "end", "ensure", "enum", "extend", "false", "for", "fun", "if", "in", "include", "instance_sizeof", "is_a?", "lib", "macro", "module", "next", "nil", "nil?", "of", "offsetof", "out", "pointerof", "private", "protected", "require", "rescue", "responds_to?", "return", "select", "self", "sizeof", "struct", "super", "then", "true", "type", "typeof", "uninitialized", "union", "unless", "until", "verbatim", "when", "while", "with", "yield"],
+  "types": ["Int8", "Int16", "Int32", "Int64", "Int128", "UInt8", "UInt16", "UInt32", "UInt64", "UInt128", "Float32", "Float64", "Bool", "Char", "String", "Symbol", "Nil", "Void", "Array", "Hash", "Range", "Tuple", "NamedTuple", "Proc", "Set", "Regex", "IO", "File", "Dir", "Time", "JSON", "YAML", "HTTP", "Channel", "Fiber", "Exception"],
+  "builtins": ["puts", "print", "p", "pp", "gets", "raise", "abort", "exit", "spawn", "sleep", "typeof", "sizeof", "instance_sizeof", "pointerof", "offsetof"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?(_[iuf](8|16|32|64|128))?\\b|\\b0[xX][0-9a-fA-F_]+\\b|\\b0[oO][0-7_]+\\b|\\b0[bB][01_]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_!?]*)\\s*\\(",
+  "foldBased": "keyword"
+}

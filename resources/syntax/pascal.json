@@ -1,0 +1,14 @@
+{
+  "name": "Pascal",
+  "keywords": ["absolute", "and", "array", "asm", "begin", "case", "const", "constructor", "destructor", "div", "do", "downto", "else", "end", "file", "for", "function", "goto", "if", "implementation", "in", "inherited", "inline", "interface", "label", "mod", "nil", "not", "object", "of", "on", "operator", "or", "packed", "procedure", "program", "record", "reintroduce", "repeat", "self", "set", "shl", "shr", "string", "then", "to", "type", "unit", "until", "uses", "var", "while", "with", "xor", "as", "class", "except", "exports", "finalization", "finally", "initialization", "is", "library", "on", "out", "property", "raise", "resourcestring", "threadvar", "try"],
+  "types": ["Boolean", "Byte", "Cardinal", "Char", "Comp", "Currency", "Double", "Extended", "Int64", "Integer", "LongBool", "LongInt", "LongWord", "NativeInt", "NativeUInt", "PAnsiChar", "PChar", "Pointer", "PWideChar", "QWord", "Real", "Real48", "ShortInt", "ShortString", "Single", "SmallInt", "String", "UInt64", "WideChar", "WideString", "Word", "WordBool", "AnsiString", "UnicodeString", "Variant", "OleVariant", "TObject", "TComponent", "TStream", "TList", "TStrings", "TStringList"],
+  "builtins": ["Abs", "ArcTan", "Chr", "Concat", "Copy", "Cos", "Dec", "Delete", "Dispose", "Eof", "Eoln", "Exp", "FilePos", "FileSize", "FillChar", "FreeMem", "GetMem", "Halt", "Hi", "Inc", "Insert", "Int", "Length", "Ln", "Lo", "Move", "New", "Odd", "Ord", "Pi", "Pos", "Pred", "Random", "Read", "ReadLn", "Round", "Seek", "Sin", "SizeOf", "Sqr", "Sqrt", "Str", "Succ", "Swap", "Trunc", "UpCase", "Val", "Write", "WriteLn", "Assigned", "FreeAndNil", "High", "Low", "SetLength", "Trim", "Format", "IntToStr", "StrToInt", "FloatToStr", "StrToFloat"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "{",
+  "multiLineCommentEnd": "}",
+  "stringDelimiters": ["'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\$[0-9a-fA-F]+\\b|&[0-7]+\\b|%[01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "keyword",
+  "caseInsensitiveKeywords": true
+}

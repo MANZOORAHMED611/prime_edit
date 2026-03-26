@@ -1,0 +1,14 @@
+{
+  "name": "Perl",
+  "keywords": ["my", "our", "local", "use", "no", "require", "package", "sub", "do", "if", "elsif", "else", "unless", "while", "until", "for", "foreach", "given", "when", "default", "next", "last", "redo", "return", "die", "warn", "eval", "BEGIN", "END", "INIT", "CHECK", "UNITCHECK", "DESTROY", "AUTOLOAD", "and", "or", "not", "eq", "ne", "lt", "gt", "le", "ge", "cmp", "qw", "qq", "qr", "tr", "s", "m", "y", "chomp", "chop", "defined", "delete", "exists", "grep", "join", "keys", "map", "pop", "push", "reverse", "shift", "sort", "splice", "split", "unshift", "values", "bless", "ref", "tie", "tied", "untie"],
+  "types": ["SCALAR", "ARRAY", "HASH", "CODE", "REF", "GLOB", "LVALUE", "FORMAT", "IO", "VSTRING", "Regexp"],
+  "builtins": ["print", "say", "open", "close", "read", "write", "seek", "tell", "eof", "binmode", "chmod", "chown", "chdir", "mkdir", "rmdir", "rename", "unlink", "stat", "lstat", "opendir", "readdir", "closedir", "glob", "system", "exec", "fork", "wait", "waitpid", "exit", "length", "substr", "index", "rindex", "sprintf", "printf", "hex", "oct", "int", "abs", "sqrt", "log", "exp", "sin", "cos", "atan2", "rand", "srand", "time", "localtime", "gmtime"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "=pod",
+  "multiLineCommentEnd": "=cut",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "variablePattern": "[\\$@%][A-Za-z_][A-Za-z0-9_]*|[\\$@%]\\{[^}]+\\}",
+  "foldBased": "brace"
+}

@@ -1,6 +1,7 @@
 #include "documentmanager.h"
 #include "utils/settings.h"
 #include <QDir>
+#include <QFile>
 #include <QStandardPaths>
 
 DocumentManager &DocumentManager::instance()
@@ -13,6 +14,10 @@ DocumentManager::DocumentManager(QObject *parent)
     : QObject(parent)
 {
     connect(&m_recoveryTimer, &QTimer::timeout, this, &DocumentManager::saveRecoveryData);
+
+    m_fileWatcher = new QFileSystemWatcher(this);
+    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged,
+            this, &DocumentManager::onFileChanged);
 
     // Load recent files from settings
     m_recentFiles = Settings::instance().recentFiles();
@@ -53,6 +58,7 @@ Document *DocumentManager::openDocument(const QString &filePath)
 
     m_documents.append(doc);
     addRecentFile(filePath);
+    m_fileWatcher->addPath(filePath);
 
     connect(doc, &Document::modifiedChanged, this, &DocumentManager::onDocumentModifiedChanged);
 
@@ -70,6 +76,9 @@ bool DocumentManager::closeDocument(Document *document, bool force)
         return false;  // Caller should handle prompting
     }
 
+    if (!document->filePath().isEmpty()) {
+        m_fileWatcher->removePath(document->filePath());
+    }
     document->clearRecovery();
     m_documents.removeOne(document);
     emit documentClosed(document);
@@ -155,6 +164,15 @@ void DocumentManager::onDocumentModifiedChanged(bool modified)
     if (doc) {
         emit documentModifiedChanged(doc);
     }
+}
+
+void DocumentManager::onFileChanged(const QString &path)
+{
+    // Re-add to watcher (Qt removes it after notification)
+    if (QFile::exists(path)) {
+        m_fileWatcher->addPath(path);
+    }
+    emit fileExternallyModified(path);
 }
 
 void DocumentManager::saveRecoveryData()

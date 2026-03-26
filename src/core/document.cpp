@@ -1,4 +1,5 @@
 #include "document.h"
+#include "charsetdetector.h"
 #include "largefile.h"
 #include <QFile>
 #include <QFileInfo>
@@ -53,8 +54,8 @@ bool Document::load(const QString &filePath)
     QByteArray data = file.readAll();
     file.close();
 
-    // Detect encoding
-    m_encoding = detectEncoding(data);
+    // Detect encoding using charset detector
+    m_encoding = CharsetDetector::detect(data);
 
     // Convert to QString
     QString text;

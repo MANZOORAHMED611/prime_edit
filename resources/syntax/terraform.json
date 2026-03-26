@@ -1,0 +1,13 @@
+{
+  "name": "Terraform",
+  "keywords": ["resource", "data", "variable", "output", "locals", "module", "provider", "terraform", "backend", "required_providers", "required_version", "for", "for_each", "in", "if", "else", "dynamic", "content", "lifecycle", "create_before_destroy", "prevent_destroy", "ignore_changes", "replace_triggered_by", "provisioner", "connection", "count", "depends_on", "source", "version", "moved", "import", "check", "true", "false", "null"],
+  "types": ["string", "number", "bool", "list", "map", "set", "object", "tuple", "any"],
+  "builtins": ["abs", "ceil", "floor", "log", "max", "min", "pow", "signum", "chomp", "format", "formatlist", "indent", "join", "lower", "regex", "regexall", "replace", "split", "startswith", "endswith", "strrev", "substr", "title", "trim", "trimprefix", "trimsuffix", "trimspace", "upper", "alltrue", "anytrue", "chunklist", "coalesce", "coalescelist", "compact", "concat", "contains", "distinct", "element", "flatten", "index", "keys", "length", "list", "lookup", "map", "matchkeys", "merge", "one", "range", "reverse", "setintersection", "setproduct", "setsubtract", "setunion", "slice", "sort", "sum", "transpose", "values", "zipmap", "base64decode", "base64encode", "base64gzip", "csvdecode", "jsondecode", "jsonencode", "textdecodebase64", "textencodebase64", "urlencode", "yamldecode", "yamlencode", "abspath", "dirname", "pathexpand", "basename", "file", "fileexists", "fileset", "filebase64", "templatefile", "formatdate", "timeadd", "timestamp", "md5", "sha1", "sha256", "sha512", "uuid", "uuidv5", "bcrypt", "rsadecrypt", "cidrhost", "cidrnetmask", "cidrsubnet", "cidrsubnets", "try", "can", "tobool", "tomap", "tolist", "tonumber", "toset", "tostring", "type"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "brace"
+}

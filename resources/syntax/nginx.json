@@ -1,0 +1,14 @@
+{
+  "name": "Nginx",
+  "keywords": ["server", "location", "upstream", "http", "events", "stream", "mail", "map", "geo", "types", "if", "set", "rewrite", "return", "break", "proxy_pass", "fastcgi_pass", "uwsgi_pass", "scgi_pass", "include", "root", "index", "alias", "try_files", "error_page", "access_log", "error_log", "listen", "server_name", "ssl_certificate", "ssl_certificate_key", "worker_processes", "worker_connections", "sendfile", "keepalive_timeout", "gzip", "add_header", "proxy_set_header", "client_max_body_size", "deny", "allow", "auth_basic", "satisfy", "limit_req", "limit_conn", "resolver"],
+  "types": [],
+  "builtins": ["on", "off", "yes", "no", "auto"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?[kmgKMG]?\\b",
+  "functionPattern": "",
+  "variablePattern": "\\$[A-Za-z_][A-Za-z0-9_]*",
+  "foldBased": "brace"
+}

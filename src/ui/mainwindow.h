@@ -21,6 +21,7 @@ class IncrementalSearchBar;
 class PreferencesDialog;
 class CommandPalette;
 class TerminalWidget;
+class NotificationBar;
 
 class MainWindow : public QMainWindow
 {
@@ -63,6 +64,7 @@ public slots:
     bool closeFile(int index = -1);
     bool closeAllFiles();
     void printFile();
+    void reloadFromDisk();
 
     // Indentation
     void increaseIndent();
@@ -234,6 +236,7 @@ private:
     IncrementalSearchBar *m_incrementalSearchBar = nullptr;
     PreferencesDialog *m_preferencesDialog = nullptr;
     CommandPalette *m_commandPalette = nullptr;
+    NotificationBar *m_notificationBar = nullptr;
 
     // Dock widgets
     QDockWidget *m_terminalDock = nullptr;

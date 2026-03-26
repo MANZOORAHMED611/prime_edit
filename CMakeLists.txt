@@ -46,6 +46,7 @@ set(CORE_SOURCES
     src/core/remoteconnection.cpp
     src/core/largefile.cpp
     src/core/searchengine.cpp
+    src/core/charsetdetector.cpp
 )
 
 set(UI_SOURCES
@@ -72,6 +73,8 @@ set(UI_SOURCES
     src/ui/gitdiffviewer.cpp
     src/ui/toolbarmanager.cpp
     src/ui/columneditor.cpp
+    src/ui/notificationbar.cpp
+    src/ui/recoverydialog.cpp
 )
 
 set(SYNTAX_SOURCES
@@ -98,6 +101,7 @@ set(HEADERS
     src/core/remoteconnection.h
     src/core/largefile.h
     src/core/searchengine.h
+    src/core/charsetdetector.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h
@@ -120,6 +124,8 @@ set(HEADERS
     src/ui/gitdiffviewer.h
     src/ui/toolbarmanager.h
     src/ui/columneditor.h
+    src/ui/notificationbar.h
+    src/ui/recoverydialog.h
     src/syntax/highlighter.h
     src/syntax/languagemanager.h
     src/utils/fileutils.h
@@ -156,6 +162,13 @@ target_link_libraries(olive-notepad PRIVATE
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Svg
 )
+
+# Optional ICU support for enhanced charset detection
+find_package(ICU QUIET COMPONENTS uc data)
+if(ICU_FOUND)
+    target_link_libraries(olive-notepad PRIVATE ICU::uc ICU::data)
+    target_compile_definitions(olive-notepad PRIVATE HAVE_ICU=1)
+endif()
 
 # Install rules
 install(TARGETS olive-notepad

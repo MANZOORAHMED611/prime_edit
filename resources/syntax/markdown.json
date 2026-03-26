@@ -1,0 +1,19 @@
+{
+  "name": "Markdown",
+  "keywords": [],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": [],
+  "numberPattern": "",
+  "functionPattern": "",
+  "headerPattern": "^#{1,6}\\s+.*$",
+  "boldPattern": "\\*\\*[^*]+\\*\\*|__[^_]+__",
+  "italicPattern": "\\*[^*]+\\*|_[^_]+_",
+  "codePattern": "`[^`]+`",
+  "linkPattern": "\\[[^\\]]+\\]\\([^)]+\\)",
+  "listPattern": "^\\s*[-*+]\\s+|^\\s*[0-9]+\\.\\s+",
+  "foldBased": "indent"
+}

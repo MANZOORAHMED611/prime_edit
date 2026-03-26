@@ -1,0 +1,13 @@
+{
+  "name": "GraphQL",
+  "keywords": ["query", "mutation", "subscription", "fragment", "on", "type", "interface", "union", "enum", "scalar", "input", "extend", "schema", "directive", "implements", "repeatable", "true", "false", "null"],
+  "types": ["Int", "Float", "String", "Boolean", "ID"],
+  "builtins": [],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b",
+  "functionPattern": "",
+  "foldBased": "brace"
+}

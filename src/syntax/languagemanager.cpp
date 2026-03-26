@@ -131,6 +131,90 @@ void LanguageManager::initMappings()
 
     // Config files
     m_extensionToLanguage["dockerfile"] = "Dockerfile";
+    m_extensionToLanguage["nginx"] = "Nginx";
+    m_extensionToLanguage["csv"] = "CSV";
+
+    // Systems languages (additional)
+    m_extensionToLanguage["d"] = "D";
+    m_extensionToLanguage["di"] = "D";
+    m_extensionToLanguage["zig"] = "Zig";
+    m_extensionToLanguage["nim"] = "Nim";
+    m_extensionToLanguage["nims"] = "Nim";
+    m_extensionToLanguage["nimble"] = "Nim";
+    m_extensionToLanguage["f90"] = "Fortran";
+    m_extensionToLanguage["f95"] = "Fortran";
+    m_extensionToLanguage["f03"] = "Fortran";
+    m_extensionToLanguage["f08"] = "Fortran";
+    m_extensionToLanguage["f"] = "Fortran";
+    m_extensionToLanguage["for"] = "Fortran";
+
+    // Scientific
+    m_extensionToLanguage["r"] = "R";
+    m_extensionToLanguage["R"] = "R";
+    m_extensionToLanguage["rmd"] = "R";
+    m_extensionToLanguage["jl"] = "Julia";
+
+    // Legacy
+    m_extensionToLanguage["cob"] = "COBOL";
+    m_extensionToLanguage["cbl"] = "COBOL";
+    m_extensionToLanguage["cpy"] = "COBOL";
+    m_extensionToLanguage["pas"] = "Pascal";
+    m_extensionToLanguage["pp"] = "Pascal";
+    m_extensionToLanguage["lpr"] = "Pascal";
+    m_extensionToLanguage["dpr"] = "Pascal";
+    m_extensionToLanguage["adb"] = "Ada";
+    m_extensionToLanguage["ads"] = "Ada";
+
+    // Hardware description
+    m_extensionToLanguage["vhd"] = "VHDL";
+    m_extensionToLanguage["vhdl"] = "VHDL";
+
+    // Scripting (additional)
+    m_extensionToLanguage["tcl"] = "Tcl";
+    m_extensionToLanguage["tk"] = "Tcl";
+
+    // Functional (additional)
+    m_extensionToLanguage["scm"] = "Scheme";
+    m_extensionToLanguage["ss"] = "Scheme";
+    m_extensionToLanguage["rkt"] = "Scheme";
+    m_extensionToLanguage["cl"] = "Lisp";
+    m_extensionToLanguage["lisp"] = "Lisp";
+    m_extensionToLanguage["lsp"] = "Lisp";
+    m_extensionToLanguage["asd"] = "Lisp";
+    m_extensionToLanguage["clj"] = "Clojure";
+    m_extensionToLanguage["cljs"] = "Clojure";
+    m_extensionToLanguage["cljc"] = "Clojure";
+    m_extensionToLanguage["edn"] = "Clojure";
+    m_extensionToLanguage["fsx"] = "F#";
+    m_extensionToLanguage["fsi"] = "F#";
+
+    // Other
+    m_extensionToLanguage["pro"] = "Prolog";
+    m_extensionToLanguage["vim"] = "Vim";
+    m_extensionToLanguage["vimrc"] = "Vim";
+    m_extensionToLanguage["pgsql"] = "PostgreSQL";
+    m_extensionToLanguage["rst"] = "reStructuredText";
+    m_extensionToLanguage["rest"] = "reStructuredText";
+    m_extensionToLanguage["graphql"] = "GraphQL";
+    m_extensionToLanguage["gql"] = "GraphQL";
+    m_extensionToLanguage["proto"] = "Protocol Buffers";
+    m_extensionToLanguage["tf"] = "Terraform";
+    m_extensionToLanguage["tfvars"] = "Terraform";
+    m_extensionToLanguage["hcl"] = "HCL";
+    m_extensionToLanguage["sol"] = "Solidity";
+    m_extensionToLanguage["wat"] = "WebAssembly";
+    m_extensionToLanguage["wast"] = "WebAssembly";
+    m_extensionToLanguage["vert"] = "GLSL";
+    m_extensionToLanguage["frag"] = "GLSL";
+    m_extensionToLanguage["geom"] = "GLSL";
+    m_extensionToLanguage["comp"] = "GLSL";
+    m_extensionToLanguage["glsl"] = "GLSL";
+    m_extensionToLanguage["cu"] = "CUDA";
+    m_extensionToLanguage["cuh"] = "CUDA";
+    m_extensionToLanguage["coffee"] = "CoffeeScript";
+    m_extensionToLanguage["cr"] = "Crystal";
+    m_extensionToLanguage["v"] = "Verilog";
+    m_extensionToLanguage["sv"] = "Verilog";
 
     // Plain text
     m_extensionToLanguage["txt"] = "Plain Text";
@@ -273,4 +357,9 @@ QString LanguageManager::detectLanguage(const QString &filename, const QString &
     }
 
     return "Plain Text";
+}
+
+QString LanguageManager::definitionPath(const QString &language) const
+{
+    return ":/syntax/" + language.toLower() + ".json";
 }

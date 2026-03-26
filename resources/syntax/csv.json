@@ -1,0 +1,13 @@
+{
+  "name": "CSV",
+  "keywords": [],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b",
+  "functionPattern": "",
+  "foldBased": ""
+}

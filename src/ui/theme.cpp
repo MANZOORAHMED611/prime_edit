@@ -735,6 +735,7 @@ void ThemeManager::applyTheme(const Theme &theme)
     m_currentTheme = theme;
     QString stylesheet = theme.toStyleSheet();
     qApp->setStyleSheet(stylesheet);
+    emit themeChanged(m_currentTheme);
 }
 
 bool ThemeManager::importTheme(const QString &filePath)

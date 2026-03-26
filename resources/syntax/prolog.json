@@ -1,0 +1,13 @@
+{
+  "name": "Prolog",
+  "keywords": ["dynamic", "discontiguous", "ensure_loaded", "module", "use_module", "import_module", "export", "meta_predicate", "module_transparent", "multifile", "thread_local", "volatile", "initialization", "if", "elif", "else", "endif", "true", "false", "fail", "not"],
+  "types": ["integer", "float", "atom", "string", "list", "compound", "number", "atomic", "callable", "var", "nonvar", "is_list", "ground"],
+  "builtins": ["write", "writeln", "writef", "nl", "read", "read_term", "get_char", "put_char", "atom_chars", "atom_codes", "atom_length", "atom_concat", "char_code", "char_type", "number_chars", "number_codes", "sub_atom", "atom_string", "term_to_atom", "term_string", "append", "length", "member", "last", "nth0", "nth1", "reverse", "sort", "msort", "permutation", "flatten", "select", "subtract", "intersection", "union", "maplist", "include", "exclude", "foldl", "findall", "bagof", "setof", "forall", "aggregate_all", "assert", "asserta", "assertz", "retract", "retractall", "abolish", "functor", "arg", "copy_term", "numbervars", "succ", "plus", "between", "max_list", "min_list", "sum_list", "msort", "predsort", "catch", "throw", "halt", "format", "with_output_to", "string_concat", "string_codes", "string_code", "string_length", "split_string"],
+  "singleLineComment": "%",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b|\\b0'[\\S]\\b",
+  "functionPattern": "\\b([a-z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": ""
+}

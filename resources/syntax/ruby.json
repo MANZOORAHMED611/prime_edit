@@ -1,0 +1,14 @@
+{
+  "name": "Ruby",
+  "keywords": ["alias", "and", "begin", "break", "case", "class", "def", "defined?", "do", "else", "elsif", "end", "ensure", "false", "for", "if", "in", "module", "next", "nil", "not", "or", "redo", "rescue", "retry", "return", "self", "super", "then", "true", "undef", "unless", "until", "when", "while", "yield", "require", "require_relative", "include", "extend", "prepend", "raise", "attr_reader", "attr_writer", "attr_accessor", "private", "protected", "public", "lambda", "proc"],
+  "types": ["Integer", "Float", "String", "Array", "Hash", "Symbol", "Regexp", "Range", "NilClass", "TrueClass", "FalseClass", "Numeric", "Comparable", "Enumerable", "IO", "File", "Dir", "Time", "Struct", "Proc", "Method", "Thread", "Mutex", "Fiber"],
+  "builtins": ["puts", "print", "p", "pp", "gets", "chomp", "each", "map", "select", "reject", "reduce", "inject", "collect", "detect", "find", "sort", "sort_by", "min", "max", "count", "length", "size", "empty?", "nil?", "is_a?", "respond_to?", "send", "method_missing", "freeze", "frozen?", "dup", "clone", "tap", "then", "yield_self"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "=begin",
+  "multiLineCommentEnd": "=end",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_!?]*)\\s*[\\(]",
+  "variablePattern": "@{1,2}[A-Za-z_][A-Za-z0-9_]*|\\$[A-Za-z_][A-Za-z0-9_]*",
+  "foldBased": "keyword"
+}
