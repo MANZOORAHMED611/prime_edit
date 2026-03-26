@@ -64,32 +64,9 @@ int main(int argc, char *argv[])
     // Load and apply theme from settings
     ThemeManager::instance().loadThemes();
     ThemeManager::instance().applyTheme(Settings::instance().theme());
-    app.setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());
 
-    // Check for unsaved document recovery
-    QString unsavedDir = QStandardPaths::writableLocation(
-        QStandardPaths::AppDataLocation) + "/sessions/unsaved";
-    QDir unsavedDirObj(unsavedDir);
-    QStringList recoveryFiles = unsavedDirObj.entryList(
-        QStringList() << "*.json", QDir::Files);
-
-    if (!recoveryFiles.isEmpty()) {
-        QStringList fullPaths;
-        for (const QString &f : recoveryFiles) {
-            fullPaths.append(unsavedDir + "/" + f);
-        }
-
-        RecoveryDialog dialog(fullPaths);
-        if (dialog.exec() == QDialog::Accepted) {
-            if (!dialog.shouldRecover()) {
-                for (const QString &f : fullPaths) {
-                    QFile::remove(f);
-                }
-            }
-            // If recover, files stay and Session::restoreUnsavedDocuments
-            // will pick them up
-        }
-    }
+    // Unsaved documents are restored silently by Session::restore()
+    // via restoreUnsavedDocuments() — no dialog, Notepad++ behavior
 
     // Create main window
     MainWindow mainWindow;

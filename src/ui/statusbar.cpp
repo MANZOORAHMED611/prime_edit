@@ -1,6 +1,7 @@
 #include "statusbar.h"
 #include "editor.h"
 #include "mainwindow.h"
+#include "theme.h"
 #include "core/document.h"
 
 StatusBarWidget::StatusBarWidget(MainWindow *parent)
@@ -24,13 +25,6 @@ StatusBarWidget::StatusBarWidget(MainWindow *parent)
     m_eolButton->setFlat(true);
     m_encodingButton->setFlat(true);
 
-    QString buttonStyle =
-        "QPushButton { border: 1px solid #a0a0a0; padding: 2px 8px; "
-        "background: transparent; } "
-        "QPushButton:hover { background: #e0e0e0; }";
-    m_eolButton->setStyleSheet(buttonStyle);
-    m_encodingButton->setStyleSheet(buttonStyle);
-
     // Layout: docType stretches, rest are permanent
     addWidget(m_docTypeLabel, 1);
     addPermanentWidget(m_lengthLabel);
@@ -47,14 +41,34 @@ StatusBarWidget::StatusBarWidget(MainWindow *parent)
     setEncoding("UTF-8");
     setInsertMode(true);
 
-    // Overall style
-    setStyleSheet(
-        "QStatusBar { border-top: 1px solid #c0c0c0; background: #f0f0f0; } "
-        "QLabel { padding: 2px 6px; color: #000000; font-size: 11px; }");
-
     // Setup menus
     setupEolMenu();
     setupEncodingMenu();
+
+    // Apply theme-aware styles (initial + on theme change)
+    auto applyThemeStyle = [this]() {
+        Theme theme = ThemeManager::instance().currentTheme();
+        QString statusStyle = QString(
+            "QStatusBar { border-top: 1px solid %1; background: %2; } "
+            "QLabel { padding: 2px 6px; color: %3; font-size: 11px; }")
+            .arg(theme.borderColor.name(),
+                 theme.statusBarBackground.name(),
+                 theme.statusBarForeground.name());
+        setStyleSheet(statusStyle);
+
+        QString btnStyle = QString(
+            "QPushButton { border: 1px solid %1; padding: 2px 8px; "
+            "background: transparent; color: %2; } "
+            "QPushButton:hover { background: %3; }")
+            .arg(theme.borderColor.name(),
+                 theme.statusBarForeground.name(),
+                 theme.accentPrimary.name());
+        m_eolButton->setStyleSheet(btnStyle);
+        m_encodingButton->setStyleSheet(btnStyle);
+    };
+    applyThemeStyle();
+    connect(&ThemeManager::instance(), &ThemeManager::themeChanged,
+            this, applyThemeStyle);
 }
 
 void StatusBarWidget::setupEolMenu()

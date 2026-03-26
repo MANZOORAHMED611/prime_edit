@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "editor.h"
 #include "tabwidget.h"
+#include "statusbar.h"
 #include "evalresultwidget.h"
 #include "endpointconfigdialog.h"
 #include "core/document.h"
@@ -361,107 +362,131 @@ void MainWindow::syncHorizontalScroll()
 // Encoding operations
 void MainWindow::convertToANSI()
 {
-    // TODO: Implement ANSI conversion
-    statusBar()->showMessage(tr("Convert to ANSI not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setEncoding("ISO-8859-1");
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Encoding changed to ANSI (ISO-8859-1)"), 3000);
 }
 
 void MainWindow::convertToUTF8()
 {
-    // TODO: Implement UTF-8 conversion
-    statusBar()->showMessage(tr("Convert to UTF-8 not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setEncoding("UTF-8");
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Encoding changed to UTF-8"), 3000);
 }
 
 void MainWindow::convertToUTF8BOM()
 {
-    // TODO: Implement UTF-8 BOM conversion
-    statusBar()->showMessage(tr("Convert to UTF-8 BOM not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setEncoding("UTF-8-BOM");
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Encoding changed to UTF-8-BOM"), 3000);
 }
 
 void MainWindow::convertToUCS2BE()
 {
-    // TODO: Implement UCS-2 BE conversion
-    statusBar()->showMessage(tr("Convert to UCS-2 BE not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setEncoding("UTF-16BE");
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Encoding changed to UCS-2 Big Endian"), 3000);
 }
 
 void MainWindow::convertToUCS2LE()
 {
-    // TODO: Implement UCS-2 LE conversion
-    statusBar()->showMessage(tr("Convert to UCS-2 LE not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setEncoding("UTF-16LE");
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Encoding changed to UCS-2 Little Endian"), 3000);
 }
 
 // Line ending operations
 void MainWindow::convertToWindows()
 {
-    // TODO: Implement Windows line ending conversion
-    statusBar()->showMessage(tr("Convert to Windows (CRLF) not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setLineEnding(Document::Windows);
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Line ending changed to Windows (CRLF)"), 3000);
 }
 
 void MainWindow::convertToUnix()
 {
-    // TODO: Implement Unix line ending conversion
-    statusBar()->showMessage(tr("Convert to Unix (LF) not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setLineEnding(Document::Unix);
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Line ending changed to Unix (LF)"), 3000);
 }
 
 void MainWindow::convertToMac()
 {
-    // TODO: Implement Mac line ending conversion
-    statusBar()->showMessage(tr("Convert to Mac (CR) not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+    e->document()->setLineEnding(Document::ClassicMac);
+    m_statusBar->updateFromEditor(e);
+    statusBar()->showMessage(tr("Line ending changed to Mac (CR)"), 3000);
 }
 
 // Bookmark operations
 void MainWindow::toggleBookmark()
 {
-    // TODO: Implement bookmark toggle
-    statusBar()->showMessage(tr("Toggle bookmark not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->toggleBookmark(e->currentLine());
 }
 
 void MainWindow::nextBookmark()
 {
-    // TODO: Implement next bookmark
-    statusBar()->showMessage(tr("Next bookmark not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->nextBookmark();
 }
 
 void MainWindow::previousBookmark()
 {
-    // TODO: Implement previous bookmark
-    statusBar()->showMessage(tr("Previous bookmark not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->previousBookmark();
 }
 
 void MainWindow::clearAllBookmarks()
 {
-    // TODO: Implement clear all bookmarks
-    statusBar()->showMessage(tr("Clear all bookmarks not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->clearBookmarks();
 }
 
 // Folding operations
 void MainWindow::foldAll()
 {
-    // TODO: Implement fold all
-    statusBar()->showMessage(tr("Fold all not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->foldAll();
 }
 
 void MainWindow::unfoldAll()
 {
-    // TODO: Implement unfold all
-    statusBar()->showMessage(tr("Unfold all not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->unfoldAll();
 }
 
 void MainWindow::toggleFold()
 {
-    // TODO: Implement toggle fold
-    statusBar()->showMessage(tr("Toggle fold not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->toggleFoldAtCursor();
 }
 
 void MainWindow::foldCurrentLevel()
 {
-    // TODO: Implement fold current level
-    statusBar()->showMessage(tr("Fold current level not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->foldAt(e->textCursor().blockNumber());
 }
 
 void MainWindow::unfoldCurrentLevel()
 {
-    // TODO: Implement unfold current level
-    statusBar()->showMessage(tr("Unfold current level not yet implemented"), 3000);
+    Editor *e = currentEditor();
+    if (e) e->unfoldAt(e->textCursor().blockNumber());
 }
 
 // Document/Tab operations

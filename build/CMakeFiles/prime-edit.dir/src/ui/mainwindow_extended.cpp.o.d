@@ -474,12 +474,13 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication_platform.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QClipboard \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qclipboard.h \
- /home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.h \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \

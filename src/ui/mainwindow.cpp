@@ -875,6 +875,31 @@ QStringList MainWindow::openFilePaths() const
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    // Check for unsaved changes before closing
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        Editor *editor = qobject_cast<Editor*>(m_tabWidget->widget(i));
+        if (editor && editor->document() && editor->document()->isModified()) {
+            QMessageBox::StandardButton result = QMessageBox::question(
+                this, tr("Save Changes"),
+                tr("Do you want to save changes to '%1'?")
+                    .arg(editor->document()->displayName()),
+                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+            if (result == QMessageBox::Cancel) {
+                event->ignore();
+                return;
+            }
+            if (result == QMessageBox::Save) {
+                m_tabWidget->setCurrentIndex(i);
+                saveFile();
+                if (editor->document()->isModified()) {
+                    event->ignore();
+                    return;
+                }
+            }
+        }
+    }
+
     Session::instance().saveUnsavedDocuments(this);
     m_closingAll = true;
     event->accept();
@@ -906,9 +931,11 @@ void MainWindow::onTabChanged(int index)
     updateStatusBar();
     updateMenuState();
 
-    m_documentMap->setEditor(currentEditor());
+    if (m_documentMap) {
+        m_documentMap->setEditor(currentEditor());
+    }
 
-    if (m_functionListDock && m_functionListDock->isVisible()) {
+    if (m_functionListDock && m_functionListDock->isVisible() && m_functionList) {
         m_functionList->setEditor(currentEditor());
     }
 
