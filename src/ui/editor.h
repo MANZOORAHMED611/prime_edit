@@ -5,8 +5,10 @@
 #include <QTextDocument>
 #include <QMap>
 #include <QSet>
+#include <QTimer>
 
 #include "core/searchengine.h"
+#include "ui/completionpopup.h"
 
 class QPainter;
 struct Theme;
@@ -204,6 +206,13 @@ private:
     QList<QTextEdit::ExtraSelection> m_markSelections;
 
     QString getCommentString() const;
+
+    // Auto-completion
+    void triggerCompletion();
+    QVector<SimpleCompletionItem> gatherCompletions(const QString &prefix);
+    QTimer *m_completionTimer = nullptr;
+    CompletionPopup *m_completionPopup = nullptr;
+    int m_consecutiveWordChars = 0;
 };
 
 #endif // EDITOR_H

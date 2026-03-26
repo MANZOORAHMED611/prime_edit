@@ -485,6 +485,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.h",
+			"MU",
+			"YPKJ5OE7LN/moc_documentmap.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h",
 			"MU",
 			"YPKJ5OE7LN/moc_editor.cpp",
@@ -494,6 +500,12 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.h",
 			"MU",
 			"YPKJ5OE7LN/moc_fileexplorer.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.h",
+			"MU",
+			"YPKJ5OE7LN/moc_functionlist.cpp",
 			null
 		],
 		[
@@ -524,6 +536,12 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.h",
 			"MU",
 			"YPKJ5OE7LN/moc_linenumberarea.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.h",
+			"MU",
+			"YPKJ5OE7LN/moc_macrodialog.cpp",
 			null
 		],
 		[
@@ -632,7 +650,6 @@
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
 		"QT_NETWORK_LIB",
-		"QT_NO_DEBUG",
 		"QT_PRINTSUPPORT_LIB",
 		"QT_SVG_LIB",
 		"QT_WIDGETS_LIB"
@@ -783,12 +800,22 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp",
 			"MU",
 			null
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp",
 			"MU",
 			null
 		],
@@ -814,6 +841,11 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp",
 			"MU",
 			null
 		],

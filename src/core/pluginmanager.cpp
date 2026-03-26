@@ -10,10 +10,14 @@ PluginManager::PluginManager()
     QString appDir = QCoreApplication::applicationDirPath();
     m_pluginDirs.append(appDir + "/plugins");
 
+    QString configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    m_pluginDirs.append(configDir + "/plugins");
+
     QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     m_pluginDirs.append(dataDir + "/plugins");
 
     // System-wide plugins
+    m_pluginDirs.append("/usr/lib/olive-notepad/plugins");
     m_pluginDirs.append("/usr/share/notepad-supreme/plugins");
     m_pluginDirs.append("/usr/local/share/notepad-supreme/plugins");
 }

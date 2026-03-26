@@ -5,6 +5,12 @@
 #include <QVector>
 #include "../core/lspclient.h"
 
+struct SimpleCompletionItem {
+    QString label;
+    QString detail;
+    enum Kind { Keyword, Type, Word, Snippet } kind = Word;
+};
+
 class CompletionPopup : public QListWidget
 {
     Q_OBJECT
@@ -13,6 +19,7 @@ public:
     explicit CompletionPopup(QWidget *parent = nullptr);
 
     void setCompletions(const QVector<CompletionItem> &items);
+    void setSimpleCompletions(const QVector<SimpleCompletionItem> &items);
     void showAtPosition(const QPoint &globalPos);
     QString selectedCompletion() const;
 

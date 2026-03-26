@@ -434,4 +434,14 @@ CMakeFiles/olive-notepad.dir/src/main.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
- /home/abusulaiman/dev/repository/olive_notepad/src/core/session.h
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/session.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QPluginLoader \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qpluginloader.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qlibrary.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/plugininterface.h

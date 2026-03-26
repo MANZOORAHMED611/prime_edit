@@ -22,6 +22,8 @@ class PreferencesDialog;
 class CommandPalette;
 class TerminalWidget;
 class NotificationBar;
+class DocumentMapWidget;
+class FunctionListPanel;
 
 class MainWindow : public QMainWindow
 {
@@ -168,6 +170,7 @@ private slots:
     void playbackMacro();
     void saveMacro();
     void loadMacro();
+    void runMacroMultipleTimes();
 
     // Recent files
     void openRecentFile();
@@ -241,6 +244,10 @@ private:
     // Dock widgets
     QDockWidget *m_terminalDock = nullptr;
     TerminalWidget *m_terminal = nullptr;
+    DocumentMapWidget *m_documentMap = nullptr;
+    QDockWidget *m_documentMapDock = nullptr;
+    FunctionListPanel *m_functionList = nullptr;
+    QDockWidget *m_functionListDock = nullptr;
 
     // Menus
     QMenu *m_fileMenu;

@@ -75,6 +75,9 @@ set(UI_SOURCES
     src/ui/columneditor.cpp
     src/ui/notificationbar.cpp
     src/ui/recoverydialog.cpp
+    src/ui/functionlist.cpp
+    src/ui/macrodialog.cpp
+    src/ui/documentmap.cpp
 )
 
 set(SYNTAX_SOURCES
@@ -126,6 +129,9 @@ set(HEADERS
     src/ui/columneditor.h
     src/ui/notificationbar.h
     src/ui/recoverydialog.h
+    src/ui/functionlist.h
+    src/ui/macrodialog.h
+    src/ui/documentmap.h
     src/syntax/highlighter.h
     src/syntax/languagemanager.h
     src/utils/fileutils.h

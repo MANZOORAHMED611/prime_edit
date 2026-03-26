@@ -8,6 +8,7 @@
 #include "ui/theme.h"
 #include "utils/settings.h"
 #include "core/session.h"
+#include "core/pluginmanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -87,6 +88,9 @@ int main(int argc, char *argv[])
     // Create main window
     MainWindow mainWindow;
     mainWindow.show();
+
+    // Load plugins
+    PluginManager::instance().loadPlugins();
 
     // Open files from command line
     const QStringList files = parser.positionalArguments();

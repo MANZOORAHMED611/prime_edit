@@ -68,7 +68,7 @@ include CMakeFiles/olive-notepad_autogen.dir/progress.make
 
 CMakeFiles/olive-notepad_autogen:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target olive-notepad"
-	/usr/bin/cmake -E cmake_autogen /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir/AutogenInfo.json ""
+	/usr/bin/cmake -E cmake_autogen /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/olive-notepad_autogen.dir/AutogenInfo.json Debug
 
 olive-notepad_autogen: CMakeFiles/olive-notepad_autogen
 olive-notepad_autogen: CMakeFiles/olive-notepad_autogen.dir/build.make

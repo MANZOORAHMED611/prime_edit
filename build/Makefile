@@ -691,6 +691,30 @@ src/ui/completionpopup.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/completionpopup.cpp.s
 .PHONY : src/ui/completionpopup.cpp.s
 
+src/ui/documentmap.o: src/ui/documentmap.cpp.o
+.PHONY : src/ui/documentmap.o
+
+# target to build an object file
+src/ui/documentmap.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.o
+.PHONY : src/ui/documentmap.cpp.o
+
+src/ui/documentmap.i: src/ui/documentmap.cpp.i
+.PHONY : src/ui/documentmap.i
+
+# target to preprocess a source file
+src/ui/documentmap.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.i
+.PHONY : src/ui/documentmap.cpp.i
+
+src/ui/documentmap.s: src/ui/documentmap.cpp.s
+.PHONY : src/ui/documentmap.s
+
+# target to generate assembly for a file
+src/ui/documentmap.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.s
+.PHONY : src/ui/documentmap.cpp.s
+
 src/ui/editor.o: src/ui/editor.cpp.o
 .PHONY : src/ui/editor.o
 
@@ -738,6 +762,30 @@ src/ui/fileexplorer.s: src/ui/fileexplorer.cpp.s
 src/ui/fileexplorer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/fileexplorer.cpp.s
 .PHONY : src/ui/fileexplorer.cpp.s
+
+src/ui/functionlist.o: src/ui/functionlist.cpp.o
+.PHONY : src/ui/functionlist.o
+
+# target to build an object file
+src/ui/functionlist.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.o
+.PHONY : src/ui/functionlist.cpp.o
+
+src/ui/functionlist.i: src/ui/functionlist.cpp.i
+.PHONY : src/ui/functionlist.i
+
+# target to preprocess a source file
+src/ui/functionlist.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.i
+.PHONY : src/ui/functionlist.cpp.i
+
+src/ui/functionlist.s: src/ui/functionlist.cpp.s
+.PHONY : src/ui/functionlist.s
+
+# target to generate assembly for a file
+src/ui/functionlist.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.s
+.PHONY : src/ui/functionlist.cpp.s
 
 src/ui/gitdiffviewer.o: src/ui/gitdiffviewer.cpp.o
 .PHONY : src/ui/gitdiffviewer.o
@@ -858,6 +906,30 @@ src/ui/linenumberarea.s: src/ui/linenumberarea.cpp.s
 src/ui/linenumberarea.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.s
 .PHONY : src/ui/linenumberarea.cpp.s
+
+src/ui/macrodialog.o: src/ui/macrodialog.cpp.o
+.PHONY : src/ui/macrodialog.o
+
+# target to build an object file
+src/ui/macrodialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o
+.PHONY : src/ui/macrodialog.cpp.o
+
+src/ui/macrodialog.i: src/ui/macrodialog.cpp.i
+.PHONY : src/ui/macrodialog.i
+
+# target to preprocess a source file
+src/ui/macrodialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.i
+.PHONY : src/ui/macrodialog.cpp.i
+
+src/ui/macrodialog.s: src/ui/macrodialog.cpp.s
+.PHONY : src/ui/macrodialog.s
+
+# target to generate assembly for a file
+src/ui/macrodialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.s
+.PHONY : src/ui/macrodialog.cpp.s
 
 src/ui/mainwindow.o: src/ui/mainwindow.cpp.o
 .PHONY : src/ui/mainwindow.o
@@ -1344,12 +1416,18 @@ help:
 	@echo "... src/ui/completionpopup.o"
 	@echo "... src/ui/completionpopup.i"
 	@echo "... src/ui/completionpopup.s"
+	@echo "... src/ui/documentmap.o"
+	@echo "... src/ui/documentmap.i"
+	@echo "... src/ui/documentmap.s"
 	@echo "... src/ui/editor.o"
 	@echo "... src/ui/editor.i"
 	@echo "... src/ui/editor.s"
 	@echo "... src/ui/fileexplorer.o"
 	@echo "... src/ui/fileexplorer.i"
 	@echo "... src/ui/fileexplorer.s"
+	@echo "... src/ui/functionlist.o"
+	@echo "... src/ui/functionlist.i"
+	@echo "... src/ui/functionlist.s"
 	@echo "... src/ui/gitdiffviewer.o"
 	@echo "... src/ui/gitdiffviewer.i"
 	@echo "... src/ui/gitdiffviewer.s"
@@ -1365,6 +1443,9 @@ help:
 	@echo "... src/ui/linenumberarea.o"
 	@echo "... src/ui/linenumberarea.i"
 	@echo "... src/ui/linenumberarea.s"
+	@echo "... src/ui/macrodialog.o"
+	@echo "... src/ui/macrodialog.i"
+	@echo "... src/ui/macrodialog.s"
 	@echo "... src/ui/mainwindow.o"
 	@echo "... src/ui/mainwindow.i"
 	@echo "... src/ui/mainwindow.s"

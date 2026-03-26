@@ -11,10 +11,14 @@
 #include "terminalwidget.h"
 #include "toolbarmanager.h"
 #include "notificationbar.h"
+#include "documentmap.h"
+#include "functionlist.h"
+#include "macrodialog.h"
 #include "core/document.h"
 #include "core/documentmanager.h"
 #include "core/session.h"
 #include "core/macrorecorder.h"
+#include "core/pluginmanager.h"
 #include "utils/settings.h"
 #include "utils/fileutils.h"
 #include "syntax/languagemanager.h"
@@ -37,9 +41,13 @@
 #include <QStyle>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QPrintPreviewDialog>
 #include <QPixmap>
 #include <QPainter>
 #include <QFileInfo>
+#include <QDesktopServices>
+#include <QStandardPaths>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -111,6 +119,14 @@ void MainWindow::setupUi()
     m_terminalDock->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
     addDockWidget(Qt::BottomDockWidgetArea, m_terminalDock);
     m_terminalDock->hide();  // Hidden by default
+
+    // Setup document map dock widget
+    m_documentMap = new DocumentMapWidget(this);
+    m_documentMapDock = new QDockWidget(tr("Document Map"), this);
+    m_documentMapDock->setWidget(m_documentMap);
+    m_documentMapDock->setAllowedAreas(Qt::RightDockWidgetArea);
+    addDockWidget(Qt::RightDockWidgetArea, m_documentMapDock);
+    m_documentMapDock->hide();
 
     // File change monitoring
     connect(&DocumentManager::instance(),
@@ -351,6 +367,12 @@ void MainWindow::setupMenus()
 
     m_viewMenu->addSeparator();
 
+    QAction *documentMapAction = m_viewMenu->addAction(tr("Document &Map"));
+    documentMapAction->setCheckable(true);
+    documentMapAction->setChecked(false);
+    connect(documentMapAction, &QAction::toggled, m_documentMapDock, &QDockWidget::setVisible);
+    connect(m_documentMapDock, &QDockWidget::visibilityChanged, documentMapAction, &QAction::setChecked);
+
     QAction *fullScreenAction = m_viewMenu->addAction(tr("&Full Screen"), this, &MainWindow::toggleFullScreen);
     fullScreenAction->setShortcut(QKeySequence::FullScreen);
 
@@ -421,6 +443,7 @@ void MainWindow::setupMenus()
     m_macroMenu->addAction(tr("Start &Recording"), this, &MainWindow::startRecordingMacro, QKeySequence(Qt::Key_F9));
     m_macroMenu->addAction(tr("&Stop Recording"), this, &MainWindow::stopRecordingMacro, QKeySequence(Qt::SHIFT | Qt::Key_F9));
     m_macroMenu->addAction(tr("&Playback"), this, &MainWindow::playbackMacro, QKeySequence(Qt::Key_F10));
+    m_macroMenu->addAction(tr("Run &Multiple Times..."), this, &MainWindow::runMacroMultipleTimes);
     m_macroMenu->addSeparator();
     m_macroMenu->addAction(tr("Save Macro..."), this, &MainWindow::saveMacro);
     m_macroMenu->addAction(tr("Load Macro..."), this, &MainWindow::loadMacro);
@@ -431,6 +454,30 @@ void MainWindow::setupMenus()
     m_runMenu = menuBar()->addMenu(tr("&Run"));
     m_runMenu->addAction(tr("&Launch in Terminal"), this, &MainWindow::launchInTerminal);
     m_runMenu->addAction(tr("Open Containing &Folder"), this, &MainWindow::openContainingFolder);
+
+    // ============================================================
+    // Plugins menu
+    // ============================================================
+    QMenu *pluginsMenu = menuBar()->addMenu(tr("&Plugins"));
+
+    QStringList pluginNames = PluginManager::instance().pluginNames();
+    if (pluginNames.isEmpty()) {
+        pluginsMenu->addAction(tr("(No plugins loaded)"))->setEnabled(false);
+    } else {
+        for (const QString &name : pluginNames) {
+            QAction *action = pluginsMenu->addAction(name);
+            action->setCheckable(true);
+            action->setChecked(true);
+        }
+    }
+
+    pluginsMenu->addSeparator();
+    pluginsMenu->addAction(tr("Open Plugin &Directory..."), this, [this]() {
+        QString dir = QStandardPaths::writableLocation(
+            QStandardPaths::AppConfigLocation) + "/plugins";
+        QDir().mkpath(dir);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+    });
 
     // ============================================================
     // Window menu (dynamically populated)
@@ -751,9 +798,16 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::onTabChanged(int index)
 {
+    Q_UNUSED(index);
     updateWindowTitle();
     updateStatusBar();
     updateMenuState();
+
+    m_documentMap->setEditor(currentEditor());
+
+    if (m_functionListDock && m_functionListDock->isVisible()) {
+        m_functionList->setEditor(currentEditor());
+    }
 }
 
 void MainWindow::onTabCloseRequested(int index)
@@ -885,15 +939,15 @@ void MainWindow::selectAll()
 void MainWindow::printFile()
 {
     Editor *editor = currentEditor();
-    if (editor) {
-        QPrinter printer(QPrinter::HighResolution);
-        QPrintDialog dialog(&printer, this);
-        dialog.setWindowTitle(tr("Print Document"));
+    if (!editor) return;
 
-        if (dialog.exec() == QDialog::Accepted) {
-            editor->print(&printer);
-        }
-    }
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(&printer, this);
+    connect(&preview, &QPrintPreviewDialog::paintRequested,
+            this, [editor](QPrinter *p) {
+        editor->print(p);
+    });
+    preview.exec();
 }
 
 void MainWindow::increaseIndent()
@@ -1522,6 +1576,28 @@ void MainWindow::loadMacro()
         MacroRecorder::instance().loadMacro(name);
         QString desc = MacroRecorder::instance().currentMacroDescription();
         statusBar()->showMessage(tr("Macro loaded: %1 - %2").arg(name, desc), 5000);
+    }
+}
+
+void MainWindow::runMacroMultipleTimes()
+{
+    MacroDialog dialog(this);
+    if (dialog.exec() != QDialog::Accepted) return;
+
+    Editor *editor = currentEditor();
+    if (!editor) return;
+
+    if (dialog.runUntilEnd()) {
+        int lastLine = static_cast<QPlainTextEdit*>(editor)->document()->blockCount();
+        while (editor->currentLine() < lastLine) {
+            int prevLine = editor->currentLine();
+            MacroRecorder::instance().playback(editor);
+            if (editor->currentLine() == prevLine) break;
+        }
+    } else {
+        for (int i = 0; i < dialog.runCount(); ++i) {
+            MacroRecorder::instance().playback(editor);
+        }
     }
 }
 
