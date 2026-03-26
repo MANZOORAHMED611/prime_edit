@@ -587,6 +587,8 @@
     <div class="sidebar-nav">
         <div class="section-label">Overview</div>
         <a href="#overview">Product Overview</a>
+        <a href="#who">Who This Is For</a>
+        <a href="#why">Why PrimeEdit</a>
         <a href="#architecture">Architecture</a>
         <a href="#building">Building from Source</a>
 
@@ -613,10 +615,11 @@
         <a href="#persistence">Persistent Documents</a>
         <a href="#monitoring">File Monitoring</a>
 
-        <div class="section-label">Unique Features</div>
+        <div class="section-label">What Makes It Different</div>
         <a href="#schema">Schema Validation</a>
         <a href="#blockeval">Block Evaluation</a>
         <a href="#islamic">Islamic Knowledge</a>
+        <a href="#casestudy">Case Study: Scholarly Authoring</a>
 
         <div class="section-label">UI &amp; Customization</div>
         <a href="#themes">Themes</a>
@@ -642,7 +645,7 @@
                     <h1>PrimeEdit</h1>
                 </div>
             </div>
-            <p>A native editor for structured documents, where content is validated, enforced, and executable. Built for performance and extensibility on Linux.</p>
+            <p>The editor for documents that are executed, validated, or consumed by systems &mdash; not just read. Built for performance and extensibility on Linux.</p>
             <div class="hero-stats">
                 <div class="hero-stat">
                     <div class="number">19,430</div>
@@ -668,19 +671,97 @@
 
         <!-- Product Overview -->
         <section>
-            <p class="lead">PrimeEdit is a high-performance, native text editor purpose-built for Linux. It combines the editing power of Notepad++ with structured document validation, LLM-powered block evaluation, and Islamic scholarly knowledge integration &mdash; capabilities no other editor offers.</p>
+            <p class="lead">PrimeEdit is for people writing documents that are executed, validated, or consumed by systems &mdash; not just read. It combines native performance with structured document validation, executable block evaluation, and domain-specific knowledge integration.</p>
 
             <div class="info-box note">
-                <strong>Positioning:</strong> PrimeEdit is not an IDE. It is not an AI assistant. It is the editor for people doing structured, rule-bound, high-stakes text work on Linux.
+                <strong>Not an IDE. Not an AI assistant.</strong> PrimeEdit is a structured knowledge editor &mdash; an execution-aware document system for rule-bound, high-stakes text work.
             </div>
 
             <h3>Core Principles</h3>
             <ul>
                 <li><strong>Performance first</strong> &mdash; sub-second startup, 1GB+ file handling, 60fps scrolling</li>
-                <li><strong>Structured validation</strong> &mdash; documents have rules; PrimeEdit enforces them</li>
-                <li><strong>Execution, not assistance</strong> &mdash; block evaluation sends text to endpoints and returns results inline</li>
-                <li><strong>Domain-aware</strong> &mdash; Islamic scholarly workflows are first-class citizens</li>
+                <li><strong>Documents have rules</strong> &mdash; schema validation enforces them in real-time</li>
+                <li><strong>Any block is a transformation</strong> &mdash; select text, evaluate against any LLM endpoint, accept or reject the diff</li>
+                <li><strong>Domain-aware</strong> &mdash; Islamic scholarly workflows prove the system; your domain is next</li>
             </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Who This Is For -->
+        <section id="who">
+            <h2><span class="section-number"></span> Who This Is For</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="card-icon">&#128209;</div>
+                    <h3>Technical Writers</h3>
+                    <p>Writing structured documents with validation rules &mdash; API specs, compliance docs, instruction files. Schema validation catches violations as you type.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128202;</div>
+                    <h3>Large File Engineers</h3>
+                    <p>Working with log files, data dumps, and datasets over 100MB that VS Code cannot open. PrimeEdit handles 1GB+ files without blinking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#129302;</div>
+                    <h3>AI Prompt Engineers</h3>
+                    <p>Authoring AI instruction files, prompt libraries, and system prompts. Block evaluation transforms any selection against an LLM endpoint inline.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128214;</div>
+                    <h3>Scholarly Authors</h3>
+                    <p>Rule-bound writing workflows where citations must be verified, sources must be graded, and formatting must be enforced. Islamic scholarship is the reference implementation.</p>
+                </div>
+            </div>
+
+            <div class="info-box tip">
+                <strong>Not for:</strong> If you need a debugger, project management, or AI chat sidebar, use an IDE. PrimeEdit is for the document itself &mdash; validating it, transforming it, and making it correct.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Why PrimeEdit -->
+        <section id="why">
+            <h2><span class="section-number"></span> Why PrimeEdit</h2>
+            <p class="lead">What you get that other editors cannot give you.</p>
+
+            <table>
+                <thead><tr><th>If You Need</th><th>Other Editors</th><th>PrimeEdit</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Open a 500MB log file</td>
+                        <td>VS Code: hangs or refuses. Notepad++: slow, high memory.</td>
+                        <td>Opens in &lt;2 seconds. Memory-mapped. Scrolls at 60fps.</td>
+                    </tr>
+                    <tr>
+                        <td>Validate document structure</td>
+                        <td>No editor does this. Linters exist for code, not documents.</td>
+                        <td>JSON schema rules. Inline violations. Real-time health score.</td>
+                    </tr>
+                    <tr>
+                        <td>Transform a text block with AI</td>
+                        <td>Copy to ChatGPT. Paste back. Lose context.</td>
+                        <td>Select. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd>. See diff. Accept or reject. Never leave the document.</td>
+                    </tr>
+                    <tr>
+                        <td>Verify a hadith citation</td>
+                        <td>No editor has any concept of this.</td>
+                        <td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd>. Grading, source, and authority from a 16,000-chunk RAG system.</td>
+                    </tr>
+                    <tr>
+                        <td>Unsaved files survive restart</td>
+                        <td>Notepad++: yes. VS Code: yes (with workspace).</td>
+                        <td>Yes. Silent. No prompts. No workspace required.</td>
+                    </tr>
+                    <tr>
+                        <td>81 languages, LSP, native speed</td>
+                        <td>Notepad++: no LSP. VS Code: Electron, not native.</td>
+                        <td>C++ native. 6.9MB binary. LSP built-in. 81 syntax definitions.</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
 
         <div class="divider"></div>
@@ -1240,11 +1321,11 @@ make -j$(nproc)
 
         <!-- Block Evaluation -->
         <section id="blockeval">
-            <h2><span class="section-number">19</span> Block Evaluation with Diff <span class="badge badge-new">Unique</span></h2>
-            <p class="lead">Select text. Evaluate it against any LLM endpoint. See the result inline with a diff. Accept or reject. The document is the interface.</p>
+            <h2><span class="section-number">19</span> Block Evaluation <span class="badge badge-new">Unique</span></h2>
+            <p class="lead">Turn any block of text into an executable transformation. Select, evaluate, see the diff, accept or reject. The document is the interface. The result lives in the document.</p>
 
             <div class="info-box tip">
-                <strong>Distinction:</strong> This is not Copilot. Other editors add AI as an assistant layer. PrimeEdit adds AI as an <em>execution</em> layer. The result lives in the document.
+                <strong>This is not Copilot.</strong> Other editors add AI as an assistant layer &mdash; a sidebar, a chat window, a suggestion ghost. PrimeEdit adds AI as an <em>execution primitive</em>. You select text. You press a key. The text is transformed. You see exactly what changed. You decide. That's it.
             </div>
 
             <h3>Workflow</h3>
@@ -1275,7 +1356,7 @@ make -j$(nproc)
         <!-- Islamic Knowledge -->
         <section id="islamic">
             <h2><span class="section-number">20</span> Islamic Knowledge Integration <span class="badge badge-new">Moat</span></h2>
-            <p class="lead">The feature that makes PrimeEdit unreplicable. Hadith validation, Quranic verse verification, and Arabic RTL rendering &mdash; purpose-built for Islamic scholarly authorship.</p>
+            <p class="lead">The reference implementation of everything PrimeEdit can do. Schema validation, block evaluation, RAG-powered verification, and domain-aware rendering &mdash; all integrated into a single scholarly authoring workflow. This is the proof that the system works. Your domain is next.</p>
 
             <div class="feature-grid">
                 <div class="feature-card">
@@ -1312,9 +1393,60 @@ make -j$(nproc)
 
         <div class="divider"></div>
 
+        <!-- Case Study -->
+        <section id="casestudy">
+            <h2><span class="section-number">21</span> Case Study: Islamic Scholarly Authoring</h2>
+            <p class="lead">This is not just a feature list. This is a complete workflow that demonstrates every differentiating capability of PrimeEdit working together.</p>
+
+            <h3>The Workflow</h3>
+
+            <div class="arch-diagram">
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">1. Open Treatise</div>
+                        <div class="box-items">Author opens a <code>.treatise</code> file<br>PrimeEdit auto-detects yameen pipeline<br>Islamic hadith schema activates automatically<br>Arabic text renders RTL without configuration</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">2. Schema Validates</div>
+                        <div class="box-items">Red underline: hadith citation missing grading<br>Warning: source collection not referenced<br>Validation panel shows 3 errors, 2 warnings<br>Status bar: document health score</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">3. Author Fixes</div>
+                        <div class="box-items">Adds grading authority &mdash; underline disappears<br><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> on a hadith &mdash; RAG confirms: Sahih, Bukhari<br>Citation verified against 16,000-chunk knowledge base</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">4. Block Evaluation</div>
+                        <div class="box-items">Selects a paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>Sends to Ollama for scholarly refinement<br>Inline diff shows changes: green additions, red removals<br>Press <kbd>A</kbd> to accept into document</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">5. All Clear</div>
+                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All citations verified. All rules pass.<br>Document is structurally valid and scholarly sound.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box note">
+                <strong>This workflow uses:</strong> schema validation (Feature 3) + block evaluation (Feature 4) + RAG bridge (Feature 5) + Arabic RTL rendering + auto-detection &mdash; five systems working as one. The Islamic domain is the proof. Legal compliance, medical protocols, AI prompt libraries, and any domain with rules can follow the same pattern.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
         <!-- Themes -->
         <section id="themes">
-            <h2><span class="section-number">21</span> Themes &amp; Customization</h2>
+            <h2><span class="section-number">23</span> Themes &amp; Customization</h2>
             <p>9 built-in themes with live switching. Syntax colors update instantly.</p>
 
             <table>
@@ -1338,7 +1470,7 @@ make -j$(nproc)
 
         <!-- Panels & Docks -->
         <section id="panels">
-            <h2><span class="section-number">22</span> Panels &amp; Docks</h2>
+            <h2><span class="section-number">24</span> Panels &amp; Docks</h2>
 
             <table>
                 <thead><tr><th>Panel</th><th>Position</th><th>Toggle</th><th>Purpose</th></tr></thead>
@@ -1381,7 +1513,7 @@ make -j$(nproc)
 
         <!-- Keyboard Shortcuts -->
         <section id="shortcuts">
-            <h2><span class="section-number">24</span> Keyboard Shortcuts</h2>
+            <h2><span class="section-number">25</span> Keyboard Shortcuts</h2>
 
             <h4>File</h4>
             <div class="shortcut-grid">
@@ -1450,7 +1582,7 @@ make -j$(nproc)
 
         <!-- Configuration Files -->
         <section id="config">
-            <h2><span class="section-number">25</span> Configuration Files</h2>
+            <h2><span class="section-number">26</span> Configuration Files</h2>
 
             <table>
                 <thead><tr><th>File</th><th>Location</th><th>Purpose</th></tr></thead>
@@ -1471,7 +1603,7 @@ make -j$(nproc)
 
         <!-- CLI -->
         <section id="cli">
-            <h2><span class="section-number">26</span> Command Line Interface</h2>
+            <h2><span class="section-number">27</span> Command Line Interface</h2>
 
             <pre><code>PrimeEdit [options] [files...]
 
