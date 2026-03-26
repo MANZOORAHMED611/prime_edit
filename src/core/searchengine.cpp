@@ -251,3 +251,82 @@ void SearchEngine::findInFiles(
 
     emit fileSearchFinished(totalHits, totalFiles);
 }
+
+void SearchEngine::searchLargeFile(
+    const QString &filePath, const QString &pattern, const Options &opts)
+{
+    if (pattern.isEmpty()) {
+        emit largeFileSearchFinished(0);
+        return;
+    }
+
+    QRegularExpression regex = buildRegex(pattern, opts);
+    if (!regex.isValid()) {
+        emit largeFileSearchFinished(0);
+        return;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        emit largeFileSearchFinished(0);
+        return;
+    }
+
+    qint64 fileSize = file.size();
+    uchar *data = file.map(0, fileSize);
+    if (!data) {
+        file.close();
+        emit largeFileSearchFinished(0);
+        return;
+    }
+
+    int totalHits = 0;
+    qint64 lineNum = 1;
+    constexpr qint64 CHUNK_SIZE = 1024 * 1024; // 1MB chunks
+
+    for (qint64 offset = 0; offset < fileSize; offset += CHUNK_SIZE) {
+        // Overlap slightly to avoid missing matches at boundaries
+        qint64 chunkEnd = qMin(offset + CHUNK_SIZE + 4096, fileSize);
+        qint64 chunkLen = chunkEnd - offset;
+
+        QString chunk = QString::fromUtf8(
+            reinterpret_cast<const char *>(data + offset),
+            static_cast<int>(chunkLen));
+
+        QRegularExpressionMatchIterator it = regex.globalMatch(chunk);
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+
+            int matchPos = match.capturedStart();
+            int localLine = chunk.left(matchPos).count('\n');
+
+            SearchResult result;
+            result.filePath = filePath;
+            result.line = static_cast<int>(lineNum + localLine);
+            result.column = matchPos;
+            result.length = match.capturedLength();
+
+            // Extract the line text around the match
+            int lineBegin = chunk.lastIndexOf('\n', matchPos) + 1;
+            int lineEnd = chunk.indexOf('\n', matchPos);
+            if (lineEnd < 0) lineEnd = chunk.length();
+            result.lineText = chunk.mid(lineBegin, lineEnd - lineBegin);
+
+            emit largeFileSearchResult(result);
+            totalHits++;
+        }
+
+        // Count newlines in non-overlapping portion for line tracking
+        qint64 countEnd = qMin(offset + CHUNK_SIZE, fileSize);
+        for (qint64 i = offset; i < countEnd; ++i) {
+            if (data[i] == '\n') lineNum++;
+        }
+
+        int pct = static_cast<int>(offset * 100 / fileSize);
+        emit largeFileSearchProgress(pct);
+    }
+
+    file.unmap(data);
+    file.close();
+    emit largeFileSearchFinished(totalHits);
+}

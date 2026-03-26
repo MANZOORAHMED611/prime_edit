@@ -3,6 +3,7 @@
 #include "theme.h"
 #include "completionpopup.h"
 #include "core/document.h"
+#include "core/largefile.h"
 #include "core/macrorecorder.h"
 #include "core/lspmanager.h"
 #include "core/lspclient.h"
@@ -64,6 +65,17 @@ Editor::Editor(Document *document, QWidget *parent)
     // Load content from document BEFORE connecting textChanged signal
     if (!m_document->text().isEmpty()) {
         setPlainText(m_document->text());
+    }
+
+    // Large file: set up dynamic viewport loading via scrollbar
+    if (m_document->isLargeFile()) {
+        connect(verticalScrollBar(), &QScrollBar::valueChanged,
+                this, &Editor::loadViewportContent);
+
+        LargeFileReader *reader = m_document->largeFileReader();
+        if (reader) {
+            verticalScrollBar()->setRange(0, static_cast<int>(reader->lineCount() - 1));
+        }
     }
 
     // NOW connect textChanged - after initial content is loaded
@@ -182,7 +194,11 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
             // Section 2: Line numbers
             if (m_lineNumbersVisible) {
-                QString number = QString::number(blockNumber + 1);
+                int displayLineNumber = blockNumber + 1;
+                if (m_document && m_document->isLargeFile()) {
+                    displayLineNumber = static_cast<int>(blockNumber + m_viewportStartLine + 1);
+                }
+                QString number = QString::number(displayLineNumber);
                 painter.setPen(theme.lineNumberForeground);
                 if (blockNumber == textCursor().blockNumber()) {
                     painter.setPen(theme.foreground);
@@ -1688,4 +1704,51 @@ void Editor::requestLSPCompletion()
     int col = textCursor().columnNumber();
     QString uri = QStringLiteral("file://") + m_document->filePath();
     client->completion(uri, line, col);
+}
+
+void Editor::loadViewportContent()
+{
+    if (!m_document || !m_document->isLargeFile()) return;
+    LargeFileReader *reader = m_document->largeFileReader();
+    if (!reader) return;
+
+    qint64 scrollLine = verticalScrollBar()->value();
+    qint64 visibleLines = height() / fontMetrics().height();
+
+    // Only reload if near the edge of the current buffer
+    qint64 bufferStart = m_viewportStartLine;
+    qint64 bufferEnd = m_viewportStartLine + QPlainTextEdit::document()->blockCount();
+
+    if (scrollLine >= bufferStart + 100 &&
+        scrollLine + visibleLines <= bufferEnd - 100) {
+        return; // Still within comfortable buffer range
+    }
+
+    // Calculate new viewport range
+    qint64 startLine = qMax(qint64(0), scrollLine - VIEWPORT_BUFFER);
+    qint64 endLine = qMin(reader->lineCount(),
+                          scrollLine + visibleLines + VIEWPORT_BUFFER);
+
+    m_viewportStartLine = startLine;
+
+    bool oldSyncing = m_syncing;
+    m_syncing = true;
+
+    QStringList lines = reader->lines(startLine, endLine - startLine);
+
+    // Block scrollbar signals to prevent re-entrant updates
+    verticalScrollBar()->blockSignals(true);
+    setPlainText(lines.join('\n'));
+    verticalScrollBar()->blockSignals(false);
+
+    // Position cursor relative to viewport
+    int localLine = static_cast<int>(scrollLine - startLine);
+    QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(localLine);
+    if (block.isValid()) {
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(block.position());
+        setTextCursor(cursor);
+    }
+
+    m_syncing = oldSyncing;
 }

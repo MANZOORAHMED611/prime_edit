@@ -9,6 +9,7 @@
 
 #include "core/searchengine.h"
 #include "core/lspclient.h"
+#include "core/largefile.h"
 #include "ui/completionpopup.h"
 
 class QPainter;
@@ -222,6 +223,11 @@ private:
     QTimer *m_completionTimer = nullptr;
     CompletionPopup *m_completionPopup = nullptr;
     int m_consecutiveWordChars = 0;
+
+    // Large file viewport loading
+    void loadViewportContent();
+    qint64 m_viewportStartLine = 0;
+    static constexpr int VIEWPORT_BUFFER = 500;
 };
 
 #endif // EDITOR_H

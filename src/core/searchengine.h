@@ -45,6 +45,10 @@ public:
                      const QString &fileFilter, const Options &opts,
                      bool recursive, bool includeHidden);
 
+    // Large file search (runs on memory-mapped data)
+    void searchLargeFile(const QString &filePath, const QString &pattern,
+                         const Options &opts);
+
     // Utility
     static QString expandEscapes(const QString &text);
 
@@ -52,6 +56,10 @@ signals:
     void fileSearchResult(const SearchResult &result);
     void fileSearchFinished(int totalHits, int totalFiles);
     void fileSearchProgress(const QString &currentFile);
+
+    void largeFileSearchResult(const SearchResult &result);
+    void largeFileSearchFinished(int totalHits);
+    void largeFileSearchProgress(int percent);
 
 private:
     QRegularExpression buildRegex(const QString &pattern, const Options &opts) const;

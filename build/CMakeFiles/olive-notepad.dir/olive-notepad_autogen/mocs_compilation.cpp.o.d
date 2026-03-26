@@ -519,6 +519,7 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_fileexplorer.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/fileexplorer.h \
