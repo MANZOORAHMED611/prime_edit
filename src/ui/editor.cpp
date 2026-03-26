@@ -1,8 +1,11 @@
 #include "editor.h"
 #include "linenumberarea.h"
 #include "theme.h"
+#include "completionpopup.h"
 #include "core/document.h"
 #include "core/macrorecorder.h"
+#include "core/lspmanager.h"
+#include "core/lspclient.h"
 #include "syntax/highlighter.h"
 #include "utils/settings.h"
 
@@ -15,6 +18,7 @@
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QRegularExpression>
+#include <QToolTip>
 #include <QSet>
 #include <algorithm>
 
@@ -627,6 +631,7 @@ void Editor::updateExtraSelections()
 
     allSelections.append(m_bracketSelections);
     allSelections.append(m_markSelections);
+    allSelections.append(m_diagnosticSelections);
 
     setExtraSelections(allSelections);
 }
@@ -1480,6 +1485,15 @@ void Editor::paintIndentGuides(QPainter &painter, const Theme &theme)
 
 void Editor::mousePressEvent(QMouseEvent *event)
 {
+    // Ctrl+click: go to definition via LSP
+    if (event->modifiers() & Qt::ControlModifier
+        && event->button() == Qt::LeftButton) {
+        QTextCursor cursor = cursorForPosition(event->pos());
+        setTextCursor(cursor);
+        requestGotoDefinition();
+        return;
+    }
+
     if (event->modifiers() & Qt::AltModifier && event->button() == Qt::LeftButton) {
         QTextCursor cursor = cursorForPosition(event->pos());
         m_columnSelection.active = true;
@@ -1578,4 +1592,100 @@ void Editor::clearColumnSelection()
 {
     m_columnSelection.active = false;
     viewport()->update();
+}
+
+// --- LSP Integration ---
+
+void Editor::setDiagnostics(const QVector<Diagnostic> &diagnostics)
+{
+    m_diagnosticSelections.clear();
+
+    for (const Diagnostic &diag : diagnostics) {
+        QTextEdit::ExtraSelection sel;
+
+        QColor underlineColor;
+        switch (diag.severity) {
+        case 1: underlineColor = Qt::red; break;
+        case 2: underlineColor = QColor(255, 165, 0); break;
+        case 3: underlineColor = Qt::blue; break;
+        case 4: underlineColor = Qt::gray; break;
+        default: underlineColor = Qt::red; break;
+        }
+
+        sel.format.setUnderlineColor(underlineColor);
+        sel.format.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+        sel.format.setToolTip(diag.message);
+
+        QTextBlock startBlock =
+            QPlainTextEdit::document()->findBlockByNumber(diag.line);
+        QTextBlock endBlock =
+            QPlainTextEdit::document()->findBlockByNumber(diag.endLine);
+
+        if (startBlock.isValid() && endBlock.isValid()) {
+            sel.cursor = QTextCursor(startBlock);
+            sel.cursor.movePosition(QTextCursor::Right,
+                                    QTextCursor::MoveAnchor,
+                                    diag.character);
+
+            QTextCursor endCursor(endBlock);
+            endCursor.movePosition(QTextCursor::Right,
+                                   QTextCursor::MoveAnchor,
+                                   diag.endCharacter);
+            sel.cursor.setPosition(endCursor.position(),
+                                   QTextCursor::KeepAnchor);
+
+            m_diagnosticSelections.append(sel);
+        }
+    }
+
+    updateExtraSelections();
+}
+
+void Editor::showLSPCompletions(const QVector<CompletionItem> &items)
+{
+    if (items.isEmpty() || !m_completionPopup) return;
+    m_completionPopup->setCompletions(items);
+    QRect rect = cursorRect();
+    QPoint pos = mapToGlobal(QPoint(rect.left(), rect.bottom()));
+    m_completionPopup->showAtPosition(pos);
+}
+
+void Editor::requestHover(int line, int character)
+{
+    if (!m_document) return;
+    QString lang = m_document->language();
+    LSPClient *client =
+        LSPManager::instance().clientForLanguage(lang);
+    if (!client || !client->isInitialized()) return;
+
+    QString uri = QStringLiteral("file://") + m_document->filePath();
+    client->hover(uri, line, character);
+}
+
+void Editor::requestGotoDefinition()
+{
+    if (!m_document) return;
+    QString lang = m_document->language();
+    LSPClient *client =
+        LSPManager::instance().clientForLanguage(lang);
+    if (!client || !client->isInitialized()) return;
+
+    int line = textCursor().blockNumber();
+    int col = textCursor().columnNumber();
+    QString uri = QStringLiteral("file://") + m_document->filePath();
+    client->gotoDefinition(uri, line, col);
+}
+
+void Editor::requestLSPCompletion()
+{
+    if (!m_document) return;
+    QString lang = m_document->language();
+    LSPClient *client =
+        LSPManager::instance().clientForLanguage(lang);
+    if (!client || !client->isInitialized()) return;
+
+    int line = textCursor().blockNumber();
+    int col = textCursor().columnNumber();
+    QString uri = QStringLiteral("file://") + m_document->filePath();
+    client->completion(uri, line, col);
 }

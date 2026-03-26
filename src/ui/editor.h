@@ -8,6 +8,7 @@
 #include <QTimer>
 
 #include "core/searchengine.h"
+#include "core/lspclient.h"
 #include "ui/completionpopup.h"
 
 class QPainter;
@@ -92,6 +93,13 @@ public:
     // Language
     void setLanguage(const QString &language);
     QString language() const;
+
+    // LSP integration
+    void setDiagnostics(const QVector<Diagnostic> &diagnostics);
+    void showLSPCompletions(const QVector<CompletionItem> &items);
+    void requestHover(int line, int character);
+    void requestGotoDefinition();
+    void requestLSPCompletion();
 
     // Sync
     void syncToDocument();
@@ -204,6 +212,7 @@ private:
     void updateExtraSelections();
     QList<QTextEdit::ExtraSelection> m_bracketSelections;
     QList<QTextEdit::ExtraSelection> m_markSelections;
+    QList<QTextEdit::ExtraSelection> m_diagnosticSelections;
 
     QString getCommentString() const;
 

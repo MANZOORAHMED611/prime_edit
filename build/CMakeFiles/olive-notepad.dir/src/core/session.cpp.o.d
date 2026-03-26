@@ -411,6 +411,11 @@ CMakeFiles/olive-notepad.dir/src/core/session.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonDocument \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h \
@@ -428,10 +433,6 @@ CMakeFiles/olive-notepad.dir/src/core/session.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/lspclient.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonDocument \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabBar \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \

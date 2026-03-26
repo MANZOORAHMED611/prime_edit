@@ -14,6 +14,7 @@
 class Editor;
 class Document;
 class TabWidget;
+class LSPBridge;
 class StatusBarWidget;
 class SearchDialog;
 class SearchResultsPanel;
@@ -216,6 +217,11 @@ private slots:
     void toggleAlwaysOnTop();
     void showSummary();
 
+    // LSP operations
+    void gotoDefinition();
+    void findReferences();
+    void renameSymbol();
+
 private:
     void setupUi();
     void setupMenus();
@@ -307,6 +313,9 @@ private:
     QLabel *m_encodingLabel;
     QLabel *m_lineEndingLabel;
     QLabel *m_languageLabel;
+
+    // LSP
+    LSPBridge *m_lspBridge = nullptr;
 
     // State
     int m_untitledCounter = 0;

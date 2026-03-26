@@ -907,6 +907,30 @@ src/ui/linenumberarea.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.s
 .PHONY : src/ui/linenumberarea.cpp.s
 
+src/ui/lspbridge.o: src/ui/lspbridge.cpp.o
+.PHONY : src/ui/lspbridge.o
+
+# target to build an object file
+src/ui/lspbridge.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o
+.PHONY : src/ui/lspbridge.cpp.o
+
+src/ui/lspbridge.i: src/ui/lspbridge.cpp.i
+.PHONY : src/ui/lspbridge.i
+
+# target to preprocess a source file
+src/ui/lspbridge.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.i
+.PHONY : src/ui/lspbridge.cpp.i
+
+src/ui/lspbridge.s: src/ui/lspbridge.cpp.s
+.PHONY : src/ui/lspbridge.s
+
+# target to generate assembly for a file
+src/ui/lspbridge.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.s
+.PHONY : src/ui/lspbridge.cpp.s
+
 src/ui/macrodialog.o: src/ui/macrodialog.cpp.o
 .PHONY : src/ui/macrodialog.o
 
@@ -1443,6 +1467,9 @@ help:
 	@echo "... src/ui/linenumberarea.o"
 	@echo "... src/ui/linenumberarea.i"
 	@echo "... src/ui/linenumberarea.s"
+	@echo "... src/ui/lspbridge.o"
+	@echo "... src/ui/lspbridge.i"
+	@echo "... src/ui/lspbridge.s"
 	@echo "... src/ui/macrodialog.o"
 	@echo "... src/ui/macrodialog.i"
 	@echo "... src/ui/macrodialog.s"

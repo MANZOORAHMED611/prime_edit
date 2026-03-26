@@ -62,6 +62,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.o.d"
   "CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.o"
   "CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.o.d"
+  "CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o"
+  "CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o.d"
   "CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o"
   "CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o.d"
   "CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o"

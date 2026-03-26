@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "tabwidget.h"
 #include "editor.h"
+#include "lspbridge.h"
+#include "core/lspmanager.h"
+#include "core/lspclient.h"
 #include "statusbar.h"
 #include "searchdialog.h"
 #include "searchresultspanel.h"
@@ -154,6 +157,9 @@ void MainWindow::setupUi()
             }
         }
     });
+
+    // LSP Bridge
+    m_lspBridge = new LSPBridge(this, this);
 }
 
 void MainWindow::setupMenus()
@@ -516,6 +522,22 @@ void MainWindow::setupShortcuts()
         Editor *e = currentEditor();
         if (e) e->jumpToMatchingBracket();
     });
+
+    // Go to Definition (F12)
+    QShortcut *gotoDefShortcut = new QShortcut(QKeySequence(Qt::Key_F12), this);
+    connect(gotoDefShortcut, &QShortcut::activated,
+            this, &MainWindow::gotoDefinition);
+
+    // Find References (Shift+F12)
+    QShortcut *refsShortcut = new QShortcut(
+        QKeySequence(Qt::SHIFT | Qt::Key_F12), this);
+    connect(refsShortcut, &QShortcut::activated,
+            this, &MainWindow::findReferences);
+
+    // Rename Symbol (F2)
+    QShortcut *renameShortcut = new QShortcut(QKeySequence(Qt::Key_F2), this);
+    connect(renameShortcut, &QShortcut::activated,
+            this, &MainWindow::renameSymbol);
 }
 
 void MainWindow::newFile()
@@ -527,6 +549,8 @@ void MainWindow::newFile()
     int index = m_tabWidget->addTab(editor, title);
     m_tabWidget->setTabIcon(index, TabBar::iconForFile(QString()));
     m_tabWidget->setCurrentIndex(index);
+
+    if (m_lspBridge) m_lspBridge->onEditorOpened(editor);
 
     updateWindowTitle();
 }
@@ -573,6 +597,8 @@ void MainWindow::openFile(const QString &filePath)
     int index = m_tabWidget->addTab(editor, doc->displayName());
     m_tabWidget->setTabIcon(index, TabBar::iconForFile(path));
     m_tabWidget->setCurrentIndex(index);
+
+    if (m_lspBridge) m_lspBridge->onEditorOpened(editor);
 
     updateWindowTitle();
 }
@@ -807,6 +833,10 @@ void MainWindow::onTabChanged(int index)
 
     if (m_functionListDock && m_functionListDock->isVisible()) {
         m_functionList->setEditor(currentEditor());
+    }
+
+    if (m_lspBridge) {
+        m_lspBridge->onEditorChanged(currentEditor());
     }
 }
 

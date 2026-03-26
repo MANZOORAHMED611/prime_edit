@@ -829,10 +829,24 @@ CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp -o CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.s
 
+CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o: CMakeFiles/olive-notepad.dir/flags.make
+CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o: ../src/ui/lspbridge.cpp
+CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o: CMakeFiles/olive-notepad.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o -MF CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o.d -o CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp
+
+CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp > CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.i
+
+CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp -o CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.s
+
 CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o: CMakeFiles/olive-notepad.dir/flags.make
 CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o: ../src/syntax/highlighter.cpp
 CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o: CMakeFiles/olive-notepad.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o -MF CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o.d -o CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp
 
 CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.i: cmake_force
@@ -846,7 +860,7 @@ CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.s: cmake_force
 CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o: CMakeFiles/olive-notepad.dir/flags.make
 CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o: ../src/syntax/languagemanager.cpp
 CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o: CMakeFiles/olive-notepad.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o -MF CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o.d -o CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp
 
 CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.i: cmake_force
@@ -860,7 +874,7 @@ CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.s: cmake_force
 CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o: CMakeFiles/olive-notepad.dir/flags.make
 CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o: ../src/utils/fileutils.cpp
 CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o: CMakeFiles/olive-notepad.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o -MF CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o.d -o CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp
 
 CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.i: cmake_force
@@ -874,7 +888,7 @@ CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.s: cmake_force
 CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o: CMakeFiles/olive-notepad.dir/flags.make
 CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp
 CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o: CMakeFiles/olive-notepad.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o -MF CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o.d -o CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp
 
 CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.i: cmake_force
@@ -888,7 +902,7 @@ CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.s: cmake_force
 CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/olive-notepad.dir/flags.make
 CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o: olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp
 CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/olive-notepad.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o -MF CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o.d -o CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp
 
 CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.i: cmake_force
@@ -944,6 +958,7 @@ olive__notepad_OBJECTS = \
 "CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.o" \
 "CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o" \
 "CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.o" \
+"CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o" \
 "CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o" \
 "CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o" \
 "CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o" \
@@ -996,6 +1011,7 @@ Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.o
 Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.o
 Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o
 Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.o
+Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o
 Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o
 Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o
 Olive\ Notepad: CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o
@@ -1013,7 +1029,7 @@ Olive\ Notepad: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.2.4
 Olive\ Notepad: /usr/lib/x86_64-linux-gnu/libGLX.so
 Olive\ Notepad: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 Olive\ Notepad: CMakeFiles/olive-notepad.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Linking CXX executable \"Olive Notepad\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Linking CXX executable \"Olive Notepad\""
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/olive-notepad.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

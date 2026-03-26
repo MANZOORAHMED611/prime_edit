@@ -5,6 +5,8 @@
 #include "editor.h"
 #include "tabwidget.h"
 #include "core/document.h"
+#include "core/lspmanager.h"
+#include "core/lspclient.h"
 #include <QMessageBox>
 #include <QTextBlock>
 #include <QTextCursor>
@@ -15,6 +17,8 @@
 #include <QUrl>
 #include <QDir>
 #include <QFileInfo>
+#include <QInputDialog>
+#include <QLineEdit>
 
 // Comment operations
 void MainWindow::blockComment()
@@ -598,4 +602,54 @@ void MainWindow::showSummary()
     int chars = text.length();
     QMessageBox::information(this, tr("Summary"),
         tr("Lines: %1\nWords: %2\nCharacters: %3").arg(lines).arg(words).arg(chars));
+}
+
+// --- LSP Operations ---
+
+void MainWindow::gotoDefinition()
+{
+    Editor *e = currentEditor();
+    if (e) e->requestGotoDefinition();
+}
+
+void MainWindow::findReferences()
+{
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+
+    QString lang = e->document()->language();
+    LSPClient *client =
+        LSPManager::instance().clientForLanguage(lang);
+    if (!client || !client->isInitialized()) return;
+
+    int line = e->currentLine() - 1;
+    int col = e->currentColumn() - 1;
+    QString uri = QStringLiteral("file://") + e->document()->filePath();
+    client->references(uri, line, col);
+}
+
+void MainWindow::renameSymbol()
+{
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+
+    QTextCursor cursor = e->textCursor();
+    cursor.select(QTextCursor::WordUnderCursor);
+    QString oldName = cursor.selectedText();
+
+    bool ok = false;
+    QString newName = QInputDialog::getText(
+        this, tr("Rename Symbol"), tr("New name:"),
+        QLineEdit::Normal, oldName, &ok);
+    if (!ok || newName.isEmpty() || newName == oldName) return;
+
+    QString lang = e->document()->language();
+    LSPClient *client =
+        LSPManager::instance().clientForLanguage(lang);
+    if (!client || !client->isInitialized()) return;
+
+    int line = e->currentLine() - 1;
+    int col = e->currentColumn() - 1;
+    QString uri = QStringLiteral("file://") + e->document()->filePath();
+    client->rename(uri, line, col, newName);
 }

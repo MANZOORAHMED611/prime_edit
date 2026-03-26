@@ -38,6 +38,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp" "CMakeFiles/olive-notepad.dir/src/ui/hexviewer.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/hexviewer.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp" "CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp" "CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.o.d"
+  "/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp" "CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp" "CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o.d"

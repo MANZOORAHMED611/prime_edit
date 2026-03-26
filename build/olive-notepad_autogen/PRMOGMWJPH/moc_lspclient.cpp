@@ -23,8 +23,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_LSPClient_t {
-    const uint offsetsAndSize[52];
-    char stringdata0[335];
+    const uint offsetsAndSize[56];
+    char stringdata0[362];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_LSPClient_t, stringdata0) + ofs), len 
@@ -49,13 +49,15 @@ QT_MOC_LITERAL(183, 20), // "diagnosticsPublished"
 QT_MOC_LITERAL(204, 3), // "uri"
 QT_MOC_LITERAL(208, 17), // "QList<Diagnostic>"
 QT_MOC_LITERAL(226, 11), // "diagnostics"
-QT_MOC_LITERAL(238, 13), // "errorOccurred"
-QT_MOC_LITERAL(252, 5), // "error"
-QT_MOC_LITERAL(258, 11), // "onReadyRead"
-QT_MOC_LITERAL(270, 14), // "onProcessError"
-QT_MOC_LITERAL(285, 22), // "QProcess::ProcessError"
-QT_MOC_LITERAL(308, 17), // "onProcessFinished"
-QT_MOC_LITERAL(326, 8) // "exitCode"
+QT_MOC_LITERAL(238, 12), // "renameResult"
+QT_MOC_LITERAL(251, 13), // "workspaceEdit"
+QT_MOC_LITERAL(265, 13), // "errorOccurred"
+QT_MOC_LITERAL(279, 5), // "error"
+QT_MOC_LITERAL(285, 11), // "onReadyRead"
+QT_MOC_LITERAL(297, 14), // "onProcessError"
+QT_MOC_LITERAL(312, 22), // "QProcess::ProcessError"
+QT_MOC_LITERAL(335, 17), // "onProcessFinished"
+QT_MOC_LITERAL(353, 8) // "exitCode"
 
     },
     "LSPClient\0initialized\0\0shutdownComplete\0"
@@ -64,10 +66,10 @@ QT_MOC_LITERAL(326, 8) // "exitCode"
     "Location\0location\0referencesResult\0"
     "QList<Location>\0locations\0"
     "diagnosticsPublished\0uri\0QList<Diagnostic>\0"
-    "diagnostics\0errorOccurred\0error\0"
-    "onReadyRead\0onProcessError\0"
-    "QProcess::ProcessError\0onProcessFinished\0"
-    "exitCode"
+    "diagnostics\0renameResult\0workspaceEdit\0"
+    "errorOccurred\0error\0onReadyRead\0"
+    "onProcessError\0QProcess::ProcessError\0"
+    "onProcessFinished\0exitCode"
 };
 #undef QT_MOC_LITERAL
 
@@ -77,27 +79,28 @@ static const uint qt_meta_data_LSPClient[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       8,       // signalCount
+       9,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   80,    2, 0x06,    1 /* Public */,
-       3,    0,   81,    2, 0x06,    2 /* Public */,
-       4,    1,   82,    2, 0x06,    3 /* Public */,
-       7,    1,   85,    2, 0x06,    5 /* Public */,
-       9,    1,   88,    2, 0x06,    7 /* Public */,
-      12,    1,   91,    2, 0x06,    9 /* Public */,
-      15,    2,   94,    2, 0x06,   11 /* Public */,
-      19,    1,   99,    2, 0x06,   14 /* Public */,
+       1,    0,   86,    2, 0x06,    1 /* Public */,
+       3,    0,   87,    2, 0x06,    2 /* Public */,
+       4,    1,   88,    2, 0x06,    3 /* Public */,
+       7,    1,   91,    2, 0x06,    5 /* Public */,
+       9,    1,   94,    2, 0x06,    7 /* Public */,
+      12,    1,   97,    2, 0x06,    9 /* Public */,
+      15,    2,  100,    2, 0x06,   11 /* Public */,
+      19,    1,  105,    2, 0x06,   14 /* Public */,
+      21,    1,  108,    2, 0x06,   16 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      21,    0,  102,    2, 0x08,   16 /* Private */,
-      22,    1,  103,    2, 0x08,   17 /* Private */,
-      24,    1,  106,    2, 0x08,   19 /* Private */,
+      23,    0,  111,    2, 0x08,   18 /* Private */,
+      24,    1,  112,    2, 0x08,   19 /* Private */,
+      26,    1,  115,    2, 0x08,   21 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -107,12 +110,13 @@ static const uint qt_meta_data_LSPClient[] = {
     QMetaType::Void, 0x80000000 | 10,   11,
     QMetaType::Void, 0x80000000 | 13,   14,
     QMetaType::Void, QMetaType::QString, 0x80000000 | 17,   16,   18,
-    QMetaType::Void, QMetaType::QString,   20,
+    QMetaType::Void, QMetaType::QJsonObject,   20,
+    QMetaType::Void, QMetaType::QString,   22,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 23,   20,
-    QMetaType::Void, QMetaType::Int,   25,
+    QMetaType::Void, 0x80000000 | 25,   22,
+    QMetaType::Void, QMetaType::Int,   27,
 
        0        // eod
 };
@@ -130,10 +134,11 @@ void LSPClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 4: _t->definitionResult((*reinterpret_cast< std::add_pointer_t<Location>>(_a[1]))); break;
         case 5: _t->referencesResult((*reinterpret_cast< std::add_pointer_t<QList<Location>>>(_a[1]))); break;
         case 6: _t->diagnosticsPublished((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QList<Diagnostic>>>(_a[2]))); break;
-        case 7: _t->errorOccurred((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 8: _t->onReadyRead(); break;
-        case 9: _t->onProcessError((*reinterpret_cast< std::add_pointer_t<QProcess::ProcessError>>(_a[1]))); break;
-        case 10: _t->onProcessFinished((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 7: _t->renameResult((*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[1]))); break;
+        case 8: _t->errorOccurred((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 9: _t->onReadyRead(); break;
+        case 10: _t->onProcessError((*reinterpret_cast< std::add_pointer_t<QProcess::ProcessError>>(_a[1]))); break;
+        case 11: _t->onProcessFinished((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -188,9 +193,16 @@ void LSPClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             }
         }
         {
+            using _t = void (LSPClient::*)(const QJsonObject & );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LSPClient::renameResult)) {
+                *result = 7;
+                return;
+            }
+        }
+        {
             using _t = void (LSPClient::*)(const QString & );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LSPClient::errorOccurred)) {
-                *result = 7;
+                *result = 8;
                 return;
             }
         }
@@ -204,7 +216,7 @@ const QMetaObject LSPClient::staticMetaObject = { {
     qt_static_metacall,
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_LSPClient_t
-, QtPrivate::TypeAndForceComplete<LSPClient, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QVector<CompletionItem> &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const Location &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QVector<Location> &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<const QVector<Diagnostic> &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
+, QtPrivate::TypeAndForceComplete<LSPClient, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QVector<CompletionItem> &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const Location &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QVector<Location> &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>, QtPrivate::TypeAndForceComplete<const QVector<Diagnostic> &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
 , QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QProcess::ProcessError, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>
 
 
@@ -232,13 +244,13 @@ int LSPClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 12)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 11;
+        _id -= 12;
     }
     return _id;
 }
@@ -291,10 +303,17 @@ void LSPClient::diagnosticsPublished(const QString & _t1, const QVector<Diagnost
 }
 
 // SIGNAL 7
-void LSPClient::errorOccurred(const QString & _t1)
+void LSPClient::renameResult(const QJsonObject & _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
+}
+
+// SIGNAL 8
+void LSPClient::errorOccurred(const QString & _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 8, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

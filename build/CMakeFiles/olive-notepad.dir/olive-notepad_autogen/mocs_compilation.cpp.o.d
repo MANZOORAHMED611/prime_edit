@@ -518,6 +518,7 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QSet \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_fileexplorer.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/fileexplorer.h \
@@ -563,6 +564,8 @@ CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/incrementalsearchbar.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_linenumberarea.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/linenumberarea.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_lspbridge.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/lspbridge.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_macrodialog.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/../../../src/ui/macrodialog.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/YPKJ5OE7LN/moc_mainwindow.cpp \

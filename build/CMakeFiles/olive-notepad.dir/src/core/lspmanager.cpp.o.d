@@ -338,4 +338,10 @@ CMakeFiles/olive-notepad.dir/src/core/lspmanager.cpp.o: \
  /usr/include/c++/11/bits/istream.tcc \
  /usr/include/c++/11/bits/sstream.tcc /usr/include/c++/11/codecvt \
  /usr/include/c++/11/bits/fs_dir.h /usr/include/c++/11/bits/fs_ops.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QFile \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonArray \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QStandardPaths \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h

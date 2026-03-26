@@ -78,6 +78,7 @@ set(UI_SOURCES
     src/ui/functionlist.cpp
     src/ui/macrodialog.cpp
     src/ui/documentmap.cpp
+    src/ui/lspbridge.cpp
 )
 
 set(SYNTAX_SOURCES
@@ -132,6 +133,7 @@ set(HEADERS
     src/ui/functionlist.h
     src/ui/macrodialog.h
     src/ui/documentmap.h
+    src/ui/lspbridge.h
     src/syntax/highlighter.h
     src/syntax/languagemanager.h
     src/utils/fileutils.h

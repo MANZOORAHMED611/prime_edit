@@ -539,6 +539,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.h",
+			"MU",
+			"YPKJ5OE7LN/moc_lspbridge.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.h",
 			"MU",
 			"YPKJ5OE7LN/moc_macrodialog.cpp",
@@ -841,6 +847,11 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp",
 			"MU",
 			null
 		],

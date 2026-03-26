@@ -21,6 +21,7 @@
 #include "YPKJ5OE7LN/moc_hexviewer.cpp"
 #include "YPKJ5OE7LN/moc_incrementalsearchbar.cpp"
 #include "YPKJ5OE7LN/moc_linenumberarea.cpp"
+#include "YPKJ5OE7LN/moc_lspbridge.cpp"
 #include "YPKJ5OE7LN/moc_macrodialog.cpp"
 #include "YPKJ5OE7LN/moc_mainwindow.cpp"
 #include "YPKJ5OE7LN/moc_markdownpreview.cpp"

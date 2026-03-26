@@ -397,11 +397,7 @@ CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
- /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistview.h \
- /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
@@ -414,6 +410,11 @@ CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonDocument \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistview.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/lspclient.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h \
