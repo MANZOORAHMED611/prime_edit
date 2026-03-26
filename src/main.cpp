@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QIcon>
+#include <QPixmap>
 #include "ui/mainwindow.h"
 #include "ui/recoverydialog.h"
 #include "ui/theme.h"
@@ -17,9 +18,22 @@ int main(int argc, char *argv[])
     app.setApplicationVersion("1.0.0");
     app.setOrganizationName("PrimeEdit");
     app.setOrganizationDomain("primeedit.dev");
-    // Set window icon
-    QIcon appIcon(":/icons/prime_edit_icon.png");
+    // Set window icon — add at multiple sizes for proper WM display
+    QIcon appIcon;
+    QPixmap iconPixmap(":/icons/prime_edit_icon.png");
+    if (!iconPixmap.isNull()) {
+        // Add scaled versions for taskbar (48), titlebar (32), and small (16)
+        appIcon.addPixmap(iconPixmap.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
     app.setWindowIcon(appIcon);
+
+    // Set the desktop filename for proper icon association in GNOME/KDE
+    app.setDesktopFileName("prime-edit");
 
     // Ensure config directories exist
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
