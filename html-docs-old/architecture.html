@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - Olive Notepad</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Olive Notepad</h1>
+                <p>Technical Documentation</p>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-section">Overview</li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="requirements.html" class="nav-link">Requirements</a></li>
+                <li class="nav-item"><a href="architecture.html" class="nav-link active">Architecture</a></li>
+
+                <li class="nav-section">Implementation</li>
+                <li class="nav-item"><a href="phase1.html" class="nav-link">Phase 1: Core Editor (MVP)</a></li>
+                <li class="nav-item"><a href="phase2.html" class="nav-link">Phase 2: Power Features</a></li>
+                <li class="nav-item"><a href="phase3.html" class="nav-link">Phase 3: Developer Tools</a></li>
+                <li class="nav-item"><a href="phase4.html" class="nav-link">Phase 4: Ecosystem</a></li>
+
+                <li class="nav-section">Technical Details</li>
+                <li class="nav-item"><a href="api-reference.html" class="nav-link">API Reference</a></li>
+                <li class="nav-item"><a href="data-structures.html" class="nav-link">Data Structures</a></li>
+                <li class="nav-item"><a href="ui-components.html" class="nav-link">UI Components</a></li>
+
+                <li class="nav-section">User Guide</li>
+                <li class="nav-item"><a href="features.html" class="nav-link">Feature List</a></li>
+                <li class="nav-item"><a href="keyboard-shortcuts.html" class="nav-link">Keyboard Shortcuts</a></li>
+                <li class="nav-item"><a href="building.html" class="nav-link">Building & Installing</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Architecture Overview</h1>
+                <p class="subtitle">System design and component interactions</p>
+            </div>
+
+            <!-- High-Level Architecture -->
+            <section class="section">
+                <h2>1. High-Level Architecture</h2>
+
+                <div class="architecture-box">
+                    <h4>Presentation Layer</h4>
+                    <p>Qt Widgets (MainWindow, Editor, Dialogs)</p>
+                </div>
+
+                <div class="architecture-arrow">↓</div>
+
+                <div class="architecture-box">
+                    <h4>Business Logic Layer</h4>
+                    <p>Document Management, Syntax Highlighting, Session Management</p>
+                </div>
+
+                <div class="architecture-arrow">↓</div>
+
+                <div class="architecture-box">
+                    <h4>Data Layer</h4>
+                    <p>Piece Table, Settings Storage, File I/O</p>
+                </div>
+            </section>
+
+            <!-- Component Structure -->
+            <section class="section">
+                <h2>2. Component Structure</h2>
+
+                <h3>src/core/</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Purpose</th>
+                            <th>Key Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Document</code></td>
+                            <td>Document model</td>
+                            <td>File I/O, encoding detection, metadata, modified state tracking</td>
+                        </tr>
+                        <tr>
+                            <td><code>DocumentManager</code></td>
+                            <td>Multi-document management</td>
+                            <td>Create/close documents, auto-recovery timer, document registry</td>
+                        </tr>
+                        <tr>
+                            <td><code>PieceTable</code></td>
+                            <td>Efficient text buffer</td>
+                            <td>Insert/delete operations, undo/redo stack, line-based operations</td>
+                        </tr>
+                        <tr>
+                            <td><code>Session</code></td>
+                            <td>Session persistence</td>
+                            <td>Save/restore window state, open files, tab positions</td>
+                        </tr>
+                        <tr>
+                            <td><code>Encoding</code></td>
+                            <td>Text encoding utilities</td>
+                            <td>Encoding detection, conversion (UTF-8, UTF-16, etc.)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>src/ui/</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Purpose</th>
+                            <th>Key Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>MainWindow</code></td>
+                            <td>Application main window</td>
+                            <td>Menu bar, toolbar, status bar, tab management, file operations</td>
+                        </tr>
+                        <tr>
+                            <td><code>Editor</code></td>
+                            <td>Text editing widget</td>
+                            <td>Based on QPlainTextEdit, line numbers, syntax highlighting, zoom, search</td>
+                        </tr>
+                        <tr>
+                            <td><code>TabWidget</code></td>
+                            <td>Tabbed interface</td>
+                            <td>Custom QTabWidget with context menus, modified indicators</td>
+                        </tr>
+                        <tr>
+                            <td><code>FindDialog</code></td>
+                            <td>Find/replace interface</td>
+                            <td>Regex support, case sensitivity, whole word, replace all</td>
+                        </tr>
+                        <tr>
+                            <td><code>PreferencesDialog</code></td>
+                            <td>Settings editor</td>
+                            <td>Font, tab settings, editor options, theme selection</td>
+                        </tr>
+                        <tr>
+                            <td><code>StatusBarWidget</code></td>
+                            <td>Status information</td>
+                            <td>Line/column position, encoding, line ending, language</td>
+                        </tr>
+                        <tr>
+                            <td><code>LineNumberArea</code></td>
+                            <td>Line number gutter</td>
+                            <td>Paint line numbers, highlight current line</td>
+                        </tr>
+                        <tr>
+                            <td><code>FileExplorer</code></td>
+                            <td>File browser panel</td>
+                            <td>Tree view of directories, file filtering, navigation</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>src/syntax/</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Purpose</th>
+                            <th>Key Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>SyntaxHighlighter</code></td>
+                            <td>Code colorization</td>
+                            <td>Based on QSyntaxHighlighter, regex-based rules, multi-line support</td>
+                        </tr>
+                        <tr>
+                            <td><code>LanguageManager</code></td>
+                            <td>Language definitions</td>
+                            <td>Language detection, syntax rule registry</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>src/utils/</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Purpose</th>
+                            <th>Key Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Settings</code></td>
+                            <td>Application settings</td>
+                            <td>Singleton, JSON storage, signal-based updates, XDG-compliant paths</td>
+                        </tr>
+                        <tr>
+                            <td><code>FileUtils</code></td>
+                            <td>File system utilities</td>
+                            <td>File filters, extension mapping, path manipulation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Data Flow -->
+            <section class="section">
+                <h2>3. Data Flow</h2>
+
+                <h3>File Opening Sequence</h3>
+                <pre><code>1. User: File → Open
+2. MainWindow::openFile() prompts for path
+3. DocumentManager::openDocument(path)
+4. Create new Document instance
+5. Document::load() reads file with encoding detection
+6. MainWindow::createEditor(document)
+7. Create Editor widget with Document reference
+8. Editor constructor loads content from Document
+9. SyntaxHighlighter attached to Editor's QTextDocument
+10. Tab added to TabWidget with Editor
+11. StatusBar updated with file info</code></pre>
+
+                <h3>Text Editing Sequence</h3>
+                <pre><code>1. User types in Editor (QPlainTextEdit)
+2. Editor::keyPressEvent() handles special keys (Tab, Enter)
+3. Text inserted into QPlainTextEdit's internal QTextDocument
+4. QPlainTextEdit::textChanged signal emitted
+5. Editor::onTextChanged() marks Document as modified
+6. Document::modifiedChanged signal emitted
+7. MainWindow updates tab title with "*" indicator
+8. SyntaxHighlighter::highlightBlock() called for changed lines
+9. Auto-save timer triggered (every 5 seconds)
+10. Document::saveRecovery() saves to recovery location</code></pre>
+
+                <h3>Session Restore Sequence</h3>
+                <pre><code>1. Application starts
+2. Settings::instance().load() reads settings.json
+3. If restoreSession enabled:
+4.   Session::restore(mainWindow)
+5.   Read session.json for window geometry and file paths
+6.   For each saved file path:
+7.     MainWindow::openFile(path)
+8.   Restore window position and size
+9.   Set active tab index</code></pre>
+            </section>
+
+            <!-- Design Patterns -->
+            <section class="section">
+                <h2>4. Design Patterns Used</h2>
+
+                <h3>Singleton Pattern</h3>
+                <ul>
+                    <li><code>Settings::instance()</code> - Global settings access</li>
+                    <li><code>DocumentManager::instance()</code> - Central document registry</li>
+                    <li><code>Session::instance()</code> - Session management</li>
+                </ul>
+
+                <h3>Observer Pattern (Qt Signals/Slots)</h3>
+                <ul>
+                    <li>Document emits <code>modifiedChanged</code> → MainWindow updates tab</li>
+                    <li>Settings emits <code>fontChanged</code> → Editor updates font</li>
+                    <li>Editor emits <code>cursorPositionChanged</code> → StatusBar updates</li>
+                </ul>
+
+                <h3>Model-View Pattern</h3>
+                <ul>
+                    <li>Document (Model) ↔ Editor (View/Controller)</li>
+                    <li>QFileSystemModel (Model) ↔ QTreeView in FileExplorer (View)</li>
+                </ul>
+
+                <h3>Command Pattern (via Piece Table)</h3>
+                <ul>
+                    <li>Insert/Remove operations stored in undo stack</li>
+                    <li>Each operation is reversible</li>
+                    <li>Undo/redo implemented as stack manipulation</li>
+                </ul>
+            </section>
+
+            <!-- Memory Management -->
+            <section class="section">
+                <h2>5. Memory Management</h2>
+
+                <h3>Ownership Model</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Object</th>
+                            <th>Owner</th>
+                            <th>Lifetime</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Document instances</td>
+                            <td>DocumentManager (via Qt parent-child)</td>
+                            <td>Until explicitly closed</td>
+                        </tr>
+                        <tr>
+                            <td>Editor widgets</td>
+                            <td>TabWidget (via Qt parent-child)</td>
+                            <td>Until tab closed</td>
+                        </tr>
+                        <tr>
+                            <td>SyntaxHighlighter</td>
+                            <td>Editor (via Qt parent-child)</td>
+                            <td>Same as Editor</td>
+                        </tr>
+                        <tr>
+                            <td>LineNumberArea</td>
+                            <td>Editor (via Qt parent-child)</td>
+                            <td>Same as Editor</td>
+                        </tr>
+                        <tr>
+                            <td>Dialogs (Find, Preferences)</td>
+                            <td>MainWindow (via Qt parent-child)</td>
+                            <td>Application lifetime</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-info">
+                    <strong>Qt Memory Model:</strong> Objects with parent are automatically deleted when parent is destroyed.
+                    Manual deletion is only needed for objects without parents.
+                </div>
+
+                <h3>Piece Table Memory Efficiency</h3>
+                <ul>
+                    <li><strong>Original Buffer:</strong> Stores initial file content (never modified)</li>
+                    <li><strong>Add Buffer:</strong> Stores all inserted text (append-only)</li>
+                    <li><strong>Piece Descriptors:</strong> Small structs pointing to buffers</li>
+                    <li><strong>Memory Growth:</strong> Linear with edits, not file size</li>
+                    <li><strong>Example:</strong> 1MB file + 100KB edits = ~1.1MB memory (vs 2MB+ for gap buffer)</li>
+                </ul>
+            </section>
+
+            <!-- Threading Model -->
+            <section class="section">
+                <h2>6. Threading Model</h2>
+
+                <h3>Current Implementation (Single-Threaded)</h3>
+                <p>
+                    All operations currently run on the main Qt event loop thread. This is sufficient for Phase 1-2
+                    features and typical file sizes (&lt; 100MB).
+                </p>
+
+                <h3>Future Multi-Threading (Phase 3+)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Thread Strategy</th>
+                            <th>Benefit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Large file loading</td>
+                            <td>QThread worker</td>
+                            <td>Non-blocking UI</td>
+                        </tr>
+                        <tr>
+                            <td>Find in files</td>
+                            <td>QThread pool</td>
+                            <td>Parallel search across files</td>
+                        </tr>
+                        <tr>
+                            <td>LSP communication</td>
+                            <td>QProcess with async I/O</td>
+                            <td>Non-blocking language server queries</td>
+                        </tr>
+                        <tr>
+                            <td>Syntax highlighting</td>
+                            <td>Main thread (incremental)</td>
+                            <td>Direct QTextDocument access required</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Configuration Storage -->
+            <section class="section">
+                <h2>7. Configuration and Storage</h2>
+
+                <h3>XDG Base Directory Compliance</h3>
+                <pre><code># Configuration
+~/.config/NotepadSupreme/settings.json
+~/.config/NotepadSupreme/session.json
+
+# Data (recovery files)
+~/.local/share/notepad-supreme/recovery/
+  document_<hash>.json
+
+# Cache (future use)
+~/.cache/notepad-supreme/</code></pre>
+
+                <h3>Settings File Structure (JSON)</h3>
+                <pre><code>{
+  "editor": {
+    "fontFamily": "Monospace",
+    "fontSize": 10,
+    "tabWidth": 4,
+    "insertSpaces": true,
+    "wordWrap": false,
+    "lineNumbers": true,
+    "highlightCurrentLine": true,
+    "autoSave": false,
+    "autoSaveInterval": 1000
+  },
+  "theme": {
+    "name": "Default Dark"
+  },
+  "restoreSession": true,
+  "recentFiles": [
+    "/home/user/file1.txt",
+    "/home/user/file2.py"
+  ],
+  "files": {
+    "encoding": "UTF-8",
+    "lineEnding": "LF",
+    "trimTrailingWhitespace": true,
+    "insertFinalNewline": true
+  }
+}</code></pre>
+            </section>
+
+            <!-- Error Handling -->
+            <section class="section">
+                <h2>8. Error Handling Strategy</h2>
+
+                <h3>File I/O Errors</h3>
+                <ul>
+                    <li>Use <code>QFile::errorString()</code> for detailed messages</li>
+                    <li>Show QMessageBox with error details to user</li>
+                    <li>Graceful fallback (e.g., don't crash if recovery file missing)</li>
+                </ul>
+
+                <h3>Encoding Errors</h3>
+                <ul>
+                    <li>Attempt detection using BOM or heuristics</li>
+                    <li>Fallback to UTF-8 if detection fails</li>
+                    <li>Allow user to override encoding in status bar</li>
+                </ul>
+
+                <h3>Crash Recovery</h3>
+                <ul>
+                    <li>Auto-save recovery files every 5 seconds</li>
+                    <li>Detect abnormal shutdown via lock file</li>
+                    <li>Present recovery dialog on next start</li>
+                    <li>Allow selective recovery or discard</li>
+                </ul>
+            </section>
+
+            <footer class="footer">
+                <p>Architecture Documentation v1.0 | Last Updated: November 28, 2025</p>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

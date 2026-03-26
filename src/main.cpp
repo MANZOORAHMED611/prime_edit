@@ -47,11 +47,9 @@ int main(int argc, char *argv[])
     // Load settings
     Settings::instance().load();
 
-    // Load and apply Olive theme
+    // Load and apply theme from settings
     ThemeManager::instance().loadThemes();
-    ThemeManager::instance().applyTheme("Notepad++");
-
-    // Apply theme stylesheet to application
+    ThemeManager::instance().applyTheme(Settings::instance().theme());
     app.setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());
 
     // Check for unsaved document recovery

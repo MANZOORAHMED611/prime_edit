@@ -474,6 +474,11 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
@@ -591,10 +596,6 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/plugininterface.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.h \

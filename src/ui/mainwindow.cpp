@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "tabwidget.h"
 #include "editor.h"
+#include "theme.h"
 #include "lspbridge.h"
 #include "core/lspmanager.h"
 #include "core/lspclient.h"
@@ -172,6 +173,56 @@ void MainWindow::setupUi()
             this, [this](const QString &err) {
         if (m_evalResult) m_evalResult->hide();
         statusBar()->showMessage(tr("Evaluation error: %1").arg(err), 5000);
+    });
+
+    // Connect settings signals to apply changes globally
+    connect(&Settings::instance(), &Settings::themeChanged, this, [this](const QString &themeName) {
+        ThemeManager::instance().applyTheme(themeName);
+        qApp->setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());
+    });
+
+    connect(&Settings::instance(), &Settings::fontChanged, this, [this]() {
+        qApp->setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());
+    });
+
+    connect(&Settings::instance(), &Settings::wordWrapChanged, this, [this](bool enabled) {
+        for (int i = 0; i < m_tabWidget->count(); ++i) {
+            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
+            if (e) e->setWordWrapEnabled(enabled);
+        }
+    });
+
+    connect(&Settings::instance(), &Settings::lineNumbersChanged, this, [this](bool enabled) {
+        for (int i = 0; i < m_tabWidget->count(); ++i) {
+            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
+            if (e) e->setLineNumbersVisible(enabled);
+        }
+    });
+
+    connect(&Settings::instance(), &Settings::highlightCurrentLineChanged, this, [this](bool) {
+        // Trigger re-highlight on all open editors by moving cursor
+        for (int i = 0; i < m_tabWidget->count(); ++i) {
+            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
+            if (e) {
+                // Force rehighlight by toggling extra selections
+                QTextCursor cursor = e->textCursor();
+                e->setTextCursor(cursor);
+            }
+        }
+    });
+
+    connect(&Settings::instance(), &Settings::minimapChanged, this, [this](bool enabled) {
+        if (m_documentMapDock) {
+            m_documentMapDock->setVisible(enabled);
+        }
+    });
+
+    connect(&Settings::instance(), &Settings::autoSaveChanged, this, [](bool enabled) {
+        if (enabled) {
+            DocumentManager::instance().startRecoveryTimer();
+        } else {
+            DocumentManager::instance().stopRecoveryTimer();
+        }
     });
 }
 

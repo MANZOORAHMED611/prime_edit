@@ -144,7 +144,7 @@ void Settings::reset()
     m_highlightCurrentLine = true;
     m_autoSave = false;
     m_autoSaveInterval = 1000;
-    m_theme = "Default Dark";
+    m_theme = "Notepad++";
     m_restoreSession = true;
     m_defaultEncoding = "UTF-8";
     m_defaultLineEnding = "LF";

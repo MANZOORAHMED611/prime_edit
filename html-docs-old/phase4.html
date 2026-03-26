@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 4: Ecosystem - Olive Notepad Development</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+        }
+        .phase-badge {
+            background-color: #10b981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .content-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .feature {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .feature h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .feature-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status-complete {
+            background-color: #10b981;
+            color: white;
+        }
+        code {
+            background-color: #f1f3f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #e9ecef;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="phase-badge">✓ Completed (6/6)</div>
+        <h1>Phase 4: Ecosystem</h1>
+        <p>Building an extensible ecosystem with plugins, themes, and enhanced integrations</p>
+    </div>
+
+    <div class="content-section">
+        <h2>Overview</h2>
+        <p>
+            Phase 4 completes Olive Notepad by adding ecosystem features that enable extensibility
+            and enhanced workflows. This phase introduces plugin architecture, comprehensive theming,
+            specialized viewers, remote editing capabilities, and enhanced Git integration.
+        </p>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Total Features</div>
+                <div class="stat-value">6</div>
+                <div class="stat-label">All Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">New Components</div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Classes/Widgets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Lines of Code</div>
+                <div class="stat-value">~4,000</div>
+                <div class="stat-label">Phase 4 Contribution</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>Features</h2>
+
+        <div class="feature">
+            <h3>19. Plugin Architecture <span class="feature-status status-complete">✓ Complete</span></h3>
+
+            <h4>Purpose</h4>
+            <p>Enable extensibility through a plugin system that allows third-party developers to add functionality to Olive Notepad.</p>
+
+            <h4>Components</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>File</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>PluginInterface</td>
+                    <td>src/core/plugininterface.h</td>
+                    <td>Abstract interface that all plugins must implement</td>
+                </tr>
+                <tr>
+                    <td>PluginManager</td>
+                    <td>src/core/pluginmanager.h/cpp</td>
+                    <td>Manages plugin loading, lifecycle, and event broadcasting</td>
+                </tr>
+            </table>
+
+            <h4>Plugin API</h4>
+            <p>Plugins can hook into the following events:</p>
+            <ul>
+                <li><code>onFileOpened(Document*)</code> - Called when a file is opened</li>
+                <li><code>onFileSaved(Document*)</code> - Called when a file is saved</li>
+                <li><code>onFileClosed(Document*)</code> - Called when a file is closed</li>
+                <li><code>onTextChanged(Editor*)</code> - Called when text is modified</li>
+                <li><code>onSelectionChanged(Editor*)</code> - Called when selection changes</li>
+                <li><code>onCursorMoved(Editor*)</code> - Called when cursor position changes</li>
+            </ul>
+
+            <h4>Plugin Directories</h4>
+            <ul>
+                <li>Application directory: <code>./plugins</code></li>
+                <li>User directory: <code>~/.local/share/notepad-supreme/plugins</code></li>
+                <li>System-wide: <code>/usr/share/notepad-supreme/plugins</code></li>
+                <li>Local system: <code>/usr/local/share/notepad-supreme/plugins</code></li>
+            </ul>
+
+            <h4>Custom Commands</h4>
+            <p>Plugins can register custom commands accessible via the command palette using the format <code>PluginName::CommandName</code>.</p>
+        </div>
+
+        <div class="feature">
+            <h3>20. Theme System <span class="feature-status status-complete">✓ Complete</span></h3>
+
+            <h4>Purpose</h4>
+            <p>Comprehensive theming system with built-in themes and a visual theme editor for full customization.</p>
+
+            <h4>Components</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>File</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>Theme</td>
+                    <td>src/ui/theme.h/cpp</td>
+                    <td>Theme data structure with 30+ color properties</td>
+                </tr>
+                <tr>
+                    <td>ThemeManager</td>
+                    <td>src/ui/theme.h/cpp</td>
+                    <td>Manages themes, load/save, import/export</td>
+                </tr>
+                <tr>
+                    <td>ThemeEditorDialog</td>
+                    <td>src/ui/themeeditor.h/cpp</td>
+                    <td>Visual theme editor with live preview</td>
+                </tr>
+                <tr>
+                    <td>ColorButton</td>
+                    <td>src/ui/themeeditor.h/cpp</td>
+                    <td>Custom color picker button widget</td>
+                </tr>
+            </table>
+
+            <h4>Built-in Themes</h4>
+            <ul>
+                <li><strong>Default Dark</strong> - VS Code dark inspired theme</li>
+                <li><strong>Default Light</strong> - VS Code light inspired theme</li>
+                <li><strong>Monokai</strong> - Classic Monokai by Wimer Hazenberg</li>
+                <li><strong>Dracula</strong> - Popular Dracula theme by Zeno Rocha</li>
+                <li><strong>Nord</strong> - Arctic Ice Studio's Nord color palette</li>
+                <li><strong>Solarized Dark</strong> - Ethan Schoonover's Solarized dark</li>
+                <li><strong>Solarized Light</strong> - Ethan Schoonover's Solarized light</li>
+            </ul>
+
+            <h4>Color Categories</h4>
+            <p>Themes define colors for:</p>
+            <ul>
+                <li><strong>Editor</strong> - Background, foreground, selection, current line, line numbers</li>
+                <li><strong>Syntax</strong> - Keywords, strings, comments, numbers, functions, types, variables, operators</li>
+                <li><strong>UI</strong> - Menus, toolbars, status bar, tabs</li>
+                <li><strong>Accents</strong> - Primary, secondary, borders</li>
+                <li><strong>Diagnostics</strong> - Errors, warnings, info, hints</li>
+            </ul>
+
+            <h4>Theme Editor Features</h4>
+            <ul>
+                <li>Live preview of theme changes</li>
+                <li>Color picker for all 30+ colors</li>
+                <li>Save/load custom themes</li>
+                <li>Import/export themes as JSON</li>
+                <li>Metadata editing (name, author, dark/light)</li>
+            </ul>
+        </div>
+
+        <div class="feature">
+            <h3>21. Markdown Preview <span class="feature-status status-complete">✓ Complete</span></h3>
+
+            <h4>Purpose</h4>
+            <p>Live rendering of Markdown documents with GitHub-flavored styling.</p>
+
+            <h4>Components</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>File</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>MarkdownPreview</td>
+                    <td>src/ui/markdownpreview.h/cpp</td>
+                    <td>Markdown preview widget with live rendering</td>
+                </tr>
+            </table>
+
+            <h4>Supported Markdown Features</h4>
+            <ul>
+                <li>Headers (H1-H6)</li>
+                <li>Bold, italic, strikethrough</li>
+                <li>Inline code and code blocks</li>
+                <li>Links and images</li>
+                <li>Blockquotes</li>
+                <li>Ordered and unordered lists</li>
+                <li>Horizontal rules</li>
+                <li>Tables (HTML)</li>
+            </ul>
+
+            <h4>Features</h4>
+            <ul>
+                <li>Auto-update with configurable delay (default 500ms)</li>
+                <li>Scroll position preservation during updates</li>
+                <li>Zoom in/out/reset</li>
+                <li>GitHub-flavored CSS styling</li>
+                <li>Syntax highlighting for code blocks</li>
+            </ul>
+        </div>
+
+        <div class="feature">
+            <h3>22. Hex Viewer Mode <span class="feature-status status-complete">✓ Complete</span></h3>
+
+            <h4>Purpose</h4>
+            <p>View and navigate binary files in hexadecimal format with ASCII preview.</p>
+
+            <h4>Components</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>File</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>HexViewerWidget</td>
+                    <td>src/ui/hexviewer.h/cpp</td>
+                    <td>Core hex viewing widget with rendering</td>
+                </tr>
+                <tr>
+                    <td>HexViewer</td>
+                    <td>src/ui/hexviewer.h/cpp</td>
+                    <td>Container with scrolling and file loading</td>
+                </tr>
+            </table>
+
+            <h4>Display Features</h4>
+            <ul>
+                <li>Offset column (configurable)</li>
+                <li>Hexadecimal byte display</li>
+                <li>ASCII representation (configurable)</li>
+                <li>Configurable bytes per line (default 16)</li>
+                <li>Color-coded selection and cursor</li>
+            </ul>
+
+            <h4>Navigation</h4>
+            <ul>
+                <li>Keyboard navigation (arrows, Page Up/Down, Home/End)</li>
+                <li>Mouse selection</li>
+                <li>Go to offset</li>
+                <li>Find byte pattern</li>
+            </ul>
+
+            <h4>Operations</h4>
+            <ul>
+                <li>Copy selection as hex (Ctrl+C)</li>
+                <li>Export selection to file</li>
+                <li>Search for byte patterns</li>
+            </ul>
+        </div>
+
+        <div class="feature">
+            <h3>23. Remote File Editing (SFTP/SSH) <span class="feature-status status-complete">✓ Complete</span></h3>
+
+            <h4>Purpose</h4>
+            <p>Edit files on remote servers via SFTP/SSH without leaving the editor.</p>
+
+            <h4>Components</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>File</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>RemoteConnection</td>
+                    <td>src/core/remoteconnection.h/cpp</td>
+                    <td>SSH/SFTP/SCP connection handling</td>
+                </tr>
+                <tr>
+                    <td>RemoteFileManager</td>
+                    <td>src/core/remoteconnection.h/cpp</td>
+                    <td>Manages multiple connections and file mappings</td>
+                </tr>
+                <tr>
+                    <td>RemoteConnectionDialog</td>
+                    <td>src/ui/remoteconnectiondialog.h/cpp</td>
+                    <td>UI for managing remote connections</td>
+                </tr>
+            </table>
+
+            <h4>Supported Protocols</h4>
+            <ul>
+                <li><strong>SFTP</strong> - Secure File Transfer Protocol</li>
+                <li><strong>SSH</strong> - Secure Shell for command execution</li>
+                <li><strong>SCP</strong> - Secure Copy Protocol</li>
+            </ul>
+
+            <h4>Features</h4>
+            <ul>
+                <li>Save/load connection profiles</li>
+                <li>Multiple simultaneous connections</li>
+                <li>Download file, edit locally, upload on save</li>
+                <li>Directory listing and browsing</li>
+                <li>File operations (delete, create directory)</li>
+                <li>Progress tracking for uploads/downloads</li>
+            </ul>
+
+            <h4>Implementation</h4>
+            <p>Uses command-line tools <code>ssh</code> and <code>scp</code> via QProcess, with temporary local files for editing.</p>
+        </div>
+
+        <div class="feature">
+            <h3>24. Enhanced Git Integration <span class="feature-status status-complete">✓ Complete</span></h3>
+
+            <h4>Purpose</h4>
+            <p>Visual diff viewing and interactive staging for Git repositories.</p>
+
+            <h4>Components</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>File</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>GitDiffViewer</td>
+                    <td>src/ui/gitdiffviewer.h/cpp</td>
+                    <td>Visual diff viewer with staging controls</td>
+                </tr>
+                <tr>
+                    <td>GitStagingDialog</td>
+                    <td>src/ui/gitdiffviewer.h/cpp</td>
+                    <td>Complete staging workflow with commit</td>
+                </tr>
+            </table>
+
+            <h4>Features</h4>
+            <ul>
+                <li><strong>Diff Viewing</strong> - Color-coded diff with syntax highlighting</li>
+                <li><strong>File Tree</strong> - Organized view of staged/unstaged changes</li>
+                <li><strong>Interactive Staging</strong> - Stage/unstage individual files</li>
+                <li><strong>Discard Changes</strong> - Revert modifications to files</li>
+                <li><strong>Commit</strong> - Create commits with message input</li>
+                <li><strong>Status Indicators</strong> - Modified, added, deleted, renamed</li>
+            </ul>
+
+            <h4>Diff Colors</h4>
+            <ul>
+                <li><span style="color: #008000;">Green</span> - Added lines (+)</li>
+                <li><span style="color: #800000;">Red</span> - Deleted lines (-)</li>
+                <li><span style="color: #000080;">Dark Blue</span> - File headers (+++/---)</li>
+                <li><span style="color: #0080FF;">Cyan</span> - Hunk headers (@@)</li>
+            </ul>
+
+            <h4>Git Commands Used</h4>
+            <ul>
+                <li><code>git diff</code> - Show unstaged changes</li>
+                <li><code>git diff --cached</code> - Show staged changes</li>
+                <li><code>git add</code> - Stage files</li>
+                <li><code>git reset HEAD</code> - Unstage files</li>
+                <li><code>git checkout --</code> - Discard changes</li>
+                <li><code>git commit -m</code> - Create commit</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>Technical Details</h2>
+
+        <h3>New Dependencies</h3>
+        <ul>
+            <li>Qt6::Network (for remote connections)</li>
+            <li>External tools: <code>ssh</code>, <code>scp</code>, <code>git</code></li>
+        </ul>
+
+        <h3>Design Patterns</h3>
+        <ul>
+            <li><strong>Singleton</strong> - ThemeManager, PluginManager, RemoteFileManager</li>
+            <li><strong>Observer</strong> - Plugin event broadcasting</li>
+            <li><strong>Strategy</strong> - Different connection types (SFTP/SSH/SCP)</li>
+            <li><strong>Factory</strong> - Built-in theme creation</li>
+        </ul>
+
+        <h3>File Locations</h3>
+        <table>
+            <tr>
+                <th>Data Type</th>
+                <th>Location</th>
+            </tr>
+            <tr>
+                <td>User Themes</td>
+                <td>~/.config/NotepadSupreme/themes/</td>
+            </tr>
+            <tr>
+                <td>User Plugins</td>
+                <td>~/.local/share/notepad-supreme/plugins/</td>
+            </tr>
+            <tr>
+                <td>Connection Profiles</td>
+                <td>~/.config/NotepadSupreme/ (QSettings)</td>
+            </tr>
+            <tr>
+                <td>Temporary Remote Files</td>
+                <td>/tmp/notepad-supreme-remote-*</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="content-section">
+        <h2>Phase Summary</h2>
+
+        <h3>Files Added</h3>
+        <ul>
+            <li>src/core/plugininterface.h</li>
+            <li>src/core/pluginmanager.h/cpp</li>
+            <li>src/core/remoteconnection.h/cpp</li>
+            <li>src/ui/theme.h/cpp</li>
+            <li>src/ui/themeeditor.h/cpp</li>
+            <li>src/ui/markdownpreview.h/cpp</li>
+            <li>src/ui/hexviewer.h/cpp</li>
+            <li>src/ui/remoteconnectiondialog.h/cpp</li>
+            <li>src/ui/gitdiffviewer.h/cpp</li>
+        </ul>
+
+        <h3>Lines of Code</h3>
+        <p>Phase 4 added approximately <strong>4,000 lines</strong> of C++ code across 12 new components.</p>
+
+        <h3>Impact</h3>
+        <p>
+            Phase 4 transforms Olive Notepad from a standalone text editor into an extensible platform.
+            The plugin architecture enables community contributions, the theme system provides unlimited
+            customization, and the specialized viewers (Markdown, Hex) and integrations (remote editing, Git)
+            make it suitable for diverse workflows from web development to systems programming.
+        </p>
+    </div>
+
+    <div class="content-section">
+        <h2>Navigation</h2>
+        <p>
+            <a href="index.html">← Back to Overview</a> |
+            <a href="phase1.html">Phase 1</a> |
+            <a href="phase2.html">Phase 2</a> |
+            <a href="phase3.html">Phase 3</a> |
+            <strong>Phase 4</strong>
+        </p>
+    </div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 #include "preferencesdialog.h"
+#include "theme.h"
 #include "utils/settings.h"
 #include "core/encoding.h"
 
@@ -119,15 +120,10 @@ QWidget *PreferencesDialog::createAppearancePage()
     QFormLayout *themeLayout = new QFormLayout(themeGroup);
 
     m_themeCombo = new QComboBox(themeGroup);
-    m_themeCombo->addItems({
-        "Default Dark",
-        "Default Light",
-        "Solarized Dark",
-        "Solarized Light",
-        "Monokai",
-        "Dracula",
-        "Nord"
-    });
+    QVector<Theme> themes = ThemeManager::instance().themes();
+    for (const Theme &t : themes) {
+        m_themeCombo->addItem(t.name);
+    }
 
     themeLayout->addRow(tr("Color theme:"), m_themeCombo);
 
@@ -266,6 +262,7 @@ void PreferencesDialog::saveSettings()
 void PreferencesDialog::apply()
 {
     saveSettings();
+    Settings::instance().save();
 }
 
 void PreferencesDialog::reset()
@@ -277,5 +274,6 @@ void PreferencesDialog::reset()
 void PreferencesDialog::accept()
 {
     saveSettings();
+    Settings::instance().save();
     QDialog::accept();
 }

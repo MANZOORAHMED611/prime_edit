@@ -95,7 +95,7 @@ private:
     bool m_highlightCurrentLine = true;
     bool m_autoSave = false;
     int m_autoSaveInterval = 1000;
-    QString m_theme = "Default Dark";
+    QString m_theme = "Notepad++";
     bool m_restoreSession = true;
     QStringList m_recentFiles;
     QString m_defaultEncoding = "UTF-8";
