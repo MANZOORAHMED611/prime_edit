@@ -4,6 +4,7 @@
 #include "lspbridge.h"
 #include "core/lspmanager.h"
 #include "core/lspclient.h"
+#include "core/llmevaluator.h"
 #include "statusbar.h"
 #include "searchdialog.h"
 #include "searchresultspanel.h"
@@ -17,6 +18,8 @@
 #include "documentmap.h"
 #include "functionlist.h"
 #include "macrodialog.h"
+#include "evalresultwidget.h"
+#include "endpointconfigdialog.h"
 #include "core/document.h"
 #include "core/documentmanager.h"
 #include "core/session.h"
@@ -160,6 +163,16 @@ void MainWindow::setupUi()
 
     // LSP Bridge
     m_lspBridge = new LSPBridge(this, this);
+
+    // LLM Evaluator
+    m_evaluator = new LLMEvaluator(this);
+    connect(m_evaluator, &LLMEvaluator::resultReady,
+            this, &MainWindow::onEvalResult);
+    connect(m_evaluator, &LLMEvaluator::errorOccurred,
+            this, [this](const QString &err) {
+        if (m_evalResult) m_evalResult->hide();
+        statusBar()->showMessage(tr("Evaluation error: %1").arg(err), 5000);
+    });
 }
 
 void MainWindow::setupMenus()
@@ -441,6 +454,13 @@ void MainWindow::setupMenus()
 
     QAction *commandPaletteAction = m_toolsMenu->addAction(tr("Command &Palette..."), this, &MainWindow::showCommandPalette);
     commandPaletteAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_P));
+
+    m_toolsMenu->addSeparator();
+    QAction *evalAction = m_toolsMenu->addAction(
+        tr("&Evaluate Selection"), this, &MainWindow::evaluateSelection);
+    evalAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E));
+    m_toolsMenu->addAction(
+        tr("Configure &Endpoint..."), this, &MainWindow::configureEndpoint);
 
     // ============================================================
     // Macro menu

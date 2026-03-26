@@ -401,6 +401,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.h",
+			"MU",
+			"PRMOGMWJPH/moc_llmevaluator.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h",
 			"MU",
 			"PRMOGMWJPH/moc_lspclient.cpp",
@@ -494,6 +500,18 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h",
 			"MU",
 			"YPKJ5OE7LN/moc_editor.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.h",
+			"MU",
+			"YPKJ5OE7LN/moc_endpointconfigdialog.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.h",
+			"MU",
+			"YPKJ5OE7LN/moc_evalresultwidget.cpp",
 			null
 		],
 		[
@@ -736,6 +754,11 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp",
 			"MU",
 			null
@@ -812,6 +835,16 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp",
 			"MU",
 			null
 		],

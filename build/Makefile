@@ -355,6 +355,30 @@ src/core/largefile.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.s
 .PHONY : src/core/largefile.cpp.s
 
+src/core/llmevaluator.o: src/core/llmevaluator.cpp.o
+.PHONY : src/core/llmevaluator.o
+
+# target to build an object file
+src/core/llmevaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.o
+.PHONY : src/core/llmevaluator.cpp.o
+
+src/core/llmevaluator.i: src/core/llmevaluator.cpp.i
+.PHONY : src/core/llmevaluator.i
+
+# target to preprocess a source file
+src/core/llmevaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.i
+.PHONY : src/core/llmevaluator.cpp.i
+
+src/core/llmevaluator.s: src/core/llmevaluator.cpp.s
+.PHONY : src/core/llmevaluator.s
+
+# target to generate assembly for a file
+src/core/llmevaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.s
+.PHONY : src/core/llmevaluator.cpp.s
+
 src/core/lspclient.o: src/core/lspclient.cpp.o
 .PHONY : src/core/lspclient.o
 
@@ -738,6 +762,54 @@ src/ui/editor.s: src/ui/editor.cpp.s
 src/ui/editor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.s
 .PHONY : src/ui/editor.cpp.s
+
+src/ui/endpointconfigdialog.o: src/ui/endpointconfigdialog.cpp.o
+.PHONY : src/ui/endpointconfigdialog.o
+
+# target to build an object file
+src/ui/endpointconfigdialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/endpointconfigdialog.cpp.o
+.PHONY : src/ui/endpointconfigdialog.cpp.o
+
+src/ui/endpointconfigdialog.i: src/ui/endpointconfigdialog.cpp.i
+.PHONY : src/ui/endpointconfigdialog.i
+
+# target to preprocess a source file
+src/ui/endpointconfigdialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/endpointconfigdialog.cpp.i
+.PHONY : src/ui/endpointconfigdialog.cpp.i
+
+src/ui/endpointconfigdialog.s: src/ui/endpointconfigdialog.cpp.s
+.PHONY : src/ui/endpointconfigdialog.s
+
+# target to generate assembly for a file
+src/ui/endpointconfigdialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/endpointconfigdialog.cpp.s
+.PHONY : src/ui/endpointconfigdialog.cpp.s
+
+src/ui/evalresultwidget.o: src/ui/evalresultwidget.cpp.o
+.PHONY : src/ui/evalresultwidget.o
+
+# target to build an object file
+src/ui/evalresultwidget.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/evalresultwidget.cpp.o
+.PHONY : src/ui/evalresultwidget.cpp.o
+
+src/ui/evalresultwidget.i: src/ui/evalresultwidget.cpp.i
+.PHONY : src/ui/evalresultwidget.i
+
+# target to preprocess a source file
+src/ui/evalresultwidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/evalresultwidget.cpp.i
+.PHONY : src/ui/evalresultwidget.cpp.i
+
+src/ui/evalresultwidget.s: src/ui/evalresultwidget.cpp.s
+.PHONY : src/ui/evalresultwidget.s
+
+# target to generate assembly for a file
+src/ui/evalresultwidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/evalresultwidget.cpp.s
+.PHONY : src/ui/evalresultwidget.cpp.s
 
 src/ui/fileexplorer.o: src/ui/fileexplorer.cpp.o
 .PHONY : src/ui/fileexplorer.o
@@ -1398,6 +1470,9 @@ help:
 	@echo "... src/core/largefile.o"
 	@echo "... src/core/largefile.i"
 	@echo "... src/core/largefile.s"
+	@echo "... src/core/llmevaluator.o"
+	@echo "... src/core/llmevaluator.i"
+	@echo "... src/core/llmevaluator.s"
 	@echo "... src/core/lspclient.o"
 	@echo "... src/core/lspclient.i"
 	@echo "... src/core/lspclient.s"
@@ -1446,6 +1521,12 @@ help:
 	@echo "... src/ui/editor.o"
 	@echo "... src/ui/editor.i"
 	@echo "... src/ui/editor.s"
+	@echo "... src/ui/endpointconfigdialog.o"
+	@echo "... src/ui/endpointconfigdialog.i"
+	@echo "... src/ui/endpointconfigdialog.s"
+	@echo "... src/ui/evalresultwidget.o"
+	@echo "... src/ui/evalresultwidget.i"
+	@echo "... src/ui/evalresultwidget.s"
 	@echo "... src/ui/fileexplorer.o"
 	@echo "... src/ui/fileexplorer.i"
 	@echo "... src/ui/fileexplorer.s"

@@ -47,6 +47,7 @@ set(CORE_SOURCES
     src/core/largefile.cpp
     src/core/searchengine.cpp
     src/core/charsetdetector.cpp
+    src/core/llmevaluator.cpp
 )
 
 set(UI_SOURCES
@@ -79,6 +80,8 @@ set(UI_SOURCES
     src/ui/macrodialog.cpp
     src/ui/documentmap.cpp
     src/ui/lspbridge.cpp
+    src/ui/evalresultwidget.cpp
+    src/ui/endpointconfigdialog.cpp
 )
 
 set(SYNTAX_SOURCES
@@ -106,6 +109,7 @@ set(HEADERS
     src/core/largefile.h
     src/core/searchengine.h
     src/core/charsetdetector.h
+    src/core/llmevaluator.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h
@@ -134,6 +138,8 @@ set(HEADERS
     src/ui/macrodialog.h
     src/ui/documentmap.h
     src/ui/lspbridge.h
+    src/ui/evalresultwidget.h
+    src/ui/endpointconfigdialog.h
     src/syntax/highlighter.h
     src/syntax/languagemanager.h
     src/utils/fileutils.h

@@ -4,7 +4,10 @@
 #include "mainwindow.h"
 #include "editor.h"
 #include "tabwidget.h"
+#include "evalresultwidget.h"
+#include "endpointconfigdialog.h"
 #include "core/document.h"
+#include "core/llmevaluator.h"
 #include "core/lspmanager.h"
 #include "core/lspclient.h"
 #include <QMessageBox>
@@ -652,4 +655,78 @@ void MainWindow::renameSymbol()
     int col = e->currentColumn() - 1;
     QString uri = QStringLiteral("file://") + e->document()->filePath();
     client->rename(uri, line, col, newName);
+}
+
+// ============================================================
+// LLM Block Evaluation
+// ============================================================
+
+void MainWindow::evaluateSelection()
+{
+    Editor *e = currentEditor();
+    if (!e) return;
+
+    QString selectedText = e->selectedText();
+    if (selectedText.isEmpty()) {
+        statusBar()->showMessage(
+            tr("No text selected for evaluation"), 3000);
+        return;
+    }
+
+    m_evalOriginalText = selectedText;
+
+    if (!m_evalResult) {
+        m_evalResult = new EvalResultWidget(e);
+        connect(m_evalResult, &EvalResultWidget::accepted,
+                this, &MainWindow::onEvalAccepted);
+        connect(m_evalResult, &EvalResultWidget::rejected,
+                this, &MainWindow::onEvalRejected);
+    } else {
+        m_evalResult->setParent(e);
+    }
+
+    QRect selRect = e->cursorRect();
+    m_evalResult->move(selRect.left(), selRect.bottom() + 10);
+    m_evalResult->resize(
+        e->width() - selRect.left() - 20, 250);
+    m_evalResult->showLoading();
+
+    EvalEndpoint endpoint = LLMEvaluator::loadEndpoint();
+    m_evaluator->evaluate(selectedText, endpoint);
+}
+
+void MainWindow::onEvalResult(const QString &result)
+{
+    if (m_evalResult) {
+        m_evalResult->showResult(m_evalOriginalText, result);
+    }
+}
+
+void MainWindow::onEvalAccepted(const QString &result)
+{
+    Editor *e = currentEditor();
+    if (e) {
+        QTextCursor cursor = e->textCursor();
+        cursor.beginEditBlock();
+        cursor.insertText(result);
+        cursor.endEditBlock();
+    }
+    if (m_evalResult) m_evalResult->hide();
+}
+
+void MainWindow::onEvalRejected()
+{
+    if (m_evalResult) m_evalResult->hide();
+    m_evaluator->cancel();
+}
+
+void MainWindow::configureEndpoint()
+{
+    EndpointConfigDialog dialog(this);
+    dialog.setEndpoint(LLMEvaluator::loadEndpoint());
+    if (dialog.exec() == QDialog::Accepted) {
+        LLMEvaluator::saveEndpoint(dialog.endpoint());
+        statusBar()->showMessage(
+            tr("Endpoint configuration saved"), 3000);
+    }
 }

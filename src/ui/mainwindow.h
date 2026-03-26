@@ -25,6 +25,8 @@ class TerminalWidget;
 class NotificationBar;
 class DocumentMapWidget;
 class FunctionListPanel;
+class LLMEvaluator;
+class EvalResultWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -222,6 +224,13 @@ private slots:
     void findReferences();
     void renameSymbol();
 
+    // LLM evaluation
+    void evaluateSelection();
+    void onEvalResult(const QString &result);
+    void onEvalAccepted(const QString &result);
+    void onEvalRejected();
+    void configureEndpoint();
+
 private:
     void setupUi();
     void setupMenus();
@@ -316,6 +325,11 @@ private:
 
     // LSP
     LSPBridge *m_lspBridge = nullptr;
+
+    // LLM evaluation
+    LLMEvaluator *m_evaluator = nullptr;
+    EvalResultWidget *m_evalResult = nullptr;
+    QString m_evalOriginalText;
 
     // State
     int m_untitledCounter = 0;

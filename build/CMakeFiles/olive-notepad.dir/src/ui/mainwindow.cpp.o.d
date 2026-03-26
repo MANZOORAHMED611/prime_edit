@@ -477,6 +477,42 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QNetworkAccessManager \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qnetworkaccessmanager.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetworkglobal.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetwork-config.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qnetworkrequest.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QSharedDataPointer \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qshareddata.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QUrl \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QSslConfiguration \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslconfiguration.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslsocket.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtcpsocket.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qabstractsocket.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qhostaddress.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslerror.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslcertificate.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcryptographichash.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qssl.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QFlags \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qflags.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QSslPreSharedKeyAuthenticator \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslpresharedkeyauthenticator.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QMetaType \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetatype.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QNetworkReply \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qnetworkreply.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QIODevice \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qiodevice.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QNetworkRequest \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qnetworkrequest.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QNetworkAccessManager \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
@@ -533,6 +569,8 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpixmap.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
@@ -558,7 +596,6 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QFileDialog \
@@ -577,7 +614,6 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMimeData \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmimedata.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUrl \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QActionGroup \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qactiongroup.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QShortcut \
