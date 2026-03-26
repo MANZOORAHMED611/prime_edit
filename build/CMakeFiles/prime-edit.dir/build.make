@@ -226,7 +226,7 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/toolbar/book
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/toolbar/comment-outline.svg
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: /usr/lib/qt6/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic RCC for resources/resources.qrc"
-	/usr/bin/cmake -E cmake_autorcc /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/prime-edit_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json Debug
+	/usr/bin/cmake -E cmake_autorcc /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/prime-edit_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json 
 
 CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: prime-edit_autogen/mocs_compilation.cpp

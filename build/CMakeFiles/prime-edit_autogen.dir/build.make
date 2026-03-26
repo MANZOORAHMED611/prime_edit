@@ -68,7 +68,7 @@ include CMakeFiles/prime-edit_autogen.dir/progress.make
 
 CMakeFiles/prime-edit_autogen:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target prime-edit"
-	/usr/bin/cmake -E cmake_autogen /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/prime-edit_autogen.dir/AutogenInfo.json Debug
+	/usr/bin/cmake -E cmake_autogen /home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/prime-edit_autogen.dir/AutogenInfo.json ""
 
 prime-edit_autogen: CMakeFiles/prime-edit_autogen
 prime-edit_autogen: CMakeFiles/prime-edit_autogen.dir/build.make
