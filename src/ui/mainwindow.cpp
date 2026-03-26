@@ -80,8 +80,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUi()
 {
-    setWindowTitle("Olive Notepad");
-    setWindowIcon(QIcon(":/icons/olive_notepad_icon.png"));
+    setWindowTitle("PrimeEdit");
+    setWindowIcon(QIcon(":/icons/prime_edit_icon.png"));
     resize(1200, 800);
     setAcceptDrops(true);
 
@@ -517,7 +517,7 @@ void MainWindow::setupMenus()
     // ============================================================
     m_helpMenu = menuBar()->addMenu(tr("?"));
 
-    m_helpMenu->addAction(tr("&About Olive Notepad"), this, &MainWindow::showAbout);
+    m_helpMenu->addAction(tr("&About PrimeEdit"), this, &MainWindow::showAbout);
     m_helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
 }
 
@@ -1486,10 +1486,10 @@ void MainWindow::resetZoom()
 
 void MainWindow::showAbout()
 {
-    QMessageBox::about(this, tr("About Olive Notepad"),
-        tr("<h2>Olive Notepad 1.0</h2>"
-           "<p>A native Linux text editor designed to match and exceed "
-           "Notepad++ functionality while incorporating modern features.</p>"
+    QMessageBox::about(this, tr("About PrimeEdit"),
+        tr("<h2>PrimeEdit 1.0</h2>"
+           "<p>A native editor for structured documents, where content is "
+           "validated, enforced, and executable.</p>"
            "<p>Built with Qt %1</p>").arg(QT_VERSION_STR));
 }
 
@@ -1703,10 +1703,10 @@ void MainWindow::updateWindowTitle()
         if (!doc->isUntitled()) {
             title += " - " + doc->filePath();
         }
-        title += " - Olive Notepad";
+        title += " - PrimeEdit";
         setWindowTitle(title);
     } else {
-        setWindowTitle("Olive Notepad");
+        setWindowTitle("PrimeEdit");
     }
 }
 

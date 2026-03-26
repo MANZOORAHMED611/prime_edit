@@ -144,7 +144,7 @@ void TerminalWidget::startShell(const QString &shell)
     m_currentShell = shell.isEmpty() ? m_shellCombo->currentText() : shell;
 
     // Welcome message
-    appendOutput(QString("Olive Notepad Terminal\n"), QColor(100, 150, 255));
+    appendOutput(QString("PrimeEdit Terminal\n"), QColor(100, 150, 255));
     appendOutput(QString("Working Directory: %1\n").arg(m_workingDir), QColor(150, 150, 150));
     appendOutput(QString("Shell: %1\n\n").arg(m_currentShell), QColor(150, 150, 150));
 }

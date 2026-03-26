@@ -17,9 +17,9 @@ PluginManager::PluginManager()
     m_pluginDirs.append(dataDir + "/plugins");
 
     // System-wide plugins
-    m_pluginDirs.append("/usr/lib/olive-notepad/plugins");
-    m_pluginDirs.append("/usr/share/notepad-supreme/plugins");
-    m_pluginDirs.append("/usr/local/share/notepad-supreme/plugins");
+    m_pluginDirs.append("/usr/lib/prime-edit/plugins");
+    m_pluginDirs.append("/usr/share/prime-edit/plugins");
+    m_pluginDirs.append("/usr/local/share/prime-edit/plugins");
 }
 
 PluginManager::~PluginManager()
@@ -71,7 +71,7 @@ void PluginManager::loadPlugin(const QString &filePath)
 
     PluginInterface *plugin = qobject_cast<PluginInterface*>(pluginObj);
     if (!plugin) {
-        emit pluginError(filePath, "Not a valid Olive Notepad plugin");
+        emit pluginError(filePath, "Not a valid PrimeEdit plugin");
         loader->unload();
         delete loader;
         return;

@@ -13,18 +13,12 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName("Olive Notepad");
+    app.setApplicationName("PrimeEdit");
     app.setApplicationVersion("1.0.0");
-    app.setOrganizationName("OliveNotepad");
-    app.setOrganizationDomain("olive-notepad.org");
-    // Set window icon - try olive icon first, fallback to legacy icons
-    QIcon appIcon(":/icons/olive_notepad_icon.png");
-    if (appIcon.isNull()) {
-        appIcon = QIcon(":/icons/notepad-supreme.svg");
-    }
-    if (appIcon.isNull()) {
-        appIcon = QIcon(":/icons/notepad_supreme_icon.png");
-    }
+    app.setOrganizationName("PrimeEdit");
+    app.setOrganizationDomain("primeedit.dev");
+    // Set window icon
+    QIcon appIcon(":/icons/prime_edit_icon.png");
     app.setWindowIcon(appIcon);
 
     // Ensure config directories exist
@@ -37,7 +31,7 @@ int main(int argc, char *argv[])
 
     // Parse command line arguments
     QCommandLineParser parser;
-    parser.setApplicationDescription("A native Linux text editor");
+    parser.setApplicationDescription("The editor for structured knowledge work");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("files", "Files to open", "[files...]");

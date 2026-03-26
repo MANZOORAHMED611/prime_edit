@@ -16,7 +16,7 @@ RecoveryDialog::RecoveryDialog(const QStringList &files, QWidget *parent)
     auto *layout = new QVBoxLayout(this);
 
     layout->addWidget(new QLabel(
-        tr("Olive Notepad found unsaved documents. Recover them?")));
+        tr("PrimeEdit found unsaved documents. Recover them?")));
 
     m_listWidget = new QListWidget(this);
     for (const QString &filePath : files) {

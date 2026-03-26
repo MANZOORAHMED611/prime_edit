@@ -46,7 +46,7 @@ public:
 };
 
 // Qt plugin interface macro
-#define PluginInterface_iid "com.notepad-supreme.PluginInterface/1.0"
+#define PluginInterface_iid "com.primeedit.PluginInterface/1.0"
 Q_DECLARE_INTERFACE(PluginInterface, PluginInterface_iid)
 
 #endif // PLUGININTERFACE_H

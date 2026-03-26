@@ -162,85 +162,85 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named olive-notepad
+# Target rules for targets named prime-edit
 
 # Build rule for target.
-olive-notepad: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 olive-notepad
-.PHONY : olive-notepad
+prime-edit: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 prime-edit
+.PHONY : prime-edit
 
 # fast build rule for target.
-olive-notepad/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/build
-.PHONY : olive-notepad/fast
+prime-edit/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/build
+.PHONY : prime-edit/fast
 
 #=============================================================================
-# Target rules for targets named olive-notepad_autogen
+# Target rules for targets named prime-edit_autogen
 
 # Build rule for target.
-olive-notepad_autogen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 olive-notepad_autogen
-.PHONY : olive-notepad_autogen
+prime-edit_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 prime-edit_autogen
+.PHONY : prime-edit_autogen
 
 # fast build rule for target.
-olive-notepad_autogen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad_autogen.dir/build.make CMakeFiles/olive-notepad_autogen.dir/build
-.PHONY : olive-notepad_autogen/fast
+prime-edit_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit_autogen.dir/build.make CMakeFiles/prime-edit_autogen.dir/build
+.PHONY : prime-edit_autogen/fast
 
-olive-notepad_autogen/3YJK5W5UP7/qrc_resources.o: olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o
-.PHONY : olive-notepad_autogen/3YJK5W5UP7/qrc_resources.o
-
-# target to build an object file
-olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o
-.PHONY : olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.o
-
-olive-notepad_autogen/3YJK5W5UP7/qrc_resources.i: olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.i
-.PHONY : olive-notepad_autogen/3YJK5W5UP7/qrc_resources.i
-
-# target to preprocess a source file
-olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.i
-.PHONY : olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.i
-
-olive-notepad_autogen/3YJK5W5UP7/qrc_resources.s: olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.s
-.PHONY : olive-notepad_autogen/3YJK5W5UP7/qrc_resources.s
-
-# target to generate assembly for a file
-olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.s
-.PHONY : olive-notepad_autogen/3YJK5W5UP7/qrc_resources.cpp.s
-
-olive-notepad_autogen/mocs_compilation.o: olive-notepad_autogen/mocs_compilation.cpp.o
-.PHONY : olive-notepad_autogen/mocs_compilation.o
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.o: prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o
+.PHONY : prime-edit_autogen/3YJK5W5UP7/qrc_resources.o
 
 # target to build an object file
-olive-notepad_autogen/mocs_compilation.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.o
-.PHONY : olive-notepad_autogen/mocs_compilation.cpp.o
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o
+.PHONY : prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o
 
-olive-notepad_autogen/mocs_compilation.i: olive-notepad_autogen/mocs_compilation.cpp.i
-.PHONY : olive-notepad_autogen/mocs_compilation.i
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.i: prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.i
+.PHONY : prime-edit_autogen/3YJK5W5UP7/qrc_resources.i
 
 # target to preprocess a source file
-olive-notepad_autogen/mocs_compilation.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.i
-.PHONY : olive-notepad_autogen/mocs_compilation.cpp.i
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.i
+.PHONY : prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.i
 
-olive-notepad_autogen/mocs_compilation.s: olive-notepad_autogen/mocs_compilation.cpp.s
-.PHONY : olive-notepad_autogen/mocs_compilation.s
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.s: prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.s
+.PHONY : prime-edit_autogen/3YJK5W5UP7/qrc_resources.s
 
 # target to generate assembly for a file
-olive-notepad_autogen/mocs_compilation.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/olive-notepad_autogen/mocs_compilation.cpp.s
-.PHONY : olive-notepad_autogen/mocs_compilation.cpp.s
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.s
+.PHONY : prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.s
+
+prime-edit_autogen/mocs_compilation.o: prime-edit_autogen/mocs_compilation.cpp.o
+.PHONY : prime-edit_autogen/mocs_compilation.o
+
+# target to build an object file
+prime-edit_autogen/mocs_compilation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o
+.PHONY : prime-edit_autogen/mocs_compilation.cpp.o
+
+prime-edit_autogen/mocs_compilation.i: prime-edit_autogen/mocs_compilation.cpp.i
+.PHONY : prime-edit_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+prime-edit_autogen/mocs_compilation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.i
+.PHONY : prime-edit_autogen/mocs_compilation.cpp.i
+
+prime-edit_autogen/mocs_compilation.s: prime-edit_autogen/mocs_compilation.cpp.s
+.PHONY : prime-edit_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+prime-edit_autogen/mocs_compilation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.s
+.PHONY : prime-edit_autogen/mocs_compilation.cpp.s
 
 src/core/charsetdetector.o: src/core/charsetdetector.cpp.o
 .PHONY : src/core/charsetdetector.o
 
 # target to build an object file
 src/core/charsetdetector.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.o
 .PHONY : src/core/charsetdetector.cpp.o
 
 src/core/charsetdetector.i: src/core/charsetdetector.cpp.i
@@ -248,7 +248,7 @@ src/core/charsetdetector.i: src/core/charsetdetector.cpp.i
 
 # target to preprocess a source file
 src/core/charsetdetector.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.i
 .PHONY : src/core/charsetdetector.cpp.i
 
 src/core/charsetdetector.s: src/core/charsetdetector.cpp.s
@@ -256,7 +256,7 @@ src/core/charsetdetector.s: src/core/charsetdetector.cpp.s
 
 # target to generate assembly for a file
 src/core/charsetdetector.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/charsetdetector.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.s
 .PHONY : src/core/charsetdetector.cpp.s
 
 src/core/document.o: src/core/document.cpp.o
@@ -264,7 +264,7 @@ src/core/document.o: src/core/document.cpp.o
 
 # target to build an object file
 src/core/document.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/document.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/document.cpp.o
 .PHONY : src/core/document.cpp.o
 
 src/core/document.i: src/core/document.cpp.i
@@ -272,7 +272,7 @@ src/core/document.i: src/core/document.cpp.i
 
 # target to preprocess a source file
 src/core/document.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/document.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/document.cpp.i
 .PHONY : src/core/document.cpp.i
 
 src/core/document.s: src/core/document.cpp.s
@@ -280,7 +280,7 @@ src/core/document.s: src/core/document.cpp.s
 
 # target to generate assembly for a file
 src/core/document.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/document.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/document.cpp.s
 .PHONY : src/core/document.cpp.s
 
 src/core/documentmanager.o: src/core/documentmanager.cpp.o
@@ -288,7 +288,7 @@ src/core/documentmanager.o: src/core/documentmanager.cpp.o
 
 # target to build an object file
 src/core/documentmanager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/documentmanager.cpp.o
 .PHONY : src/core/documentmanager.cpp.o
 
 src/core/documentmanager.i: src/core/documentmanager.cpp.i
@@ -296,7 +296,7 @@ src/core/documentmanager.i: src/core/documentmanager.cpp.i
 
 # target to preprocess a source file
 src/core/documentmanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/documentmanager.cpp.i
 .PHONY : src/core/documentmanager.cpp.i
 
 src/core/documentmanager.s: src/core/documentmanager.cpp.s
@@ -304,7 +304,7 @@ src/core/documentmanager.s: src/core/documentmanager.cpp.s
 
 # target to generate assembly for a file
 src/core/documentmanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/documentmanager.cpp.s
 .PHONY : src/core/documentmanager.cpp.s
 
 src/core/encoding.o: src/core/encoding.cpp.o
@@ -312,7 +312,7 @@ src/core/encoding.o: src/core/encoding.cpp.o
 
 # target to build an object file
 src/core/encoding.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/encoding.cpp.o
 .PHONY : src/core/encoding.cpp.o
 
 src/core/encoding.i: src/core/encoding.cpp.i
@@ -320,7 +320,7 @@ src/core/encoding.i: src/core/encoding.cpp.i
 
 # target to preprocess a source file
 src/core/encoding.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/encoding.cpp.i
 .PHONY : src/core/encoding.cpp.i
 
 src/core/encoding.s: src/core/encoding.cpp.s
@@ -328,7 +328,7 @@ src/core/encoding.s: src/core/encoding.cpp.s
 
 # target to generate assembly for a file
 src/core/encoding.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/encoding.cpp.s
 .PHONY : src/core/encoding.cpp.s
 
 src/core/islamicbridge.o: src/core/islamicbridge.cpp.o
@@ -336,7 +336,7 @@ src/core/islamicbridge.o: src/core/islamicbridge.cpp.o
 
 # target to build an object file
 src/core/islamicbridge.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o
 .PHONY : src/core/islamicbridge.cpp.o
 
 src/core/islamicbridge.i: src/core/islamicbridge.cpp.i
@@ -344,7 +344,7 @@ src/core/islamicbridge.i: src/core/islamicbridge.cpp.i
 
 # target to preprocess a source file
 src/core/islamicbridge.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.i
 .PHONY : src/core/islamicbridge.cpp.i
 
 src/core/islamicbridge.s: src/core/islamicbridge.cpp.s
@@ -352,7 +352,7 @@ src/core/islamicbridge.s: src/core/islamicbridge.cpp.s
 
 # target to generate assembly for a file
 src/core/islamicbridge.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.s
 .PHONY : src/core/islamicbridge.cpp.s
 
 src/core/largefile.o: src/core/largefile.cpp.o
@@ -360,7 +360,7 @@ src/core/largefile.o: src/core/largefile.cpp.o
 
 # target to build an object file
 src/core/largefile.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/largefile.cpp.o
 .PHONY : src/core/largefile.cpp.o
 
 src/core/largefile.i: src/core/largefile.cpp.i
@@ -368,7 +368,7 @@ src/core/largefile.i: src/core/largefile.cpp.i
 
 # target to preprocess a source file
 src/core/largefile.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/largefile.cpp.i
 .PHONY : src/core/largefile.cpp.i
 
 src/core/largefile.s: src/core/largefile.cpp.s
@@ -376,7 +376,7 @@ src/core/largefile.s: src/core/largefile.cpp.s
 
 # target to generate assembly for a file
 src/core/largefile.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/largefile.cpp.s
 .PHONY : src/core/largefile.cpp.s
 
 src/core/llmevaluator.o: src/core/llmevaluator.cpp.o
@@ -384,7 +384,7 @@ src/core/llmevaluator.o: src/core/llmevaluator.cpp.o
 
 # target to build an object file
 src/core/llmevaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o
 .PHONY : src/core/llmevaluator.cpp.o
 
 src/core/llmevaluator.i: src/core/llmevaluator.cpp.i
@@ -392,7 +392,7 @@ src/core/llmevaluator.i: src/core/llmevaluator.cpp.i
 
 # target to preprocess a source file
 src/core/llmevaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.i
 .PHONY : src/core/llmevaluator.cpp.i
 
 src/core/llmevaluator.s: src/core/llmevaluator.cpp.s
@@ -400,7 +400,7 @@ src/core/llmevaluator.s: src/core/llmevaluator.cpp.s
 
 # target to generate assembly for a file
 src/core/llmevaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.s
 .PHONY : src/core/llmevaluator.cpp.s
 
 src/core/lspclient.o: src/core/lspclient.cpp.o
@@ -408,7 +408,7 @@ src/core/lspclient.o: src/core/lspclient.cpp.o
 
 # target to build an object file
 src/core/lspclient.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/lspclient.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/lspclient.cpp.o
 .PHONY : src/core/lspclient.cpp.o
 
 src/core/lspclient.i: src/core/lspclient.cpp.i
@@ -416,7 +416,7 @@ src/core/lspclient.i: src/core/lspclient.cpp.i
 
 # target to preprocess a source file
 src/core/lspclient.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/lspclient.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/lspclient.cpp.i
 .PHONY : src/core/lspclient.cpp.i
 
 src/core/lspclient.s: src/core/lspclient.cpp.s
@@ -424,7 +424,7 @@ src/core/lspclient.s: src/core/lspclient.cpp.s
 
 # target to generate assembly for a file
 src/core/lspclient.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/lspclient.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/lspclient.cpp.s
 .PHONY : src/core/lspclient.cpp.s
 
 src/core/lspmanager.o: src/core/lspmanager.cpp.o
@@ -432,7 +432,7 @@ src/core/lspmanager.o: src/core/lspmanager.cpp.o
 
 # target to build an object file
 src/core/lspmanager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/lspmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/lspmanager.cpp.o
 .PHONY : src/core/lspmanager.cpp.o
 
 src/core/lspmanager.i: src/core/lspmanager.cpp.i
@@ -440,7 +440,7 @@ src/core/lspmanager.i: src/core/lspmanager.cpp.i
 
 # target to preprocess a source file
 src/core/lspmanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/lspmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/lspmanager.cpp.i
 .PHONY : src/core/lspmanager.cpp.i
 
 src/core/lspmanager.s: src/core/lspmanager.cpp.s
@@ -448,7 +448,7 @@ src/core/lspmanager.s: src/core/lspmanager.cpp.s
 
 # target to generate assembly for a file
 src/core/lspmanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/lspmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/lspmanager.cpp.s
 .PHONY : src/core/lspmanager.cpp.s
 
 src/core/macrorecorder.o: src/core/macrorecorder.cpp.o
@@ -456,7 +456,7 @@ src/core/macrorecorder.o: src/core/macrorecorder.cpp.o
 
 # target to build an object file
 src/core/macrorecorder.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/macrorecorder.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/macrorecorder.cpp.o
 .PHONY : src/core/macrorecorder.cpp.o
 
 src/core/macrorecorder.i: src/core/macrorecorder.cpp.i
@@ -464,7 +464,7 @@ src/core/macrorecorder.i: src/core/macrorecorder.cpp.i
 
 # target to preprocess a source file
 src/core/macrorecorder.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/macrorecorder.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/macrorecorder.cpp.i
 .PHONY : src/core/macrorecorder.cpp.i
 
 src/core/macrorecorder.s: src/core/macrorecorder.cpp.s
@@ -472,7 +472,7 @@ src/core/macrorecorder.s: src/core/macrorecorder.cpp.s
 
 # target to generate assembly for a file
 src/core/macrorecorder.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/macrorecorder.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/macrorecorder.cpp.s
 .PHONY : src/core/macrorecorder.cpp.s
 
 src/core/piecetable.o: src/core/piecetable.cpp.o
@@ -480,7 +480,7 @@ src/core/piecetable.o: src/core/piecetable.cpp.o
 
 # target to build an object file
 src/core/piecetable.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/piecetable.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/piecetable.cpp.o
 .PHONY : src/core/piecetable.cpp.o
 
 src/core/piecetable.i: src/core/piecetable.cpp.i
@@ -488,7 +488,7 @@ src/core/piecetable.i: src/core/piecetable.cpp.i
 
 # target to preprocess a source file
 src/core/piecetable.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/piecetable.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/piecetable.cpp.i
 .PHONY : src/core/piecetable.cpp.i
 
 src/core/piecetable.s: src/core/piecetable.cpp.s
@@ -496,7 +496,7 @@ src/core/piecetable.s: src/core/piecetable.cpp.s
 
 # target to generate assembly for a file
 src/core/piecetable.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/piecetable.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/piecetable.cpp.s
 .PHONY : src/core/piecetable.cpp.s
 
 src/core/pluginmanager.o: src/core/pluginmanager.cpp.o
@@ -504,7 +504,7 @@ src/core/pluginmanager.o: src/core/pluginmanager.cpp.o
 
 # target to build an object file
 src/core/pluginmanager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/pluginmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/pluginmanager.cpp.o
 .PHONY : src/core/pluginmanager.cpp.o
 
 src/core/pluginmanager.i: src/core/pluginmanager.cpp.i
@@ -512,7 +512,7 @@ src/core/pluginmanager.i: src/core/pluginmanager.cpp.i
 
 # target to preprocess a source file
 src/core/pluginmanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/pluginmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/pluginmanager.cpp.i
 .PHONY : src/core/pluginmanager.cpp.i
 
 src/core/pluginmanager.s: src/core/pluginmanager.cpp.s
@@ -520,7 +520,7 @@ src/core/pluginmanager.s: src/core/pluginmanager.cpp.s
 
 # target to generate assembly for a file
 src/core/pluginmanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/pluginmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/pluginmanager.cpp.s
 .PHONY : src/core/pluginmanager.cpp.s
 
 src/core/remoteconnection.o: src/core/remoteconnection.cpp.o
@@ -528,7 +528,7 @@ src/core/remoteconnection.o: src/core/remoteconnection.cpp.o
 
 # target to build an object file
 src/core/remoteconnection.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/remoteconnection.cpp.o
 .PHONY : src/core/remoteconnection.cpp.o
 
 src/core/remoteconnection.i: src/core/remoteconnection.cpp.i
@@ -536,7 +536,7 @@ src/core/remoteconnection.i: src/core/remoteconnection.cpp.i
 
 # target to preprocess a source file
 src/core/remoteconnection.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/remoteconnection.cpp.i
 .PHONY : src/core/remoteconnection.cpp.i
 
 src/core/remoteconnection.s: src/core/remoteconnection.cpp.s
@@ -544,7 +544,7 @@ src/core/remoteconnection.s: src/core/remoteconnection.cpp.s
 
 # target to generate assembly for a file
 src/core/remoteconnection.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/remoteconnection.cpp.s
 .PHONY : src/core/remoteconnection.cpp.s
 
 src/core/schemavalidator.o: src/core/schemavalidator.cpp.o
@@ -552,7 +552,7 @@ src/core/schemavalidator.o: src/core/schemavalidator.cpp.o
 
 # target to build an object file
 src/core/schemavalidator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o
 .PHONY : src/core/schemavalidator.cpp.o
 
 src/core/schemavalidator.i: src/core/schemavalidator.cpp.i
@@ -560,7 +560,7 @@ src/core/schemavalidator.i: src/core/schemavalidator.cpp.i
 
 # target to preprocess a source file
 src/core/schemavalidator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.i
 .PHONY : src/core/schemavalidator.cpp.i
 
 src/core/schemavalidator.s: src/core/schemavalidator.cpp.s
@@ -568,7 +568,7 @@ src/core/schemavalidator.s: src/core/schemavalidator.cpp.s
 
 # target to generate assembly for a file
 src/core/schemavalidator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.s
 .PHONY : src/core/schemavalidator.cpp.s
 
 src/core/searchengine.o: src/core/searchengine.cpp.o
@@ -576,7 +576,7 @@ src/core/searchengine.o: src/core/searchengine.cpp.o
 
 # target to build an object file
 src/core/searchengine.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/searchengine.cpp.o
 .PHONY : src/core/searchengine.cpp.o
 
 src/core/searchengine.i: src/core/searchengine.cpp.i
@@ -584,7 +584,7 @@ src/core/searchengine.i: src/core/searchengine.cpp.i
 
 # target to preprocess a source file
 src/core/searchengine.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/searchengine.cpp.i
 .PHONY : src/core/searchengine.cpp.i
 
 src/core/searchengine.s: src/core/searchengine.cpp.s
@@ -592,7 +592,7 @@ src/core/searchengine.s: src/core/searchengine.cpp.s
 
 # target to generate assembly for a file
 src/core/searchengine.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/searchengine.cpp.s
 .PHONY : src/core/searchengine.cpp.s
 
 src/core/session.o: src/core/session.cpp.o
@@ -600,7 +600,7 @@ src/core/session.o: src/core/session.cpp.o
 
 # target to build an object file
 src/core/session.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/session.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/session.cpp.o
 .PHONY : src/core/session.cpp.o
 
 src/core/session.i: src/core/session.cpp.i
@@ -608,7 +608,7 @@ src/core/session.i: src/core/session.cpp.i
 
 # target to preprocess a source file
 src/core/session.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/session.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/session.cpp.i
 .PHONY : src/core/session.cpp.i
 
 src/core/session.s: src/core/session.cpp.s
@@ -616,7 +616,7 @@ src/core/session.s: src/core/session.cpp.s
 
 # target to generate assembly for a file
 src/core/session.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/session.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/session.cpp.s
 .PHONY : src/core/session.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -624,7 +624,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -632,7 +632,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -640,7 +640,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/syntax/highlighter.o: src/syntax/highlighter.cpp.o
@@ -648,7 +648,7 @@ src/syntax/highlighter.o: src/syntax/highlighter.cpp.o
 
 # target to build an object file
 src/syntax/highlighter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o
 .PHONY : src/syntax/highlighter.cpp.o
 
 src/syntax/highlighter.i: src/syntax/highlighter.cpp.i
@@ -656,7 +656,7 @@ src/syntax/highlighter.i: src/syntax/highlighter.cpp.i
 
 # target to preprocess a source file
 src/syntax/highlighter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.i
 .PHONY : src/syntax/highlighter.cpp.i
 
 src/syntax/highlighter.s: src/syntax/highlighter.cpp.s
@@ -664,7 +664,7 @@ src/syntax/highlighter.s: src/syntax/highlighter.cpp.s
 
 # target to generate assembly for a file
 src/syntax/highlighter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/syntax/highlighter.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.s
 .PHONY : src/syntax/highlighter.cpp.s
 
 src/syntax/languagemanager.o: src/syntax/languagemanager.cpp.o
@@ -672,7 +672,7 @@ src/syntax/languagemanager.o: src/syntax/languagemanager.cpp.o
 
 # target to build an object file
 src/syntax/languagemanager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o
 .PHONY : src/syntax/languagemanager.cpp.o
 
 src/syntax/languagemanager.i: src/syntax/languagemanager.cpp.i
@@ -680,7 +680,7 @@ src/syntax/languagemanager.i: src/syntax/languagemanager.cpp.i
 
 # target to preprocess a source file
 src/syntax/languagemanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.i
 .PHONY : src/syntax/languagemanager.cpp.i
 
 src/syntax/languagemanager.s: src/syntax/languagemanager.cpp.s
@@ -688,7 +688,7 @@ src/syntax/languagemanager.s: src/syntax/languagemanager.cpp.s
 
 # target to generate assembly for a file
 src/syntax/languagemanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.s
 .PHONY : src/syntax/languagemanager.cpp.s
 
 src/ui/columneditor.o: src/ui/columneditor.cpp.o
@@ -696,7 +696,7 @@ src/ui/columneditor.o: src/ui/columneditor.cpp.o
 
 # target to build an object file
 src/ui/columneditor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/columneditor.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o
 .PHONY : src/ui/columneditor.cpp.o
 
 src/ui/columneditor.i: src/ui/columneditor.cpp.i
@@ -704,7 +704,7 @@ src/ui/columneditor.i: src/ui/columneditor.cpp.i
 
 # target to preprocess a source file
 src/ui/columneditor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/columneditor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.i
 .PHONY : src/ui/columneditor.cpp.i
 
 src/ui/columneditor.s: src/ui/columneditor.cpp.s
@@ -712,7 +712,7 @@ src/ui/columneditor.s: src/ui/columneditor.cpp.s
 
 # target to generate assembly for a file
 src/ui/columneditor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/columneditor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.s
 .PHONY : src/ui/columneditor.cpp.s
 
 src/ui/commandpalette.o: src/ui/commandpalette.cpp.o
@@ -720,7 +720,7 @@ src/ui/commandpalette.o: src/ui/commandpalette.cpp.o
 
 # target to build an object file
 src/ui/commandpalette.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/commandpalette.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o
 .PHONY : src/ui/commandpalette.cpp.o
 
 src/ui/commandpalette.i: src/ui/commandpalette.cpp.i
@@ -728,7 +728,7 @@ src/ui/commandpalette.i: src/ui/commandpalette.cpp.i
 
 # target to preprocess a source file
 src/ui/commandpalette.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/commandpalette.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.i
 .PHONY : src/ui/commandpalette.cpp.i
 
 src/ui/commandpalette.s: src/ui/commandpalette.cpp.s
@@ -736,7 +736,7 @@ src/ui/commandpalette.s: src/ui/commandpalette.cpp.s
 
 # target to generate assembly for a file
 src/ui/commandpalette.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/commandpalette.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.s
 .PHONY : src/ui/commandpalette.cpp.s
 
 src/ui/completionpopup.o: src/ui/completionpopup.cpp.o
@@ -744,7 +744,7 @@ src/ui/completionpopup.o: src/ui/completionpopup.cpp.o
 
 # target to build an object file
 src/ui/completionpopup.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/completionpopup.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o
 .PHONY : src/ui/completionpopup.cpp.o
 
 src/ui/completionpopup.i: src/ui/completionpopup.cpp.i
@@ -752,7 +752,7 @@ src/ui/completionpopup.i: src/ui/completionpopup.cpp.i
 
 # target to preprocess a source file
 src/ui/completionpopup.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/completionpopup.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.i
 .PHONY : src/ui/completionpopup.cpp.i
 
 src/ui/completionpopup.s: src/ui/completionpopup.cpp.s
@@ -760,7 +760,7 @@ src/ui/completionpopup.s: src/ui/completionpopup.cpp.s
 
 # target to generate assembly for a file
 src/ui/completionpopup.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/completionpopup.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.s
 .PHONY : src/ui/completionpopup.cpp.s
 
 src/ui/documentmap.o: src/ui/documentmap.cpp.o
@@ -768,7 +768,7 @@ src/ui/documentmap.o: src/ui/documentmap.cpp.o
 
 # target to build an object file
 src/ui/documentmap.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o
 .PHONY : src/ui/documentmap.cpp.o
 
 src/ui/documentmap.i: src/ui/documentmap.cpp.i
@@ -776,7 +776,7 @@ src/ui/documentmap.i: src/ui/documentmap.cpp.i
 
 # target to preprocess a source file
 src/ui/documentmap.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.i
 .PHONY : src/ui/documentmap.cpp.i
 
 src/ui/documentmap.s: src/ui/documentmap.cpp.s
@@ -784,7 +784,7 @@ src/ui/documentmap.s: src/ui/documentmap.cpp.s
 
 # target to generate assembly for a file
 src/ui/documentmap.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/documentmap.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.s
 .PHONY : src/ui/documentmap.cpp.s
 
 src/ui/editor.o: src/ui/editor.cpp.o
@@ -792,7 +792,7 @@ src/ui/editor.o: src/ui/editor.cpp.o
 
 # target to build an object file
 src/ui/editor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o
 .PHONY : src/ui/editor.cpp.o
 
 src/ui/editor.i: src/ui/editor.cpp.i
@@ -800,7 +800,7 @@ src/ui/editor.i: src/ui/editor.cpp.i
 
 # target to preprocess a source file
 src/ui/editor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/editor.cpp.i
 .PHONY : src/ui/editor.cpp.i
 
 src/ui/editor.s: src/ui/editor.cpp.s
@@ -808,7 +808,7 @@ src/ui/editor.s: src/ui/editor.cpp.s
 
 # target to generate assembly for a file
 src/ui/editor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/editor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/editor.cpp.s
 .PHONY : src/ui/editor.cpp.s
 
 src/ui/endpointconfigdialog.o: src/ui/endpointconfigdialog.cpp.o
@@ -816,7 +816,7 @@ src/ui/endpointconfigdialog.o: src/ui/endpointconfigdialog.cpp.o
 
 # target to build an object file
 src/ui/endpointconfigdialog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/endpointconfigdialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o
 .PHONY : src/ui/endpointconfigdialog.cpp.o
 
 src/ui/endpointconfigdialog.i: src/ui/endpointconfigdialog.cpp.i
@@ -824,7 +824,7 @@ src/ui/endpointconfigdialog.i: src/ui/endpointconfigdialog.cpp.i
 
 # target to preprocess a source file
 src/ui/endpointconfigdialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/endpointconfigdialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.i
 .PHONY : src/ui/endpointconfigdialog.cpp.i
 
 src/ui/endpointconfigdialog.s: src/ui/endpointconfigdialog.cpp.s
@@ -832,7 +832,7 @@ src/ui/endpointconfigdialog.s: src/ui/endpointconfigdialog.cpp.s
 
 # target to generate assembly for a file
 src/ui/endpointconfigdialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/endpointconfigdialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.s
 .PHONY : src/ui/endpointconfigdialog.cpp.s
 
 src/ui/evalresultwidget.o: src/ui/evalresultwidget.cpp.o
@@ -840,7 +840,7 @@ src/ui/evalresultwidget.o: src/ui/evalresultwidget.cpp.o
 
 # target to build an object file
 src/ui/evalresultwidget.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/evalresultwidget.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o
 .PHONY : src/ui/evalresultwidget.cpp.o
 
 src/ui/evalresultwidget.i: src/ui/evalresultwidget.cpp.i
@@ -848,7 +848,7 @@ src/ui/evalresultwidget.i: src/ui/evalresultwidget.cpp.i
 
 # target to preprocess a source file
 src/ui/evalresultwidget.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/evalresultwidget.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.i
 .PHONY : src/ui/evalresultwidget.cpp.i
 
 src/ui/evalresultwidget.s: src/ui/evalresultwidget.cpp.s
@@ -856,7 +856,7 @@ src/ui/evalresultwidget.s: src/ui/evalresultwidget.cpp.s
 
 # target to generate assembly for a file
 src/ui/evalresultwidget.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/evalresultwidget.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.s
 .PHONY : src/ui/evalresultwidget.cpp.s
 
 src/ui/fileexplorer.o: src/ui/fileexplorer.cpp.o
@@ -864,7 +864,7 @@ src/ui/fileexplorer.o: src/ui/fileexplorer.cpp.o
 
 # target to build an object file
 src/ui/fileexplorer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/fileexplorer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o
 .PHONY : src/ui/fileexplorer.cpp.o
 
 src/ui/fileexplorer.i: src/ui/fileexplorer.cpp.i
@@ -872,7 +872,7 @@ src/ui/fileexplorer.i: src/ui/fileexplorer.cpp.i
 
 # target to preprocess a source file
 src/ui/fileexplorer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/fileexplorer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.i
 .PHONY : src/ui/fileexplorer.cpp.i
 
 src/ui/fileexplorer.s: src/ui/fileexplorer.cpp.s
@@ -880,7 +880,7 @@ src/ui/fileexplorer.s: src/ui/fileexplorer.cpp.s
 
 # target to generate assembly for a file
 src/ui/fileexplorer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/fileexplorer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.s
 .PHONY : src/ui/fileexplorer.cpp.s
 
 src/ui/functionlist.o: src/ui/functionlist.cpp.o
@@ -888,7 +888,7 @@ src/ui/functionlist.o: src/ui/functionlist.cpp.o
 
 # target to build an object file
 src/ui/functionlist.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o
 .PHONY : src/ui/functionlist.cpp.o
 
 src/ui/functionlist.i: src/ui/functionlist.cpp.i
@@ -896,7 +896,7 @@ src/ui/functionlist.i: src/ui/functionlist.cpp.i
 
 # target to preprocess a source file
 src/ui/functionlist.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.i
 .PHONY : src/ui/functionlist.cpp.i
 
 src/ui/functionlist.s: src/ui/functionlist.cpp.s
@@ -904,7 +904,7 @@ src/ui/functionlist.s: src/ui/functionlist.cpp.s
 
 # target to generate assembly for a file
 src/ui/functionlist.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/functionlist.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.s
 .PHONY : src/ui/functionlist.cpp.s
 
 src/ui/gitdiffviewer.o: src/ui/gitdiffviewer.cpp.o
@@ -912,7 +912,7 @@ src/ui/gitdiffviewer.o: src/ui/gitdiffviewer.cpp.o
 
 # target to build an object file
 src/ui/gitdiffviewer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/gitdiffviewer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o
 .PHONY : src/ui/gitdiffviewer.cpp.o
 
 src/ui/gitdiffviewer.i: src/ui/gitdiffviewer.cpp.i
@@ -920,7 +920,7 @@ src/ui/gitdiffviewer.i: src/ui/gitdiffviewer.cpp.i
 
 # target to preprocess a source file
 src/ui/gitdiffviewer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/gitdiffviewer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.i
 .PHONY : src/ui/gitdiffviewer.cpp.i
 
 src/ui/gitdiffviewer.s: src/ui/gitdiffviewer.cpp.s
@@ -928,7 +928,7 @@ src/ui/gitdiffviewer.s: src/ui/gitdiffviewer.cpp.s
 
 # target to generate assembly for a file
 src/ui/gitdiffviewer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/gitdiffviewer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.s
 .PHONY : src/ui/gitdiffviewer.cpp.s
 
 src/ui/gitstatusdelegate.o: src/ui/gitstatusdelegate.cpp.o
@@ -936,7 +936,7 @@ src/ui/gitstatusdelegate.o: src/ui/gitstatusdelegate.cpp.o
 
 # target to build an object file
 src/ui/gitstatusdelegate.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/gitstatusdelegate.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o
 .PHONY : src/ui/gitstatusdelegate.cpp.o
 
 src/ui/gitstatusdelegate.i: src/ui/gitstatusdelegate.cpp.i
@@ -944,7 +944,7 @@ src/ui/gitstatusdelegate.i: src/ui/gitstatusdelegate.cpp.i
 
 # target to preprocess a source file
 src/ui/gitstatusdelegate.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/gitstatusdelegate.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.i
 .PHONY : src/ui/gitstatusdelegate.cpp.i
 
 src/ui/gitstatusdelegate.s: src/ui/gitstatusdelegate.cpp.s
@@ -952,7 +952,7 @@ src/ui/gitstatusdelegate.s: src/ui/gitstatusdelegate.cpp.s
 
 # target to generate assembly for a file
 src/ui/gitstatusdelegate.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/gitstatusdelegate.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.s
 .PHONY : src/ui/gitstatusdelegate.cpp.s
 
 src/ui/hexviewer.o: src/ui/hexviewer.cpp.o
@@ -960,7 +960,7 @@ src/ui/hexviewer.o: src/ui/hexviewer.cpp.o
 
 # target to build an object file
 src/ui/hexviewer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/hexviewer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o
 .PHONY : src/ui/hexviewer.cpp.o
 
 src/ui/hexviewer.i: src/ui/hexviewer.cpp.i
@@ -968,7 +968,7 @@ src/ui/hexviewer.i: src/ui/hexviewer.cpp.i
 
 # target to preprocess a source file
 src/ui/hexviewer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/hexviewer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.i
 .PHONY : src/ui/hexviewer.cpp.i
 
 src/ui/hexviewer.s: src/ui/hexviewer.cpp.s
@@ -976,7 +976,7 @@ src/ui/hexviewer.s: src/ui/hexviewer.cpp.s
 
 # target to generate assembly for a file
 src/ui/hexviewer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/hexviewer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.s
 .PHONY : src/ui/hexviewer.cpp.s
 
 src/ui/incrementalsearchbar.o: src/ui/incrementalsearchbar.cpp.o
@@ -984,7 +984,7 @@ src/ui/incrementalsearchbar.o: src/ui/incrementalsearchbar.cpp.o
 
 # target to build an object file
 src/ui/incrementalsearchbar.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o
 .PHONY : src/ui/incrementalsearchbar.cpp.o
 
 src/ui/incrementalsearchbar.i: src/ui/incrementalsearchbar.cpp.i
@@ -992,7 +992,7 @@ src/ui/incrementalsearchbar.i: src/ui/incrementalsearchbar.cpp.i
 
 # target to preprocess a source file
 src/ui/incrementalsearchbar.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.i
 .PHONY : src/ui/incrementalsearchbar.cpp.i
 
 src/ui/incrementalsearchbar.s: src/ui/incrementalsearchbar.cpp.s
@@ -1000,7 +1000,7 @@ src/ui/incrementalsearchbar.s: src/ui/incrementalsearchbar.cpp.s
 
 # target to generate assembly for a file
 src/ui/incrementalsearchbar.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.s
 .PHONY : src/ui/incrementalsearchbar.cpp.s
 
 src/ui/linenumberarea.o: src/ui/linenumberarea.cpp.o
@@ -1008,7 +1008,7 @@ src/ui/linenumberarea.o: src/ui/linenumberarea.cpp.o
 
 # target to build an object file
 src/ui/linenumberarea.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o
 .PHONY : src/ui/linenumberarea.cpp.o
 
 src/ui/linenumberarea.i: src/ui/linenumberarea.cpp.i
@@ -1016,7 +1016,7 @@ src/ui/linenumberarea.i: src/ui/linenumberarea.cpp.i
 
 # target to preprocess a source file
 src/ui/linenumberarea.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.i
 .PHONY : src/ui/linenumberarea.cpp.i
 
 src/ui/linenumberarea.s: src/ui/linenumberarea.cpp.s
@@ -1024,7 +1024,7 @@ src/ui/linenumberarea.s: src/ui/linenumberarea.cpp.s
 
 # target to generate assembly for a file
 src/ui/linenumberarea.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/linenumberarea.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.s
 .PHONY : src/ui/linenumberarea.cpp.s
 
 src/ui/lspbridge.o: src/ui/lspbridge.cpp.o
@@ -1032,7 +1032,7 @@ src/ui/lspbridge.o: src/ui/lspbridge.cpp.o
 
 # target to build an object file
 src/ui/lspbridge.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o
 .PHONY : src/ui/lspbridge.cpp.o
 
 src/ui/lspbridge.i: src/ui/lspbridge.cpp.i
@@ -1040,7 +1040,7 @@ src/ui/lspbridge.i: src/ui/lspbridge.cpp.i
 
 # target to preprocess a source file
 src/ui/lspbridge.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.i
 .PHONY : src/ui/lspbridge.cpp.i
 
 src/ui/lspbridge.s: src/ui/lspbridge.cpp.s
@@ -1048,7 +1048,7 @@ src/ui/lspbridge.s: src/ui/lspbridge.cpp.s
 
 # target to generate assembly for a file
 src/ui/lspbridge.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/lspbridge.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.s
 .PHONY : src/ui/lspbridge.cpp.s
 
 src/ui/macrodialog.o: src/ui/macrodialog.cpp.o
@@ -1056,7 +1056,7 @@ src/ui/macrodialog.o: src/ui/macrodialog.cpp.o
 
 # target to build an object file
 src/ui/macrodialog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o
 .PHONY : src/ui/macrodialog.cpp.o
 
 src/ui/macrodialog.i: src/ui/macrodialog.cpp.i
@@ -1064,7 +1064,7 @@ src/ui/macrodialog.i: src/ui/macrodialog.cpp.i
 
 # target to preprocess a source file
 src/ui/macrodialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.i
 .PHONY : src/ui/macrodialog.cpp.i
 
 src/ui/macrodialog.s: src/ui/macrodialog.cpp.s
@@ -1072,7 +1072,7 @@ src/ui/macrodialog.s: src/ui/macrodialog.cpp.s
 
 # target to generate assembly for a file
 src/ui/macrodialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/macrodialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.s
 .PHONY : src/ui/macrodialog.cpp.s
 
 src/ui/mainwindow.o: src/ui/mainwindow.cpp.o
@@ -1080,7 +1080,7 @@ src/ui/mainwindow.o: src/ui/mainwindow.cpp.o
 
 # target to build an object file
 src/ui/mainwindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o
 .PHONY : src/ui/mainwindow.cpp.o
 
 src/ui/mainwindow.i: src/ui/mainwindow.cpp.i
@@ -1088,7 +1088,7 @@ src/ui/mainwindow.i: src/ui/mainwindow.cpp.i
 
 # target to preprocess a source file
 src/ui/mainwindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.i
 .PHONY : src/ui/mainwindow.cpp.i
 
 src/ui/mainwindow.s: src/ui/mainwindow.cpp.s
@@ -1096,7 +1096,7 @@ src/ui/mainwindow.s: src/ui/mainwindow.cpp.s
 
 # target to generate assembly for a file
 src/ui/mainwindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/mainwindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.s
 .PHONY : src/ui/mainwindow.cpp.s
 
 src/ui/mainwindow_extended.o: src/ui/mainwindow_extended.cpp.o
@@ -1104,7 +1104,7 @@ src/ui/mainwindow_extended.o: src/ui/mainwindow_extended.cpp.o
 
 # target to build an object file
 src/ui/mainwindow_extended.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o
 .PHONY : src/ui/mainwindow_extended.cpp.o
 
 src/ui/mainwindow_extended.i: src/ui/mainwindow_extended.cpp.i
@@ -1112,7 +1112,7 @@ src/ui/mainwindow_extended.i: src/ui/mainwindow_extended.cpp.i
 
 # target to preprocess a source file
 src/ui/mainwindow_extended.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.i
 .PHONY : src/ui/mainwindow_extended.cpp.i
 
 src/ui/mainwindow_extended.s: src/ui/mainwindow_extended.cpp.s
@@ -1120,7 +1120,7 @@ src/ui/mainwindow_extended.s: src/ui/mainwindow_extended.cpp.s
 
 # target to generate assembly for a file
 src/ui/mainwindow_extended.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.s
 .PHONY : src/ui/mainwindow_extended.cpp.s
 
 src/ui/markdownpreview.o: src/ui/markdownpreview.cpp.o
@@ -1128,7 +1128,7 @@ src/ui/markdownpreview.o: src/ui/markdownpreview.cpp.o
 
 # target to build an object file
 src/ui/markdownpreview.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/markdownpreview.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o
 .PHONY : src/ui/markdownpreview.cpp.o
 
 src/ui/markdownpreview.i: src/ui/markdownpreview.cpp.i
@@ -1136,7 +1136,7 @@ src/ui/markdownpreview.i: src/ui/markdownpreview.cpp.i
 
 # target to preprocess a source file
 src/ui/markdownpreview.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/markdownpreview.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.i
 .PHONY : src/ui/markdownpreview.cpp.i
 
 src/ui/markdownpreview.s: src/ui/markdownpreview.cpp.s
@@ -1144,7 +1144,7 @@ src/ui/markdownpreview.s: src/ui/markdownpreview.cpp.s
 
 # target to generate assembly for a file
 src/ui/markdownpreview.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/markdownpreview.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.s
 .PHONY : src/ui/markdownpreview.cpp.s
 
 src/ui/notificationbar.o: src/ui/notificationbar.cpp.o
@@ -1152,7 +1152,7 @@ src/ui/notificationbar.o: src/ui/notificationbar.cpp.o
 
 # target to build an object file
 src/ui/notificationbar.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o
 .PHONY : src/ui/notificationbar.cpp.o
 
 src/ui/notificationbar.i: src/ui/notificationbar.cpp.i
@@ -1160,7 +1160,7 @@ src/ui/notificationbar.i: src/ui/notificationbar.cpp.i
 
 # target to preprocess a source file
 src/ui/notificationbar.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.i
 .PHONY : src/ui/notificationbar.cpp.i
 
 src/ui/notificationbar.s: src/ui/notificationbar.cpp.s
@@ -1168,7 +1168,7 @@ src/ui/notificationbar.s: src/ui/notificationbar.cpp.s
 
 # target to generate assembly for a file
 src/ui/notificationbar.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/notificationbar.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.s
 .PHONY : src/ui/notificationbar.cpp.s
 
 src/ui/preferencesdialog.o: src/ui/preferencesdialog.cpp.o
@@ -1176,7 +1176,7 @@ src/ui/preferencesdialog.o: src/ui/preferencesdialog.cpp.o
 
 # target to build an object file
 src/ui/preferencesdialog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o
 .PHONY : src/ui/preferencesdialog.cpp.o
 
 src/ui/preferencesdialog.i: src/ui/preferencesdialog.cpp.i
@@ -1184,7 +1184,7 @@ src/ui/preferencesdialog.i: src/ui/preferencesdialog.cpp.i
 
 # target to preprocess a source file
 src/ui/preferencesdialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.i
 .PHONY : src/ui/preferencesdialog.cpp.i
 
 src/ui/preferencesdialog.s: src/ui/preferencesdialog.cpp.s
@@ -1192,7 +1192,7 @@ src/ui/preferencesdialog.s: src/ui/preferencesdialog.cpp.s
 
 # target to generate assembly for a file
 src/ui/preferencesdialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/preferencesdialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.s
 .PHONY : src/ui/preferencesdialog.cpp.s
 
 src/ui/recoverydialog.o: src/ui/recoverydialog.cpp.o
@@ -1200,7 +1200,7 @@ src/ui/recoverydialog.o: src/ui/recoverydialog.cpp.o
 
 # target to build an object file
 src/ui/recoverydialog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o
 .PHONY : src/ui/recoverydialog.cpp.o
 
 src/ui/recoverydialog.i: src/ui/recoverydialog.cpp.i
@@ -1208,7 +1208,7 @@ src/ui/recoverydialog.i: src/ui/recoverydialog.cpp.i
 
 # target to preprocess a source file
 src/ui/recoverydialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.i
 .PHONY : src/ui/recoverydialog.cpp.i
 
 src/ui/recoverydialog.s: src/ui/recoverydialog.cpp.s
@@ -1216,7 +1216,7 @@ src/ui/recoverydialog.s: src/ui/recoverydialog.cpp.s
 
 # target to generate assembly for a file
 src/ui/recoverydialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/recoverydialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.s
 .PHONY : src/ui/recoverydialog.cpp.s
 
 src/ui/remoteconnectiondialog.o: src/ui/remoteconnectiondialog.cpp.o
@@ -1224,7 +1224,7 @@ src/ui/remoteconnectiondialog.o: src/ui/remoteconnectiondialog.cpp.o
 
 # target to build an object file
 src/ui/remoteconnectiondialog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o
 .PHONY : src/ui/remoteconnectiondialog.cpp.o
 
 src/ui/remoteconnectiondialog.i: src/ui/remoteconnectiondialog.cpp.i
@@ -1232,7 +1232,7 @@ src/ui/remoteconnectiondialog.i: src/ui/remoteconnectiondialog.cpp.i
 
 # target to preprocess a source file
 src/ui/remoteconnectiondialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.i
 .PHONY : src/ui/remoteconnectiondialog.cpp.i
 
 src/ui/remoteconnectiondialog.s: src/ui/remoteconnectiondialog.cpp.s
@@ -1240,7 +1240,7 @@ src/ui/remoteconnectiondialog.s: src/ui/remoteconnectiondialog.cpp.s
 
 # target to generate assembly for a file
 src/ui/remoteconnectiondialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.s
 .PHONY : src/ui/remoteconnectiondialog.cpp.s
 
 src/ui/searchdialog.o: src/ui/searchdialog.cpp.o
@@ -1248,7 +1248,7 @@ src/ui/searchdialog.o: src/ui/searchdialog.cpp.o
 
 # target to build an object file
 src/ui/searchdialog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o
 .PHONY : src/ui/searchdialog.cpp.o
 
 src/ui/searchdialog.i: src/ui/searchdialog.cpp.i
@@ -1256,7 +1256,7 @@ src/ui/searchdialog.i: src/ui/searchdialog.cpp.i
 
 # target to preprocess a source file
 src/ui/searchdialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.i
 .PHONY : src/ui/searchdialog.cpp.i
 
 src/ui/searchdialog.s: src/ui/searchdialog.cpp.s
@@ -1264,7 +1264,7 @@ src/ui/searchdialog.s: src/ui/searchdialog.cpp.s
 
 # target to generate assembly for a file
 src/ui/searchdialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.s
 .PHONY : src/ui/searchdialog.cpp.s
 
 src/ui/searchresultspanel.o: src/ui/searchresultspanel.cpp.o
@@ -1272,7 +1272,7 @@ src/ui/searchresultspanel.o: src/ui/searchresultspanel.cpp.o
 
 # target to build an object file
 src/ui/searchresultspanel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o
 .PHONY : src/ui/searchresultspanel.cpp.o
 
 src/ui/searchresultspanel.i: src/ui/searchresultspanel.cpp.i
@@ -1280,7 +1280,7 @@ src/ui/searchresultspanel.i: src/ui/searchresultspanel.cpp.i
 
 # target to preprocess a source file
 src/ui/searchresultspanel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.i
 .PHONY : src/ui/searchresultspanel.cpp.i
 
 src/ui/searchresultspanel.s: src/ui/searchresultspanel.cpp.s
@@ -1288,7 +1288,7 @@ src/ui/searchresultspanel.s: src/ui/searchresultspanel.cpp.s
 
 # target to generate assembly for a file
 src/ui/searchresultspanel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.s
 .PHONY : src/ui/searchresultspanel.cpp.s
 
 src/ui/statusbar.o: src/ui/statusbar.cpp.o
@@ -1296,7 +1296,7 @@ src/ui/statusbar.o: src/ui/statusbar.cpp.o
 
 # target to build an object file
 src/ui/statusbar.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/statusbar.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o
 .PHONY : src/ui/statusbar.cpp.o
 
 src/ui/statusbar.i: src/ui/statusbar.cpp.i
@@ -1304,7 +1304,7 @@ src/ui/statusbar.i: src/ui/statusbar.cpp.i
 
 # target to preprocess a source file
 src/ui/statusbar.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/statusbar.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.i
 .PHONY : src/ui/statusbar.cpp.i
 
 src/ui/statusbar.s: src/ui/statusbar.cpp.s
@@ -1312,7 +1312,7 @@ src/ui/statusbar.s: src/ui/statusbar.cpp.s
 
 # target to generate assembly for a file
 src/ui/statusbar.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/statusbar.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.s
 .PHONY : src/ui/statusbar.cpp.s
 
 src/ui/tabwidget.o: src/ui/tabwidget.cpp.o
@@ -1320,7 +1320,7 @@ src/ui/tabwidget.o: src/ui/tabwidget.cpp.o
 
 # target to build an object file
 src/ui/tabwidget.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/tabwidget.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o
 .PHONY : src/ui/tabwidget.cpp.o
 
 src/ui/tabwidget.i: src/ui/tabwidget.cpp.i
@@ -1328,7 +1328,7 @@ src/ui/tabwidget.i: src/ui/tabwidget.cpp.i
 
 # target to preprocess a source file
 src/ui/tabwidget.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/tabwidget.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.i
 .PHONY : src/ui/tabwidget.cpp.i
 
 src/ui/tabwidget.s: src/ui/tabwidget.cpp.s
@@ -1336,7 +1336,7 @@ src/ui/tabwidget.s: src/ui/tabwidget.cpp.s
 
 # target to generate assembly for a file
 src/ui/tabwidget.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/tabwidget.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.s
 .PHONY : src/ui/tabwidget.cpp.s
 
 src/ui/terminalwidget.o: src/ui/terminalwidget.cpp.o
@@ -1344,7 +1344,7 @@ src/ui/terminalwidget.o: src/ui/terminalwidget.cpp.o
 
 # target to build an object file
 src/ui/terminalwidget.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/terminalwidget.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o
 .PHONY : src/ui/terminalwidget.cpp.o
 
 src/ui/terminalwidget.i: src/ui/terminalwidget.cpp.i
@@ -1352,7 +1352,7 @@ src/ui/terminalwidget.i: src/ui/terminalwidget.cpp.i
 
 # target to preprocess a source file
 src/ui/terminalwidget.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/terminalwidget.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.i
 .PHONY : src/ui/terminalwidget.cpp.i
 
 src/ui/terminalwidget.s: src/ui/terminalwidget.cpp.s
@@ -1360,7 +1360,7 @@ src/ui/terminalwidget.s: src/ui/terminalwidget.cpp.s
 
 # target to generate assembly for a file
 src/ui/terminalwidget.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/terminalwidget.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.s
 .PHONY : src/ui/terminalwidget.cpp.s
 
 src/ui/theme.o: src/ui/theme.cpp.o
@@ -1368,7 +1368,7 @@ src/ui/theme.o: src/ui/theme.cpp.o
 
 # target to build an object file
 src/ui/theme.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/theme.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o
 .PHONY : src/ui/theme.cpp.o
 
 src/ui/theme.i: src/ui/theme.cpp.i
@@ -1376,7 +1376,7 @@ src/ui/theme.i: src/ui/theme.cpp.i
 
 # target to preprocess a source file
 src/ui/theme.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/theme.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/theme.cpp.i
 .PHONY : src/ui/theme.cpp.i
 
 src/ui/theme.s: src/ui/theme.cpp.s
@@ -1384,7 +1384,7 @@ src/ui/theme.s: src/ui/theme.cpp.s
 
 # target to generate assembly for a file
 src/ui/theme.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/theme.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/theme.cpp.s
 .PHONY : src/ui/theme.cpp.s
 
 src/ui/themeeditor.o: src/ui/themeeditor.cpp.o
@@ -1392,7 +1392,7 @@ src/ui/themeeditor.o: src/ui/themeeditor.cpp.o
 
 # target to build an object file
 src/ui/themeeditor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/themeeditor.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o
 .PHONY : src/ui/themeeditor.cpp.o
 
 src/ui/themeeditor.i: src/ui/themeeditor.cpp.i
@@ -1400,7 +1400,7 @@ src/ui/themeeditor.i: src/ui/themeeditor.cpp.i
 
 # target to preprocess a source file
 src/ui/themeeditor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/themeeditor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.i
 .PHONY : src/ui/themeeditor.cpp.i
 
 src/ui/themeeditor.s: src/ui/themeeditor.cpp.s
@@ -1408,7 +1408,7 @@ src/ui/themeeditor.s: src/ui/themeeditor.cpp.s
 
 # target to generate assembly for a file
 src/ui/themeeditor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/themeeditor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.s
 .PHONY : src/ui/themeeditor.cpp.s
 
 src/ui/toolbarmanager.o: src/ui/toolbarmanager.cpp.o
@@ -1416,7 +1416,7 @@ src/ui/toolbarmanager.o: src/ui/toolbarmanager.cpp.o
 
 # target to build an object file
 src/ui/toolbarmanager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o
 .PHONY : src/ui/toolbarmanager.cpp.o
 
 src/ui/toolbarmanager.i: src/ui/toolbarmanager.cpp.i
@@ -1424,7 +1424,7 @@ src/ui/toolbarmanager.i: src/ui/toolbarmanager.cpp.i
 
 # target to preprocess a source file
 src/ui/toolbarmanager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.i
 .PHONY : src/ui/toolbarmanager.cpp.i
 
 src/ui/toolbarmanager.s: src/ui/toolbarmanager.cpp.s
@@ -1432,7 +1432,7 @@ src/ui/toolbarmanager.s: src/ui/toolbarmanager.cpp.s
 
 # target to generate assembly for a file
 src/ui/toolbarmanager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.s
 .PHONY : src/ui/toolbarmanager.cpp.s
 
 src/ui/validationpanel.o: src/ui/validationpanel.cpp.o
@@ -1440,7 +1440,7 @@ src/ui/validationpanel.o: src/ui/validationpanel.cpp.o
 
 # target to build an object file
 src/ui/validationpanel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o
 .PHONY : src/ui/validationpanel.cpp.o
 
 src/ui/validationpanel.i: src/ui/validationpanel.cpp.i
@@ -1448,7 +1448,7 @@ src/ui/validationpanel.i: src/ui/validationpanel.cpp.i
 
 # target to preprocess a source file
 src/ui/validationpanel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.i
 .PHONY : src/ui/validationpanel.cpp.i
 
 src/ui/validationpanel.s: src/ui/validationpanel.cpp.s
@@ -1456,7 +1456,7 @@ src/ui/validationpanel.s: src/ui/validationpanel.cpp.s
 
 # target to generate assembly for a file
 src/ui/validationpanel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.s
 .PHONY : src/ui/validationpanel.cpp.s
 
 src/utils/fileutils.o: src/utils/fileutils.cpp.o
@@ -1464,7 +1464,7 @@ src/utils/fileutils.o: src/utils/fileutils.cpp.o
 
 # target to build an object file
 src/utils/fileutils.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o
 .PHONY : src/utils/fileutils.cpp.o
 
 src/utils/fileutils.i: src/utils/fileutils.cpp.i
@@ -1472,7 +1472,7 @@ src/utils/fileutils.i: src/utils/fileutils.cpp.i
 
 # target to preprocess a source file
 src/utils/fileutils.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.i
 .PHONY : src/utils/fileutils.cpp.i
 
 src/utils/fileutils.s: src/utils/fileutils.cpp.s
@@ -1480,7 +1480,7 @@ src/utils/fileutils.s: src/utils/fileutils.cpp.s
 
 # target to generate assembly for a file
 src/utils/fileutils.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.s
 .PHONY : src/utils/fileutils.cpp.s
 
 src/utils/settings.o: src/utils/settings.cpp.o
@@ -1488,7 +1488,7 @@ src/utils/settings.o: src/utils/settings.cpp.o
 
 # target to build an object file
 src/utils/settings.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o
 .PHONY : src/utils/settings.cpp.o
 
 src/utils/settings.i: src/utils/settings.cpp.i
@@ -1496,7 +1496,7 @@ src/utils/settings.i: src/utils/settings.cpp.i
 
 # target to preprocess a source file
 src/utils/settings.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/utils/settings.cpp.i
 .PHONY : src/utils/settings.cpp.i
 
 src/utils/settings.s: src/utils/settings.cpp.s
@@ -1504,7 +1504,7 @@ src/utils/settings.s: src/utils/settings.cpp.s
 
 # target to generate assembly for a file
 src/utils/settings.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/utils/settings.cpp.s
 .PHONY : src/utils/settings.cpp.s
 
 # Help Target
@@ -1519,14 +1519,14 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... olive-notepad_autogen"
-	@echo "... olive-notepad"
-	@echo "... olive-notepad_autogen/3YJK5W5UP7/qrc_resources.o"
-	@echo "... olive-notepad_autogen/3YJK5W5UP7/qrc_resources.i"
-	@echo "... olive-notepad_autogen/3YJK5W5UP7/qrc_resources.s"
-	@echo "... olive-notepad_autogen/mocs_compilation.o"
-	@echo "... olive-notepad_autogen/mocs_compilation.i"
-	@echo "... olive-notepad_autogen/mocs_compilation.s"
+	@echo "... prime-edit_autogen"
+	@echo "... prime-edit"
+	@echo "... prime-edit_autogen/3YJK5W5UP7/qrc_resources.o"
+	@echo "... prime-edit_autogen/3YJK5W5UP7/qrc_resources.i"
+	@echo "... prime-edit_autogen/3YJK5W5UP7/qrc_resources.s"
+	@echo "... prime-edit_autogen/mocs_compilation.o"
+	@echo "... prime-edit_autogen/mocs_compilation.i"
+	@echo "... prime-edit_autogen/mocs_compilation.s"
 	@echo "... src/core/charsetdetector.o"
 	@echo "... src/core/charsetdetector.i"
 	@echo "... src/core/charsetdetector.s"

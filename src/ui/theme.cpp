@@ -152,7 +152,7 @@ Theme Theme::defaultDark()
 {
     Theme t;
     t.name = "Default Dark";
-    t.author = "Olive Notepad";
+    t.author = "PrimeEdit";
     t.isDark = true;
 
     t.background = QColor("#1e1e1e");
@@ -205,7 +205,7 @@ Theme Theme::defaultLight()
 {
     Theme t;
     t.name = "Default Light";
-    t.author = "Olive Notepad";
+    t.author = "PrimeEdit";
     t.isDark = false;
 
     t.background = QColor("#ffffff");
@@ -258,7 +258,7 @@ Theme Theme::olive()
 {
     Theme t;
     t.name = "Olive";
-    t.author = "Olive Notepad";
+    t.author = "PrimeEdit";
     t.isDark = false;
 
     t.background = QColor("#f8f9f5");

@@ -167,13 +167,13 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/olive-notepad_autogen.dir/AutogenInfo.json"
-  "CMakeFiles/olive-notepad_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json"
+  "CMakeFiles/prime-edit_autogen.dir/AutogenInfo.json"
+  "CMakeFiles/prime-edit_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/olive-notepad.dir/DependInfo.cmake"
-  "CMakeFiles/olive-notepad_autogen.dir/DependInfo.cmake"
+  "CMakeFiles/prime-edit.dir/DependInfo.cmake"
+  "CMakeFiles/prime-edit_autogen.dir/DependInfo.cmake"
   )

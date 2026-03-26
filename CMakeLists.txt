@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(OliveNotepad VERSION 1.0.0 LANGUAGES CXX)
+project(PrimeEdit VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -158,7 +158,7 @@ set(RESOURCES
 )
 
 # Create executable
-add_executable(olive-notepad
+add_executable(prime-edit
     src/main.cpp
     ${CORE_SOURCES}
     ${UI_SOURCES}
@@ -168,13 +168,13 @@ add_executable(olive-notepad
     ${RESOURCES}
 )
 
-set_target_properties(olive-notepad PROPERTIES OUTPUT_NAME "Olive Notepad")
+set_target_properties(prime-edit PROPERTIES OUTPUT_NAME "PrimeEdit")
 
-target_include_directories(olive-notepad PRIVATE
+target_include_directories(prime-edit PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(olive-notepad PRIVATE
+target_link_libraries(prime-edit PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
@@ -186,25 +186,25 @@ target_link_libraries(olive-notepad PRIVATE
 # Optional ICU support for enhanced charset detection
 find_package(ICU QUIET COMPONENTS uc data)
 if(ICU_FOUND)
-    target_link_libraries(olive-notepad PRIVATE ICU::uc ICU::data)
-    target_compile_definitions(olive-notepad PRIVATE HAVE_ICU=1)
+    target_link_libraries(prime-edit PRIVATE ICU::uc ICU::data)
+    target_compile_definitions(prime-edit PRIVATE HAVE_ICU=1)
 endif()
 
 # Install rules
-install(TARGETS olive-notepad
+install(TARGETS prime-edit
     RUNTIME DESTINATION bin
 )
 
-install(FILES resources/olive-notepad.desktop
+install(FILES resources/prime-edit.desktop
     DESTINATION share/applications
 )
 
 install(FILES resources/icons/notepad-supreme.svg
     DESTINATION share/icons/hicolor/scalable/apps
-    RENAME olive-notepad.svg
+    RENAME prime-edit.svg
 )
 
-install(FILES resources/icons/olive_notepad_icon.png
+install(FILES resources/icons/prime_edit_icon.png
     DESTINATION share/icons/hicolor/256x256/apps
-    RENAME olive-notepad.png
+    RENAME prime-edit.png
 )

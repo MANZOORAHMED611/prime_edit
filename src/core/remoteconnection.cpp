@@ -316,7 +316,7 @@ QString RemoteFileManager::openRemoteFile(const QString &connectionName, const Q
     // Create temporary file
     QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
     QString fileName = QFileInfo(remotePath).fileName();
-    QString localPath = tempDir + "/notepad-supreme-remote-" + fileName;
+    QString localPath = tempDir + "/prime-edit-remote-" + fileName;
 
     // Download file
     conn->downloadFile(remotePath, localPath);
