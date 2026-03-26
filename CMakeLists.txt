@@ -208,3 +208,41 @@ install(FILES resources/icons/prime_edit_icon.png
     DESTINATION share/icons/hicolor/256x256/apps
     RENAME prime-edit.png
 )
+
+# Post-build: install icon + desktop file for dev use
+add_custom_command(TARGET prime-edit POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/resources/icons/prime_edit_icon.png
+        $<TARGET_FILE_DIR:prime-edit>/prime-edit.png
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        $ENV{HOME}/.local/share/icons/hicolor/256x256/apps
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/resources/icons/prime_edit_icon.png
+        $ENV{HOME}/.local/share/icons/hicolor/256x256/apps/prime-edit.png
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        $ENV{HOME}/.local/share/applications
+    COMMENT "Installing PrimeEdit icon and launcher"
+)
+
+# Generate desktop file with absolute paths for dev builds
+file(GENERATE OUTPUT ${CMAKE_BINARY_DIR}/prime-edit.desktop CONTENT
+"[Desktop Entry]
+Name=PrimeEdit
+Comment=The editor for structured knowledge work
+GenericName=Text Editor
+Exec=$<TARGET_FILE:prime-edit> %F
+Icon=$ENV{HOME}/.local/share/icons/hicolor/256x256/apps/prime-edit.png
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;Development;
+StartupWMClass=PrimeEdit
+"
+)
+
+# Copy desktop file to user applications dir after build
+add_custom_command(TARGET prime-edit POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_BINARY_DIR}/prime-edit.desktop
+        $ENV{HOME}/.local/share/applications/prime-edit.desktop
+    COMMENT "Installing PrimeEdit desktop launcher"
+)
