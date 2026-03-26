@@ -65,7 +65,8 @@ Replace the 13 hardcoded `loadXxxRules()` methods with a generic JSON-based load
 ```
 
 Key fields:
-- `keywords`, `types`, `builtins` — word lists, highlighted with different formats
+- `keywords`, `types` — word lists, highlighted with keyword and type formats respectively
+- `builtins` — word list highlighted using `m_typeFormat` (shares type color; no separate builtin format/theme field needed)
 - `singleLineComment`, `multiLineCommentStart/End` — comment patterns
 - `stringDelimiters` — characters that start/end strings
 - `preprocessorPrefix` — line-start prefix for preprocessor directives
@@ -96,7 +97,9 @@ m_stringFormat.setForeground(theme.string);
 
 Connect to theme changes so switching themes rehighlights all documents.
 
-**Files modified:** `src/syntax/highlighter.cpp`
+**Theme change notification:** `ThemeManager` is currently not a `QObject` and has no signals. Make `ThemeManager` inherit `QObject`, add `Q_OBJECT` macro, and emit `themeChanged(const Theme &)` signal from `applyTheme()`. In `Editor`'s constructor, connect `ThemeManager::instance().themeChanged` to a lambda that calls `m_highlighter->setupFormats()` then `m_highlighter->rehighlight()`.
+
+**Files modified:** `src/syntax/highlighter.cpp`, `src/ui/theme.h` (make ThemeManager a QObject, add signal), `src/ui/theme.cpp` (emit signal in applyTheme), `src/ui/editor.cpp` (connect to themeChanged)
 
 ### 1.3 Language Definitions (80+)
 
@@ -122,7 +125,9 @@ Create JSON definitions for all languages in the requirements spec, grouped by c
 
 Each file: `resources/syntax/<language-lowercase>.json`
 
-The 13 existing hardcoded languages (C++, Python, JavaScript, HTML, CSS, JSON, YAML, Markdown, Bash, Rust, Go, Java, SQL) are converted to JSON first — they serve as the template for all others.
+The 13 existing hardcoded languages (C++, Python, JavaScript, HTML, CSS, JSON, YAML, Markdown, Bash, Rust, Go, Java, SQL) are converted to JSON first — they serve as the template for all others. Note: XML currently shares HTML rules via `loadHtmlRules()` and does not have its own method — its JSON definition must be authored from scratch with XML-specific patterns (processing instructions, CDATA, namespaces).
+
+**Resource path convention:** All syntax JSON files are registered under the Qt resource prefix `:/syntax/`, so the loader uses `QFile(":/syntax/" + languageName.toLower() + ".json")`.
 
 ### 1.4 Auto-Detection Improvements
 
@@ -161,17 +166,18 @@ This is a best-effort detector — not a full ICU replacement. Sufficient for No
 
 ### 2.2 Encoding Conversion Hardening
 
-The Encoding class has basic encode/decode. Extend to support all declared encodings using Qt's `QStringEncoder`/`QStringDecoder` (Qt6) or `QTextCodec` (Qt5):
+The Encoding class has basic encode/decode. Extend to support additional encodings.
 
-- Windows-1252, ISO-8859-1 through ISO-8859-15
-- KOI8-R, KOI8-U
-- Shift-JIS, EUC-JP, ISO-2022-JP
-- GB2312, GBK, GB18030
-- Big5
-- UTF-16 LE/BE with and without BOM
-- UTF-32 LE/BE
+**Qt6 constraint:** `QStringEncoder`/`QStringDecoder` natively support only UTF variants + Latin-1 by enum. Named-encoding constructors (e.g., `QStringDecoder("Windows-1252")`) require Qt6 to be built with ICU support, which is not guaranteed. The CMakeLists.txt does not currently link ICU.
 
-**Files modified:** `src/core/encoding.cpp`
+**Approach:** Use `QStringEncoder(const char *name)` with runtime detection — call it and check `isValid()`. If ICU is available, all encodings work. If not, fall back gracefully:
+- Always supported: UTF-8, UTF-8-BOM, UTF-16 LE/BE, UTF-32 LE/BE, Latin-1
+- ICU-dependent: Windows-1252, ISO-8859-2 through 15, KOI8-R/U, Shift-JIS, EUC-JP, GB2312/GBK/GB18030, Big5
+- If an ICU-dependent encoding is requested and unavailable, show a status bar warning "Encoding [X] not available — install libicu-dev" and fall back to Latin-1
+
+Add `find_package(ICU QUIET COMPONENTS uc data)` to CMakeLists.txt. If found, link it. If not, the build still succeeds — just without extended encoding support.
+
+**Files modified:** `src/core/encoding.cpp`, `CMakeLists.txt`
 
 ### 2.3 File Change Monitoring
 
@@ -233,10 +239,15 @@ Add File > Reload from Disk (Ctrl+Shift+R) action:
 - On clean close (all saved), the unsaved cache directory is emptied
 - On crash recovery, unsaved cache files survive and are restored via the Recovery Dialog (2.4)
 
+**Shutdown sequence clarification:**
+- `MainWindow::closeEvent()` calls `Session::saveUnsavedDocuments()` FIRST (persists all unsaved content to the cache directory), THEN calls the normal close flow. The save prompt is suppressed for application quit — only explicit close-tab (Ctrl+W) prompts.
+- The post-exec call in `main.cpp` (`Session::instance().save(&mainWindow)`) handles only the normal session file (tab list, cursor positions for saved files). These are separate concerns.
+- Crash recovery: the existing `DocumentManager::saveRecoveryData()` on 5-second timer handles crash scenarios. The unsaved cache directory and recovery directory are both checked by the Recovery Dialog (2.4) on startup.
+
 **Files modified:**
-- `src/core/session.h` — add unsaved document persistence methods
-- `src/core/session.cpp` — implement save/restore for unsaved documents
-- `src/ui/mainwindow.cpp` — modify `closeEvent()` to persist instead of prompting
+- `src/core/session.h` — add `saveUnsavedDocuments(MainWindow *)`, `restoreUnsavedDocuments(MainWindow *)`
+- `src/core/session.cpp` — implement save/restore for unsaved documents to cache directory
+- `src/ui/mainwindow.cpp` — modify `closeEvent()` to call `Session::saveUnsavedDocuments()` before close, suppress save prompt on app quit
 
 ### 2.7 Print System Hardening
 
@@ -257,12 +268,11 @@ Complete the print system:
 A right-side dock widget showing a zoomed-out view of the entire document.
 
 **Implementation:**
-- `DocumentMapWidget` — a `QPlainTextEdit` subclass in read-only mode
-- Font: 1pt (or smallest legible), no line numbers, no gutter
-- Synced to the active editor's content via `setPlainText(editor->toPlainText())`
-- **Viewport highlight** — draw a semi-transparent rectangle overlay showing which portion of the document is visible in the main editor
-- **Click/drag navigation** — clicking in the map scrolls the main editor to that position
-- **Content sync** — connect to editor's `textChanged` signal (debounced, 500ms)
+- `DocumentMapWidget` — a custom `QWidget` subclass with `paintEvent` (NOT a `QPlainTextEdit` — using a second text edit would re-parse the full document into a new `QTextDocument` and stall the UI on large files)
+- **Rendering:** render the document to a `QPixmap` at reduced scale (each text line becomes ~1px high colored strip based on syntax highlighting). Cache the pixmap, invalidate on text change (debounced 500ms).
+- **Viewport highlight** — draw a semi-transparent blue rectangle overlay showing which portion of the document is visible in the main editor
+- **Click/drag navigation** — clicking in the map calculates the proportional line position and scrolls the main editor
+- **Content sync** — connect to editor's `textChanged` signal, debounce 500ms before regenerating the cached pixmap
 - Toggle via View > Document Map
 
 **New files:** `src/ui/documentmap.h`, `src/ui/documentmap.cpp`
@@ -287,6 +297,12 @@ A left or right side panel showing a tree of functions/classes/methods in the cu
 ### 3.3 Auto-Completion
 
 Extend the existing `CompletionPopup` class with proper completion sources.
+
+**LSP decoupling:** The current `CompletionPopup` accepts `QVector<CompletionItem>` where `CompletionItem` is defined in `src/core/lspclient.h` as an LSP struct. For Phase 2 (non-LSP word completion), decouple the completion item type:
+- Define a new `SimpleCompletionItem` struct in `completionpopup.h`: `{QString label, QString detail, enum Kind {Keyword, Type, Word, Snippet}}`
+- Add `void setItems(const QVector<SimpleCompletionItem> &items)` to `CompletionPopup`
+- Keep the existing LSP `CompletionItem` overload for Phase 3 LSP integration
+- The popup renders both types identically — it only uses label and detail for display
 
 **Sources (in priority order):**
 1. **Language keywords** — from the active language's syntax definition (keywords + types + builtins)
@@ -335,7 +351,7 @@ Wire the existing PluginManager into the application:
 
 3. **Plugin event wiring** — connect DocumentManager signals to PluginManager broadcast methods (fileOpened, fileSaved, fileClosed). Connect Editor signals to textChanged/cursorMoved broadcasts.
 
-**Files modified:** `src/main.cpp`, `src/ui/mainwindow.h`, `src/ui/mainwindow.cpp`
+**Files modified:** `src/main.cpp`, `src/ui/mainwindow.h`, `src/ui/mainwindow.cpp`, `src/core/pluginmanager.cpp` (add default scan directories in constructor)
 
 ---
 
@@ -361,12 +377,14 @@ Wire the existing PluginManager into the application:
 ### Modified Files
 | File | Changes |
 |------|---------|
+| `src/ui/theme.h` | Make ThemeManager a QObject, add themeChanged signal |
+| `src/ui/theme.cpp` | Emit themeChanged from applyTheme() |
 | `src/syntax/highlighter.h` | Remove 13 loadXxxRules, add loadFromDefinition |
 | `src/syntax/highlighter.cpp` | Data-driven syntax loader, theme-aware colors |
 | `src/syntax/languagemanager.h` | Add definitionForLanguage accessor |
 | `src/syntax/languagemanager.cpp` | Register JSON definitions, improved auto-detection |
-| `src/core/encoding.cpp` | Full encoding support (CJK, ISO-8859, KOI8) |
-| `src/core/document.cpp` | Use charset detector, persistent unsaved support |
+| `src/core/encoding.cpp` | Full encoding support with ICU fallback |
+| `src/core/document.cpp` | Use charset detector in load() |
 | `src/core/documentmanager.h` | QFileSystemWatcher member, file change signals |
 | `src/core/documentmanager.cpp` | File monitoring, watcher management |
 | `src/core/session.h` | Unsaved document persistence methods |
@@ -375,7 +393,8 @@ Wire the existing PluginManager into the application:
 | `src/ui/mainwindow.cpp` | Document map, function list, plugin menu, reload, modified closeEvent |
 | `src/ui/completionpopup.h` | Multi-source completion, fuzzy matching |
 | `src/ui/completionpopup.cpp` | Completion sources, trigger logic |
-| `src/ui/editor.cpp` | Auto-completion trigger, completion integration |
+| `src/ui/editor.cpp` | Auto-completion trigger, completion integration, theme change connection |
+| `src/core/pluginmanager.cpp` | Add default scan directories in constructor |
 | `src/main.cpp` | Recovery dialog, plugin loading on startup |
 | `CMakeLists.txt` | Add new source files |
 | `resources/resources.qrc` | Add syntax JSON files |
@@ -411,7 +430,7 @@ Wire the existing PluginManager into the application:
 12. **Auto-completion** — extend CompletionPopup with sources and triggers
 13. **Macro run N times** — dialog and execution loop
 14. **Plugin menu + startup loading** — wire PluginManager to UI
-15. **Print hardening** — print preview, headers/footers
+15. **Print hardening** — print preview, headers/footers (no dependencies, can run at any point)
 16. **Integration verification** — full test pass
 
 Each step produces a compilable, runnable binary.
