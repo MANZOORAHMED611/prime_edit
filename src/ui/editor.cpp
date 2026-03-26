@@ -92,10 +92,16 @@ void Editor::setupEditor()
     setFrameShape(QFrame::NoFrame);
     setLineWrapMode(Settings::instance().wordWrap() ? WidgetWidth : NoWrap);
 
-    // Set monospace font with Arabic fallback
+    // Set monospace font
     QFont font = Settings::instance().font();
-    font.setFamilies({font.family(),
-                      "Noto Sans Arabic", "Amiri", "DejaVu Sans"});
+    font.setStyleHint(QFont::Monospace);
+    // Only add Arabic font fallbacks if they won't override the primary monospace font
+    // Qt resolves families in order — keep monospace fonts first
+    QStringList families;
+    families << font.family() << "DejaVu Sans Mono" << "Liberation Mono" << "Courier New";
+    // Arabic fallbacks last (for mixed content documents)
+    families << "Noto Sans Arabic" << "Amiri";
+    font.setFamilies(families);
     setFont(font);
     m_baseFontSize = font.pointSize();
 
@@ -119,8 +125,11 @@ void Editor::applySettings()
 {
     QFont font = Settings::instance().font();
     font.setPointSize(m_baseFontSize + m_zoomLevel);
-    font.setFamilies({font.family(),
-                      "Noto Sans Arabic", "Amiri", "DejaVu Sans"});
+    font.setStyleHint(QFont::Monospace);
+    QStringList families;
+    families << font.family() << "DejaVu Sans Mono" << "Liberation Mono" << "Courier New";
+    families << "Noto Sans Arabic" << "Amiri";
+    font.setFamilies(families);
     setFont(font);
 
     m_tabWidth = Settings::instance().tabWidth();
@@ -134,6 +143,11 @@ void Editor::updateTextDirection()
 {
     QTextBlock block = QPlainTextEdit::document()->begin();
     bool foundArabic = false;
+    bool wasModified = m_document->isModified();
+
+    // Block signals to prevent setBlockFormat from triggering textChanged → setModified
+    bool oldSyncing = m_syncing;
+    m_syncing = true;
 
     while (block.isValid()) {
         QString text = block.text().trimmed();
@@ -159,6 +173,14 @@ void Editor::updateTextDirection()
         }
         block = block.next();
     }
+
+    m_syncing = oldSyncing;
+
+    // Restore original modified state — RTL detection should not mark file as modified
+    if (!wasModified) {
+        m_document->setModified(false);
+    }
+
     m_hasArabicContent = foundArabic;
 }
 

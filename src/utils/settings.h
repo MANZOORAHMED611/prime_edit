@@ -85,7 +85,7 @@ signals:
 private:
     explicit Settings(QObject *parent = nullptr);
 
-    QString m_fontFamily = "Monospace";
+    QString m_fontFamily = "DejaVu Sans Mono";
     int m_fontSize = 10;
     int m_tabWidth = 4;
     bool m_insertSpaces = true;

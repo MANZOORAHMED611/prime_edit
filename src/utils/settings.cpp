@@ -134,7 +134,7 @@ void Settings::save()
 
 void Settings::reset()
 {
-    m_fontFamily = "Monospace";
+    m_fontFamily = "DejaVu Sans Mono";
     m_fontSize = 10;
     m_tabWidth = 4;
     m_insertSpaces = true;
