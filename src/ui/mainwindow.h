@@ -27,6 +27,9 @@ class DocumentMapWidget;
 class FunctionListPanel;
 class LLMEvaluator;
 class EvalResultWidget;
+class IslamicBridge;
+class SchemaValidator;
+struct HadithValidation;
 
 class MainWindow : public QMainWindow
 {
@@ -231,6 +234,12 @@ private slots:
     void onEvalRejected();
     void configureEndpoint();
 
+    // Islamic knowledge integration
+    void validateHadith();
+    void onHadithValidated(const HadithValidation &result);
+    void loadSchemaForDocument();
+    void validateCurrentDocument();
+
 private:
     void setupUi();
     void setupMenus();
@@ -330,6 +339,10 @@ private:
     LLMEvaluator *m_evaluator = nullptr;
     EvalResultWidget *m_evalResult = nullptr;
     QString m_evalOriginalText;
+
+    // Islamic knowledge integration
+    IslamicBridge *m_islamicBridge = nullptr;
+    SchemaValidator *m_schemaValidator = nullptr;
 
     // State
     int m_untitledCounter = 0;

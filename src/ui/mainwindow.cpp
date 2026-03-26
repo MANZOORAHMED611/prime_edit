@@ -558,6 +558,12 @@ void MainWindow::setupShortcuts()
     QShortcut *renameShortcut = new QShortcut(QKeySequence(Qt::Key_F2), this);
     connect(renameShortcut, &QShortcut::activated,
             this, &MainWindow::renameSymbol);
+
+    // Hadith validation (Ctrl+Shift+H)
+    QShortcut *hadithShortcut = new QShortcut(
+        QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_H), this);
+    connect(hadithShortcut, &QShortcut::activated,
+            this, &MainWindow::validateHadith);
 }
 
 void MainWindow::newFile()

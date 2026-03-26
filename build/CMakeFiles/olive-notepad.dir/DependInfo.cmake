@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp" "CMakeFiles/olive-notepad.dir/src/core/document.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/document.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp" "CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/documentmanager.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp" "CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.o.d"
+  "/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp" "CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp" "CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp" "CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/llmevaluator.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp" "CMakeFiles/olive-notepad.dir/src/core/lspclient.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/lspclient.cpp.o.d"
@@ -22,6 +23,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp" "CMakeFiles/olive-notepad.dir/src/core/piecetable.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/piecetable.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp" "CMakeFiles/olive-notepad.dir/src/core/pluginmanager.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/pluginmanager.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp" "CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.o.d"
+  "/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp" "CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp" "CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp" "CMakeFiles/olive-notepad.dir/src/core/session.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/core/session.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/main.cpp" "CMakeFiles/olive-notepad.dir/src/main.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/main.cpp.o.d"
@@ -58,6 +60,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp" "CMakeFiles/olive-notepad.dir/src/ui/theme.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/theme.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp" "CMakeFiles/olive-notepad.dir/src/ui/themeeditor.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/themeeditor.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp" "CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.o.d"
+  "/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp" "CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp" "CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/utils/fileutils.cpp.o.d"
   "/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp" "CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o" "gcc" "CMakeFiles/olive-notepad.dir/src/utils/settings.cpp.o.d"
   )

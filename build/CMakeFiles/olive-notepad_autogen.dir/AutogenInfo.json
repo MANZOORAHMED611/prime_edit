@@ -395,6 +395,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.h",
+			"MU",
+			"PRMOGMWJPH/moc_islamicbridge.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.h",
 			"MU",
 			"PRMOGMWJPH/moc_largefile.cpp",
@@ -446,6 +452,12 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.h",
 			"MU",
 			"PRMOGMWJPH/moc_remoteconnection.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.h",
+			"MU",
+			"PRMOGMWJPH/moc_schemavalidator.cpp",
 			null
 		],
 		[
@@ -653,6 +665,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.h",
+			"MU",
+			"YPKJ5OE7LN/moc_validationpanel.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.h",
 			"MU",
 			"VSCBVMNR7M/moc_fileutils.cpp",
@@ -749,6 +767,11 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp",
 			"MU",
 			null
@@ -785,6 +808,11 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp",
 			"MU",
 			null
 		],
@@ -965,6 +993,11 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp",
 			"MU",
 			null
 		],

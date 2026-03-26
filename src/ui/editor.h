@@ -228,6 +228,11 @@ private:
     void loadViewportContent();
     qint64 m_viewportStartLine = 0;
     static constexpr int VIEWPORT_BUFFER = 500;
+
+    // Arabic RTL support
+    void updateTextDirection();
+    QTimer *m_rtlTimer = nullptr;
+    bool m_hasArabicContent = false;
 };
 
 #endif // EDITOR_H

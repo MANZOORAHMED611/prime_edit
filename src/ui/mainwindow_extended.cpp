@@ -8,6 +8,8 @@
 #include "endpointconfigdialog.h"
 #include "core/document.h"
 #include "core/llmevaluator.h"
+#include "core/islamicbridge.h"
+#include "core/schemavalidator.h"
 #include "core/lspmanager.h"
 #include "core/lspclient.h"
 #include <QMessageBox>
@@ -22,6 +24,7 @@
 #include <QFileInfo>
 #include <QInputDialog>
 #include <QLineEdit>
+#include <QToolTip>
 
 // Comment operations
 void MainWindow::blockComment()
@@ -729,4 +732,120 @@ void MainWindow::configureEndpoint()
         statusBar()->showMessage(
             tr("Endpoint configuration saved"), 3000);
     }
+}
+
+// --- Islamic Knowledge Integration ---
+
+void MainWindow::validateHadith()
+{
+    Editor *e = currentEditor();
+    if (!e) return;
+
+    // Get selected text or current line
+    QString text = e->selectedText();
+    if (text.isEmpty()) {
+        QTextCursor cursor = e->textCursor();
+        cursor.select(QTextCursor::BlockUnderCursor);
+        text = cursor.selectedText();
+    }
+
+    if (text.isEmpty()) return;
+
+    if (!m_islamicBridge) {
+        m_islamicBridge = new IslamicBridge(this);
+        connect(m_islamicBridge, &IslamicBridge::hadithValidated,
+                this, &MainWindow::onHadithValidated);
+    }
+
+    statusBar()->showMessage(tr("Validating hadith..."), 0);
+    m_islamicBridge->validateHadith(text);
+}
+
+void MainWindow::onHadithValidated(const HadithValidation &result)
+{
+    if (!result.error.isEmpty()) {
+        statusBar()->showMessage(
+            tr("Hadith validation error: %1")
+                .arg(result.error), 5000);
+        return;
+    }
+
+    QString message;
+    if (result.isValid) {
+        message = tr("VALID — %1 | Source: %2 | Grading: %3 by %4")
+            .arg(result.hadithText.left(50),
+                 result.source,
+                 result.grading,
+                 result.gradingAuthority);
+    } else {
+        message = tr("NOT VERIFIED — Hadith text could not be "
+                      "validated against known collections");
+    }
+
+    // Show as tooltip at cursor position
+    Editor *e = currentEditor();
+    if (e) {
+        QToolTip::showText(
+            e->mapToGlobal(e->cursorRect().bottomLeft()),
+            message, e, QRect(), 10000);
+    }
+    statusBar()->showMessage(message, 10000);
+}
+
+void MainWindow::loadSchemaForDocument()
+{
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return;
+
+    QString filePath = e->document()->filePath();
+    if (filePath.isEmpty()) return;
+
+    QFileInfo fi(filePath);
+    QString dirName = fi.absoluteDir().dirName();
+    QString parentDir =
+        QFileInfo(fi.absoluteDir().absolutePath()).dir().dirName();
+
+    // Detect yameen-treatise pipeline files
+    bool isYameen =
+        filePath.endsWith(".treatise") ||
+        filePath.endsWith(".hadith") ||
+        dirName == "manuscripts" ||
+        parentDir == "yameen-publications" ||
+        QFile::exists(
+            fi.absoluteDir().filePath("manuscript.yaml")) ||
+        QFile::exists(
+            fi.absoluteDir().filePath("treatise.yaml"));
+
+    if (isYameen) {
+        if (!m_schemaValidator) {
+            m_schemaValidator = new SchemaValidator(this);
+        }
+        m_schemaValidator->loadSchemaFromJson(
+            SchemaValidator::hadithSchema());
+        validateCurrentDocument();
+
+        if (!m_islamicBridge) {
+            m_islamicBridge = new IslamicBridge(this);
+            connect(m_islamicBridge,
+                    &IslamicBridge::hadithValidated,
+                    this, &MainWindow::onHadithValidated);
+            m_islamicBridge->testConnection();
+        }
+
+        statusBar()->showMessage(
+            tr("Yameen Publications pipeline detected"
+               " — Islamic schema active"), 5000);
+    }
+}
+
+void MainWindow::validateCurrentDocument()
+{
+    if (!m_schemaValidator || !m_schemaValidator->hasSchema())
+        return;
+
+    Editor *e = currentEditor();
+    if (!e) return;
+
+    QString text = e->toPlainText();
+    m_schemaValidator->validate(text);
 }

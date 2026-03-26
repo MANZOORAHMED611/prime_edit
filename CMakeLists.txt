@@ -48,6 +48,8 @@ set(CORE_SOURCES
     src/core/searchengine.cpp
     src/core/charsetdetector.cpp
     src/core/llmevaluator.cpp
+    src/core/islamicbridge.cpp
+    src/core/schemavalidator.cpp
 )
 
 set(UI_SOURCES
@@ -82,6 +84,7 @@ set(UI_SOURCES
     src/ui/lspbridge.cpp
     src/ui/evalresultwidget.cpp
     src/ui/endpointconfigdialog.cpp
+    src/ui/validationpanel.cpp
 )
 
 set(SYNTAX_SOURCES
@@ -110,6 +113,8 @@ set(HEADERS
     src/core/searchengine.h
     src/core/charsetdetector.h
     src/core/llmevaluator.h
+    src/core/islamicbridge.h
+    src/core/schemavalidator.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h
@@ -140,6 +145,7 @@ set(HEADERS
     src/ui/lspbridge.h
     src/ui/evalresultwidget.h
     src/ui/endpointconfigdialog.h
+    src/ui/validationpanel.h
     src/syntax/highlighter.h
     src/syntax/languagemanager.h
     src/utils/fileutils.h

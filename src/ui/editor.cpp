@@ -92,8 +92,10 @@ void Editor::setupEditor()
     setFrameShape(QFrame::NoFrame);
     setLineWrapMode(Settings::instance().wordWrap() ? WidgetWidth : NoWrap);
 
-    // Set monospace font
+    // Set monospace font with Arabic fallback
     QFont font = Settings::instance().font();
+    font.setFamilies({font.family(),
+                      "Noto Sans Arabic", "Amiri", "DejaVu Sans"});
     setFont(font);
     m_baseFontSize = font.pointSize();
 
@@ -101,12 +103,24 @@ void Editor::setupEditor()
     m_tabWidth = Settings::instance().tabWidth();
     m_insertSpaces = Settings::instance().insertSpaces();
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * m_tabWidth);
+
+    // Debounced Arabic RTL direction update
+    m_rtlTimer = new QTimer(this);
+    m_rtlTimer->setSingleShot(true);
+    m_rtlTimer->setInterval(2000);
+    connect(m_rtlTimer, &QTimer::timeout,
+            this, &Editor::updateTextDirection);
+    connect(this, &QPlainTextEdit::textChanged, this, [this]() {
+        m_rtlTimer->start();
+    });
 }
 
 void Editor::applySettings()
 {
     QFont font = Settings::instance().font();
     font.setPointSize(m_baseFontSize + m_zoomLevel);
+    font.setFamilies({font.family(),
+                      "Noto Sans Arabic", "Amiri", "DejaVu Sans"});
     setFont(font);
 
     m_tabWidth = Settings::instance().tabWidth();
@@ -114,6 +128,38 @@ void Editor::applySettings()
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * m_tabWidth);
 
     updateLineNumberAreaWidth(0);
+}
+
+void Editor::updateTextDirection()
+{
+    QTextBlock block = QPlainTextEdit::document()->begin();
+    bool foundArabic = false;
+
+    while (block.isValid()) {
+        QString text = block.text().trimmed();
+        if (!text.isEmpty()) {
+            bool hasArabic = false;
+            for (const QChar &ch : text) {
+                ushort code = ch.unicode();
+                if (code >= 0x0600 && code <= 0x06FF) {
+                    hasArabic = true;
+                    foundArabic = true;
+                    break;
+                }
+            }
+
+            QTextBlockFormat fmt = block.blockFormat();
+            Qt::LayoutDirection dir =
+                hasArabic ? Qt::RightToLeft : Qt::LeftToRight;
+            if (fmt.layoutDirection() != dir) {
+                QTextCursor cursor(block);
+                fmt.setLayoutDirection(dir);
+                cursor.setBlockFormat(fmt);
+            }
+        }
+        block = block.next();
+    }
+    m_hasArabicContent = foundArabic;
 }
 
 int Editor::lineNumberAreaWidth() const

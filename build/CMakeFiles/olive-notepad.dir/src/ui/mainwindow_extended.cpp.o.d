@@ -530,6 +530,8 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMessageBox \
@@ -550,4 +552,6 @@ CMakeFiles/olive-notepad.dir/src/ui/mainwindow_extended.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QInputDialog \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qinputdialog.h \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QToolTip \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtooltip.h

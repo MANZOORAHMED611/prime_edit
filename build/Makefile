@@ -331,6 +331,30 @@ src/core/encoding.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.s
 .PHONY : src/core/encoding.cpp.s
 
+src/core/islamicbridge.o: src/core/islamicbridge.cpp.o
+.PHONY : src/core/islamicbridge.o
+
+# target to build an object file
+src/core/islamicbridge.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.o
+.PHONY : src/core/islamicbridge.cpp.o
+
+src/core/islamicbridge.i: src/core/islamicbridge.cpp.i
+.PHONY : src/core/islamicbridge.i
+
+# target to preprocess a source file
+src/core/islamicbridge.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.i
+.PHONY : src/core/islamicbridge.cpp.i
+
+src/core/islamicbridge.s: src/core/islamicbridge.cpp.s
+.PHONY : src/core/islamicbridge.s
+
+# target to generate assembly for a file
+src/core/islamicbridge.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/islamicbridge.cpp.s
+.PHONY : src/core/islamicbridge.cpp.s
+
 src/core/largefile.o: src/core/largefile.cpp.o
 .PHONY : src/core/largefile.o
 
@@ -522,6 +546,30 @@ src/core/remoteconnection.s: src/core/remoteconnection.cpp.s
 src/core/remoteconnection.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.s
 .PHONY : src/core/remoteconnection.cpp.s
+
+src/core/schemavalidator.o: src/core/schemavalidator.cpp.o
+.PHONY : src/core/schemavalidator.o
+
+# target to build an object file
+src/core/schemavalidator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.o
+.PHONY : src/core/schemavalidator.cpp.o
+
+src/core/schemavalidator.i: src/core/schemavalidator.cpp.i
+.PHONY : src/core/schemavalidator.i
+
+# target to preprocess a source file
+src/core/schemavalidator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.i
+.PHONY : src/core/schemavalidator.cpp.i
+
+src/core/schemavalidator.s: src/core/schemavalidator.cpp.s
+.PHONY : src/core/schemavalidator.s
+
+# target to generate assembly for a file
+src/core/schemavalidator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/schemavalidator.cpp.s
+.PHONY : src/core/schemavalidator.cpp.s
 
 src/core/searchengine.o: src/core/searchengine.cpp.o
 .PHONY : src/core/searchengine.o
@@ -1387,6 +1435,30 @@ src/ui/toolbarmanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/toolbarmanager.cpp.s
 .PHONY : src/ui/toolbarmanager.cpp.s
 
+src/ui/validationpanel.o: src/ui/validationpanel.cpp.o
+.PHONY : src/ui/validationpanel.o
+
+# target to build an object file
+src/ui/validationpanel.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.o
+.PHONY : src/ui/validationpanel.cpp.o
+
+src/ui/validationpanel.i: src/ui/validationpanel.cpp.i
+.PHONY : src/ui/validationpanel.i
+
+# target to preprocess a source file
+src/ui/validationpanel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.i
+.PHONY : src/ui/validationpanel.cpp.i
+
+src/ui/validationpanel.s: src/ui/validationpanel.cpp.s
+.PHONY : src/ui/validationpanel.s
+
+# target to generate assembly for a file
+src/ui/validationpanel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/validationpanel.cpp.s
+.PHONY : src/ui/validationpanel.cpp.s
+
 src/utils/fileutils.o: src/utils/fileutils.cpp.o
 .PHONY : src/utils/fileutils.o
 
@@ -1467,6 +1539,9 @@ help:
 	@echo "... src/core/encoding.o"
 	@echo "... src/core/encoding.i"
 	@echo "... src/core/encoding.s"
+	@echo "... src/core/islamicbridge.o"
+	@echo "... src/core/islamicbridge.i"
+	@echo "... src/core/islamicbridge.s"
 	@echo "... src/core/largefile.o"
 	@echo "... src/core/largefile.i"
 	@echo "... src/core/largefile.s"
@@ -1491,6 +1566,9 @@ help:
 	@echo "... src/core/remoteconnection.o"
 	@echo "... src/core/remoteconnection.i"
 	@echo "... src/core/remoteconnection.s"
+	@echo "... src/core/schemavalidator.o"
+	@echo "... src/core/schemavalidator.i"
+	@echo "... src/core/schemavalidator.s"
 	@echo "... src/core/searchengine.o"
 	@echo "... src/core/searchengine.i"
 	@echo "... src/core/searchengine.s"
@@ -1599,6 +1677,9 @@ help:
 	@echo "... src/ui/toolbarmanager.o"
 	@echo "... src/ui/toolbarmanager.i"
 	@echo "... src/ui/toolbarmanager.s"
+	@echo "... src/ui/validationpanel.o"
+	@echo "... src/ui/validationpanel.i"
+	@echo "... src/ui/validationpanel.s"
 	@echo "... src/utils/fileutils.o"
 	@echo "... src/utils/fileutils.i"
 	@echo "... src/utils/fileutils.s"
