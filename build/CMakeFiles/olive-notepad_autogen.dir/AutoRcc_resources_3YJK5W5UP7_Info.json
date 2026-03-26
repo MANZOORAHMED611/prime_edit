@@ -7,6 +7,7 @@
 	"INCLUDE_DIR" : "/home/abusulaiman/dev/repository/olive_notepad/build/olive-notepad_autogen/include",
 	"INPUTS" : 
 	[
+		"/home/abusulaiman/dev/repository/olive_notepad/resources/themes/notepadpp.json",
 		"/home/abusulaiman/dev/repository/olive_notepad/resources/themes/dark.json",
 		"/home/abusulaiman/dev/repository/olive_notepad/resources/themes/olive.json",
 		"/home/abusulaiman/dev/repository/olive_notepad/resources/themes/light.json",

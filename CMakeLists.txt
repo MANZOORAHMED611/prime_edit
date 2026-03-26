@@ -54,7 +54,9 @@ set(UI_SOURCES
     src/ui/tabwidget.cpp
     src/ui/editor.cpp
     src/ui/statusbar.cpp
-    src/ui/finddialog.cpp
+    src/ui/searchdialog.cpp
+    src/ui/searchresultspanel.cpp
+    src/ui/incrementalsearchbar.cpp
     src/ui/preferencesdialog.cpp
     src/ui/linenumberarea.cpp
     src/ui/fileexplorer.cpp
@@ -100,7 +102,9 @@ set(HEADERS
     src/ui/tabwidget.h
     src/ui/editor.h
     src/ui/statusbar.h
-    src/ui/finddialog.h
+    src/ui/searchdialog.h
+    src/ui/searchresultspanel.h
+    src/ui/incrementalsearchbar.h
     src/ui/preferencesdialog.h
     src/ui/linenumberarea.h
     src/ui/fileexplorer.h

@@ -7,56 +7,8 @@
 	"CMAKE_LIST_FILES" : 
 	[
 		"/home/abusulaiman/dev/repository/olive_notepad/CMakeLists.txt",
-		"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeSystem.cmake.in",
 		"/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/3.22.1/CMakeSystem.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeUnixFindMake.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeDetermineCXXCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Platform/Linux-Determine-CXX.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompilerId.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeCompilerIdDetection.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/ADSP-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/ARMCC-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/ARMClang-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/AppleClang-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompilerInternal.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Borland-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompilerInternal.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Cray-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Embarcadero-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Fujitsu-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/GHS-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/HP-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/IAR-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Intel-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/MSVC-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/NVHPC-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/NVIDIA-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/PGI-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/PathScale-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/SCO-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/TI-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/Watcom-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/XL-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake",
-		"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeCXXCompiler.cmake.in",
 		"/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake",
@@ -71,18 +23,6 @@
 		"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake",
 		"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake",
 		"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeTestCompilerCommon.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompilerABI.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeParseImplicitIncludeInfo.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeParseLibraryArchitecture.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeTestCompilerCommon.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp",
-		"/usr/share/cmake-3.22/Modules/CMakeDetermineCompileFeatures.cmake",
-		"/usr/share/cmake-3.22/Modules/Internal/FeatureTesting.cmake",
-		"/usr/share/cmake-3.22/Modules/CMakeCXXCompiler.cmake.in",
-		"/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersion.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersionImpl.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6Config.cmake",
@@ -111,7 +51,6 @@
 		"/usr/share/cmake-3.22/Modules/CheckLibraryExists.cmake",
 		"/usr/share/cmake-3.22/Modules/CheckIncludeFileCXX.cmake",
 		"/usr/share/cmake-3.22/Modules/CheckCXXSourceCompiles.cmake",
-		"/usr/share/cmake-3.22/Modules/CheckIncludeFile.cxx.in",
 		"/usr/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake",
 		"/usr/share/cmake-3.22/Modules/FindPackageMessage.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreConfigVersion.cmake",
@@ -445,6 +384,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.h",
+			"MU",
+			"PRMOGMWJPH/moc_largefile.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h",
 			"MU",
 			"PRMOGMWJPH/moc_lspclient.cpp",
@@ -487,6 +432,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.h",
+			"MU",
+			"PRMOGMWJPH/moc_searchengine.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/session.h",
 			"MU",
 			"PRMOGMWJPH/moc_session.cpp",
@@ -502,6 +453,12 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.h",
 			"MU",
 			"SKMTTJJW33/moc_languagemanager.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.h",
+			"MU",
+			"YPKJ5OE7LN/moc_columneditor.cpp",
 			null
 		],
 		[
@@ -529,12 +486,6 @@
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/finddialog.h",
-			"MU",
-			"YPKJ5OE7LN/moc_finddialog.cpp",
-			null
-		],
-		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.h",
 			"MU",
 			"YPKJ5OE7LN/moc_gitdiffviewer.cpp",
@@ -550,6 +501,12 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.h",
 			"MU",
 			"YPKJ5OE7LN/moc_hexviewer.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.h",
+			"MU",
+			"YPKJ5OE7LN/moc_incrementalsearchbar.cpp",
 			null
 		],
 		[
@@ -580,6 +537,18 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.h",
 			"MU",
 			"YPKJ5OE7LN/moc_remoteconnectiondialog.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.h",
+			"MU",
+			"YPKJ5OE7LN/moc_searchdialog.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.h",
+			"MU",
+			"YPKJ5OE7LN/moc_searchresultspanel.cpp",
 			null
 		],
 		[
@@ -710,6 +679,11 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp",
 			"MU",
 			null
@@ -740,6 +714,11 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp",
 			"MU",
 			null
@@ -756,6 +735,11 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp",
 			"MU",
 			null
 		],
@@ -780,11 +764,6 @@
 			null
 		],
 		[
-			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/finddialog.cpp",
-			"MU",
-			null
-		],
-		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp",
 			"MU",
 			null
@@ -796,6 +775,11 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp",
 			"MU",
 			null
 		],
@@ -826,6 +810,16 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp",
 			"MU",
 			null
 		],

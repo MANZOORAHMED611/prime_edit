@@ -307,6 +307,30 @@ src/core/encoding.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/encoding.cpp.s
 .PHONY : src/core/encoding.cpp.s
 
+src/core/largefile.o: src/core/largefile.cpp.o
+.PHONY : src/core/largefile.o
+
+# target to build an object file
+src/core/largefile.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.o
+.PHONY : src/core/largefile.cpp.o
+
+src/core/largefile.i: src/core/largefile.cpp.i
+.PHONY : src/core/largefile.i
+
+# target to preprocess a source file
+src/core/largefile.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.i
+.PHONY : src/core/largefile.cpp.i
+
+src/core/largefile.s: src/core/largefile.cpp.s
+.PHONY : src/core/largefile.s
+
+# target to generate assembly for a file
+src/core/largefile.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/largefile.cpp.s
+.PHONY : src/core/largefile.cpp.s
+
 src/core/lspclient.o: src/core/lspclient.cpp.o
 .PHONY : src/core/lspclient.o
 
@@ -451,6 +475,30 @@ src/core/remoteconnection.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/remoteconnection.cpp.s
 .PHONY : src/core/remoteconnection.cpp.s
 
+src/core/searchengine.o: src/core/searchengine.cpp.o
+.PHONY : src/core/searchengine.o
+
+# target to build an object file
+src/core/searchengine.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.o
+.PHONY : src/core/searchengine.cpp.o
+
+src/core/searchengine.i: src/core/searchengine.cpp.i
+.PHONY : src/core/searchengine.i
+
+# target to preprocess a source file
+src/core/searchengine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.i
+.PHONY : src/core/searchengine.cpp.i
+
+src/core/searchengine.s: src/core/searchengine.cpp.s
+.PHONY : src/core/searchengine.s
+
+# target to generate assembly for a file
+src/core/searchengine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/core/searchengine.cpp.s
+.PHONY : src/core/searchengine.cpp.s
+
 src/core/session.o: src/core/session.cpp.o
 .PHONY : src/core/session.o
 
@@ -546,6 +594,30 @@ src/syntax/languagemanager.s: src/syntax/languagemanager.cpp.s
 src/syntax/languagemanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/syntax/languagemanager.cpp.s
 .PHONY : src/syntax/languagemanager.cpp.s
+
+src/ui/columneditor.o: src/ui/columneditor.cpp.o
+.PHONY : src/ui/columneditor.o
+
+# target to build an object file
+src/ui/columneditor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/columneditor.cpp.o
+.PHONY : src/ui/columneditor.cpp.o
+
+src/ui/columneditor.i: src/ui/columneditor.cpp.i
+.PHONY : src/ui/columneditor.i
+
+# target to preprocess a source file
+src/ui/columneditor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/columneditor.cpp.i
+.PHONY : src/ui/columneditor.cpp.i
+
+src/ui/columneditor.s: src/ui/columneditor.cpp.s
+.PHONY : src/ui/columneditor.s
+
+# target to generate assembly for a file
+src/ui/columneditor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/columneditor.cpp.s
+.PHONY : src/ui/columneditor.cpp.s
 
 src/ui/commandpalette.o: src/ui/commandpalette.cpp.o
 .PHONY : src/ui/commandpalette.o
@@ -643,30 +715,6 @@ src/ui/fileexplorer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/fileexplorer.cpp.s
 .PHONY : src/ui/fileexplorer.cpp.s
 
-src/ui/finddialog.o: src/ui/finddialog.cpp.o
-.PHONY : src/ui/finddialog.o
-
-# target to build an object file
-src/ui/finddialog.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/finddialog.cpp.o
-.PHONY : src/ui/finddialog.cpp.o
-
-src/ui/finddialog.i: src/ui/finddialog.cpp.i
-.PHONY : src/ui/finddialog.i
-
-# target to preprocess a source file
-src/ui/finddialog.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/finddialog.cpp.i
-.PHONY : src/ui/finddialog.cpp.i
-
-src/ui/finddialog.s: src/ui/finddialog.cpp.s
-.PHONY : src/ui/finddialog.s
-
-# target to generate assembly for a file
-src/ui/finddialog.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/finddialog.cpp.s
-.PHONY : src/ui/finddialog.cpp.s
-
 src/ui/gitdiffviewer.o: src/ui/gitdiffviewer.cpp.o
 .PHONY : src/ui/gitdiffviewer.o
 
@@ -738,6 +786,30 @@ src/ui/hexviewer.s: src/ui/hexviewer.cpp.s
 src/ui/hexviewer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/hexviewer.cpp.s
 .PHONY : src/ui/hexviewer.cpp.s
+
+src/ui/incrementalsearchbar.o: src/ui/incrementalsearchbar.cpp.o
+.PHONY : src/ui/incrementalsearchbar.o
+
+# target to build an object file
+src/ui/incrementalsearchbar.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.o
+.PHONY : src/ui/incrementalsearchbar.cpp.o
+
+src/ui/incrementalsearchbar.i: src/ui/incrementalsearchbar.cpp.i
+.PHONY : src/ui/incrementalsearchbar.i
+
+# target to preprocess a source file
+src/ui/incrementalsearchbar.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.i
+.PHONY : src/ui/incrementalsearchbar.cpp.i
+
+src/ui/incrementalsearchbar.s: src/ui/incrementalsearchbar.cpp.s
+.PHONY : src/ui/incrementalsearchbar.s
+
+# target to generate assembly for a file
+src/ui/incrementalsearchbar.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/incrementalsearchbar.cpp.s
+.PHONY : src/ui/incrementalsearchbar.cpp.s
 
 src/ui/linenumberarea.o: src/ui/linenumberarea.cpp.o
 .PHONY : src/ui/linenumberarea.o
@@ -882,6 +954,54 @@ src/ui/remoteconnectiondialog.s: src/ui/remoteconnectiondialog.cpp.s
 src/ui/remoteconnectiondialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/remoteconnectiondialog.cpp.s
 .PHONY : src/ui/remoteconnectiondialog.cpp.s
+
+src/ui/searchdialog.o: src/ui/searchdialog.cpp.o
+.PHONY : src/ui/searchdialog.o
+
+# target to build an object file
+src/ui/searchdialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.o
+.PHONY : src/ui/searchdialog.cpp.o
+
+src/ui/searchdialog.i: src/ui/searchdialog.cpp.i
+.PHONY : src/ui/searchdialog.i
+
+# target to preprocess a source file
+src/ui/searchdialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.i
+.PHONY : src/ui/searchdialog.cpp.i
+
+src/ui/searchdialog.s: src/ui/searchdialog.cpp.s
+.PHONY : src/ui/searchdialog.s
+
+# target to generate assembly for a file
+src/ui/searchdialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchdialog.cpp.s
+.PHONY : src/ui/searchdialog.cpp.s
+
+src/ui/searchresultspanel.o: src/ui/searchresultspanel.cpp.o
+.PHONY : src/ui/searchresultspanel.o
+
+# target to build an object file
+src/ui/searchresultspanel.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.o
+.PHONY : src/ui/searchresultspanel.cpp.o
+
+src/ui/searchresultspanel.i: src/ui/searchresultspanel.cpp.i
+.PHONY : src/ui/searchresultspanel.i
+
+# target to preprocess a source file
+src/ui/searchresultspanel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.i
+.PHONY : src/ui/searchresultspanel.cpp.i
+
+src/ui/searchresultspanel.s: src/ui/searchresultspanel.cpp.s
+.PHONY : src/ui/searchresultspanel.s
+
+# target to generate assembly for a file
+src/ui/searchresultspanel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/olive-notepad.dir/build.make CMakeFiles/olive-notepad.dir/src/ui/searchresultspanel.cpp.s
+.PHONY : src/ui/searchresultspanel.cpp.s
 
 src/ui/statusbar.o: src/ui/statusbar.cpp.o
 .PHONY : src/ui/statusbar.o
@@ -1104,6 +1224,9 @@ help:
 	@echo "... src/core/encoding.o"
 	@echo "... src/core/encoding.i"
 	@echo "... src/core/encoding.s"
+	@echo "... src/core/largefile.o"
+	@echo "... src/core/largefile.i"
+	@echo "... src/core/largefile.s"
 	@echo "... src/core/lspclient.o"
 	@echo "... src/core/lspclient.i"
 	@echo "... src/core/lspclient.s"
@@ -1122,6 +1245,9 @@ help:
 	@echo "... src/core/remoteconnection.o"
 	@echo "... src/core/remoteconnection.i"
 	@echo "... src/core/remoteconnection.s"
+	@echo "... src/core/searchengine.o"
+	@echo "... src/core/searchengine.i"
+	@echo "... src/core/searchengine.s"
 	@echo "... src/core/session.o"
 	@echo "... src/core/session.i"
 	@echo "... src/core/session.s"
@@ -1134,6 +1260,9 @@ help:
 	@echo "... src/syntax/languagemanager.o"
 	@echo "... src/syntax/languagemanager.i"
 	@echo "... src/syntax/languagemanager.s"
+	@echo "... src/ui/columneditor.o"
+	@echo "... src/ui/columneditor.i"
+	@echo "... src/ui/columneditor.s"
 	@echo "... src/ui/commandpalette.o"
 	@echo "... src/ui/commandpalette.i"
 	@echo "... src/ui/commandpalette.s"
@@ -1146,9 +1275,6 @@ help:
 	@echo "... src/ui/fileexplorer.o"
 	@echo "... src/ui/fileexplorer.i"
 	@echo "... src/ui/fileexplorer.s"
-	@echo "... src/ui/finddialog.o"
-	@echo "... src/ui/finddialog.i"
-	@echo "... src/ui/finddialog.s"
 	@echo "... src/ui/gitdiffviewer.o"
 	@echo "... src/ui/gitdiffviewer.i"
 	@echo "... src/ui/gitdiffviewer.s"
@@ -1158,6 +1284,9 @@ help:
 	@echo "... src/ui/hexviewer.o"
 	@echo "... src/ui/hexviewer.i"
 	@echo "... src/ui/hexviewer.s"
+	@echo "... src/ui/incrementalsearchbar.o"
+	@echo "... src/ui/incrementalsearchbar.i"
+	@echo "... src/ui/incrementalsearchbar.s"
 	@echo "... src/ui/linenumberarea.o"
 	@echo "... src/ui/linenumberarea.i"
 	@echo "... src/ui/linenumberarea.s"
@@ -1176,6 +1305,12 @@ help:
 	@echo "... src/ui/remoteconnectiondialog.o"
 	@echo "... src/ui/remoteconnectiondialog.i"
 	@echo "... src/ui/remoteconnectiondialog.s"
+	@echo "... src/ui/searchdialog.o"
+	@echo "... src/ui/searchdialog.i"
+	@echo "... src/ui/searchdialog.s"
+	@echo "... src/ui/searchresultspanel.o"
+	@echo "... src/ui/searchresultspanel.i"
+	@echo "... src/ui/searchresultspanel.s"
 	@echo "... src/ui/statusbar.o"
 	@echo "... src/ui/statusbar.i"
 	@echo "... src/ui/statusbar.s"

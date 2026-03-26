@@ -15,7 +15,9 @@ class Editor;
 class Document;
 class TabWidget;
 class StatusBarWidget;
-class FindDialog;
+class SearchDialog;
+class SearchResultsPanel;
+class IncrementalSearchBar;
 class PreferencesDialog;
 class CommandPalette;
 class TerminalWidget;
@@ -124,6 +126,13 @@ private slots:
     void findPrevious();
     void replace();
     void goToLineDialog();
+    void showIncrementalSearch();
+    void onSearchResultActivated(const QString &filePath, int line);
+    void onFindAllInCurrent();
+    void onFindAllInAllOpen();
+    void onFindInFiles();
+    void onCountRequested();
+    void onIncrementalSearchChanged(const QString &text);
 
     // View menu
     void toggleWordWrap();
@@ -216,7 +225,10 @@ private:
 
     TabWidget *m_tabWidget;
     StatusBarWidget *m_statusBar;
-    FindDialog *m_findDialog = nullptr;
+    SearchDialog *m_searchDialog = nullptr;
+    SearchResultsPanel *m_searchResultsPanel = nullptr;
+    QDockWidget *m_searchResultsDock = nullptr;
+    IncrementalSearchBar *m_incrementalSearchBar = nullptr;
     PreferencesDialog *m_preferencesDialog = nullptr;
     CommandPalette *m_commandPalette = nullptr;
 

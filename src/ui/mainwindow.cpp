@@ -2,7 +2,10 @@
 #include "tabwidget.h"
 #include "editor.h"
 #include "statusbar.h"
-#include "finddialog.h"
+#include "searchdialog.h"
+#include "searchresultspanel.h"
+#include "incrementalsearchbar.h"
+#include "core/searchengine.h"
 #include "preferencesdialog.h"
 #include "commandpalette.h"
 #include "terminalwidget.h"
@@ -23,6 +26,8 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <QUrl>
+#include <QVBoxLayout>
+#include <QTextDocument>
 #include <QAction>
 #include <QActionGroup>
 #include <QShortcut>
@@ -64,10 +69,35 @@ void MainWindow::setupUi()
     setAcceptDrops(true);
 
     m_tabWidget = new TabWidget(this);
-    setCentralWidget(m_tabWidget);
+
+    // Wrap tab widget with incremental search bar
+    QWidget *centralContainer = new QWidget(this);
+    QVBoxLayout *centralLayout = new QVBoxLayout(centralContainer);
+    centralLayout->setContentsMargins(0, 0, 0, 0);
+    centralLayout->setSpacing(0);
+    m_incrementalSearchBar = new IncrementalSearchBar(centralContainer);
+    m_incrementalSearchBar->hide();
+    centralLayout->addWidget(m_incrementalSearchBar);
+    centralLayout->addWidget(m_tabWidget);
+    setCentralWidget(centralContainer);
 
     connect(m_tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     connect(m_tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::onTabCloseRequested);
+
+    connect(m_incrementalSearchBar, &IncrementalSearchBar::searchChanged,
+            this, &MainWindow::onIncrementalSearchChanged);
+    connect(m_incrementalSearchBar, &IncrementalSearchBar::findNext, this, &MainWindow::findNext);
+    connect(m_incrementalSearchBar, &IncrementalSearchBar::findPrevious, this, &MainWindow::findPrevious);
+
+    // Setup search results dock widget
+    m_searchResultsPanel = new SearchResultsPanel(this);
+    m_searchResultsDock = new QDockWidget(tr("Search Results"), this);
+    m_searchResultsDock->setWidget(m_searchResultsPanel);
+    m_searchResultsDock->setAllowedAreas(Qt::BottomDockWidgetArea);
+    addDockWidget(Qt::BottomDockWidgetArea, m_searchResultsDock);
+    m_searchResultsDock->hide();
+    connect(m_searchResultsPanel, &SearchResultsPanel::resultActivated,
+            this, &MainWindow::onSearchResultActivated);
 
     // Setup terminal dock widget
     m_terminal = new TerminalWidget(this);
@@ -213,14 +243,13 @@ void MainWindow::setupMenus()
     QAction *findInFilesAction = m_searchMenu->addAction(tr("Find in &Files..."));
     findInFilesAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F));
     connect(findInFilesAction, &QAction::triggered, this, [this]() {
-        QMessageBox::information(this, tr("Find in Files"), tr("Search dialog coming in Task 13"));
+        find();
+        if (m_searchDialog) m_searchDialog->showTab(2);
     });
 
     QAction *incrementalSearchAction = m_searchMenu->addAction(tr("&Incremental Search"));
     incrementalSearchAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
-    connect(incrementalSearchAction, &QAction::triggered, this, [this]() {
-        QMessageBox::information(this, tr("Incremental Search"), tr("Incremental search coming in Task 13"));
-    });
+    connect(incrementalSearchAction, &QAction::triggered, this, &MainWindow::showIncrementalSearch);
 
     m_searchMenu->addSeparator();
 
@@ -1006,42 +1035,205 @@ void MainWindow::toTitleCase()
 
 void MainWindow::find()
 {
-    if (!m_findDialog) {
-        m_findDialog = new FindDialog(this);
-        connect(m_findDialog, &FindDialog::findNext, this, &MainWindow::findNext);
-        connect(m_findDialog, &FindDialog::findPrevious, this, &MainWindow::findPrevious);
+    if (!m_searchDialog) {
+        m_searchDialog = new SearchDialog(this);
+        connect(m_searchDialog, &SearchDialog::findNext, this, &MainWindow::findNext);
+        connect(m_searchDialog, &SearchDialog::findPrevious, this, &MainWindow::findPrevious);
+        connect(m_searchDialog, &SearchDialog::replaceOne, this, [this]() {
+            Editor *e = currentEditor();
+            if (!e || !m_searchDialog) return;
+            if (!e->selectedText().isEmpty()) {
+                e->insertPlainText(m_searchDialog->replaceText());
+            }
+            findNext();
+        });
+        connect(m_searchDialog, &SearchDialog::replaceAll, this, [this]() {
+            Editor *e = currentEditor();
+            if (!e || !m_searchDialog) return;
+            SearchEngine engine;
+            QString result = engine.replaceInText(
+                e->toPlainText(), m_searchDialog->searchText(),
+                m_searchDialog->replaceText(), m_searchDialog->searchOptions());
+            e->selectAll();
+            e->insertPlainText(result);
+        });
+        connect(m_searchDialog, &SearchDialog::countRequested, this, &MainWindow::onCountRequested);
+        connect(m_searchDialog, &SearchDialog::findAllInCurrent, this, &MainWindow::onFindAllInCurrent);
+        connect(m_searchDialog, &SearchDialog::findAllInAllOpen, this, &MainWindow::onFindAllInAllOpen);
+        connect(m_searchDialog, &SearchDialog::findInFiles, this, &MainWindow::onFindInFiles);
     }
-    m_findDialog->setReplaceMode(false);
-    m_findDialog->show();
-    m_findDialog->raise();
-    m_findDialog->activateWindow();
+    Editor *e = currentEditor();
+    if (e && !e->selectedText().isEmpty()) {
+        m_searchDialog->setSearchText(e->selectedText());
+    }
+    m_searchDialog->showTab(0);
+    m_searchDialog->show();
+    m_searchDialog->raise();
+    m_searchDialog->activateWindow();
 }
 
 void MainWindow::findNext()
 {
     Editor *editor = currentEditor();
-    if (editor && m_findDialog) {
-        editor->findNext(m_findDialog->searchText(), m_findDialog->searchFlags());
+    if (!editor) return;
+
+    QString pattern;
+    if (m_searchDialog) {
+        pattern = m_searchDialog->searchText();
+    } else if (m_incrementalSearchBar && m_incrementalSearchBar->isVisible()) {
+        pattern = m_incrementalSearchBar->searchText();
     }
+    if (pattern.isEmpty()) return;
+
+    editor->findNext(pattern, QTextDocument::FindFlags());
 }
 
 void MainWindow::findPrevious()
 {
     Editor *editor = currentEditor();
-    if (editor && m_findDialog) {
-        editor->findPrevious(m_findDialog->searchText(), m_findDialog->searchFlags());
+    if (!editor) return;
+
+    QString pattern;
+    if (m_searchDialog) {
+        pattern = m_searchDialog->searchText();
+    } else if (m_incrementalSearchBar && m_incrementalSearchBar->isVisible()) {
+        pattern = m_incrementalSearchBar->searchText();
     }
+    if (pattern.isEmpty()) return;
+
+    editor->findPrevious(pattern, QTextDocument::FindFlags());
 }
 
 void MainWindow::replace()
 {
-    if (!m_findDialog) {
-        m_findDialog = new FindDialog(this);
+    if (!m_searchDialog) {
+        find();
     }
-    m_findDialog->setReplaceMode(true);
-    m_findDialog->show();
-    m_findDialog->raise();
-    m_findDialog->activateWindow();
+    if (m_searchDialog) {
+        Editor *e = currentEditor();
+        if (e && !e->selectedText().isEmpty()) {
+            m_searchDialog->setSearchText(e->selectedText());
+        }
+        m_searchDialog->showTab(1);
+        m_searchDialog->show();
+        m_searchDialog->raise();
+        m_searchDialog->activateWindow();
+    }
+}
+
+void MainWindow::showIncrementalSearch()
+{
+    m_incrementalSearchBar->activate();
+}
+
+void MainWindow::onSearchResultActivated(const QString &filePath, int line)
+{
+    if (!filePath.isEmpty()) {
+        openFile(filePath);
+    }
+    Editor *e = currentEditor();
+    if (e) {
+        e->goToLine(line);
+    }
+}
+
+void MainWindow::onFindAllInCurrent()
+{
+    Editor *e = currentEditor();
+    if (!e || !m_searchDialog) return;
+
+    SearchEngine engine;
+    auto results = engine.findAll(e->toPlainText(),
+                                  m_searchDialog->searchText(),
+                                  m_searchDialog->searchOptions());
+
+    m_searchResultsPanel->clear();
+    m_searchResultsPanel->setHeader(m_searchDialog->searchText(),
+                                     results.size(), 1);
+    for (const auto &r : results) {
+        m_searchResultsPanel->addResult(r);
+    }
+    m_searchResultsDock->show();
+}
+
+void MainWindow::onFindAllInAllOpen()
+{
+    if (!m_searchDialog) return;
+
+    SearchEngine engine;
+    m_searchResultsPanel->clear();
+
+    int totalHits = 0;
+    int totalFiles = 0;
+
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
+        if (!e) continue;
+
+        auto results = engine.findAll(e->toPlainText(),
+                                      m_searchDialog->searchText(),
+                                      m_searchDialog->searchOptions());
+        if (!results.isEmpty()) {
+            totalFiles++;
+            totalHits += results.size();
+            for (auto r : results) {
+                r.filePath = m_tabWidget->tabText(i);
+                m_searchResultsPanel->addResult(r);
+            }
+        }
+    }
+
+    m_searchResultsPanel->setHeader(m_searchDialog->searchText(),
+                                     totalHits, totalFiles);
+    m_searchResultsDock->show();
+}
+
+void MainWindow::onFindInFiles()
+{
+    if (!m_searchDialog) return;
+
+    SearchEngine *engine = new SearchEngine(this);
+
+    m_searchResultsPanel->clear();
+    m_searchResultsDock->show();
+
+    connect(engine, &SearchEngine::fileSearchResult, this, [this](const SearchResult &result) {
+        m_searchResultsPanel->addResult(result);
+    });
+
+    connect(engine, &SearchEngine::fileSearchFinished, this,
+            [this, engine](int totalHits, int totalFiles) {
+        m_searchResultsPanel->setHeader(m_searchDialog ? m_searchDialog->searchText() : QString(),
+                                         totalHits, totalFiles);
+        engine->deleteLater();
+    });
+
+    engine->findInFiles(m_searchDialog->directory(),
+                        m_searchDialog->searchText(),
+                        m_searchDialog->fileFilter(),
+                        m_searchDialog->searchOptions(),
+                        m_searchDialog->recursive(),
+                        m_searchDialog->includeHidden());
+}
+
+void MainWindow::onCountRequested()
+{
+    Editor *e = currentEditor();
+    if (!e || !m_searchDialog) return;
+
+    SearchEngine engine;
+    int count = engine.matchCount(e->toPlainText(),
+                                   m_searchDialog->searchText(),
+                                   m_searchDialog->searchOptions());
+    QMessageBox::information(this, tr("Count"),
+                             tr("%1 matches found").arg(count));
+}
+
+void MainWindow::onIncrementalSearchChanged(const QString &text)
+{
+    Editor *e = currentEditor();
+    if (!e || text.isEmpty()) return;
+    e->findNext(text, QTextDocument::FindFlags());
 }
 
 void MainWindow::goToLineDialog()

@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TabBar_t {
-    const uint offsetsAndSize[14];
-    char stringdata0[91];
+    const uint offsetsAndSize[16];
+    char stringdata0[112];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_TabBar_t, stringdata0) + ofs), len 
@@ -35,12 +35,13 @@ QT_MOC_LITERAL(23, 0), // ""
 QT_MOC_LITERAL(24, 20), // "closeOthersRequested"
 QT_MOC_LITERAL(45, 5), // "index"
 QT_MOC_LITERAL(51, 21), // "closeToRightRequested"
-QT_MOC_LITERAL(73, 17) // "closeAllRequested"
+QT_MOC_LITERAL(73, 20), // "closeToLeftRequested"
+QT_MOC_LITERAL(94, 17) // "closeAllRequested"
 
     },
     "TabBar\0newTabRequested\0\0closeOthersRequested\0"
     "index\0closeToRightRequested\0"
-    "closeAllRequested"
+    "closeToLeftRequested\0closeAllRequested"
 };
 #undef QT_MOC_LITERAL
 
@@ -50,21 +51,23 @@ static const uint qt_meta_data_TabBar[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   38,    2, 0x06,    1 /* Public */,
-       3,    1,   39,    2, 0x06,    2 /* Public */,
-       5,    1,   42,    2, 0x06,    4 /* Public */,
-       6,    0,   45,    2, 0x06,    6 /* Public */,
+       1,    0,   44,    2, 0x06,    1 /* Public */,
+       3,    1,   45,    2, 0x06,    2 /* Public */,
+       5,    1,   48,    2, 0x06,    4 /* Public */,
+       6,    1,   51,    2, 0x06,    6 /* Public */,
+       7,    0,   54,    2, 0x06,    8 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void,
@@ -81,7 +84,8 @@ void TabBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 0: _t->newTabRequested(); break;
         case 1: _t->closeOthersRequested((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 2: _t->closeToRightRequested((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 3: _t->closeAllRequested(); break;
+        case 3: _t->closeToLeftRequested((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 4: _t->closeAllRequested(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -108,9 +112,16 @@ void TabBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
             }
         }
         {
+            using _t = void (TabBar::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TabBar::closeToLeftRequested)) {
+                *result = 3;
+                return;
+            }
+        }
+        {
             using _t = void (TabBar::*)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TabBar::closeAllRequested)) {
-                *result = 3;
+                *result = 4;
                 return;
             }
         }
@@ -124,7 +135,7 @@ const QMetaObject TabBar::staticMetaObject = { {
     qt_static_metacall,
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_TabBar_t
-, QtPrivate::TypeAndForceComplete<TabBar, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+, QtPrivate::TypeAndForceComplete<TabBar, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
 
 
 
@@ -152,13 +163,13 @@ int TabBar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
@@ -184,13 +195,20 @@ void TabBar::closeToRightRequested(int _t1)
 }
 
 // SIGNAL 3
+void TabBar::closeToLeftRequested(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
 void TabBar::closeAllRequested()
 {
-    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
+    QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
 }
 struct qt_meta_stringdata_TabWidget_t {
-    const uint offsetsAndSize[14];
-    char stringdata0[100];
+    const uint offsetsAndSize[16];
+    char stringdata0[123];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_TabWidget_t, stringdata0) + ofs), len 
@@ -202,12 +220,14 @@ QT_MOC_LITERAL(26, 0), // ""
 QT_MOC_LITERAL(27, 22), // "onCloseOthersRequested"
 QT_MOC_LITERAL(50, 5), // "index"
 QT_MOC_LITERAL(56, 23), // "onCloseToRightRequested"
-QT_MOC_LITERAL(80, 19) // "onCloseAllRequested"
+QT_MOC_LITERAL(80, 22), // "onCloseToLeftRequested"
+QT_MOC_LITERAL(103, 19) // "onCloseAllRequested"
 
     },
     "TabWidget\0newTabRequested\0\0"
     "onCloseOthersRequested\0index\0"
-    "onCloseToRightRequested\0onCloseAllRequested"
+    "onCloseToRightRequested\0onCloseToLeftRequested\0"
+    "onCloseAllRequested"
 };
 #undef QT_MOC_LITERAL
 
@@ -217,7 +237,7 @@ static const uint qt_meta_data_TabWidget[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -225,17 +245,19 @@ static const uint qt_meta_data_TabWidget[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   38,    2, 0x06,    1 /* Public */,
+       1,    0,   44,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    1,   39,    2, 0x08,    2 /* Private */,
-       5,    1,   42,    2, 0x08,    4 /* Private */,
-       6,    0,   45,    2, 0x08,    6 /* Private */,
+       3,    1,   45,    2, 0x08,    2 /* Private */,
+       5,    1,   48,    2, 0x08,    4 /* Private */,
+       6,    1,   51,    2, 0x08,    6 /* Private */,
+       7,    0,   54,    2, 0x08,    8 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
 
  // slots: parameters
+    QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void, QMetaType::Int,    4,
     QMetaType::Void,
@@ -252,7 +274,8 @@ void TabWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 0: _t->newTabRequested(); break;
         case 1: _t->onCloseOthersRequested((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 2: _t->onCloseToRightRequested((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 3: _t->onCloseAllRequested(); break;
+        case 3: _t->onCloseToLeftRequested((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 4: _t->onCloseAllRequested(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -275,7 +298,7 @@ const QMetaObject TabWidget::staticMetaObject = { {
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_TabWidget_t
 , QtPrivate::TypeAndForceComplete<TabWidget, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
 
 
 >,
@@ -302,13 +325,13 @@ int TabWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
