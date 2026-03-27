@@ -137,13 +137,13 @@ void ToolbarManager::createToolbars()
     m_toolbar->addAction(commentAction);
 
     QAction *indentAction = createAction("increaseIndent", tr("Indent"),
-                                        tr("Increase Indent (Tab)"),
-                                        "Tab", SLOT(increaseIndent()), ":/icons/toolbar/format-indent-increase.svg");
+                                        tr("Increase Indent"),
+                                        "", SLOT(increaseIndent()), ":/icons/toolbar/format-indent-increase.svg");
     m_toolbar->addAction(indentAction);
 
     QAction *outdentAction = createAction("decreaseIndent", tr("Outdent"),
-                                         tr("Decrease Indent (Shift+Tab)"),
-                                         "Shift+Tab", SLOT(decreaseIndent()), ":/icons/toolbar/format-indent-decrease.svg");
+                                         tr("Decrease Indent"),
+                                         "", SLOT(decreaseIndent()), ":/icons/toolbar/format-indent-decrease.svg");
     m_toolbar->addAction(outdentAction);
 }
 

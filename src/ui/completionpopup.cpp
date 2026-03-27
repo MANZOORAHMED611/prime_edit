@@ -72,6 +72,47 @@ void CompletionPopup::setCompletions(const QVector<CompletionItem> &items)
     }
 }
 
+void CompletionPopup::setSimpleCompletions(const QVector<SimpleCompletionItem> &items)
+{
+    clear();
+    m_items.clear();
+
+    Theme theme = ThemeManager::instance().currentTheme();
+
+    for (const SimpleCompletionItem &item : items) {
+        QString displayText = item.label;
+        if (!item.detail.isEmpty()) {
+            displayText += " - " + item.detail;
+        }
+
+        QListWidgetItem *listItem = new QListWidgetItem(displayText);
+        listItem->setData(Qt::UserRole, item.label);
+
+        // Color-code by kind
+        switch (item.kind) {
+        case SimpleCompletionItem::Keyword:
+            listItem->setForeground(theme.keyword);
+            break;
+        case SimpleCompletionItem::Type:
+            listItem->setForeground(theme.type);
+            break;
+        case SimpleCompletionItem::Snippet:
+            listItem->setForeground(theme.function);
+            break;
+        case SimpleCompletionItem::Word:
+        default:
+            listItem->setForeground(theme.foreground);
+            break;
+        }
+
+        addItem(listItem);
+    }
+
+    if (count() > 0) {
+        setCurrentRow(0);
+    }
+}
+
 void CompletionPopup::showAtPosition(const QPoint &globalPos)
 {
     move(globalPos);

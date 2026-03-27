@@ -262,7 +262,16 @@ void Session::saveUnsavedDocuments(MainWindow *window)
     if (oldDir.exists()) {
         oldDir.removeRecursively();
     }
-    QDir().rename(tempDir, unsavedCacheDir());
+    QString actualDir = unsavedCacheDir();
+    if (!QDir().rename(tempDir, actualDir)) {
+        // Fallback: copy files individually
+        QDir temp(tempDir);
+        QDir().mkpath(actualDir);
+        for (const QString &f : temp.entryList(QDir::Files)) {
+            QFile::copy(tempDir + "/" + f, actualDir + "/" + f);
+        }
+        QDir(tempDir).removeRecursively();
+    }
 }
 
 void Session::restoreUnsavedDocuments(MainWindow *window)

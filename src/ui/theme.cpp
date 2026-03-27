@@ -629,7 +629,7 @@ Theme Theme::notepadpp()
 ThemeManager::ThemeManager()
 {
     loadBuiltInThemes();
-    m_currentTheme = Theme::olive();  // Set Olive as default theme
+    m_currentTheme = Theme::notepadpp();  // Set Notepad++ as default theme
 }
 
 ThemeManager::~ThemeManager()

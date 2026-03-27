@@ -29,6 +29,10 @@ bool Document::load(const QString &filePath)
         if (!m_largeFileReader->open(filePath)) {
             delete m_largeFileReader;
             m_largeFileReader = nullptr;
+            // Guard: if file exceeds read-only threshold, don't attempt normal load
+            if (fi.size() > READONLY_FILE_THRESHOLD) {
+                return false;
+            }
             // Fall through to normal loading
         } else {
             m_filePath = filePath;

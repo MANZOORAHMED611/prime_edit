@@ -126,7 +126,7 @@ void DocumentManager::clearRecentFiles()
 
 void DocumentManager::startRecoveryTimer()
 {
-    m_recoveryTimer.start(RECOVERY_INTERVAL_MS);
+    m_recoveryTimer.start(Settings::instance().autoSaveInterval());
 }
 
 void DocumentManager::stopRecoveryTimer()

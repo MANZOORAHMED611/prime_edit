@@ -150,6 +150,8 @@ void Settings::reset()
     m_defaultLineEnding = "LF";
     m_trimTrailingWhitespace = true;
     m_insertFinalNewline = true;
+    m_recentFiles.clear();
+    m_customSettings.clear();
 
     emit fontChanged();
     emit tabSettingsChanged();

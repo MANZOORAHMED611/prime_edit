@@ -564,8 +564,9 @@ void MainWindow::closeTabsToLeft()
 {
     int current = m_tabWidget->currentIndex();
 
-    for (int i = current - 1; i >= 0; --i) {
-        closeFile(i);
+    // Close tabs at index 0 repeatedly (each close shifts remaining tabs left)
+    for (int i = 0; i < current; ++i) {
+        closeFile(0);
     }
 }
 

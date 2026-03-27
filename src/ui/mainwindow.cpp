@@ -922,6 +922,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
     }
 
+    Session::instance().save(this);
+    Settings::instance().save();
     Session::instance().saveUnsavedDocuments(this);
     m_closingAll = true;
     event->accept();
@@ -973,51 +975,21 @@ void MainWindow::onTabCloseRequested(int index)
 
 void MainWindow::onDocumentModified(bool modified)
 {
-    Editor *editor = qobject_cast<Editor*>(sender());
-    if (!editor) {
-        Document *doc = qobject_cast<Document*>(sender());
-        if (doc) {
-            int index = findEditorIndex(doc);
-            if (index >= 0) {
-                QString title = doc->displayName();
-                if (modified) {
-                    title += " *";
-                }
-                m_tabWidget->setTabText(index, title);
-
-                // Update icon: tint red when modified, restore when saved
-                QString filePath = doc->filePath();
-                if (modified) {
-                    QPixmap px(16, 16);
-                    px.fill(QColor("#e53935"));
-                    QPainter p(&px);
-                    QFont f = p.font();
-                    f.setPixelSize(7);
-                    f.setBold(true);
-                    p.setFont(f);
-                    p.setPen(Qt::white);
-                    p.drawText(px.rect(), Qt::AlignCenter, "MOD");
-                    p.end();
-                    m_tabWidget->setTabIcon(index, QIcon(px));
-                } else {
-                    m_tabWidget->setTabIcon(index,
-                        TabBar::iconForFile(filePath));
-                }
-            }
-        }
+    Document *doc = qobject_cast<Document*>(sender());
+    if (!doc) {
         return;
     }
 
-    int index = findEditorIndex(editor);
-    if (index >= 0 && editor->document()) {
-        QString title = editor->document()->displayName();
+    int index = findEditorIndex(doc);
+    if (index >= 0) {
+        QString title = doc->displayName();
         if (modified) {
             title += " *";
         }
         m_tabWidget->setTabText(index, title);
 
         // Update icon: tint red when modified, restore when saved
-        QString filePath = editor->document()->filePath();
+        QString filePath = doc->filePath();
         if (modified) {
             QPixmap px(16, 16);
             px.fill(QColor("#e53935"));

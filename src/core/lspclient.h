@@ -83,7 +83,6 @@ private:
     void handleResponse(const QJsonObject &response);
     void handleNotification(const QString &method, const QJsonObject &params);
 
-    QString readContentLength();
     QJsonObject parseMessage(const QByteArray &data);
 
     QProcess *m_process;
@@ -91,12 +90,12 @@ private:
     QStringList m_serverArgs;
 
     int m_nextId;
-    int m_documentVersion = 1;
     bool m_initialized;
     QString m_rootPath;
 
     QByteArray m_buffer;
     QMap<int, QString> m_pendingRequests;  // id -> method
+    QMap<QString, int> m_documentVersions;  // uri -> version counter
 };
 
 #endif // LSPCLIENT_H

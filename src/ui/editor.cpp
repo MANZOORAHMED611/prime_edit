@@ -1851,3 +1851,64 @@ void Editor::loadViewportContent()
 
     m_syncing = oldSyncing;
 }
+
+void Editor::triggerCompletion()
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+    QString prefix = cursor.selectedText();
+
+    if (prefix.length() < 2) {
+        if (m_completionPopup) {
+            m_completionPopup->hide();
+        }
+        return;
+    }
+
+    QVector<SimpleCompletionItem> items = gatherCompletions(prefix);
+    if (items.isEmpty()) {
+        if (m_completionPopup) {
+            m_completionPopup->hide();
+        }
+        return;
+    }
+
+    if (!m_completionPopup) {
+        m_completionPopup = new CompletionPopup(this);
+        connect(m_completionPopup, &CompletionPopup::completionSelected,
+                this, [this](const QString &completion) {
+            QTextCursor cur = textCursor();
+            cur.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+            cur.insertText(completion);
+        });
+    }
+
+    m_completionPopup->setSimpleCompletions(items);
+    QRect rect = cursorRect();
+    QPoint pos = mapToGlobal(QPoint(rect.left(), rect.bottom()));
+    m_completionPopup->showAtPosition(pos);
+}
+
+QVector<SimpleCompletionItem> Editor::gatherCompletions(const QString &prefix)
+{
+    QVector<SimpleCompletionItem> results;
+    QSet<QString> seen;
+
+    // Gather words from the current document
+    QString text = toPlainText();
+    QRegularExpression wordRe("\\b([A-Za-z_]\\w{2,})\\b");
+    QRegularExpressionMatchIterator it = wordRe.globalMatch(text);
+    while (it.hasNext()) {
+        QRegularExpressionMatch match = it.next();
+        QString word = match.captured(1);
+        if (word.startsWith(prefix, Qt::CaseInsensitive) && word != prefix && !seen.contains(word)) {
+            seen.insert(word);
+            SimpleCompletionItem item;
+            item.label = word;
+            item.kind = SimpleCompletionItem::Word;
+            results.append(item);
+        }
+    }
+
+    return results;
+}

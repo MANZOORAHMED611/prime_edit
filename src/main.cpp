@@ -107,9 +107,5 @@ int main(int argc, char *argv[])
 
     int result = app.exec();
 
-    // Save session on exit
-    Session::instance().save(&mainWindow);
-    Settings::instance().save();
-
     return result;
 }

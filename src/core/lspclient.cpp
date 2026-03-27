@@ -100,7 +100,8 @@ void LSPClient::didChange(const QString &uri, const QString &text)
     QJsonObject params;
     QJsonObject textDocument;
     textDocument["uri"] = uri;
-    textDocument["version"] = m_documentVersion++;
+    int version = ++m_documentVersions[uri];
+    textDocument["version"] = version;
     params["textDocument"] = textDocument;
 
     QJsonArray contentChanges;
