@@ -217,11 +217,12 @@ QString Session::unsavedCacheDir() const
 
 void Session::saveUnsavedDocuments(MainWindow *window)
 {
-    QDir dir(unsavedCacheDir());
-    if (dir.exists()) {
-        dir.removeRecursively();
+    QString tempDir = unsavedCacheDir() + "_tmp";
+    QDir tmpDirObj(tempDir);
+    if (tmpDirObj.exists()) {
+        tmpDirObj.removeRecursively();
     }
-    dir.mkpath(".");
+    tmpDirObj.mkpath(".");
 
     TabWidget *tabs = window->tabWidget();
     for (int i = 0; i < tabs->count(); ++i) {
@@ -250,11 +251,18 @@ void Session::saveUnsavedDocuments(MainWindow *window)
 
         QString fileName = QUuid::createUuid().toString(QUuid::Id128)
                            + ".json";
-        QFile file(unsavedCacheDir() + "/" + fileName);
+        QFile file(tempDir + "/" + fileName);
         if (file.open(QIODevice::WriteOnly)) {
             file.write(QJsonDocument(obj).toJson());
         }
     }
+
+    // Atomically swap: remove old cache, rename temp to actual
+    QDir oldDir(unsavedCacheDir());
+    if (oldDir.exists()) {
+        oldDir.removeRecursively();
+    }
+    QDir().rename(tempDir, unsavedCacheDir());
 }
 
 void Session::restoreUnsavedDocuments(MainWindow *window)

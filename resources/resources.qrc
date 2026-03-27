@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RCC>
     <qresource prefix="/">
-        <file>icons/notepad-supreme.svg</file>
-        <file>icons/notepad_supreme_icon.png</file>
-        <file>icons/olive_notepad_icon.png</file>
         <file>icons/prime_edit_icon.png</file>
         <file>themes/dark.json</file>
         <file>themes/light.json</file>

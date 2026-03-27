@@ -94,7 +94,7 @@ private:
     bool m_showMinimap = true;
     bool m_highlightCurrentLine = true;
     bool m_autoSave = false;
-    int m_autoSaveInterval = 1000;
+    int m_autoSaveInterval = 30000;
     QString m_theme = "Notepad++";
     bool m_restoreSession = true;
     QStringList m_recentFiles;

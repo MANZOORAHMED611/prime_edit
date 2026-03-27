@@ -440,6 +440,11 @@ CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QPainter \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpainter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QPaintEvent \

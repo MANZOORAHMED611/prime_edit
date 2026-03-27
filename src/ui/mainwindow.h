@@ -255,8 +255,8 @@ private:
     int findEditorIndex(Editor *editor) const;
     int findEditorIndex(Document *document) const;
 
-    TabWidget *m_tabWidget;
-    StatusBarWidget *m_statusBar;
+    TabWidget *m_tabWidget = nullptr;
+    StatusBarWidget *m_statusBar = nullptr;
     SearchDialog *m_searchDialog = nullptr;
     SearchResultsPanel *m_searchResultsPanel = nullptr;
     QDockWidget *m_searchResultsDock = nullptr;
@@ -274,63 +274,57 @@ private:
     QDockWidget *m_functionListDock = nullptr;
 
     // Menus
-    QMenu *m_fileMenu;
-    QMenu *m_editMenu;
-    QMenu *m_searchMenu;
-    QMenu *m_viewMenu;
-    QMenu *m_toolsMenu;
-    QMenu *m_helpMenu;
-    QMenu *m_recentFilesMenu;
-    QMenu *m_encodingMenu;
-    QMenu *m_languageMenu;
-    QMenu *m_settingsMenu;
-    QMenu *m_macroMenu;
-    QMenu *m_runMenu;
-    QMenu *m_windowMenu;
+    QMenu *m_fileMenu = nullptr;
+    QMenu *m_editMenu = nullptr;
+    QMenu *m_searchMenu = nullptr;
+    QMenu *m_viewMenu = nullptr;
+    QMenu *m_toolsMenu = nullptr;
+    QMenu *m_helpMenu = nullptr;
+    QMenu *m_recentFilesMenu = nullptr;
+    QMenu *m_encodingMenu = nullptr;
+    QMenu *m_languageMenu = nullptr;
+    QMenu *m_settingsMenu = nullptr;
+    QMenu *m_macroMenu = nullptr;
+    QMenu *m_runMenu = nullptr;
+    QMenu *m_windowMenu = nullptr;
 
     // Toolbar
-    QToolBar *m_mainToolBar;
+    QToolBar *m_mainToolBar = nullptr;
 
     // Actions for toolbar
-    QAction *m_newAction;
-    QAction *m_openAction;
-    QAction *m_saveAction;
-    QAction *m_saveAllAction;
-    QAction *m_closeAction;
-    QAction *m_printAction;
-    QAction *m_cutAction;
-    QAction *m_copyAction;
-    QAction *m_pasteAction;
-    QAction *m_undoAction;
-    QAction *m_redoAction;
-    QAction *m_findAction;
-    QAction *m_replaceAction;
-    QAction *m_findNextAction;
-    QAction *m_findPrevAction;
-    QAction *m_zoomInAction;
-    QAction *m_zoomOutAction;
-    QAction *m_wordWrapAction;
-    QAction *m_showWhitespaceAction;
-    QAction *m_showEOLAction;
-    QAction *m_showIndentGuideAction;
-    QAction *m_toggleBookmarkAction;
-    QAction *m_nextBookmarkAction;
-    QAction *m_prevBookmarkAction;
-    QAction *m_clearBookmarksAction;
-    QAction *m_startRecordingAction;
-    QAction *m_stopRecordingAction;
-    QAction *m_playbackAction;
-    QAction *m_foldAllAction;
-    QAction *m_unfoldAllAction;
-    QAction *m_toggleCommentAction;
-    QAction *m_duplicateLineAction;
-    QAction *m_deleteLineAction;
-
-    // Status bar labels
-    QLabel *m_positionLabel;
-    QLabel *m_encodingLabel;
-    QLabel *m_lineEndingLabel;
-    QLabel *m_languageLabel;
+    QAction *m_newAction = nullptr;
+    QAction *m_openAction = nullptr;
+    QAction *m_saveAction = nullptr;
+    QAction *m_saveAllAction = nullptr;
+    QAction *m_closeAction = nullptr;
+    QAction *m_printAction = nullptr;
+    QAction *m_cutAction = nullptr;
+    QAction *m_copyAction = nullptr;
+    QAction *m_pasteAction = nullptr;
+    QAction *m_undoAction = nullptr;
+    QAction *m_redoAction = nullptr;
+    QAction *m_findAction = nullptr;
+    QAction *m_replaceAction = nullptr;
+    QAction *m_findNextAction = nullptr;
+    QAction *m_findPrevAction = nullptr;
+    QAction *m_zoomInAction = nullptr;
+    QAction *m_zoomOutAction = nullptr;
+    QAction *m_wordWrapAction = nullptr;
+    QAction *m_showWhitespaceAction = nullptr;
+    QAction *m_showEOLAction = nullptr;
+    QAction *m_showIndentGuideAction = nullptr;
+    QAction *m_toggleBookmarkAction = nullptr;
+    QAction *m_nextBookmarkAction = nullptr;
+    QAction *m_prevBookmarkAction = nullptr;
+    QAction *m_clearBookmarksAction = nullptr;
+    QAction *m_startRecordingAction = nullptr;
+    QAction *m_stopRecordingAction = nullptr;
+    QAction *m_playbackAction = nullptr;
+    QAction *m_foldAllAction = nullptr;
+    QAction *m_unfoldAllAction = nullptr;
+    QAction *m_toggleCommentAction = nullptr;
+    QAction *m_duplicateLineAction = nullptr;
+    QAction *m_deleteLineAction = nullptr;
 
     // LSP
     LSPBridge *m_lspBridge = nullptr;
@@ -347,6 +341,7 @@ private:
     // State
     int m_untitledCounter = 0;
     bool m_closingAll = false;
+    bool m_distractionFree = false;
 };
 
 #endif // MAINWINDOW_H

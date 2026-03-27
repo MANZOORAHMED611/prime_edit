@@ -1,4 +1,5 @@
 #include "completionpopup.h"
+#include "theme.h"
 #include <QKeyEvent>
 #include <QListWidgetItem>
 #include <QFont>
@@ -18,26 +19,34 @@ CompletionPopup::CompletionPopup(QWidget *parent)
     font.setPointSize(10);
     setFont(font);
 
-    // Style
-    setStyleSheet(
-        "QListWidget {"
-        "    background-color: #2b2b2b;"
-        "    color: #d4d4d4;"
-        "    border: 1px solid #454545;"
-        "    outline: none;"
-        "}"
-        "QListWidget::item {"
-        "    padding: 4px 8px;"
-        "    border: none;"
-        "}"
-        "QListWidget::item:selected {"
-        "    background-color: #094771;"
-        "    color: #ffffff;"
-        "}"
-        "QListWidget::item:hover {"
-        "    background-color: #2a2a2a;"
-        "}"
-    );
+    // Style — theme-aware
+    auto applyThemeStyle = [this]() {
+        Theme theme = ThemeManager::instance().currentTheme();
+        setStyleSheet(QString(
+            "QListWidget {"
+            "    background-color: %1;"
+            "    color: %2;"
+            "    border: 1px solid %3;"
+            "    outline: none;"
+            "}"
+            "QListWidget::item {"
+            "    padding: 4px 8px;"
+            "    border: none;"
+            "}"
+            "QListWidget::item:selected {"
+            "    background-color: %4;"
+            "    color: #ffffff;"
+            "}"
+            "QListWidget::item:hover {"
+            "    background-color: %5;"
+            "}"
+        ).arg(theme.menuBackground.name(), theme.menuForeground.name(),
+              theme.borderColor.name(), theme.accentPrimary.name(),
+              theme.currentLineBackground.name()));
+    };
+    applyThemeStyle();
+    connect(&ThemeManager::instance(), &ThemeManager::themeChanged,
+            this, applyThemeStyle);
 
     connect(this, &QListWidget::itemActivated, this, &CompletionPopup::onItemActivated);
 }

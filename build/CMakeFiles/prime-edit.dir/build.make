@@ -156,10 +156,7 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/solidity.js
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/lua.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/powershell.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/vim.json
-prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/olive_notepad_icon.png
-prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/notepad-supreme.svg
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/prime_edit_icon.png
-prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/notepad_supreme_icon.png
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/toolbar/keyboard-tab.svg
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/toolbar/delete-line.svg
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/icons/toolbar/undo.svg

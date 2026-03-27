@@ -5,8 +5,11 @@
 #include <QIcon>
 #include <QPixmap>
 #include "ui/mainwindow.h"
+#include "ui/editor.h"
 #include "ui/recoverydialog.h"
 #include "ui/theme.h"
+#include "ui/tabwidget.h"
+#include "core/document.h"
 #include "utils/settings.h"
 #include "core/session.h"
 #include "core/pluginmanager.h"
@@ -93,6 +96,13 @@ int main(int argc, char *argv[])
     // Restore session if no files specified and setting enabled
     if (files.isEmpty() && Settings::instance().restoreSession()) {
         Session::instance().restore(&mainWindow);
+        // Close the initial empty "Untitled 1" tab if session restored files
+        if (mainWindow.tabWidget()->count() > 1) {
+            Editor *first = qobject_cast<Editor*>(mainWindow.tabWidget()->widget(0));
+            if (first && first->document() && first->document()->isUntitled() && first->toPlainText().isEmpty()) {
+                mainWindow.closeFile(0);
+            }
+        }
     }
 
     int result = app.exec();

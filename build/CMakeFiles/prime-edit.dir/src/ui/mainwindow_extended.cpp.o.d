@@ -530,6 +530,8 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.h \
@@ -555,4 +557,11 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qinputdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QToolTip \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtooltip.h
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtooltip.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSpinBox \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qspinbox.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QCheckBox \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcheckbox.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QRadioButton \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qradiobutton.h

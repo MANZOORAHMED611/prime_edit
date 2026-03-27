@@ -391,6 +391,8 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: prime-edit_
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
@@ -1438,6 +1440,8 @@ CMakeFiles/prime-edit.dir/src/core/document.cpp.o: ../src/core/document.cpp \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
@@ -1854,6 +1858,8 @@ CMakeFiles/prime-edit.dir/src/core/documentmanager.cpp.o: ../src/core/documentma
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
@@ -2984,7 +2990,12 @@ CMakeFiles/prime-edit.dir/src/core/largefile.cpp.o: ../src/core/largefile.cpp \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
+  /usr/include/x86_64-linux-gnu/sys/mman.h \
+  /usr/include/x86_64-linux-gnu/bits/mman.h \
+  /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h \
+  /usr/include/x86_64-linux-gnu/bits/mman-linux.h \
+  /usr/include/x86_64-linux-gnu/bits/mman-shared.h
 
 CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o: ../src/core/llmevaluator.cpp \
   /usr/include/stdc-predef.h \
@@ -4692,7 +4703,48 @@ CMakeFiles/prime-edit.dir/src/core/macrorecorder.cpp.o: ../src/core/macrorecorde
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonArray \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStandardPaths \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDir \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdir.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfiledevice.h \
+  /usr/include/c++/11/filesystem \
+  /usr/include/c++/11/bits/fs_fwd.h \
+  /usr/include/c++/11/bits/fs_path.h \
+  /usr/include/c++/11/locale \
+  /usr/include/c++/11/bits/locale_facets.h \
+  /usr/include/c++/11/cwctype \
+  /usr/include/wctype.h \
+  /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h \
+  /usr/include/c++/11/bits/locale_facets.tcc \
+  /usr/include/c++/11/bits/locale_facets_nonio.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/11/bits/codecvt.h \
+  /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/11/bits/locale_conv.h \
+  /usr/include/c++/11/iomanip \
+  /usr/include/c++/11/bits/quoted_string.h \
+  /usr/include/c++/11/sstream \
+  /usr/include/c++/11/istream \
+  /usr/include/c++/11/ios \
+  /usr/include/c++/11/bits/basic_ios.h \
+  /usr/include/c++/11/bits/basic_ios.tcc \
+  /usr/include/c++/11/ostream \
+  /usr/include/c++/11/bits/ostream.tcc \
+  /usr/include/c++/11/bits/istream.tcc \
+  /usr/include/c++/11/bits/sstream.tcc \
+  /usr/include/c++/11/codecvt \
+  /usr/include/c++/11/bits/fs_dir.h \
+  /usr/include/c++/11/bits/fs_ops.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFile \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h
 
 CMakeFiles/prime-edit.dir/src/core/piecetable.cpp.o: ../src/core/piecetable.cpp \
   /usr/include/stdc-predef.h \
@@ -7161,6 +7213,8 @@ CMakeFiles/prime-edit.dir/src/core/session.cpp.o: ../src/core/session.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QDir \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qdir.h \
@@ -7169,8 +7223,6 @@ CMakeFiles/prime-edit.dir/src/core/session.cpp.o: ../src/core/session.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QStandardPaths \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QScrollBar \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qscrollbar.h
 
@@ -7632,57 +7684,120 @@ CMakeFiles/prime-edit.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdockwidget.h \
-  ../src/ui/recoverydialog.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
+  ../src/ui/editor.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextoption.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextcursor.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextformat.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpen.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qabstracttextdocumentlayout.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextlayout.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qeventpoint.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qvector2d.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qvectornd.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpointingdevice.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qinputdevice.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qscreen.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QRect \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qrect.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QSize \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsize.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QSizeF \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTransform \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qglyphrun.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qrawfont.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextDocument \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QSet \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QTimer \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
+  ../src/core/searchengine.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
+  ../src/core/lspclient.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonDocument \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h \
+  ../src/core/largefile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFile \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
+  ../src/ui/completionpopup.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistview.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemview.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qitemselectionmodel.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemdelegate.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyleoption.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qvalidator.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qslider.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractslider.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyle.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
+  ../src/core/lspclient.h \
+  ../src/ui/recoverydialog.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
   ../src/ui/theme.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+  ../src/ui/tabwidget.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabBar \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QDesktopServices \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qdesktopservices.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QClipboard \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qclipboard.h \
+  ../src/core/document.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
+  ../src/core/piecetable.h \
   ../src/utils/settings.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
   ../src/core/session.h \
   ../src/core/pluginmanager.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QPluginLoader \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qpluginloader.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qlibrary.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
   ../src/core/plugininterface.h
 
@@ -9780,6 +9895,11 @@ CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o: ../src/ui/completionpopu
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
+  ../src/ui/theme.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QKeyEvent \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h \
@@ -9802,8 +9922,6 @@ CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o: ../src/ui/completionpopu
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qnativeinterface.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidgetItem \
-  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
-  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QFontDatabase \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h
 
@@ -10311,6 +10429,11 @@ CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o: ../src/ui/documentmap.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabwidget.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h \
   ../src/core/lspclient.h \
+  ../src/ui/theme.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QPainter \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qpainter.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QPaintEvent \
@@ -10835,6 +10958,8 @@ CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o: ../src/ui/editor.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   ../src/core/macrorecorder.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QKeyEvent \
@@ -11744,6 +11869,26 @@ CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o: ../src/ui/evalresultwid
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLabel \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlabel.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qpicture.h \
+  ../src/ui/theme.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h \
@@ -15604,6 +15749,8 @@ CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o: ../src/ui/lspbridge.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   ../src/core/lspmanager.h \
   ../src/core/lspclient.h \
@@ -16660,6 +16807,8 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o: ../src/ui/mainwindow.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   ../src/core/documentmanager.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
@@ -17315,6 +17464,8 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: ../src/ui/mainwindow
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   ../src/core/islamicbridge.h \
   ../src/core/schemavalidator.h \
@@ -17341,7 +17492,14 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: ../src/ui/mainwindow
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qinputdialog.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QToolTip \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtooltip.h
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtooltip.h \
+  ../src/ui/columneditor.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSpinBox \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qspinbox.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QCheckBox \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcheckbox.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QRadioButton \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qradiobutton.h
 
 CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o: ../src/ui/markdownpreview.cpp \
   /usr/include/stdc-predef.h \
@@ -20998,6 +21156,8 @@ CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o: ../src/ui/statusbar.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h
 
 CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o: ../src/ui/tabwidget.cpp \
@@ -21522,6 +21682,8 @@ CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o: ../src/ui/tabwidget.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
   ../src/core/piecetable.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QMouseEvent \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
@@ -24687,8 +24849,6 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 
 ../src/ui/functionlist.cpp:
 
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QHeaderView:
-
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QCursor:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLayout:
@@ -24750,6 +24910,12 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QDebug:
 
 ../src/core/lspclient.cpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QHeaderView:
+
+/usr/include/x86_64-linux-gnu/bits/mman-shared.h:
+
+/usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h:
 
 ../src/core/largefile.cpp:
 
@@ -24836,6 +25002,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_markdownpreview.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmenubar.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmenu.h:
+
+/usr/include/x86_64-linux-gnu/sys/mman.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMenu:
 
@@ -24988,6 +25156,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_commandpalette.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QRadioButton:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qicon.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcheckbox.h:
 
 ../src/ui/macrodialog.h:
 
@@ -25403,6 +25573,8 @@ prime-edit_autogen/PRMOGMWJPH/moc_largefile.cpp:
 
 /usr/include/c++/11/debug/debug.h:
 
+/usr/include/x86_64-linux-gnu/bits/mman-linux.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
@@ -25803,6 +25975,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_evalresultwidget.cpp:
 
 /usr/include/asm-generic/errno-base.h:
 
+/usr/include/x86_64-linux-gnu/bits/mman.h:
+
 ../src/ui/searchdialog.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMenuBar:
@@ -25920,14 +26094,6 @@ prime-edit_autogen/YPKJ5OE7LN/moc_toolbarmanager.cpp:
 ../src/ui/recoverydialog.cpp:
 
 /usr/include/c++/11/list:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid:
-
-/usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication_platform.h:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/gthr.h:
-
-/usr/include/c++/11/bits/list.tcc:
 
 /usr/include/c++/11/map:
 
@@ -26060,6 +26226,14 @@ prime-edit_autogen/YPKJ5OE7LN/moc_terminalwidget.cpp:
 /usr/include/x86_64-linux-gnu/bits/local_lim.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtGui/qguiapplication_platform.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/gthr.h:
+
+/usr/include/c++/11/bits/list.tcc:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid:
 
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qhostaddress.h:
 
@@ -26312,5 +26486,3 @@ prime-edit_autogen/VSCBVMNR7M/moc_settings.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qspinbox.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qvalidator.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcheckbox.h:

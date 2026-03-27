@@ -187,7 +187,7 @@ QStringList LargeFileReader::lines(qint64 startLine, qint64 count) const
     result.reserve(static_cast<int>(count));
 
     for (qint64 i = startLine;
-         i < startLine + count && i < m_lineOffsets.size();
+         i < startLine + count && i < m_totalLines;
          ++i) {
         result.append(line(i));
     }

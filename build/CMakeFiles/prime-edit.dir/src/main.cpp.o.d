@@ -394,56 +394,119 @@ CMakeFiles/prime-edit.dir/src/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdockwidget.h \
- /home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.h \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPlainTextEdit \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qplaintextedit.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextedit.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextoption.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextcursor.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextformat.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qpen.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qabstracttextdocumentlayout.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextlayout.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qeventpoint.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qvector2d.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qvectornd.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qpointingdevice.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qinputdevice.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qscreen.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QRect \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qrect.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QSize \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qsize.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QSizeF \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QTransform \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qglyphrun.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qrawfont.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextDocument \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qtextdocument.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QSet \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QTimer \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QRegularExpression \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonDocument \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QFile \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemview.h \
- /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qitemselectionmodel.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemdelegate.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyleoption.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qvalidator.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qslider.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractslider.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyle.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/../core/lspclient.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDialog \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdialog.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTabBar \
+ /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QDesktopServices \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qdesktopservices.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QClipboard \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qclipboard.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/document.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/session.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QPluginLoader \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpluginloader.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlibrary.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/plugininterface.h

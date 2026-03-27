@@ -7,6 +7,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QStandardPaths>
+#include <QDir>
+#include <QFile>
 
 MacroRecorder::MacroRecorder()
     : m_recording(false)
@@ -171,15 +174,59 @@ QString MacroRecorder::currentMacroDescription() const
 
 void MacroRecorder::loadMacrosFromSettings()
 {
-    // Load from settings (simplified - would use JSON in real implementation)
-    // For now, just initialize empty
     m_savedMacros.clear();
+
+    QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    QString filePath = configPath + "/macros.json";
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) return;
+
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    if (!doc.isObject()) return;
+
+    QJsonObject root = doc.object();
+    for (auto it = root.begin(); it != root.end(); ++it) {
+        QVector<MacroEvent> events;
+        QJsonArray arr = it.value().toArray();
+        for (const QJsonValue &val : arr) {
+            QJsonObject obj = val.toObject();
+            MacroEvent event;
+            event.type = static_cast<MacroEvent::Type>(obj["type"].toInt());
+            event.key = obj["key"].toInt();
+            event.modifiers = static_cast<Qt::KeyboardModifiers>(obj["modifiers"].toInt());
+            event.text = obj["text"].toString();
+            events.append(event);
+        }
+        m_savedMacros[it.key()] = events;
+    }
 }
 
 void MacroRecorder::saveMacrosToSettings()
 {
-    // Save to settings (simplified - would use JSON in real implementation)
-    // For now, keep in memory only
+    QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    QDir().mkpath(configPath);
+    QString filePath = configPath + "/macros.json";
+
+    QJsonObject root;
+    for (auto it = m_savedMacros.constBegin(); it != m_savedMacros.constEnd(); ++it) {
+        QJsonArray arr;
+        for (const MacroEvent &event : it.value()) {
+            QJsonObject obj;
+            obj["type"] = static_cast<int>(event.type);
+            obj["key"] = event.key;
+            obj["modifiers"] = static_cast<int>(event.modifiers);
+            obj["text"] = event.text;
+            arr.append(obj);
+        }
+        root[it.key()] = arr;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) return;
+
+    QJsonDocument doc(root);
+    file.write(doc.toJson(QJsonDocument::Compact));
 }
 
 QString MacroRecorder::eventToString(const MacroEvent &event) const

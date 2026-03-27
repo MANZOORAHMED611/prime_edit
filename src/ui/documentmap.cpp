@@ -1,5 +1,6 @@
 #include "documentmap.h"
 #include "editor.h"
+#include "theme.h"
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -67,12 +68,13 @@ void DocumentMapWidget::regenerateMap()
         mapHeight = 1;
     }
 
+    Theme theme = ThemeManager::instance().currentTheme();
     QPixmap pixmap(mapWidth, mapHeight);
-    pixmap.fill(Qt::white);
+    pixmap.fill(theme.background);
 
     QPainter painter(&pixmap);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor("#606060"));
+    painter.setBrush(theme.foreground);
 
     QTextBlock block = doc->begin();
     int y = 0;
@@ -96,7 +98,8 @@ void DocumentMapWidget::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
 
     QPainter painter(this);
-    painter.fillRect(rect(), Qt::white);
+    Theme theme = ThemeManager::instance().currentTheme();
+    painter.fillRect(rect(), theme.background);
 
     if (m_cachedMap.isNull() || !m_editor) {
         return;

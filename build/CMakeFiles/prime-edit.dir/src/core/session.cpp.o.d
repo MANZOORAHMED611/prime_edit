@@ -479,6 +479,8 @@ CMakeFiles/prime-edit.dir/src/core/session.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDir \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdir.h \
@@ -487,7 +489,5 @@ CMakeFiles/prime-edit.dir/src/core/session.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStandardPaths \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QScrollBar \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qscrollbar.h

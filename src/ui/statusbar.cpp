@@ -3,6 +3,8 @@
 #include "mainwindow.h"
 #include "theme.h"
 #include "core/document.h"
+#include <QPlainTextEdit>
+#include <QTextDocument>
 
 StatusBarWidget::StatusBarWidget(MainWindow *parent)
     : QStatusBar(parent)
@@ -144,7 +146,8 @@ void StatusBarWidget::updateFromEditor(Editor *editor)
         QString lang = doc->language();
         setLanguage(lang.isEmpty() ? "Plain Text" : lang);
 
-        setLength(doc->text().length(), doc->text().count('\n') + 1);
+        QTextDocument *qdoc = static_cast<QPlainTextEdit*>(editor)->document();
+        setLength(qdoc->characterCount(), qdoc->blockCount());
     }
 }
 

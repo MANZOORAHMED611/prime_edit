@@ -1,4 +1,5 @@
 #include "evalresultwidget.h"
+#include "theme.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QKeyEvent>
@@ -7,19 +8,21 @@
 
 EvalResultWidget::EvalResultWidget(QWidget *parent) : QWidget(parent)
 {
-    setStyleSheet("background-color: #1e1e2e; border: 2px solid #6c71c4; border-radius: 4px;");
+    Theme theme = ThemeManager::instance().currentTheme();
+    setStyleSheet(QString("background-color: %1; border: 2px solid %2; border-radius: 4px;")
+        .arg(theme.menuBackground.name(), theme.accentPrimary.name()));
 
     auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(8, 8, 8, 8);
 
     m_statusLabel = new QLabel(tr("Evaluation Result"), this);
-    m_statusLabel->setStyleSheet("color: #c0c0c0; font-weight: bold;");
+    m_statusLabel->setStyleSheet(QString("color: %1; font-weight: bold;").arg(theme.menuForeground.name()));
     layout->addWidget(m_statusLabel);
 
     m_resultView = new QPlainTextEdit(this);
     m_resultView->setReadOnly(true);
-    m_resultView->setStyleSheet(
-        "background-color: #282a36; color: #f8f8f2; border: 1px solid #44475a;");
+    m_resultView->setStyleSheet(QString("background-color: %1; color: %2; border: 1px solid %3;")
+        .arg(theme.background.name(), theme.foreground.name(), theme.borderColor.name()));
     m_resultView->setMaximumHeight(200);
     layout->addWidget(m_resultView);
 

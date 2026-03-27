@@ -71,7 +71,7 @@ void LSPClient::shutdown()
     }
 
     if (m_process) {
-        delete m_process;
+        m_process->deleteLater();
         m_process = nullptr;
     }
 
@@ -100,7 +100,7 @@ void LSPClient::didChange(const QString &uri, const QString &text)
     QJsonObject params;
     QJsonObject textDocument;
     textDocument["uri"] = uri;
-    textDocument["version"] = m_nextId++;  // Simple versioning
+    textDocument["version"] = m_documentVersion++;
     params["textDocument"] = textDocument;
 
     QJsonArray contentChanges;
@@ -294,7 +294,10 @@ void LSPClient::onReadyRead()
             }
         }
 
-        if (contentLength == 0) break;
+        if (contentLength == 0) {
+            m_buffer.remove(0, headerEnd + 4);
+            continue;
+        }
 
         int messageStart = headerEnd + 4;
         if (m_buffer.size() < messageStart + contentLength) break;

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QFileInfo>
+#include <QUuid>
 #include <memory>
 #include "piecetable.h"
 
@@ -100,8 +101,8 @@ private:
     bool m_modified = false;
     bool m_readOnly = false;
     LargeFileReader *m_largeFileReader = nullptr;
+    QString m_uuid;
 
-    static QString detectEncoding(const QByteArray &data);
     static LineEnding detectLineEnding(const QString &text);
     QString normalizeLineEndings(const QString &text, LineEnding target);
     QString recoveryFilePath() const;

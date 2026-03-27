@@ -113,8 +113,8 @@ void ToolbarManager::createToolbars()
 
     // Group 5 — Macro
     QAction *startRecAction = createAction("startRecording", tr("Record"),
-                                          tr("Start Recording Macro (Ctrl+Shift+R)"),
-                                          "Ctrl+Shift+R", SLOT(startRecordingMacro()), ":/icons/toolbar/record-circle.svg");
+                                          tr("Start Recording Macro (F9)"),
+                                          "", SLOT(startRecordingMacro()), ":/icons/toolbar/record-circle.svg");
     m_toolbar->addAction(startRecAction);
 
     QAction *stopRecAction = createAction("stopRecording", tr("Stop"),
@@ -124,8 +124,8 @@ void ToolbarManager::createToolbars()
     m_toolbar->addAction(stopRecAction);
 
     QAction *playbackAction = createAction("playback", tr("Play"),
-                                          tr("Playback Macro (Ctrl+Shift+P)"),
-                                          "Ctrl+Shift+P", SLOT(playbackMacro()), ":/icons/toolbar/play-circle.svg");
+                                          tr("Playback Macro (F10)"),
+                                          "", SLOT(playbackMacro()), ":/icons/toolbar/play-circle.svg");
     m_toolbar->addAction(playbackAction);
 
     m_toolbar->addSeparator();
@@ -133,7 +133,7 @@ void ToolbarManager::createToolbars()
     // Group 6 — Format
     QAction *commentAction = createAction("toggleComment", tr("Comment"),
                                          tr("Toggle Comment (Ctrl+/)"),
-                                         "Ctrl+/", SLOT(toggleComment()), ":/icons/toolbar/comment-outline.svg");
+                                         "", SLOT(toggleComment()), ":/icons/toolbar/comment-outline.svg");
     m_toolbar->addAction(commentAction);
 
     QAction *indentAction = createAction("increaseIndent", tr("Indent"),

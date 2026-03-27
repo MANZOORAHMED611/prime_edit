@@ -329,6 +329,8 @@ CMakeFiles/prime-edit.dir/src/core/documentmanager.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \

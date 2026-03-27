@@ -91,6 +91,7 @@ private:
     QStringList m_serverArgs;
 
     int m_nextId;
+    int m_documentVersion = 1;
     bool m_initialized;
     QString m_rootPath;
 

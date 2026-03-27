@@ -11,12 +11,12 @@
 
 Document::Document(QObject *parent)
     : QObject(parent)
+    , m_uuid(QUuid::createUuid().toString(QUuid::Id128))
 {
 }
 
 Document::~Document()
 {
-    clearRecovery();
 }
 
 bool Document::load(const QString &filePath)
@@ -305,35 +305,11 @@ void Document::clearRecovery()
     }
 }
 
-QString Document::detectEncoding(const QByteArray &data)
-{
-    // Check for BOM
-    if (data.startsWith("\xEF\xBB\xBF")) {
-        return "UTF-8-BOM";
-    }
-    if (data.startsWith("\xFF\xFE")) {
-        return "UTF-16LE";
-    }
-    if (data.startsWith("\xFE\xFF")) {
-        return "UTF-16BE";
-    }
-
-    // Check if valid UTF-8
-    auto decoder = QStringDecoder(QStringDecoder::Utf8);
-    decoder(data);
-    if (!decoder.hasError()) {
-        return "UTF-8";
-    }
-
-    // Default to ISO-8859-1
-    return "ISO-8859-1";
-}
-
 Document::LineEnding Document::detectLineEnding(const QString &text)
 {
-    int crlf = 0, lf = 0, cr = 0;
+    qint64 crlf = 0, lf = 0, cr = 0;
 
-    for (int i = 0; i < text.length(); ++i) {
+    for (qint64 i = 0; i < text.length(); ++i) {
         if (text[i] == '\r') {
             if (i + 1 < text.length() && text[i + 1] == '\n') {
                 ++crlf;
@@ -363,7 +339,7 @@ QString Document::normalizeLineEndings(const QString &text, LineEnding target)
     case ClassicMac: ending = "\r"; break;
     }
 
-    for (int i = 0; i < text.length(); ++i) {
+    for (qint64 i = 0; i < text.length(); ++i) {
         if (text[i] == '\r') {
             result.append(ending);
             if (i + 1 < text.length() && text[i + 1] == '\n') {
@@ -385,7 +361,7 @@ QString Document::recoveryFilePath() const
     QString hash;
 
     if (m_filePath.isEmpty()) {
-        hash = QString::number(reinterpret_cast<quintptr>(this), 16);
+        hash = m_uuid;
     } else {
         hash = QString::fromLatin1(
             QCryptographicHash::hash(m_filePath.toUtf8(), QCryptographicHash::Md5).toHex());

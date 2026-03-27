@@ -142,11 +142,11 @@ public:
     void setShowIndentGuide(bool show);
     bool showIndentGuide() const { return m_showIndentGuide; }
 
+    // Column editing
+    void insertTextAtColumn(const QString &text);
+
 public slots:
     void jumpToMatchingBracket();
-
-signals:
-    void cursorPositionChanged();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -197,7 +197,6 @@ private:
     };
     ColumnSelection m_columnSelection;
     void paintColumnSelection();
-    void insertTextAtColumn(const QString &text);
 
     // Whitespace / EOL / indent guide visualization
     bool m_showWhitespace = false;

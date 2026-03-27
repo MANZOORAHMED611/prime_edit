@@ -580,6 +580,8 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfile.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QUuid \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \

@@ -84,29 +84,30 @@ QVector<SearchResult> SearchEngine::findAll(
     QRegularExpression regex = buildRegex(pattern, opts);
     if (!regex.isValid()) return results;
 
-    QRegularExpressionMatchIterator it = regex.globalMatch(text);
-    QStringList lines = text.split('\n');
+    // Pre-compute line start offsets
+    QVector<int> lineStarts;
+    lineStarts.append(0);
+    for (int i = 0; i < text.length(); ++i) {
+        if (text.at(i) == '\n') {
+            lineStarts.append(i + 1);
+        }
+    }
 
+    QRegularExpressionMatchIterator it = regex.globalMatch(text);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
-
         int pos = match.capturedStart();
-        int lineNum = 1;
-        int lineStart = 0;
-        for (int i = 0; i < pos; ++i) {
-            if (text.at(i) == '\n') {
-                lineNum++;
-                lineStart = i + 1;
-            }
-        }
+
+        // Binary search for line number
+        int lineNum = static_cast<int>(std::upper_bound(lineStarts.begin(), lineStarts.end(), pos) - lineStarts.begin());
+        int lineStart = lineStarts[lineNum - 1];
+        int lineEnd = (lineNum < lineStarts.size()) ? lineStarts[lineNum] - 1 : text.length();
 
         SearchResult result;
         result.line = lineNum;
         result.column = pos - lineStart;
         result.length = match.capturedLength();
-        result.lineText = (lineNum - 1 < lines.size())
-                              ? lines.at(lineNum - 1)
-                              : QString();
+        result.lineText = text.mid(lineStart, lineEnd - lineStart);
         results.append(result);
     }
 
@@ -284,8 +285,8 @@ void SearchEngine::searchLargeFile(
     qint64 lineNum = 1;
     constexpr qint64 CHUNK_SIZE = 1024 * 1024; // 1MB chunks
 
-    for (qint64 offset = 0; offset < fileSize; offset += CHUNK_SIZE) {
-        // Overlap slightly to avoid missing matches at boundaries
+    qint64 lastMatchEnd = 0;
+    for (qint64 offset = 0; offset < fileSize; ) {
         qint64 chunkEnd = qMin(offset + CHUNK_SIZE + 4096, fileSize);
         qint64 chunkLen = chunkEnd - offset;
 
@@ -296,6 +297,14 @@ void SearchEngine::searchLargeFile(
         QRegularExpressionMatchIterator it = regex.globalMatch(chunk);
         while (it.hasNext()) {
             QRegularExpressionMatch match = it.next();
+            qint64 absolutePos = offset + match.capturedStart();
+
+            // Skip if this match was already reported in previous chunk's overlap
+            if (absolutePos < lastMatchEnd) continue;
+            // Skip matches that start in the overlap zone of next chunk
+            if (match.capturedStart() >= CHUNK_SIZE && offset + CHUNK_SIZE < fileSize) continue;
+
+            lastMatchEnd = absolutePos + match.capturedLength();
 
             int matchPos = match.capturedStart();
             int localLine = chunk.left(matchPos).count('\n');
@@ -316,7 +325,7 @@ void SearchEngine::searchLargeFile(
             totalHits++;
         }
 
-        // Count newlines in non-overlapping portion for line tracking
+        // Count newlines only in non-overlapping portion
         qint64 countEnd = qMin(offset + CHUNK_SIZE, fileSize);
         for (qint64 i = offset; i < countEnd; ++i) {
             if (data[i] == '\n') lineNum++;
@@ -324,6 +333,8 @@ void SearchEngine::searchLargeFile(
 
         int pct = static_cast<int>(offset * 100 / fileSize);
         emit largeFileSearchProgress(pct);
+
+        offset += CHUNK_SIZE; // advance by CHUNK_SIZE, not chunkEnd
     }
 
     file.unmap(data);

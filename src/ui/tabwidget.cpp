@@ -99,11 +99,13 @@ void TabBar::contextMenuEvent(QContextMenuEvent *event)
     QAction *closeAction = menu.addAction(tr("Close"));
     QAction *closeOthersAction = menu.addAction(tr("Close Others"));
     QAction *closeRightAction = menu.addAction(tr("Close to the Right"));
+    QAction *closeLeftAction = menu.addAction(tr("Close to the Left"));
     menu.addSeparator();
     QAction *closeAllAction = menu.addAction(tr("Close All"));
 
     closeOthersAction->setEnabled(count() > 1);
     closeRightAction->setEnabled(index < count() - 1);
+    closeLeftAction->setEnabled(index > 0);
 
     QAction *selected = menu.exec(event->globalPos());
 
@@ -113,6 +115,8 @@ void TabBar::contextMenuEvent(QContextMenuEvent *event)
         emit closeOthersRequested(index);
     } else if (selected == closeRightAction) {
         emit closeToRightRequested(index);
+    } else if (selected == closeLeftAction) {
+        emit closeToLeftRequested(index);
     } else if (selected == closeAllAction) {
         emit closeAllRequested();
     }

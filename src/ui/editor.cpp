@@ -43,7 +43,6 @@ Editor::Editor(Document *document, QWidget *parent)
     connect(this, &QPlainTextEdit::blockCountChanged, this, &Editor::updateLineNumberAreaWidth);
     connect(this, &QPlainTextEdit::updateRequest, this, &Editor::updateLineNumberArea);
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &Editor::highlightCurrentLine);
-    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &Editor::cursorPositionChanged);
 
     connect(m_document, &Document::languageChanged, this, [this](const QString &lang) {
         m_highlighter->setLanguage(lang);
@@ -314,6 +313,7 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
         }
 
         block = block.next();
+        if (!block.isValid()) break;
         top = bottom;
         bottom = top + qRound(blockBoundingRect(block).height());
         ++blockNumber;
@@ -471,15 +471,16 @@ int Editor::replaceAll(const QString &findText, const QString &replaceText, QTex
     int count = 0;
     QTextCursor cursor = textCursor();
     cursor.beginEditBlock();
-
     cursor.movePosition(QTextCursor::Start);
     setTextCursor(cursor);
 
     while (findNext(findText, flags)) {
-        textCursor().insertText(replaceText);
+        QTextCursor current = textCursor(); // get the cursor with selection from findNext
+        current.insertText(replaceText);
         ++count;
     }
 
+    cursor = textCursor();
     cursor.endEditBlock();
     return count;
 }
@@ -960,6 +961,37 @@ QString Editor::getCommentString() const
 
 void Editor::toggleComment()
 {
+    QString lang = m_document->language().toLower();
+
+    // HTML/XML use block comments
+    if (lang == "html" || lang == "xml" || lang == "htm") {
+        QTextCursor cursor = textCursor();
+        cursor.beginEditBlock();
+        if (cursor.hasSelection()) {
+            QString selected = cursor.selectedText();
+            if (selected.startsWith("<!-- ") && selected.endsWith(" -->")) {
+                // Uncomment
+                cursor.insertText(selected.mid(5, selected.length() - 9));
+            } else {
+                // Comment
+                cursor.insertText("<!-- " + selected + " -->");
+            }
+        } else {
+            // Comment current line
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            QString line = cursor.selectedText();
+            if (line.trimmed().startsWith("<!-- ") && line.trimmed().endsWith(" -->")) {
+                QString trimmed = line.trimmed();
+                cursor.insertText(line.replace(trimmed, trimmed.mid(5, trimmed.length() - 9)));
+            } else {
+                cursor.insertText("<!-- " + line + " -->");
+            }
+        }
+        cursor.endEditBlock();
+        return;
+    }
+
     QString commentStr = getCommentString();
     QTextCursor cursor = textCursor();
     cursor.beginEditBlock();

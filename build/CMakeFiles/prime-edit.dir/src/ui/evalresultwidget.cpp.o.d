@@ -366,6 +366,26 @@ CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLabel \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlabel.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpicture.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QString \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h \

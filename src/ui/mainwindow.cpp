@@ -135,6 +135,19 @@ void MainWindow::setupUi()
     addDockWidget(Qt::RightDockWidgetArea, m_documentMapDock);
     m_documentMapDock->hide();
 
+    // Setup function list dock widget
+    m_functionList = new FunctionListPanel(this);
+    m_functionListDock = new QDockWidget(tr("Function List"), this);
+    m_functionListDock->setWidget(m_functionList);
+    m_functionListDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    addDockWidget(Qt::RightDockWidgetArea, m_functionListDock);
+    m_functionListDock->hide();
+
+    connect(m_functionList, &FunctionListPanel::functionActivated, this, [this](int line) {
+        Editor *e = currentEditor();
+        if (e) e->goToLine(line);
+    });
+
     // File change monitoring
     connect(&DocumentManager::instance(),
             &DocumentManager::fileExternallyModified,
@@ -477,7 +490,14 @@ void MainWindow::setupMenus()
     // Language menu
     // ============================================================
     m_languageMenu = menuBar()->addMenu(tr("&Language"));
-    m_languageMenu->addAction(tr("Auto-detect"));
+    QAction *autoDetect = m_languageMenu->addAction(tr("Auto-detect"));
+    connect(autoDetect, &QAction::triggered, this, [this]() {
+        Editor *e = currentEditor();
+        if (!e || !e->document()) return;
+        QString detected = LanguageManager::instance().detectLanguage(
+            e->document()->filePath(), e->toPlainText());
+        e->setLanguage(detected);
+    });
     m_languageMenu->addSeparator();
 
     QStringList langs = LanguageManager::instance().availableLanguages();
@@ -495,8 +515,10 @@ void MainWindow::setupMenus()
     // ============================================================
     m_settingsMenu = menuBar()->addMenu(tr("&Settings"));
     m_settingsMenu->addAction(tr("&Preferences..."), this, &MainWindow::showPreferences);
-    m_settingsMenu->addAction(tr("&Style Configurator..."));
-    m_settingsMenu->addAction(tr("&Shortcut Mapper..."));
+    QAction *styleConfigAction = m_settingsMenu->addAction(tr("&Style Configurator..."));
+    styleConfigAction->setEnabled(false);
+    QAction *shortcutMapperAction = m_settingsMenu->addAction(tr("&Shortcut Mapper..."));
+    shortcutMapperAction->setEnabled(false);
 
     // ============================================================
     // Tools menu (Command Palette only)

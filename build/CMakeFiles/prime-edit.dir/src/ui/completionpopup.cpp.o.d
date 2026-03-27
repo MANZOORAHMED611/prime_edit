@@ -363,6 +363,11 @@ CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QMap \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qcolor.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QKeyEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h \
@@ -385,7 +390,5 @@ CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qnativeinterface.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidgetItem \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qfont.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QFontDatabase \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qfontdatabase.h

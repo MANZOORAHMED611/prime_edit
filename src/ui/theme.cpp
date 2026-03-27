@@ -695,7 +695,7 @@ void ThemeManager::saveTheme(const Theme &theme)
 bool ThemeManager::deleteTheme(const QString &name)
 {
     // Don't delete built-in themes
-    QStringList builtIn = {"Default Dark", "Default Light", "Monokai", "Dracula", "Nord",
+    QStringList builtIn = {"Default Dark", "Default Light", "Olive", "Monokai", "Dracula", "Nord",
                             "Solarized Dark", "Solarized Light", "Notepad++"};
     if (builtIn.contains(name)) {
         return false;

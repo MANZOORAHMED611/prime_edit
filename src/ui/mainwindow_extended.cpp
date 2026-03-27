@@ -26,6 +26,7 @@
 #include <QInputDialog>
 #include <QLineEdit>
 #include <QToolTip>
+#include "columneditor.h"
 
 // Comment operations
 void MainWindow::blockComment()
@@ -72,7 +73,12 @@ void MainWindow::removeEmptyLines()
         }
     }
 
-    editor->setPlainText(nonEmptyLines.join('\n'));
+    QString newText = nonEmptyLines.join('\n');
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(newText);
+    cursor.endEditBlock();
 }
 
 void MainWindow::removeEmptyLinesWithBlanks()
@@ -97,7 +103,12 @@ void MainWindow::removeEmptyLinesWithBlanks()
         }
     }
 
-    editor->setPlainText(filteredLines.join('\n'));
+    QString newText = filteredLines.join('\n');
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(newText);
+    cursor.endEditBlock();
 }
 
 void MainWindow::removeConsecutiveDuplicateLines()
@@ -117,7 +128,12 @@ void MainWindow::removeConsecutiveDuplicateLines()
         previousLine = line;
     }
 
-    editor->setPlainText(uniqueLines.join('\n'));
+    QString newText = uniqueLines.join('\n');
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(newText);
+    cursor.endEditBlock();
 }
 
 void MainWindow::splitLines()
@@ -145,7 +161,12 @@ void MainWindow::trimLeadingWhitespace()
         line = line.mid(i);
     }
 
-    editor->setPlainText(lines.join('\n'));
+    QString newText = lines.join('\n');
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(newText);
+    cursor.endEditBlock();
 }
 
 void MainWindow::trimLeadingAndTrailing()
@@ -160,7 +181,12 @@ void MainWindow::trimLeadingAndTrailing()
         line = line.trimmed();
     }
 
-    editor->setPlainText(lines.join('\n'));
+    QString newText = lines.join('\n');
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(newText);
+    cursor.endEditBlock();
 }
 
 void MainWindow::eolToSpace()
@@ -170,7 +196,11 @@ void MainWindow::eolToSpace()
 
     QString text = editor->toPlainText();
     text.replace('\n', ' ');
-    editor->setPlainText(text);
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(text);
+    cursor.endEditBlock();
 }
 
 void MainWindow::removeUnnecessaryBlanks()
@@ -183,7 +213,11 @@ void MainWindow::removeUnnecessaryBlanks()
     // Remove multiple consecutive blank lines
     text.replace(QRegularExpression("\n\\s*\n\\s*\n"), "\n\n");
 
-    editor->setPlainText(text);
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(text);
+    cursor.endEditBlock();
 }
 
 void MainWindow::tabToSpace()
@@ -193,7 +227,11 @@ void MainWindow::tabToSpace()
 
     QString text = editor->toPlainText();
     text.replace('\t', "    "); // 4 spaces per tab
-    editor->setPlainText(text);
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(text);
+    cursor.endEditBlock();
 }
 
 void MainWindow::spaceToTabAll()
@@ -203,7 +241,11 @@ void MainWindow::spaceToTabAll()
 
     QString text = editor->toPlainText();
     text.replace("    ", "\t"); // 4 spaces to tab
-    editor->setPlainText(text);
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(text);
+    cursor.endEditBlock();
 }
 
 void MainWindow::spaceToTabLeading()
@@ -227,7 +269,12 @@ void MainWindow::spaceToTabLeading()
         line = QString("\t").repeated(tabs) + QString(" ").repeated(remaining) + line.mid(spaceCount);
     }
 
-    editor->setPlainText(lines.join('\n'));
+    QString newText = lines.join('\n');
+    QTextCursor cursor = editor->textCursor();
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
+    cursor.insertText(newText);
+    cursor.endEditBlock();
 }
 
 // Text case operations
@@ -335,15 +382,14 @@ void MainWindow::toggleFullScreen()
 void MainWindow::toggleDistractionFree()
 {
     // Hide/show all toolbars, menus, status bar
-    static bool distractionFree = false;
-    distractionFree = !distractionFree;
+    m_distractionFree = !m_distractionFree;
 
-    menuBar()->setVisible(!distractionFree);
-    statusBar()->setVisible(!distractionFree);
+    menuBar()->setVisible(!m_distractionFree);
+    statusBar()->setVisible(!m_distractionFree);
 
     // Hide all toolbars
     for (QToolBar *toolbar : findChildren<QToolBar*>()) {
-        toolbar->setVisible(!distractionFree);
+        toolbar->setVisible(!m_distractionFree);
     }
 }
 
@@ -564,8 +610,17 @@ void MainWindow::columnMode()
 
 void MainWindow::columnEditor()
 {
-    // TODO: Implement column editor
-    statusBar()->showMessage(tr("Column editor not yet implemented"), 3000);
+    Editor *editor = currentEditor();
+    if (!editor) return;
+
+    ColumnEditor dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        // Apply column editor result
+        if (dialog.mode() == ColumnEditor::TextMode) {
+            editor->insertTextAtColumn(dialog.text());
+        }
+        // Number mode would need column selection active
+    }
 }
 
 void MainWindow::beginEndSelect()
@@ -872,5 +927,18 @@ void MainWindow::validateCurrentDocument()
     if (!e) return;
 
     QString text = e->toPlainText();
-    m_schemaValidator->validate(text);
+    QVector<SchemaViolation> violations = m_schemaValidator->validate(text);
+
+    // Update status bar with validation results
+    if (violations.isEmpty()) {
+        statusBar()->showMessage(tr("Schema: All clear"), 5000);
+    } else {
+        int errors = 0, warnings = 0;
+        for (const auto &v : violations) {
+            if (v.severity == SchemaViolation::Error) errors++;
+            else if (v.severity == SchemaViolation::Warning) warnings++;
+        }
+        statusBar()->showMessage(
+            QString("Schema: %1 errors, %2 warnings").arg(errors).arg(warnings), 10000);
+    }
 }

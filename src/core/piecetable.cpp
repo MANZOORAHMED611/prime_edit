@@ -271,42 +271,63 @@ void PieceTable::undo()
 {
     if (m_undoStack.isEmpty()) return;
 
-    UndoEntry entry = m_undoStack.takeLast();
-    m_redoStack.append(entry);
+    int gid = m_undoStack.last().groupId;
 
-    // Temporarily disable undo recording
-    QVector<UndoEntry> savedUndo = m_undoStack;
-    QVector<UndoEntry> savedRedo = m_redoStack;
-
-    if (entry.type == UndoEntry::Insert) {
-        remove(entry.position, entry.text.length());
+    // Collect all entries in this group (or just the single entry)
+    QVector<UndoEntry> toUndo;
+    if (gid > 0) {
+        while (!m_undoStack.isEmpty() && m_undoStack.last().groupId == gid) {
+            toUndo.prepend(m_undoStack.takeLast());
+        }
     } else {
-        insert(entry.position, entry.text);
+        toUndo.append(m_undoStack.takeLast());
     }
 
-    m_undoStack = savedUndo;
-    m_redoStack = savedRedo;
+    // Undo in reverse order using internal methods (no undo recording)
+    for (int i = toUndo.size() - 1; i >= 0; --i) {
+        const UndoEntry &entry = toUndo[i];
+        if (entry.type == UndoEntry::Insert) {
+            removeInternal(entry.position, entry.text.length());
+        } else {
+            insertInternal(entry.position, entry.text);
+        }
+    }
+
+    // Push all entries to redo stack (in original order)
+    for (const UndoEntry &entry : toUndo) {
+        m_redoStack.append(entry);
+    }
 }
 
 void PieceTable::redo()
 {
     if (m_redoStack.isEmpty()) return;
 
-    UndoEntry entry = m_redoStack.takeLast();
-    m_undoStack.append(entry);
+    int gid = m_redoStack.last().groupId;
 
-    // Temporarily disable undo recording
-    QVector<UndoEntry> savedUndo = m_undoStack;
-    QVector<UndoEntry> savedRedo = m_redoStack;
-
-    if (entry.type == UndoEntry::Insert) {
-        insert(entry.position, entry.text);
+    // Collect all entries in this group (or just the single entry)
+    QVector<UndoEntry> toRedo;
+    if (gid > 0) {
+        while (!m_redoStack.isEmpty() && m_redoStack.last().groupId == gid) {
+            toRedo.prepend(m_redoStack.takeLast());
+        }
     } else {
-        remove(entry.position, entry.text.length());
+        toRedo.append(m_redoStack.takeLast());
     }
 
-    m_undoStack = savedUndo;
-    m_redoStack = savedRedo;
+    // Redo in forward order using internal methods (no undo recording)
+    for (const UndoEntry &entry : toRedo) {
+        if (entry.type == UndoEntry::Insert) {
+            insertInternal(entry.position, entry.text);
+        } else {
+            removeInternal(entry.position, entry.text.length());
+        }
+    }
+
+    // Push all entries to undo stack
+    for (const UndoEntry &entry : toRedo) {
+        m_undoStack.append(entry);
+    }
 }
 
 void PieceTable::clearUndoHistory()
@@ -322,14 +343,97 @@ void PieceTable::beginUndoGroup()
 
 void PieceTable::endUndoGroup()
 {
+    if (m_undoGroupDepth <= 0) return;
     m_undoGroupDepth--;
     if (m_undoGroupDepth == 0 && !m_currentGroup.isEmpty()) {
-        // Combine group into single undo entry
-        // For simplicity, we just add them all
-        m_undoStack.append(m_currentGroup);
+        int gid = m_nextGroupId++;
+        for (auto &entry : m_currentGroup) {
+            entry.groupId = gid;
+            m_undoStack.append(entry);
+        }
         m_currentGroup.clear();
         m_redoStack.clear();
     }
+}
+
+void PieceTable::insertInternal(qint64 position, const QString &text)
+{
+    if (text.isEmpty()) return;
+
+    // Add text to add buffer
+    qint64 addStart = m_addBuffer.length();
+    m_addBuffer.append(text);
+
+    // Create new piece
+    Piece newPiece;
+    newPiece.source = Piece::Add;
+    newPiece.start = addStart;
+    newPiece.length = text.length();
+
+    if (m_pieces.isEmpty()) {
+        m_pieces.append(newPiece);
+    } else {
+        qint64 offsetInPiece;
+        qint64 pieceIndex = pieceIndexForPosition(position, offsetInPiece);
+
+        if (pieceIndex < 0) {
+            m_pieces.append(newPiece);
+        } else if (offsetInPiece == 0) {
+            m_pieces.insert(pieceIndex, newPiece);
+        } else if (offsetInPiece == m_pieces[pieceIndex].length) {
+            m_pieces.insert(pieceIndex + 1, newPiece);
+        } else {
+            Piece &original = m_pieces[pieceIndex];
+            Piece second;
+            second.source = original.source;
+            second.start = original.start + offsetInPiece;
+            second.length = original.length - offsetInPiece;
+            original.length = offsetInPiece;
+
+            m_pieces.insert(pieceIndex + 1, newPiece);
+            m_pieces.insert(pieceIndex + 2, second);
+        }
+    }
+
+    invalidateCache();
+}
+
+void PieceTable::removeInternal(qint64 position, qint64 length)
+{
+    if (length <= 0) return;
+
+    qint64 remaining = length;
+    qint64 pos = position;
+
+    while (remaining > 0 && !m_pieces.isEmpty()) {
+        qint64 offsetInPiece;
+        qint64 pieceIndex = pieceIndexForPosition(pos, offsetInPiece);
+
+        if (pieceIndex < 0) break;
+
+        Piece &piece = m_pieces[pieceIndex];
+        qint64 removeFromPiece = qMin(remaining, piece.length - offsetInPiece);
+
+        if (offsetInPiece == 0 && removeFromPiece == piece.length) {
+            m_pieces.remove(pieceIndex);
+        } else if (offsetInPiece == 0) {
+            piece.start += removeFromPiece;
+            piece.length -= removeFromPiece;
+        } else if (offsetInPiece + removeFromPiece == piece.length) {
+            piece.length -= removeFromPiece;
+        } else {
+            Piece second;
+            second.source = piece.source;
+            second.start = piece.start + offsetInPiece + removeFromPiece;
+            second.length = piece.length - offsetInPiece - removeFromPiece;
+            piece.length = offsetInPiece;
+            m_pieces.insert(pieceIndex + 1, second);
+        }
+
+        remaining -= removeFromPiece;
+    }
+
+    invalidateCache();
 }
 
 void PieceTable::clear()

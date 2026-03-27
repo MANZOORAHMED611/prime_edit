@@ -85,7 +85,7 @@ void LSPBridge::onEditorOpened(Editor *editor)
             if (diagUri == fileUri(editor)) {
                 editor->setDiagnostics(diagnostics);
             }
-        });
+        }, Qt::UniqueConnection);
 
         // Hover
         connect(client, &LSPClient::hoverResult,
@@ -93,7 +93,7 @@ void LSPBridge::onEditorOpened(Editor *editor)
             if (!content.isEmpty()) {
                 QToolTip::showText(QCursor::pos(), content, editor);
             }
-        });
+        }, Qt::UniqueConnection);
 
         // Definition
         connect(client, &LSPClient::definitionResult,
@@ -104,7 +104,7 @@ void LSPBridge::onEditorOpened(Editor *editor)
             m_mainWindow->openFile(path);
             Editor *e = m_mainWindow->currentEditor();
             if (e) e->goToLine(location.line + 1);
-        });
+        }, Qt::UniqueConnection);
 
         // Completion
         connect(client, &LSPClient::completionResult,
@@ -112,13 +112,13 @@ void LSPBridge::onEditorOpened(Editor *editor)
             if (!items.isEmpty()) {
                 editor->showLSPCompletions(items);
             }
-        });
+        }, Qt::UniqueConnection);
 
         // References (handled by MainWindow via signal)
         connect(client, &LSPClient::referencesResult,
                 this, [](const QVector<Location> &locations) {
             Q_UNUSED(locations);
-        });
+        }, Qt::UniqueConnection);
     };
 
     if (client->isInitialized()) {

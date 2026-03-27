@@ -153,8 +153,20 @@ QStringList DocumentManager::recoverableDocuments() const
 void DocumentManager::recoverDocuments(const QStringList &paths)
 {
     for (const QString &path : paths) {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly)) {
+            continue;
+        }
+
+        QString recoveredText = QString::fromUtf8(file.readAll());
+        file.close();
+
         Document *doc = createDocument();
-        doc->loadRecovery();
+        doc->setText(recoveredText);
+        doc->setModified(true);
+
+        // Remove the recovery file after loading
+        QFile::remove(path);
     }
 }
 
