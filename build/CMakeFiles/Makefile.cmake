@@ -169,6 +169,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/prime-edit_autogen.dir/AutogenInfo.json"
   "CMakeFiles/prime-edit_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json"
+  "prime-edit.desktop"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
