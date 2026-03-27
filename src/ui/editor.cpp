@@ -78,8 +78,17 @@ Editor::Editor(Document *document, QWidget *parent)
         }
     }
 
-    // NOW connect textChanged - after initial content is loaded
-    connect(this, &QPlainTextEdit::textChanged, this, &Editor::onTextChanged);
+    // Use contentsChange instead of textChanged — it provides position/removed/added
+    // counts, allowing us to distinguish real edits from formatting-only changes
+    // (syntax highlighting, RTL direction, extra selections)
+    connect(QPlainTextEdit::document(), &QTextDocument::contentsChange,
+            this, [this](int position, int charsRemoved, int charsAdded) {
+        Q_UNUSED(position);
+        // Only mark modified if actual content changed (not just formatting)
+        if ((charsRemoved > 0 || charsAdded > 0) && !m_syncing) {
+            m_document->setModified(true);
+        }
+    });
 }
 
 Editor::~Editor()
@@ -795,19 +804,9 @@ void Editor::jumpToMatchingBracket()
 
 void Editor::onTextChanged()
 {
-    // Prevent recursive calls
-    static bool inTextChanged = false;
-    if (inTextChanged) {
-        return;
-    }
-    inTextChanged = true;
-
-    // Mark document as modified
-    if (!m_syncing) {
-        m_document->setModified(true);
-    }
-
-    inTextChanged = false;
+    // Kept for compatibility — no longer the primary modification detector.
+    // contentsChange signal (connected in constructor) now handles this
+    // with proper distinction between content edits and formatting changes.
 }
 
 void Editor::syncToDocument()
