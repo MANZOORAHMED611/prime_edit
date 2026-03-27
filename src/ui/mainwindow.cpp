@@ -490,6 +490,7 @@ void MainWindow::setupMenus()
     // Language menu
     // ============================================================
     m_languageMenu = menuBar()->addMenu(tr("&Language"));
+    m_languageMenu->setStyleSheet("QMenu { max-height: 600px; }");
     QAction *autoDetect = m_languageMenu->addAction(tr("Auto-detect"));
     connect(autoDetect, &QAction::triggered, this, [this]() {
         Editor *e = currentEditor();
@@ -500,10 +501,19 @@ void MainWindow::setupMenus()
     });
     m_languageMenu->addSeparator();
 
+    // Group languages into categorized submenus to avoid one massive list
     QStringList langs = LanguageManager::instance().availableLanguages();
     std::sort(langs.begin(), langs.end());
+
+    // Split into alphabetical submenus
+    QMap<QChar, QMenu*> letterMenus;
     for (const QString &lang : langs) {
-        QAction *a = m_languageMenu->addAction(lang);
+        QChar letter = lang.at(0).toUpper();
+        if (!letterMenus.contains(letter)) {
+            QString label = QString("%1...").arg(letter);
+            letterMenus[letter] = m_languageMenu->addMenu(label);
+        }
+        QAction *a = letterMenus[letter]->addAction(lang);
         connect(a, &QAction::triggered, this, [this, lang]() {
             Editor *e = currentEditor();
             if (e) e->setLanguage(lang);

@@ -14,7 +14,7 @@ void ToolbarManager::createToolbars()
 {
     m_toolbar = m_mainWindow->addToolBar(tr("Main"));
     m_toolbar->setObjectName("MainToolBar");
-    m_toolbar->setIconSize(QSize(26, 26));
+    m_toolbar->setIconSize(QSize(20, 20));
     m_toolbar->setMovable(false);
 
     // Group 1 — File
