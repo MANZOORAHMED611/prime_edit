@@ -240,8 +240,10 @@ void Session::saveUnsavedDocuments(MainWindow *window)
             continue;
         }
 
+        // Use editor->toPlainText() NOT doc->text() — the PieceTable may
+        // not be in sync with the editor's QTextDocument content
         QJsonObject obj;
-        obj["text"] = doc->text();
+        obj["text"] = editor->toPlainText();
         obj["cursorPosition"] = editor->textCursor().position();
         obj["scrollPosition"] = editor->verticalScrollBar()->value();
         obj["title"] = tabs->tabText(i);
