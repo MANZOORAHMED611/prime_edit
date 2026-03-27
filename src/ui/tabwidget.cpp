@@ -2,6 +2,7 @@
 #include "editor.h"
 #include "core/document.h"
 #include <QMouseEvent>
+#include <QPushButton>
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QFileInfo>
@@ -127,6 +128,18 @@ TabWidget::TabWidget(QWidget *parent)
 {
     m_tabBar = new TabBar(this);
     setTabBar(m_tabBar);
+
+    // Add a "+" button at the end of the tab bar
+    QPushButton *newTabButton = new QPushButton("+", this);
+    newTabButton->setFixedSize(28, 28);
+    newTabButton->setFlat(true);
+    newTabButton->setToolTip(tr("New Tab"));
+    newTabButton->setStyleSheet(
+        "QPushButton { font-size: 18px; font-weight: bold; color: #475569; border: none; }"
+        "QPushButton:hover { color: #2563EB; background: #EFF6FF; border-radius: 4px; }"
+    );
+    setCornerWidget(newTabButton, Qt::TopRightCorner);
+    connect(newTabButton, &QPushButton::clicked, this, &TabWidget::newTabRequested);
 
     connect(m_tabBar, &TabBar::newTabRequested, this, &TabWidget::newTabRequested);
     connect(m_tabBar, &TabBar::closeOthersRequested, this, &TabWidget::onCloseOthersRequested);
