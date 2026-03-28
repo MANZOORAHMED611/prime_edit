@@ -190,12 +190,23 @@ void MainWindow::setupUi()
 
     // Connect settings signals to apply changes globally
     connect(&Settings::instance(), &Settings::themeChanged, this, [this](const QString &themeName) {
+        // applyTheme() already calls qApp->setStyleSheet() and emits themeChanged
+        // Do NOT call setStyleSheet again — double application during signal processing crashes
         ThemeManager::instance().applyTheme(themeName);
-        qApp->setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());
     });
 
+    // Periodic unsaved document backup (crash safety net)
+    // Saves every 30 seconds so a crash never loses more than 30s of work
+    QTimer *unsavedBackupTimer = new QTimer(this);
+    unsavedBackupTimer->setInterval(30000);
+    connect(unsavedBackupTimer, &QTimer::timeout, this, [this]() {
+        Session::instance().saveUnsavedDocuments(this);
+    });
+    unsavedBackupTimer->start();
+
     connect(&Settings::instance(), &Settings::fontChanged, this, [this]() {
-        qApp->setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());
+        // Re-apply theme to pick up font changes in stylesheets
+        ThemeManager::instance().applyTheme(ThemeManager::instance().currentTheme());
     });
 
     connect(&Settings::instance(), &Settings::wordWrapChanged, this, [this](bool enabled) {
@@ -910,9 +921,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
     // Notepad++ behavior: silently persist ALL unsaved documents.
     // No save prompts on application quit. Everything is restored on next launch.
 
+    // Save unsaved documents FIRST — most critical data
+    Session::instance().saveUnsavedDocuments(this);
     Session::instance().save(this);
     Settings::instance().save();
-    Session::instance().saveUnsavedDocuments(this);
     m_closingAll = true;
     event->accept();
 }
