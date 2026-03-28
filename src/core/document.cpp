@@ -35,59 +35,30 @@ bool Document::load(const QString &filePath)
     }
 
     // ================================================================
-    // MODE 3: Large/Extreme files (>100MB) — read-only viewer
-    // Load only first 500KB with line breaks for instant display
-    // The rest is accessible via mmap viewport if needed
+    // MODE 3: Large files (>100MB) — read-only, word wrap, no highlighting
+    // Load the FULL file. QPlainTextEdit handles it IF word wrap is ON.
+    // The hang was from QPlainTextEdit calculating the width of a
+    // 93-million-character single line with word wrap OFF.
+    // With word wrap ON, it only lays out the visible wrapped portion.
     // ================================================================
     if (m_fileMode == LargeFile) {
+        QFile file(filePath);
+        if (!file.open(QIODevice::ReadOnly)) return false;
+
+        QByteArray data = file.readAll();
+        file.close();
+
+        m_encoding = CharsetDetector::detect(data);
+        QString text = QString::fromUtf8(data);
+        data.clear();
+
+        m_lineEnding = detectLineEnding(text);
+        text = normalizeLineEndings(text, Unix);
+
+        m_content.setText(text);
         m_filePath = filePath;
-        setReadOnly(true);
-
-        // Try mmap for background navigation
-        m_largeFileReader = new LargeFileReader(this);
-        if (!m_largeFileReader->open(filePath)) {
-            delete m_largeFileReader;
-            m_largeFileReader = nullptr;
-        }
-
-        // Detect encoding from first 8KB
-        QFile probe(filePath);
-        if (!probe.open(QIODevice::ReadOnly)) return false;
-        QByteArray encodingProbe = probe.read(8192);
-        m_encoding = CharsetDetector::detect(encodingProbe);
-
-        // Read first 64KB for display — keep it small for instant render
-        probe.seek(0);
-        QByteArray head = probe.read(64 * 1024);
-        probe.close();
-
-        QString headText = QString::fromUtf8(head);
-        const int MAX_LINE = 200; // short lines for fast layout
-
-        // Break long lines at delimiters
-        QString display;
-        display.reserve(headText.length() + headText.length() / MAX_LINE);
-        int col = 0;
-        for (qsizetype i = 0; i < headText.length(); ++i) {
-            QChar c = headText.at(i);
-            display.append(c);
-            col++;
-            if (c == '\n') {
-                col = 0;
-            } else if (col >= MAX_LINE) {
-                if (c == ',' || c == '}' || c == ']' || c == '{' || c == '[' || c == ' ') {
-                    display.append('\n');
-                    col = 0;
-                } else if (col >= MAX_LINE + 1000) {
-                    // Emergency break — no delimiter found within 1000 chars
-                    display.append('\n');
-                    col = 0;
-                }
-            }
-        }
-
-        m_content.setText(display);
         m_modified = false;
+        setReadOnly(true);
         emit filePathChanged(m_filePath);
         emit encodingChanged(m_encoding);
         return true;

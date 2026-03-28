@@ -56,34 +56,42 @@ Editor::Editor(Document *document, QWidget *parent)
     connect(&Settings::instance(), &Settings::fontChanged, this, &Editor::applySettings);
     connect(&Settings::instance(), &Settings::tabSettingsChanged, this, &Editor::applySettings);
 
+    // Configure file mode BEFORE loading content
+    if (m_document->fileMode() == Document::LargeFile) {
+        // CRITICAL: set word wrap BEFORE setPlainText — without wrap,
+        // QPlainTextEdit tries to lay out the full width of every line.
+        // A 93-million-character single line causes an infinite hang.
+        // With wrap ON, it only lays out the visible wrapped portion.
+        setLineWrapMode(QPlainTextEdit::WidgetWidth);
+        m_bookmarkMarginVisible = false;
+        m_foldMarginVisible = false;
+        m_lineNumbersVisible = false;
+        QPlainTextEdit::document()->setUndoRedoEnabled(false);
+    } else if (m_document->fileMode() == Document::MediumFile) {
+        QPlainTextEdit::document()->setUndoRedoEnabled(true);
+    }
+
     // Initialize
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 
-    // Load content from document BEFORE connecting modification detection
+    // Load content
     m_syncing = true;
     if (!m_document->text().isEmpty()) {
+        // For large files, disable updates during load for speed
+        if (m_document->fileMode() == Document::LargeFile) {
+            setUpdatesEnabled(false);
+        }
         setPlainText(m_document->text());
+        if (m_document->fileMode() == Document::LargeFile) {
+            setUpdatesEnabled(true);
+        }
     }
     m_syncing = false;
 
     // Set language — but skip syntax highlighting for medium/large files
     if (!m_document->language().isEmpty() && m_document->fileMode() == Document::SmallFile) {
         m_highlighter->setLanguage(m_document->language());
-    }
-
-    // Medium/Large file optimizations
-    if (m_document->fileMode() != Document::SmallFile) {
-        QPlainTextEdit::document()->setUndoRedoEnabled(
-            m_document->fileMode() == Document::MediumFile);
-    }
-    if (m_document->fileMode() == Document::LargeFile) {
-        // Disable everything expensive for large files
-        m_bookmarkMarginVisible = false;
-        m_foldMarginVisible = false;
-        m_lineNumbersVisible = false;
-        setLineWrapMode(QPlainTextEdit::WidgetWidth); // force word wrap
-        updateLineNumberAreaWidth(0);
     }
 
     // Large file: set up dynamic viewport loading via scrollbar
