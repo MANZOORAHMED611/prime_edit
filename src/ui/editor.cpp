@@ -67,9 +67,16 @@ Editor::Editor(Document *document, QWidget *parent)
     }
     m_syncing = false;
 
-    // Set language — the highlighter runs incrementally via Qt's event loop
-    if (!m_document->language().isEmpty()) {
+    // Set language — but skip syntax highlighting for medium/large files
+    if (!m_document->language().isEmpty() && m_document->fileMode() == Document::SmallFile) {
         m_highlighter->setLanguage(m_document->language());
+    }
+
+    // Medium/Large file optimizations
+    if (m_document->fileMode() != Document::SmallFile) {
+        // Disable undo for large files (saves memory)
+        QPlainTextEdit::document()->setUndoRedoEnabled(
+            m_document->fileMode() == Document::MediumFile); // medium: limited undo, large: none
     }
 
     // Large file: set up dynamic viewport loading via scrollbar

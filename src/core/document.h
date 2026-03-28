@@ -21,10 +21,16 @@ public:
         ClassicMac  // CR (\r)
     };
 
-    // Files under 200MB: load fully into QPlainTextEdit (handles 1M+ lines fine)
-    // Files over 200MB: mmap + viewport loading (only for truly huge files)
-    static constexpr qint64 LARGE_FILE_THRESHOLD = 200 * 1024 * 1024;     // 200MB
-    static constexpr qint64 READONLY_FILE_THRESHOLD = 500 * 1024 * 1024;   // 500MB
+    // Three file modes:
+    // 1. Small (<20MB): full features — PieceTable, syntax highlighting, undo
+    // 2. Medium (20-100MB): reduced — no PieceTable copy, no highlighting, limited undo
+    // 3. Large/Extreme (>100MB OR single mega-line): viewer mode — chunked, read-only
+    static constexpr qint64 MEDIUM_FILE_THRESHOLD = 20 * 1024 * 1024;     // 20MB
+    static constexpr qint64 LARGE_FILE_THRESHOLD = 100 * 1024 * 1024;     // 100MB
+    static constexpr qint64 READONLY_FILE_THRESHOLD = 100 * 1024 * 1024;  // same as large
+
+    enum FileMode { SmallFile, MediumFile, LargeFile };
+    FileMode fileMode() const { return m_fileMode; }
 
     explicit Document(QObject *parent = nullptr);
     ~Document() override;
@@ -102,6 +108,7 @@ private:
     QString m_language;
     bool m_modified = false;
     bool m_readOnly = false;
+    FileMode m_fileMode = SmallFile;
     LargeFileReader *m_largeFileReader = nullptr;
     QString m_uuid;
 

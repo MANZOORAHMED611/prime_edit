@@ -1,6 +1,7 @@
 #include "document.h"
 #include "charsetdetector.h"
 #include "largefile.h"
+#include <QApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -22,59 +23,116 @@ Document::~Document()
 bool Document::load(const QString &filePath)
 {
     QFileInfo fi(filePath);
+    qint64 fileSize = fi.size();
 
-    // Large file mode — ANY file above threshold uses mmap or fails gracefully
-    if (fi.size() > LARGE_FILE_THRESHOLD) {
+    // Determine file mode
+    if (fileSize > LARGE_FILE_THRESHOLD) {
+        m_fileMode = LargeFile;
+    } else if (fileSize > MEDIUM_FILE_THRESHOLD) {
+        m_fileMode = MediumFile;
+    } else {
+        m_fileMode = SmallFile;
+    }
+
+    // ================================================================
+    // MODE 3: Large/Extreme files (>100MB) — read-only viewer
+    // Load only first 500KB with line breaks for instant display
+    // The rest is accessible via mmap viewport if needed
+    // ================================================================
+    if (m_fileMode == LargeFile) {
+        m_filePath = filePath;
+        setReadOnly(true);
+
+        // Try mmap for background navigation
         m_largeFileReader = new LargeFileReader(this);
         if (!m_largeFileReader->open(filePath)) {
             delete m_largeFileReader;
             m_largeFileReader = nullptr;
-            // mmap failed — DO NOT fall through to readAll() for large files
-            // readAll() would block the UI for minutes on a 100MB+ file
-            // Instead, read just the first 200KB directly for preview
-            QFile preview(filePath);
-            if (preview.open(QIODevice::ReadOnly)) {
-                QByteArray head = preview.read(200 * 1024);
-                preview.close();
-                m_filePath = filePath;
-                m_encoding = CharsetDetector::detect(head);
-                QString headText = QString::fromUtf8(head);
-                int lastNL = headText.lastIndexOf('\n');
-                if (lastNL > 0) headText.truncate(lastNL);
-                m_content.setText(headText);
-                m_modified = false;
-                setReadOnly(true);
-                emit filePathChanged(m_filePath);
-                emit encodingChanged(m_encoding);
-                return true;
-            }
-            return false;
-        } else {
-            m_filePath = filePath;
-            m_encoding = m_largeFileReader->encoding();
-            if (fi.size() > READONLY_FILE_THRESHOLD) {
-                setReadOnly(true);
-            }
-            // Read first ~200KB directly from file for instant display
-            // Don't use the line index (may not be ready yet)
-            {
-                QFile preview(filePath);
-                if (preview.open(QIODevice::ReadOnly)) {
-                    qint64 previewSize = qMin(fi.size(), qint64(200 * 1024));
-                    QByteArray head = preview.read(previewSize);
-                    preview.close();
-                    QString headText = QString::fromUtf8(head);
-                    int lastNL = headText.lastIndexOf('\n');
-                    if (lastNL > 0) headText.truncate(lastNL);
-                    m_content.setText(headText);
+        }
+
+        // Detect encoding from first 8KB
+        QFile probe(filePath);
+        if (!probe.open(QIODevice::ReadOnly)) return false;
+        QByteArray encodingProbe = probe.read(8192);
+        m_encoding = CharsetDetector::detect(encodingProbe);
+
+        // Read first 500KB for display — break long lines
+        probe.seek(0);
+        QByteArray head = probe.read(500 * 1024);
+        probe.close();
+
+        QString headText = QString::fromUtf8(head);
+        const int MAX_LINE = 4000;
+
+        // Break long lines at delimiters
+        QString display;
+        display.reserve(headText.length() + headText.length() / MAX_LINE);
+        int col = 0;
+        for (qsizetype i = 0; i < headText.length(); ++i) {
+            QChar c = headText.at(i);
+            display.append(c);
+            col++;
+            if (c == '\n') {
+                col = 0;
+            } else if (col >= MAX_LINE) {
+                if (c == ',' || c == '}' || c == ']' || c == '{' || c == '[' || c == ' ') {
+                    display.append('\n');
+                    col = 0;
+                } else if (col >= MAX_LINE + 1000) {
+                    // Emergency break — no delimiter found within 1000 chars
+                    display.append('\n');
+                    col = 0;
                 }
             }
-            m_modified = false;
-            emit filePathChanged(m_filePath);
-            emit encodingChanged(m_encoding);
-            return true;
         }
+
+        m_content.setText(display);
+        m_modified = false;
+        emit filePathChanged(m_filePath);
+        emit encodingChanged(m_encoding);
+        return true;
     }
+
+    // ================================================================
+    // MODE 2: Medium files (20-100MB) — direct load, no PieceTable dup
+    // ================================================================
+    if (m_fileMode == MediumFile) {
+        QFile file(filePath);
+        if (!file.open(QIODevice::ReadOnly)) return false;
+
+        QByteArray data = file.readAll();
+        file.close();
+
+        m_encoding = CharsetDetector::detect(data);
+        QString text = QString::fromUtf8(data);
+        data.clear(); // free byte array
+
+        m_lineEnding = detectLineEnding(text);
+        text = normalizeLineEndings(text, Unix);
+
+        // Check for long lines — break them
+        const int MAX_LINE = 8000;
+        bool hasLongLine = false;
+        int lineLen = 0;
+        for (qsizetype i = 0; i < qMin(text.length(), qsizetype(100000)); ++i) {
+            if (text.at(i) == '\n') { lineLen = 0; }
+            else { lineLen++; if (lineLen > MAX_LINE) { hasLongLine = true; break; } }
+        }
+        if (hasLongLine) {
+            setReadOnly(true);
+        }
+
+        m_content.setText(text);
+        m_filePath = filePath;
+        m_modified = false;
+        emit filePathChanged(m_filePath);
+        emit encodingChanged(m_encoding);
+        return true;
+    }
+
+    // ================================================================
+    // MODE 1: Small files (<20MB) — full features
+    // ================================================================
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
