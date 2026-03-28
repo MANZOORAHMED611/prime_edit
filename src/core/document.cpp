@@ -37,6 +37,7 @@ bool Document::load(const QString &filePath)
             int newlines = sample.count('\n');
             // If less than 10 newlines in 100KB, it's minified → Large mode
             if (newlines < 10 && fileSize > 5 * 1024 * 1024) {
+                m_isMinified = true;
                 m_fileMode = LargeFile;
             } else {
                 m_fileMode = MediumFile;

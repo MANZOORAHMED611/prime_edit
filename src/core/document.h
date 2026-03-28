@@ -31,6 +31,7 @@ public:
 
     enum FileMode { SmallFile, MediumFile, LargeFile };
     FileMode fileMode() const { return m_fileMode; }
+    bool isMinified() const { return m_isMinified; }
 
     explicit Document(QObject *parent = nullptr);
     ~Document() override;
@@ -109,6 +110,7 @@ private:
     bool m_modified = false;
     bool m_readOnly = false;
     FileMode m_fileMode = SmallFile;
+    bool m_isMinified = false;
     LargeFileReader *m_largeFileReader = nullptr;
     QString m_uuid;
 

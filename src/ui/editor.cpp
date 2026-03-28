@@ -63,10 +63,14 @@ Editor::Editor(Document *document, QWidget *parent)
         // A 93-million-character single line causes an infinite hang.
         // With wrap ON, it only lays out the visible wrapped portion.
         setLineWrapMode(QPlainTextEdit::WidgetWidth);
-        m_bookmarkMarginVisible = false;
-        m_foldMarginVisible = false;
-        m_lineNumbersVisible = false;
         QPlainTextEdit::document()->setUndoRedoEnabled(false);
+        m_foldMarginVisible = false;
+        m_bookmarkMarginVisible = false;
+        // Only hide line numbers for minified files (artificial line breaks)
+        // Normal large files with real lines keep line numbers
+        if (m_document->isMinified()) {
+            m_lineNumbersVisible = false;
+        }
     } else if (m_document->fileMode() == Document::MediumFile) {
         QPlainTextEdit::document()->setUndoRedoEnabled(true);
     }
