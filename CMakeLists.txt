@@ -49,6 +49,7 @@ set(CORE_SOURCES
     src/core/largefile.cpp
     src/core/searchengine.cpp
     src/core/charsetdetector.cpp
+    src/core/gitgutter.cpp
     src/core/llmevaluator.cpp
     src/core/islamicbridge.cpp
     src/core/schemavalidator.cpp
@@ -76,6 +77,7 @@ set(UI_SOURCES
     src/ui/hexviewer.cpp
     src/ui/remoteconnectiondialog.cpp
     src/ui/gitdiffviewer.cpp
+    src/ui/gitcommitdialog.cpp
     src/ui/toolbarmanager.cpp
     src/ui/columneditor.cpp
     src/ui/notificationbar.cpp
@@ -87,6 +89,7 @@ set(UI_SOURCES
     src/ui/evalresultwidget.cpp
     src/ui/endpointconfigdialog.cpp
     src/ui/validationpanel.cpp
+    src/ui/plugindialog.cpp
 )
 
 set(SYNTAX_SOURCES
@@ -114,6 +117,7 @@ set(HEADERS
     src/core/largefile.h
     src/core/searchengine.h
     src/core/charsetdetector.h
+    src/core/gitgutter.h
     src/core/llmevaluator.h
     src/core/islamicbridge.h
     src/core/schemavalidator.h
@@ -137,6 +141,7 @@ set(HEADERS
     src/ui/hexviewer.h
     src/ui/remoteconnectiondialog.h
     src/ui/gitdiffviewer.h
+    src/ui/gitcommitdialog.h
     src/ui/toolbarmanager.h
     src/ui/columneditor.h
     src/ui/notificationbar.h
@@ -148,6 +153,7 @@ set(HEADERS
     src/ui/evalresultwidget.h
     src/ui/endpointconfigdialog.h
     src/ui/validationpanel.h
+    src/ui/plugindialog.h
     src/syntax/highlighter.h
     src/syntax/languagemanager.h
     src/utils/fileutils.h

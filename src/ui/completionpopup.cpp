@@ -99,6 +99,9 @@ void CompletionPopup::setSimpleCompletions(const QVector<SimpleCompletionItem> &
         case SimpleCompletionItem::Snippet:
             listItem->setForeground(theme.function);
             break;
+        case SimpleCompletionItem::Path:
+            listItem->setForeground(theme.string);
+            break;
         case SimpleCompletionItem::Word:
         default:
             listItem->setForeground(theme.foreground);

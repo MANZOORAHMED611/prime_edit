@@ -10,7 +10,10 @@
 #include <QLabel>
 #include <QSplitter>
 #include <QDockWidget>
+#include <QMap>
+#include "../core/remoteconnection.h"
 
+class QPrinter;
 class Editor;
 class Document;
 class TabWidget;
@@ -29,7 +32,10 @@ class LLMEvaluator;
 class EvalResultWidget;
 class IslamicBridge;
 class SchemaValidator;
+class EditorAPI;
+class PluginDialog;
 struct HadithValidation;
+
 
 class MainWindow : public QMainWindow
 {
@@ -46,6 +52,7 @@ public:
 
     // Tab access
     TabWidget *tabWidget() const { return m_tabWidget; }
+    bool isSplit() const { return m_tabWidget2 != nullptr; }
 
     // Session
     QStringList openFilePaths() const;
@@ -205,6 +212,12 @@ private slots:
     void previousTab();
     void nextTab();
 
+    // Split view operations
+    void splitVertical();
+    void splitHorizontal();
+    void closeSplit();
+    void focusOtherSplit();
+
     // Column/Selection operations
     void columnMode();
     void columnEditor();
@@ -240,6 +253,19 @@ private slots:
     void loadSchemaForDocument();
     void validateCurrentDocument();
 
+    // Plugin operations
+    void showPluginDialog();
+
+    // Remote file operations
+    void openRemoteFile();
+    void onRemoteFileSelected(const RemoteConnection::ConnectionInfo &info,
+                              const QString &remotePath);
+
+    // Git operations
+    void gitCommit();
+    void gitBranchSwitch();
+    void updateGitBranch();
+
 private:
     void setupUi();
     void setupMenus();
@@ -254,6 +280,20 @@ private:
     Editor *createEditor(Document *document);
     int findEditorIndex(Editor *editor) const;
     int findEditorIndex(Document *document) const;
+
+    void printDocument(QPrinter *printer, Editor *editor);
+    TabWidget *activeTabWidget() const;
+    TabWidget *inactiveTabWidget() const;
+    void splitView(Qt::Orientation orientation);
+    void unsplit();
+    void connectTabWidget(TabWidget *tw);
+    void onTab2CloseRequested(int index);
+    void onTab2Changed(int index);
+    void checkUnsplitNeeded();
+
+    // Split view
+    QSplitter *m_splitter = nullptr;
+    TabWidget *m_tabWidget2 = nullptr;
 
     TabWidget *m_tabWidget = nullptr;
     StatusBarWidget *m_statusBar = nullptr;
@@ -337,6 +377,23 @@ private:
     // Islamic knowledge integration
     IslamicBridge *m_islamicBridge = nullptr;
     SchemaValidator *m_schemaValidator = nullptr;
+
+    // Git integration
+    QLabel *m_gitBranchLabel = nullptr;
+    QMenu *m_gitMenu = nullptr;
+
+    // Plugin system
+    EditorAPI *m_editorAPI = nullptr;
+    PluginDialog *m_pluginDialog = nullptr;
+    void initPluginSystem();
+
+    // Remote file tracking: local temp path -> (ConnectionInfo, remotePath)
+    struct RemoteFileEntry {
+        RemoteConnection::ConnectionInfo connInfo;
+        QString remotePath;
+    };
+    QMap<QString, RemoteFileEntry> m_remoteFiles;
+    void uploadRemoteFile(const QString &localPath);
 
     // State
     int m_untitledCounter = 0;

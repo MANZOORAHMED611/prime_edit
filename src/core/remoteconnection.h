@@ -3,128 +3,84 @@
 
 #include <QObject>
 #include <QString>
-#include <QByteArray>
+#include <QStringList>
+#include <QVector>
 #include <QProcess>
-#include <QTemporaryFile>
-#include <QMap>
-#include <QDateTime>
-#include <QFileInfo>
+#include <QSettings>
 
-struct RemoteFileInfo {
-    QString path;
-    QString name;
-    qint64 size;
-    bool isDirectory;
-    QString permissions;
-    QString owner;
-    QString group;
-    QDateTime modified;
-};
-
+/**
+ * Remote file operations using SSH/SCP command-line tools.
+ *
+ * All async file operations run via QProcess and emit signals on completion.
+ * Supports key-based and password-less SSH authentication (relies on
+ * ssh-agent or key files configured in ~/.ssh/config).
+ */
 class RemoteConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    enum ConnectionType {
-        SFTP,
-        SSH,
-        SCP
-    };
-
-    enum ConnectionStatus {
-        Disconnected,
-        Connecting,
-        Connected,
-        Error
+    struct ConnectionInfo {
+        QString name;
+        QString host;
+        int port = 22;
+        QString username;
+        QString authMethod;  // "key" or "password"
+        QString keyPath;     // path to SSH private key
+        QString lastPath;    // last browsed remote path
     };
 
     explicit RemoteConnection(QObject *parent = nullptr);
     ~RemoteConnection() override;
 
-    void connectToHost(const QString &host, int port, const QString &username,
-                      const QString &password, ConnectionType type = SFTP);
-    void disconnect();
+    void setConnectionInfo(const ConnectionInfo &info);
+    ConnectionInfo connectionInfo() const;
 
-    ConnectionStatus status() const { return m_status; }
-    QString errorString() const { return m_errorString; }
+    /**
+     * Synchronous connection test.
+     * Runs `ssh -o ConnectTimeout=5 user@host echo ok` and returns true
+     * if the exit code is 0. Blocks for up to 10 seconds.
+     */
+    bool testConnection();
 
-    // File operations
+    /**
+     * List a remote directory asynchronously.
+     * Emits directoryListed() with entries prefixed "d:" or "f:".
+     */
+    void listDirectory(const QString &remotePath);
+
+    /**
+     * Download a remote file via scp.
+     * Emits fileDownloaded() on success or connectionError() on failure.
+     */
     void downloadFile(const QString &remotePath, const QString &localPath);
+
+    /**
+     * Upload a local file to a remote path via scp.
+     * Emits fileUploaded() on success or connectionError() on failure.
+     */
     void uploadFile(const QString &localPath, const QString &remotePath);
-    void listDirectory(const QString &path);
-    void deleteFile(const QString &remotePath);
-    void createDirectory(const QString &remotePath);
 
-    // Connection info
-    QString host() const { return m_host; }
-    int port() const { return m_port; }
-    QString username() const { return m_username; }
-    ConnectionType type() const { return m_type; }
+    // --- Saved connection persistence via QSettings ---
+    static QVector<ConnectionInfo> savedConnections();
+    static void saveConnection(const ConnectionInfo &info);
+    static void removeConnection(const QString &name);
 
 signals:
-    void connected();
-    void disconnected();
+    void directoryListed(const QStringList &entries);
+    void fileDownloaded(const QString &localPath, const QString &remotePath);
+    void fileUploaded(const QString &remotePath);
     void connectionError(const QString &error);
-    void downloadComplete(const QString &remotePath, const QString &localPath);
-    void uploadComplete(const QString &remotePath);
-    void directoryListed(const QVector<RemoteFileInfo> &files);
-    void operationError(const QString &operation, const QString &error);
-    void progress(int percentage);
+    void connectionTestResult(bool success, const QString &message);
 
 private:
-    void setStatus(ConnectionStatus status);
-    void executeCommand(const QString &command, const QStringList &args);
-    QString buildSftpCommand(const QString &operation, const QStringList &args);
-    QString buildScpCommand(const QString &localPath, const QString &remotePath, bool upload);
-    QVector<RemoteFileInfo> parseLsOutput(const QString &output);
+    ConnectionInfo m_info;
 
-    ConnectionStatus m_status;
-    ConnectionType m_type;
-    QString m_host;
-    int m_port;
-    QString m_username;
-    QString m_password;
-    QString m_errorString;
+    /** Build base ssh argument list: -p PORT -i KEY -o opts USER@HOST */
+    QStringList sshArgs() const;
 
-    QProcess *m_process;
-    QString m_currentOperation;
-    QMap<QString, QString> m_pendingDownloads;
-    QMap<QString, QString> m_pendingUploads;
-};
-
-class RemoteFileManager : public QObject
-{
-    Q_OBJECT
-
-public:
-    static RemoteFileManager& instance();
-
-    // Connection management
-    void addConnection(const QString &name, RemoteConnection *connection);
-    void removeConnection(const QString &name);
-    RemoteConnection* connection(const QString &name) const;
-    QStringList connectionNames() const;
-
-    // Remote file editing
-    QString openRemoteFile(const QString &connectionName, const QString &remotePath);
-    bool saveRemoteFile(const QString &localPath, const QString &connectionName, const QString &remotePath);
-    void closeRemoteFile(const QString &localPath);
-
-signals:
-    void remoteFileOpened(const QString &localPath, const QString &remotePath);
-    void remoteFileSaved(const QString &remotePath);
-    void error(const QString &error);
-
-private:
-    RemoteFileManager();
-    ~RemoteFileManager();
-    RemoteFileManager(const RemoteFileManager&) = delete;
-    RemoteFileManager& operator=(const RemoteFileManager&) = delete;
-
-    QMap<QString, RemoteConnection*> m_connections;
-    QMap<QString, QString> m_remoteFiles;  // local path -> remote path
-    QMap<QString, QString> m_fileConnections;  // local path -> connection name
+    /** Build base scp argument list: -P PORT -i KEY -o opts */
+    QStringList scpArgs() const;
 };
 
 #endif // REMOTECONNECTION_H

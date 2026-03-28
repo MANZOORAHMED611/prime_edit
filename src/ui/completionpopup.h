@@ -8,7 +8,7 @@
 struct SimpleCompletionItem {
     QString label;
     QString detail;
-    enum Kind { Keyword, Type, Word, Snippet } kind = Word;
+    enum Kind { Keyword, Type, Word, Snippet, Path } kind = Word;
 };
 
 class CompletionPopup : public QListWidget

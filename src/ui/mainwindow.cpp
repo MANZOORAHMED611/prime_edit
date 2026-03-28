@@ -21,11 +21,15 @@
 #include "macrodialog.h"
 #include "evalresultwidget.h"
 #include "endpointconfigdialog.h"
+#include "gitcommitdialog.h"
+#include "plugindialog.h"
 #include "core/document.h"
 #include "core/documentmanager.h"
 #include "core/session.h"
 #include "core/macrorecorder.h"
 #include "core/pluginmanager.h"
+#include "core/remoteconnection.h"
+#include "remoteconnectiondialog.h"
 #include "utils/settings.h"
 #include "utils/fileutils.h"
 #include "syntax/languagemanager.h"
@@ -55,6 +59,9 @@
 #include <QDesktopServices>
 #include <QStandardPaths>
 #include <QDir>
+#include <QTextBlock>
+#include <QLocale>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -68,6 +75,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Start recovery timer
     DocumentManager::instance().startRecoveryTimer();
 
+    // Plugin system
+    initPluginSystem();
+
     // Create initial empty document
     newFile();
 
@@ -76,7 +86,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    PluginManager::instance().unloadAllPlugins();
     DocumentManager::instance().stopRecoveryTimer();
+    delete m_editorAPI;
+    m_editorAPI = nullptr;
 }
 
 void MainWindow::setupUi()
@@ -98,7 +111,11 @@ void MainWindow::setupUi()
     m_notificationBar = new NotificationBar(centralContainer);
     centralLayout->addWidget(m_incrementalSearchBar);
     centralLayout->addWidget(m_notificationBar);
-    centralLayout->addWidget(m_tabWidget);
+
+    // Use a QSplitter to hold tab widgets for split view
+    m_splitter = new QSplitter(Qt::Horizontal, centralContainer);
+    m_splitter->addWidget(m_tabWidget);
+    centralLayout->addWidget(m_splitter);
     setCentralWidget(centralContainer);
 
     connect(m_tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
@@ -265,6 +282,10 @@ void MainWindow::setupMenus()
 
     m_recentFilesMenu = m_fileMenu->addMenu(tr("Open &Recent"));
     updateRecentFilesMenu();
+
+    QAction *openRemoteAction = m_fileMenu->addAction(
+        tr("Open Re&mote..."), this, &MainWindow::openRemoteFile);
+    openRemoteAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_O));
 
     m_fileMenu->addSeparator();
 
@@ -470,6 +491,23 @@ void MainWindow::setupMenus()
     QAction *fullScreenAction = m_viewMenu->addAction(tr("&Full Screen"), this, &MainWindow::toggleFullScreen);
     fullScreenAction->setShortcut(QKeySequence::FullScreen);
 
+    m_viewMenu->addSeparator();
+
+    QAction *splitVertAction = m_viewMenu->addAction(tr("Split &Vertical"), this, &MainWindow::splitVertical);
+    splitVertAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Backslash));
+
+    QAction *splitHorizAction = m_viewMenu->addAction(tr("Split &Horizontal"), this, &MainWindow::splitHorizontal);
+    splitHorizAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Backslash));
+
+    m_viewMenu->addAction(tr("&Clone to Other View"), this, &MainWindow::cloneToOtherView);
+    m_viewMenu->addAction(tr("&Move to Other View"), this, &MainWindow::moveToOtherView);
+
+    QAction *closeSplitAction = m_viewMenu->addAction(tr("Close S&plit"), this, &MainWindow::closeSplit);
+    closeSplitAction->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_Backslash));
+
+    QAction *focusOtherAction = m_viewMenu->addAction(tr("Focus &Other Split"), this, &MainWindow::focusOtherSplit);
+    focusOtherAction->setShortcut(QKeySequence(Qt::Key_F6));
+
     // ============================================================
     // Encoding menu
     // ============================================================
@@ -555,6 +593,9 @@ void MainWindow::setupMenus()
     evalAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E));
     m_toolsMenu->addAction(
         tr("Configure &Endpoint..."), this, &MainWindow::configureEndpoint);
+    m_toolsMenu->addSeparator();
+    m_toolsMenu->addAction(
+        tr("&Plugins..."), this, &MainWindow::showPluginDialog);
 
     // ============================================================
     // Macro menu
@@ -574,6 +615,21 @@ void MainWindow::setupMenus()
     m_runMenu = menuBar()->addMenu(tr("&Run"));
     m_runMenu->addAction(tr("&Launch in Terminal"), this, &MainWindow::launchInTerminal);
     m_runMenu->addAction(tr("Open Containing &Folder"), this, &MainWindow::openContainingFolder);
+
+    // ============================================================
+    // Git menu
+    // ============================================================
+    m_gitMenu = menuBar()->addMenu(tr("&Git"));
+
+    QAction *gitCommitAction = m_gitMenu->addAction(
+        tr("&Commit..."), this, &MainWindow::gitCommit);
+    gitCommitAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_G));
+
+    m_gitMenu->addAction(
+        tr("Switch &Branch..."), this, &MainWindow::gitBranchSwitch);
+
+    m_gitMenu->addSeparator();
+    m_gitMenu->addAction(tr("&Refresh Branch"), this, &MainWindow::updateGitBranch);
 
     // ============================================================
     // Plugins menu
@@ -626,6 +682,13 @@ void MainWindow::setupStatusBar()
 {
     m_statusBar = new StatusBarWidget(this);
     setStatusBar(m_statusBar);
+
+    // Git branch indicator in status bar
+    m_gitBranchLabel = new QLabel(this);
+    m_gitBranchLabel->setStyleSheet(
+        "QLabel { padding: 0 8px; color: #999; }");
+    m_statusBar->addPermanentWidget(m_gitBranchLabel);
+    updateGitBranch();
 }
 
 void MainWindow::setupShortcuts()
@@ -720,6 +783,8 @@ void MainWindow::openFile(const QString &filePath)
 
     if (m_lspBridge) m_lspBridge->onEditorOpened(editor);
 
+    PluginManager::instance().broadcastFileOpened(path);
+
     updateWindowTitle();
 }
 
@@ -740,10 +805,17 @@ void MainWindow::saveFile()
     }
 
     if (doc->save()) {
+        PluginManager::instance().broadcastFileSaved(doc->filePath());
         updateWindowTitle();
         int index = findEditorIndex(editor);
         if (index >= 0) {
             m_tabWidget->setTabText(index, doc->displayName());
+        }
+
+        // Auto-upload if this is a remote file
+        QString localPath = doc->filePath();
+        if (m_remoteFiles.contains(localPath)) {
+            uploadRemoteFile(localPath);
         }
     } else {
         QMessageBox::warning(this, tr("Error"), tr("Could not save file."));
@@ -851,9 +923,15 @@ bool MainWindow::closeFile(int index)
         }
     }
 
+    const QString closedPath = doc ? doc->filePath() : QString();
+
     m_tabWidget->removeTab(index);
     if (doc) {
         DocumentManager::instance().closeDocument(doc, true);
+    }
+
+    if (!closedPath.isEmpty()) {
+        PluginManager::instance().broadcastFileClosed(closedPath);
     }
 
     // Create new empty tab if all closed (but not if we're closing all to exit)
@@ -901,7 +979,7 @@ void MainWindow::setCurrentTabIndex(int index)
 
 Editor *MainWindow::currentEditor() const
 {
-    return qobject_cast<Editor*>(m_tabWidget->currentWidget());
+    return qobject_cast<Editor*>(activeTabWidget()->currentWidget());
 }
 
 QStringList MainWindow::openFilePaths() const
@@ -966,6 +1044,8 @@ void MainWindow::onTabChanged(int index)
     if (m_lspBridge) {
         m_lspBridge->onEditorChanged(currentEditor());
     }
+
+    updateGitBranch();
 }
 
 void MainWindow::onTabCloseRequested(int index)
@@ -1071,11 +1151,148 @@ void MainWindow::printFile()
 
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested,
-            this, [editor](QPrinter *p) {
-        editor->print(p);
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [this, editor](QPrinter *p) {
+        printDocument(p, editor);
     });
     preview.exec();
+}
+
+void MainWindow::printDocument(QPrinter *printer, Editor *editor)
+{
+    if (!printer || !editor) return;
+
+    QTextDocument *doc = editor->QPlainTextEdit::document();
+    if (!doc) return;
+
+    const double dpi = printer->resolution();
+    const double margin = 0.75 * dpi;
+
+    printer->setPageMargins(QMarginsF(margin, margin, margin, margin), QPageLayout::Point);
+
+    const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel);
+    const double pageWidth = pageRect.width();
+    const double pageHeight = pageRect.height();
+
+    QFont textFont = editor->font();
+    textFont.setPointSize(10);
+    QFont headerFont = textFont;
+    headerFont.setBold(true);
+    QFont lineNumFont = textFont;
+    lineNumFont.setPointSize(9);
+
+    QFontMetricsF textFm(textFont);
+    QFontMetricsF headerFm(headerFont);
+    QFontMetricsF lineNumFm(lineNumFont);
+
+    const double lineHeight = textFm.height();
+    const double headerHeight = headerFm.height() * 2.0;
+    const double footerHeight = textFm.height() * 2.0;
+    const double contentHeight = pageHeight - headerHeight - footerHeight;
+    const int linesPerPage = static_cast<int>(contentHeight / lineHeight);
+
+    int totalLines = doc->blockCount();
+    double lineNumWidth = lineNumFm.horizontalAdvance(QString::number(totalLines)) + 20;
+    double textStartX = lineNumWidth + 10;
+
+    QString fileName = editor->document()->fileName();
+    if (fileName.isEmpty()) fileName = tr("Untitled");
+    QString dateStr = QDate::currentDate().toString(QLocale().dateFormat(QLocale::LongFormat));
+
+    int totalPages = (totalLines + linesPerPage - 1) / linesPerPage;
+    if (totalPages < 1) totalPages = 1;
+
+    QPainter painter;
+    if (!painter.begin(printer)) return;
+
+    QTextBlock block = doc->begin();
+
+    for (int page = 0; page < totalPages; ++page) {
+        if (page > 0) printer->newPage();
+
+        // Header: filename left, date right
+        painter.setFont(headerFont);
+        painter.setPen(Qt::black);
+        QRectF headerRect(0, 0, pageWidth, headerFm.height());
+        painter.drawText(headerRect, Qt::AlignLeft | Qt::AlignVCenter, fileName);
+        painter.drawText(headerRect, Qt::AlignRight | Qt::AlignVCenter, dateStr);
+        double headerLineY = headerFm.height() + 4;
+        painter.drawLine(QPointF(0, headerLineY), QPointF(pageWidth, headerLineY));
+
+        // Footer: page number centered
+        painter.setFont(textFont);
+        painter.setPen(Qt::black);
+        QString footerText = tr("Page %1 of %2").arg(page + 1).arg(totalPages);
+        QRectF footerRect(0, pageHeight - textFm.height(), pageWidth, textFm.height());
+        painter.drawText(footerRect, Qt::AlignCenter, footerText);
+        double footerLineY = pageHeight - footerHeight + 4;
+        painter.drawLine(QPointF(0, footerLineY), QPointF(pageWidth, footerLineY));
+
+        // Content lines
+        double y = headerHeight;
+
+        for (int i = 0; i < linesPerPage && block.isValid(); ++i, block = block.next()) {
+            int lineNum = page * linesPerPage + i + 1;
+
+            // Line number (right-aligned, gray)
+            painter.setFont(lineNumFont);
+            painter.setPen(Qt::gray);
+            QRectF lineNumRect(0, y, lineNumWidth, lineHeight);
+            painter.drawText(lineNumRect, Qt::AlignRight | Qt::AlignVCenter,
+                             QString::number(lineNum));
+
+            // Syntax-highlighted text via block layout formats
+            QTextLayout *layout = block.layout();
+            QString lineText = block.text();
+            double x = textStartX;
+
+            if (!layout || layout->formats().isEmpty()) {
+                painter.setFont(textFont);
+                painter.setPen(Qt::black);
+                painter.drawText(QPointF(x, y + textFm.ascent()), lineText);
+            } else {
+                QVector<QTextLayout::FormatRange> formats = layout->formats();
+                int pos = 0;
+                for (const QTextLayout::FormatRange &fmt : formats) {
+                    if (fmt.start > pos) {
+                        painter.setFont(textFont);
+                        painter.setPen(Qt::black);
+                        QString seg = lineText.mid(pos, fmt.start - pos);
+                        painter.drawText(QPointF(x, y + textFm.ascent()), seg);
+                        x += textFm.horizontalAdvance(seg);
+                    }
+
+                    QFont segFont = textFont;
+                    if (fmt.format.fontWeight() > QFont::Normal)
+                        segFont.setBold(true);
+                    if (fmt.format.fontItalic())
+                        segFont.setItalic(true);
+                    painter.setFont(segFont);
+
+                    QColor fg = fmt.format.foreground().color();
+                    if (!fg.isValid()) fg = Qt::black;
+                    painter.setPen(fg);
+
+                    int end = qMin(fmt.start + fmt.length,
+                                   static_cast<int>(lineText.length()));
+                    QString seg = lineText.mid(fmt.start, end - fmt.start);
+                    painter.drawText(QPointF(x, y + textFm.ascent()), seg);
+                    QFontMetricsF segFm(segFont);
+                    x += segFm.horizontalAdvance(seg);
+                    pos = end;
+                }
+                if (pos < lineText.length()) {
+                    painter.setFont(textFont);
+                    painter.setPen(Qt::black);
+                    painter.drawText(QPointF(x, y + textFm.ascent()),
+                                     lineText.mid(pos));
+                }
+            }
+
+            y += lineHeight;
+        }
+    }
+
+    painter.end();
 }
 
 void MainWindow::increaseIndent()
@@ -1802,6 +2019,15 @@ Editor *MainWindow::createEditor(Document *document)
     connect(document, &Document::modifiedChanged, this, &MainWindow::onDocumentModified);
     connect(editor, &Editor::cursorPositionChanged, this, &MainWindow::onCursorPositionChanged);
 
+    // Forward editor events to plugin system
+    connect(editor, &QPlainTextEdit::textChanged, this, []() {
+        PluginManager::instance().broadcastTextChanged();
+    });
+    connect(editor, &QPlainTextEdit::selectionChanged, this, [editor]() {
+        PluginManager::instance().broadcastSelectionChanged(
+            editor->textCursor().selectedText());
+    });
+
     return editor;
 }
 
@@ -1824,5 +2050,357 @@ int MainWindow::findEditorIndex(Document *document) const
         }
     }
     return -1;
+}
+
+// ============================================================
+// Split view implementation
+// ============================================================
+
+TabWidget *MainWindow::activeTabWidget() const
+{
+    if (m_tabWidget2) {
+        // Check if any widget inside m_tabWidget2 has focus
+        QWidget *focused = QApplication::focusWidget();
+        if (focused) {
+            QWidget *parent = focused;
+            while (parent) {
+                if (parent == m_tabWidget2) return m_tabWidget2;
+                if (parent == m_tabWidget) return m_tabWidget;
+                parent = parent->parentWidget();
+            }
+        }
+    }
+    return m_tabWidget;
+}
+
+TabWidget *MainWindow::inactiveTabWidget() const
+{
+    if (!m_tabWidget2) return nullptr;
+    return (activeTabWidget() == m_tabWidget) ? m_tabWidget2 : m_tabWidget;
+}
+
+void MainWindow::connectTabWidget(TabWidget *tw)
+{
+    if (tw == m_tabWidget) {
+        connect(tw, &QTabWidget::currentChanged,
+                this, &MainWindow::onTabChanged);
+        connect(tw, &QTabWidget::tabCloseRequested,
+                this, &MainWindow::onTabCloseRequested);
+    } else {
+        connect(tw, &QTabWidget::currentChanged,
+                this, &MainWindow::onTab2Changed);
+        connect(tw, &QTabWidget::tabCloseRequested,
+                this, &MainWindow::onTab2CloseRequested);
+    }
+}
+
+void MainWindow::splitView(Qt::Orientation orientation)
+{
+    if (m_tabWidget2) {
+        // Already split — just change orientation
+        m_splitter->setOrientation(orientation);
+        return;
+    }
+
+    m_splitter->setOrientation(orientation);
+
+    m_tabWidget2 = new TabWidget(this);
+    m_splitter->addWidget(m_tabWidget2);
+    connectTabWidget(m_tabWidget2);
+
+    // Clone current document into the new split
+    Editor *current = qobject_cast<Editor*>(m_tabWidget->currentWidget());
+    if (current && current->document()) {
+        Editor *cloned = createEditor(current->document());
+        QString title = current->document()->displayName();
+        int idx = m_tabWidget2->addTab(cloned, title);
+        m_tabWidget2->setTabIcon(idx,
+            TabBar::iconForFile(current->document()->filePath()));
+        m_tabWidget2->setCurrentIndex(idx);
+    }
+}
+
+void MainWindow::unsplit()
+{
+    if (!m_tabWidget2) return;
+
+    // Move all tabs from m_tabWidget2 to m_tabWidget
+    while (m_tabWidget2->count() > 0) {
+        QWidget *w = m_tabWidget2->widget(0);
+        QString title = m_tabWidget2->tabText(0);
+        QIcon icon = m_tabWidget2->tabIcon(0);
+        m_tabWidget2->removeTab(0);
+        int idx = m_tabWidget->addTab(w, icon, title);
+        Q_UNUSED(idx);
+    }
+
+    delete m_tabWidget2;
+    m_tabWidget2 = nullptr;
+
+    m_tabWidget->setFocus();
+    updateWindowTitle();
+}
+
+void MainWindow::splitVertical()
+{
+    splitView(Qt::Horizontal); // side by side
+}
+
+void MainWindow::splitHorizontal()
+{
+    splitView(Qt::Vertical); // one above other
+}
+
+void MainWindow::closeSplit()
+{
+    unsplit();
+}
+
+void MainWindow::focusOtherSplit()
+{
+    if (!m_tabWidget2) return;
+
+    TabWidget *other = inactiveTabWidget();
+    if (other && other->currentWidget()) {
+        other->currentWidget()->setFocus();
+    }
+}
+
+void MainWindow::onTab2Changed(int index)
+{
+    Q_UNUSED(index);
+    // Only update if the second tab widget is focused
+    if (activeTabWidget() == m_tabWidget2) {
+        updateWindowTitle();
+        updateStatusBar();
+        updateMenuState();
+
+        if (m_documentMap) {
+            m_documentMap->setEditor(currentEditor());
+        }
+        if (m_functionListDock && m_functionListDock->isVisible()
+            && m_functionList) {
+            m_functionList->setEditor(currentEditor());
+        }
+        if (m_lspBridge) {
+            m_lspBridge->onEditorChanged(currentEditor());
+        }
+    }
+}
+
+void MainWindow::onTab2CloseRequested(int index)
+{
+    if (!m_tabWidget2 || index < 0
+        || index >= m_tabWidget2->count()) {
+        return;
+    }
+
+    Editor *editor = qobject_cast<Editor*>(
+        m_tabWidget2->widget(index));
+    if (!editor) return;
+
+    Document *doc = editor->document();
+
+    // Check if this document has another editor in m_tabWidget
+    bool hasOtherEditor = false;
+    for (int i = 0; i < m_tabWidget->count(); ++i) {
+        Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
+        if (e && e->document() == doc) {
+            hasOtherEditor = true;
+            break;
+        }
+    }
+
+    // If no other editor has this doc, prompt to save
+    if (!hasOtherEditor && doc && doc->isModified()
+        && !doc->isReadOnly()) {
+        QMessageBox::StandardButton result = QMessageBox::question(
+            this, tr("Save Changes"),
+            tr("Do you want to save changes to '%1'?")
+                .arg(doc->displayName()),
+            QMessageBox::Save | QMessageBox::Discard
+                | QMessageBox::Cancel);
+        if (result == QMessageBox::Cancel) return;
+        if (result == QMessageBox::Save) {
+            m_tabWidget2->setCurrentIndex(index);
+            saveFile();
+            if (doc->isModified()) return;
+        }
+    }
+
+    m_tabWidget2->removeTab(index);
+
+    // If the document has no other editors, close it
+    if (!hasOtherEditor) {
+        DocumentManager::instance().closeDocument(doc, true);
+    }
+
+    checkUnsplitNeeded();
+}
+
+void MainWindow::checkUnsplitNeeded()
+{
+    if (m_tabWidget2 && m_tabWidget2->count() == 0) {
+        unsplit();
+    }
+}
+
+// ================================================================
+// Plugin system
+// ================================================================
+
+/**
+ * Concrete EditorAPI that delegates to MainWindow's current editor.
+ */
+class MainWindowEditorAPI : public EditorAPI
+{
+public:
+    explicit MainWindowEditorAPI(MainWindow *mw) : m_mw(mw) {}
+
+    QString currentText() const override
+    {
+        Editor *ed = m_mw->currentEditor();
+        return ed ? ed->toPlainText() : QString();
+    }
+
+    void setText(const QString &text) override
+    {
+        Editor *ed = m_mw->currentEditor();
+        if (ed) {
+            ed->selectAll();
+            ed->insertPlainText(text);
+        }
+    }
+
+    void insertText(const QString &text) override
+    {
+        Editor *ed = m_mw->currentEditor();
+        if (ed) {
+            ed->insertPlainText(text);
+        }
+    }
+
+    QString selectedText() const override
+    {
+        Editor *ed = m_mw->currentEditor();
+        return ed ? ed->selectedText() : QString();
+    }
+
+    void replaceSelection(const QString &text) override
+    {
+        Editor *ed = m_mw->currentEditor();
+        if (ed) {
+            ed->replaceSelection(text);
+        }
+    }
+
+    int cursorPosition() const override
+    {
+        Editor *ed = m_mw->currentEditor();
+        return ed ? ed->textCursor().position() : 0;
+    }
+
+    void setCursorPosition(int pos) override
+    {
+        Editor *ed = m_mw->currentEditor();
+        if (ed) {
+            QTextCursor tc = ed->textCursor();
+            tc.setPosition(pos);
+            ed->setTextCursor(tc);
+        }
+    }
+
+    int cursorLine() const override
+    {
+        Editor *ed = m_mw->currentEditor();
+        return ed ? ed->currentLine() : 0;
+    }
+
+    int cursorColumn() const override
+    {
+        Editor *ed = m_mw->currentEditor();
+        return ed ? ed->currentColumn() : 0;
+    }
+
+    QString currentFilePath() const override
+    {
+        Editor *ed = m_mw->currentEditor();
+        if (ed && ed->document()) {
+            return ed->document()->filePath();
+        }
+        return QString();
+    }
+
+    QString currentLanguage() const override
+    {
+        Editor *ed = m_mw->currentEditor();
+        return ed ? ed->language() : QString();
+    }
+
+    void openFile(const QString &path) override
+    {
+        m_mw->openFile(path);
+    }
+
+    void saveCurrentFile() override
+    {
+        m_mw->saveFile();
+    }
+
+    void addMenuItem(const QString &menuPath, const QString &label,
+                     std::function<void()> callback) override
+    {
+        Q_UNUSED(menuPath);
+        Q_UNUSED(label);
+        Q_UNUSED(callback);
+        // TODO(PLUGIN-1): Implement dynamic menu registration
+    }
+
+    void addToolBarButton(const QString &iconPath, const QString &tooltip,
+                          std::function<void()> callback) override
+    {
+        Q_UNUSED(iconPath);
+        Q_UNUSED(tooltip);
+        Q_UNUSED(callback);
+        // TODO(PLUGIN-2): Implement dynamic toolbar registration
+    }
+
+    void showStatusMessage(const QString &message, int timeoutMs) override
+    {
+        if (m_mw->statusBar()) {
+            m_mw->statusBar()->showMessage(message, timeoutMs);
+        }
+    }
+
+    QVariant pluginSetting(const QString &key,
+                           const QVariant &defaultValue) const override
+    {
+        QSettings settings;
+        return settings.value("PluginSettings/" + key, defaultValue);
+    }
+
+    void setPluginSetting(const QString &key, const QVariant &value) override
+    {
+        QSettings settings;
+        settings.setValue("PluginSettings/" + key, value);
+    }
+
+private:
+    MainWindow *m_mw;
+};
+
+void MainWindow::initPluginSystem()
+{
+    m_editorAPI = new MainWindowEditorAPI(this);
+    PluginManager::instance().setEditorAPI(m_editorAPI);
+    PluginManager::instance().loadPlugins();
+}
+
+void MainWindow::showPluginDialog()
+{
+    if (!m_pluginDialog) {
+        m_pluginDialog = new PluginDialog(this);
+    }
+    m_pluginDialog->exec();
 }
 

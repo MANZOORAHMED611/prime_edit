@@ -21,6 +21,10 @@
 #include <QRegularExpression>
 #include <QToolTip>
 #include <QSet>
+#include <QApplication>
+#include <QClipboard>
+#include <QDir>
+#include <QFileInfo>
 #include <algorithm>
 
 Editor::Editor(Document *document, QWidget *parent)
@@ -209,6 +213,19 @@ void Editor::setupEditor()
     connect(this, &QPlainTextEdit::textChanged, this, [this]() {
         m_rtlTimer->start();
     });
+
+    // Git gutter — debounced update on text changes
+    m_gitGutter = new GitGutter(this);
+    m_gitGutterTimer = new QTimer(this);
+    m_gitGutterTimer->setSingleShot(true);
+    m_gitGutterTimer->setInterval(1000);
+    connect(m_gitGutterTimer, &QTimer::timeout,
+            this, &Editor::updateGitGutter);
+    connect(m_gitGutter, &GitGutter::gutterUpdated,
+            m_lineNumberArea, QOverload<>::of(&QWidget::update));
+    connect(this, &QPlainTextEdit::textChanged, this, [this]() {
+        m_gitGutterTimer->start();
+    });
 }
 
 void Editor::applySettings()
@@ -227,6 +244,14 @@ void Editor::applySettings()
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * m_tabWidth);
 
     updateLineNumberAreaWidth(0);
+}
+
+void Editor::updateGitGutter()
+{
+    if (!m_document || m_document->filePath().isEmpty())
+        return;
+    m_gitGutter->updateForFile(m_document->filePath(),
+                               toPlainText());
 }
 
 void Editor::updateTextDirection()
@@ -280,6 +305,9 @@ void Editor::updateTextDirection()
 int Editor::lineNumberAreaWidth() const
 {
     int width = 0;
+    // Git gutter stripe at left edge of bookmark margin
+    if (m_gitGutter && m_gitGutter->hasChanges())
+        width += GIT_GUTTER_WIDTH;
     if (m_bookmarkMarginVisible) width += BOOKMARK_MARGIN_WIDTH;
     if (m_lineNumbersVisible) {
         int digits = 1;
@@ -306,6 +334,9 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
     Theme theme = ThemeManager::instance().currentTheme();
     QPainter painter(m_lineNumberArea);
 
+    // Git gutter occupies the leftmost strip when changes exist
+    int gitWidth = (m_gitGutter && m_gitGutter->hasChanges())
+                       ? GIT_GUTTER_WIDTH : 0;
     int bmWidth = bookmarkMarginWidth();
     int fmWidth = foldMarginWidth();
 
@@ -319,16 +350,20 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 
     // Paint section backgrounds
+    if (gitWidth > 0) {
+        QRect gitRect(0, event->rect().top(), gitWidth, event->rect().height());
+        painter.fillRect(gitRect, theme.lineNumberBackground);
+    }
     if (m_bookmarkMarginVisible) {
-        QRect bmRect(0, event->rect().top(), bmWidth, event->rect().height());
+        QRect bmRect(gitWidth, event->rect().top(), bmWidth, event->rect().height());
         painter.fillRect(bmRect, theme.bookmarkMarginBackground);
     }
     if (m_lineNumbersVisible) {
-        QRect lnRect(bmWidth, event->rect().top(), lineNumWidth, event->rect().height());
+        QRect lnRect(gitWidth + bmWidth, event->rect().top(), lineNumWidth, event->rect().height());
         painter.fillRect(lnRect, theme.lineNumberBackground);
     }
     if (m_foldMarginVisible) {
-        QRect fmRect(bmWidth + lineNumWidth, event->rect().top(), fmWidth, event->rect().height());
+        QRect fmRect(gitWidth + bmWidth + lineNumWidth, event->rect().top(), fmWidth, event->rect().height());
         painter.fillRect(fmRect, theme.foldMarginBackground);
     }
 
@@ -341,13 +376,45 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             int lineHeight = qRound(blockBoundingRect(block).height());
+            int lineNum1Based = blockNumber + 1;
+
+            // Section 0: Git gutter indicators
+            if (gitWidth > 0 && m_gitGutter->hasChangeAt(lineNum1Based)) {
+                GitLineChange::Type changeType =
+                    m_gitGutter->lineStatus(lineNum1Based);
+                QColor color;
+                switch (changeType) {
+                case GitLineChange::Added:
+                    color = QColor(0x2E, 0xCC, 0x40); // green
+                    break;
+                case GitLineChange::Modified:
+                    color = QColor(0xFF, 0xDC, 0x00); // yellow
+                    break;
+                case GitLineChange::Deleted:
+                    color = QColor(0xFF, 0x41, 0x36); // red
+                    break;
+                }
+                if (changeType == GitLineChange::Deleted) {
+                    painter.setRenderHint(QPainter::Antialiasing, true);
+                    painter.setBrush(color);
+                    painter.setPen(Qt::NoPen);
+                    QPolygon tri;
+                    tri << QPoint(0, top)
+                        << QPoint(gitWidth, top)
+                        << QPoint(gitWidth / 2, top + 4);
+                    painter.drawPolygon(tri);
+                    painter.setRenderHint(QPainter::Antialiasing, false);
+                } else {
+                    painter.fillRect(0, top, gitWidth, lineHeight, color);
+                }
+            }
 
             // Section 1: Bookmark indicators
             if (m_bookmarkMarginVisible && m_bookmarks.contains(blockNumber + 1)) {
                 painter.setRenderHint(QPainter::Antialiasing, true);
                 painter.setBrush(QColor(0x33, 0x99, 0xFF));
                 painter.setPen(Qt::NoPen);
-                int cx = bmWidth / 2;
+                int cx = gitWidth + bmWidth / 2;
                 int cy = top + lineHeight / 2;
                 painter.drawEllipse(QPoint(cx, cy), 5, 5);
                 painter.setRenderHint(QPainter::Antialiasing, false);
@@ -364,13 +431,13 @@ void Editor::lineNumberAreaPaintEvent(QPaintEvent *event)
                 if (blockNumber == textCursor().blockNumber()) {
                     painter.setPen(theme.foreground);
                 }
-                painter.drawText(bmWidth, top, lineNumWidth - 5, fontMetrics().height(),
+                painter.drawText(gitWidth + bmWidth, top, lineNumWidth - 5, fontMetrics().height(),
                                 Qt::AlignRight, number);
             }
 
             // Section 3: Fold margin indicators
             if (m_foldMarginVisible) {
-                int foldX = bmWidth + lineNumWidth;
+                int foldX = gitWidth + bmWidth + lineNumWidth;
                 if (isFoldableLine(blockNumber) ||
                     isFoldedLine(blockNumber)) {
                     int midY = top + (bottom - top) / 2;
@@ -601,6 +668,19 @@ void Editor::resizeEvent(QResizeEvent *event)
 
 void Editor::keyPressEvent(QKeyEvent *event)
 {
+    // Column selection: Delete/Backspace deletes selected columns
+    if (m_columnSelection.active
+        && (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)) {
+        deleteColumnSelection();
+        return;
+    }
+    // Column selection: Ctrl+V pastes lines across column rows
+    if (m_columnSelection.active
+        && event->key() == Qt::Key_V
+        && (event->modifiers() & Qt::ControlModifier)) {
+        pasteAtColumn();
+        return;
+    }
     // Column selection: typing inserts at each line
     if (m_columnSelection.active && !event->text().isEmpty() && event->text().at(0).isPrint()) {
         insertTextAtColumn(event->text());
@@ -613,6 +693,43 @@ void Editor::keyPressEvent(QKeyEvent *event)
         m_columnSelection.active = false;
         viewport()->update();
         return;
+    }
+
+    // Escape cancels multi-cursor mode
+    if (!m_extraCursors.isEmpty() && event->key() == Qt::Key_Escape) {
+        clearExtraCursors();
+        return;
+    }
+
+    // Ctrl+D: select next occurrence
+    if (event->key() == Qt::Key_D
+        && (event->modifiers() & Qt::ControlModifier)
+        && !(event->modifiers() & Qt::ShiftModifier)) {
+        selectNextOccurrence();
+        return;
+    }
+
+    // Ctrl+Shift+L: select all occurrences
+    if (event->key() == Qt::Key_L
+        && (event->modifiers() & Qt::ControlModifier)
+        && (event->modifiers() & Qt::ShiftModifier)) {
+        selectAllOccurrences();
+        return;
+    }
+
+    // Multi-cursor editing: intercept printable keys, backspace, delete, enter
+    if (!m_extraCursors.isEmpty()) {
+        int key = event->key();
+        bool isEditing = (!event->text().isEmpty() && event->text().at(0).isPrint())
+            || key == Qt::Key_Backspace
+            || key == Qt::Key_Delete
+            || key == Qt::Key_Return
+            || key == Qt::Key_Enter;
+
+        if (isEditing) {
+            applyMultiCursorEdit(event);
+            return;
+        }
     }
 
     // Completion popup interaction
@@ -642,8 +759,79 @@ void Editor::keyPressEvent(QKeyEvent *event)
     // Record macro event
     MacroRecorder::instance().recordKeyEvent(event);
 
-    // Handle tab key
+    // Auto-close brackets
+    if (m_autoCloseBrackets && !event->text().isEmpty()) {
+        QChar ch = event->text().at(0);
+        QTextCursor cursor = textCursor();
+        int pos = cursor.position();
+        QString docText = toPlainText();
+        QChar nextChar = (pos < docText.length()) ? docText.at(pos) : QChar();
+
+        static const QVector<QPair<QChar, QChar>> bracketPairs = {
+            {'(', ')'}, {'[', ']'}, {'{', '}'},
+            {'"', '"'}, {'\'', '\''}, {'`', '`'}
+        };
+
+        // Skip-over: typing a closing char that matches next char
+        for (const auto &pair : bracketPairs) {
+            if (ch == pair.second && nextChar == pair.second) {
+                cursor.movePosition(QTextCursor::NextCharacter);
+                setTextCursor(cursor);
+                return;
+            }
+        }
+
+        // Auto-close: insert closing bracket/quote
+        if (shouldAutoClose(cursor)) {
+            for (const auto &pair : bracketPairs) {
+                if (ch == pair.first) {
+                    if (pair.first == pair.second && isInsideString(cursor)) {
+                        break;
+                    }
+                    cursor.beginEditBlock();
+                    cursor.insertText(QString(pair.first) + QString(pair.second));
+                    cursor.movePosition(QTextCursor::PreviousCharacter);
+                    cursor.endEditBlock();
+                    setTextCursor(cursor);
+                    return;
+                }
+            }
+        }
+    }
+
+    // Backspace between empty bracket pair: delete both
+    if (m_autoCloseBrackets && event->key() == Qt::Key_Backspace) {
+        QTextCursor cursor = textCursor();
+        int pos = cursor.position();
+        QString docText = toPlainText();
+        if (pos > 0 && pos < docText.length()) {
+            QChar before = docText.at(pos - 1);
+            QChar after = docText.at(pos);
+            static const QVector<QPair<QChar, QChar>> bracketPairs = {
+                {'(', ')'}, {'[', ']'}, {'{', '}'},
+                {'"', '"'}, {'\'', '\''}, {'`', '`'}
+            };
+            for (const auto &pair : bracketPairs) {
+                if (before == pair.first && after == pair.second) {
+                    cursor.beginEditBlock();
+                    cursor.movePosition(QTextCursor::PreviousCharacter,
+                                        QTextCursor::KeepAnchor);
+                    cursor.movePosition(QTextCursor::NextCharacter,
+                                        QTextCursor::KeepAnchor, 2);
+                    cursor.removeSelectedText();
+                    cursor.endEditBlock();
+                    setTextCursor(cursor);
+                    return;
+                }
+            }
+        }
+    }
+
+    // Handle tab key — try snippet expansion first
     if (event->key() == Qt::Key_Tab) {
+        if (tryExpandSnippet()) {
+            return;
+        }
         if (m_insertSpaces) {
             QTextCursor cursor = textCursor();
             int column = cursor.columnNumber();
@@ -708,6 +896,12 @@ void Editor::keyPressEvent(QKeyEvent *event)
                 && m_document->fileMode() == Document::SmallFile) {
                 m_completionTimer->start();
             }
+        } else if (ch == QLatin1Char('/') || ch == QLatin1Char('.')) {
+            // Trigger path completion when typing / or . inside quotes
+            if (m_completionTimer && m_document
+                && m_document->fileMode() == Document::SmallFile) {
+                m_completionTimer->start();
+            }
         } else {
             // Non-word character: dismiss completion
             if (m_completionPopup && m_completionPopup->isVisible()) {
@@ -755,6 +949,9 @@ void Editor::updateLineNumberArea(const QRect &rect, int dy)
 void Editor::highlightCurrentLine()
 {
     matchBrackets();
+    if (m_rainbowBrackets) {
+        updateRainbowBrackets();
+    }
 }
 
 void Editor::matchBrackets()
@@ -843,6 +1040,133 @@ int Editor::findMatchingBracket(int position, QChar open, QChar close, bool forw
     return -1;
 }
 
+bool Editor::shouldAutoClose(const QTextCursor &cursor) const
+{
+    int pos = cursor.position();
+    QString docText = toPlainText();
+    if (pos >= docText.length()) return true;
+
+    QChar nextChar = docText.at(pos);
+    return nextChar.isSpace()
+        || nextChar == ')' || nextChar == ']' || nextChar == '}'
+        || nextChar == '\n';
+}
+
+bool Editor::isInsideString(const QTextCursor &cursor) const
+{
+    QString blockText = cursor.block().text();
+    int col = cursor.positionInBlock();
+
+    int singleCount = 0;
+    int doubleCount = 0;
+    int backtickCount = 0;
+    for (int i = 0; i < col; ++i) {
+        QChar ch = blockText.at(i);
+        if (ch == '\'' && (i == 0 || blockText.at(i - 1) != '\\'))
+            singleCount++;
+        else if (ch == '"' && (i == 0 || blockText.at(i - 1) != '\\'))
+            doubleCount++;
+        else if (ch == '`' && (i == 0 || blockText.at(i - 1) != '\\'))
+            backtickCount++;
+    }
+
+    return (singleCount % 2 != 0) || (doubleCount % 2 != 0) || (backtickCount % 2 != 0);
+}
+
+void Editor::setAutoCloseBrackets(bool enabled)
+{
+    m_autoCloseBrackets = enabled;
+}
+
+void Editor::setRainbowBrackets(bool enabled)
+{
+    m_rainbowBrackets = enabled;
+    if (enabled) {
+        updateRainbowBrackets();
+    } else {
+        m_rainbowSelections.clear();
+        updateExtraSelections();
+    }
+}
+
+void Editor::updateRainbowBrackets()
+{
+    m_rainbowSelections.clear();
+
+    if (m_document && m_document->fileMode() != Document::SmallFile) {
+        return;
+    }
+
+    static const QColor rainbowColors[6] = {
+        QColor(255, 0, 0),       // Red
+        QColor(255, 165, 0),     // Orange
+        QColor(200, 200, 0),     // Yellow
+        QColor(0, 180, 0),       // Green
+        QColor(0, 100, 255),     // Blue
+        QColor(160, 32, 240)     // Purple
+    };
+
+    // Walk visible blocks only for performance
+    QTextBlock block = firstVisibleBlock();
+    QTextBlock lastBlock = block;
+    while (lastBlock.isValid() && lastBlock.isVisible()) {
+        QTextBlock next = lastBlock.next();
+        if (!next.isValid() || !next.isVisible()) break;
+        lastBlock = next;
+    }
+
+    // We need global depth, so scan from document start to first visible
+    int depth = 0;
+    QTextBlock scanBlock = QPlainTextEdit::document()->begin();
+    while (scanBlock.isValid() && scanBlock != block) {
+        QString text = scanBlock.text();
+        for (int i = 0; i < text.length(); ++i) {
+            QChar ch = text.at(i);
+            if (ch == '(' || ch == '[' || ch == '{') depth++;
+            else if (ch == ')' || ch == ']' || ch == '}') depth--;
+        }
+        scanBlock = scanBlock.next();
+    }
+
+    // Now color visible brackets
+    while (block.isValid() && block.blockNumber() <= lastBlock.blockNumber()) {
+        QString text = block.text();
+        int blockPos = block.position();
+
+        for (int i = 0; i < text.length(); ++i) {
+            QChar ch = text.at(i);
+            bool isBracket = false;
+            bool isOpen = false;
+
+            if (ch == '(' || ch == '[' || ch == '{') {
+                isBracket = true;
+                isOpen = true;
+            } else if (ch == ')' || ch == ']' || ch == '}') {
+                isBracket = true;
+                isOpen = false;
+            }
+
+            if (isBracket) {
+                if (!isOpen) depth--;
+                int colorIdx = (depth >= 0) ? (depth % 6) : 0;
+
+                QTextEdit::ExtraSelection sel;
+                sel.format.setForeground(rainbowColors[colorIdx]);
+                sel.format.setFontWeight(QFont::Bold);
+                sel.cursor = QTextCursor(QPlainTextEdit::document());
+                sel.cursor.setPosition(blockPos + i);
+                sel.cursor.movePosition(QTextCursor::NextCharacter,
+                                        QTextCursor::KeepAnchor);
+                m_rainbowSelections.append(sel);
+
+                if (isOpen) depth++;
+            }
+        }
+
+        block = block.next();
+    }
+}
+
 void Editor::updateExtraSelections()
 {
     QList<QTextEdit::ExtraSelection> allSelections;
@@ -858,8 +1182,10 @@ void Editor::updateExtraSelections()
     }
 
     allSelections.append(m_bracketSelections);
+    allSelections.append(m_rainbowSelections);
     allSelections.append(m_markSelections);
     allSelections.append(m_diagnosticSelections);
+    allSelections.append(m_multiCursorSelections);
 
     setExtraSelections(allSelections);
 }
@@ -1662,6 +1988,211 @@ void Editor::setShowIndentGuide(bool show)
     viewport()->update();
 }
 
+// --- Multi-cursor editing ---
+
+void Editor::addCursorAtPosition(int position)
+{
+    QTextCursor cur(QPlainTextEdit::document());
+    cur.setPosition(position);
+    m_extraCursors.append(cur);
+    updateMultiCursorSelections();
+}
+
+void Editor::clearExtraCursors()
+{
+    m_extraCursors.clear();
+    m_multiCursorSelections.clear();
+    updateExtraSelections();
+    viewport()->update();
+}
+
+QString Editor::wordUnderCursor() const
+{
+    QTextCursor cur = textCursor();
+    cur.select(QTextCursor::WordUnderCursor);
+    return cur.selectedText();
+}
+
+void Editor::selectNextOccurrence()
+{
+    QString searchText;
+    QTextCursor primary = textCursor();
+
+    if (primary.hasSelection()) {
+        searchText = primary.selectedText();
+    } else {
+        // Select the word under cursor at the primary cursor
+        primary.select(QTextCursor::WordUnderCursor);
+        searchText = primary.selectedText();
+        if (searchText.isEmpty()) return;
+        setTextCursor(primary);
+    }
+
+    // Determine the search start: after the last extra cursor, or after the primary
+    int searchFrom = primary.selectionEnd();
+    for (const auto &ec : m_extraCursors) {
+        int end = ec.selectionEnd();
+        if (end > searchFrom) searchFrom = end;
+    }
+
+    QTextDocument *doc = QPlainTextEdit::document();
+    QTextCursor found = doc->find(searchText, searchFrom);
+
+    // Wrap around if not found
+    if (found.isNull()) {
+        found = doc->find(searchText, 0);
+    }
+
+    if (found.isNull()) return;
+
+    // Skip if this occurrence is already the primary cursor's selection
+    if (found.selectionStart() == primary.selectionStart()
+        && found.selectionEnd() == primary.selectionEnd()) {
+        return;
+    }
+
+    // Skip if this occurrence is already covered by an extra cursor
+    for (const auto &ec : m_extraCursors) {
+        if (found.selectionStart() == ec.selectionStart()
+            && found.selectionEnd() == ec.selectionEnd()) {
+            return;
+        }
+    }
+
+    m_extraCursors.append(found);
+    updateMultiCursorSelections();
+}
+
+void Editor::selectAllOccurrences()
+{
+    QString searchText;
+    QTextCursor primary = textCursor();
+
+    if (primary.hasSelection()) {
+        searchText = primary.selectedText();
+    } else {
+        primary.select(QTextCursor::WordUnderCursor);
+        searchText = primary.selectedText();
+        if (searchText.isEmpty()) return;
+        setTextCursor(primary);
+    }
+
+    m_extraCursors.clear();
+
+    QTextDocument *doc = QPlainTextEdit::document();
+    QTextCursor found = doc->find(searchText, 0);
+
+    while (!found.isNull()) {
+        // Skip the primary cursor's occurrence
+        if (found.selectionStart() != primary.selectionStart()
+            || found.selectionEnd() != primary.selectionEnd()) {
+            m_extraCursors.append(found);
+        }
+        found = doc->find(searchText, found.selectionEnd());
+    }
+
+    updateMultiCursorSelections();
+}
+
+void Editor::updateMultiCursorSelections()
+{
+    m_multiCursorSelections.clear();
+    Theme theme = ThemeManager::instance().currentTheme();
+
+    for (const auto &cur : m_extraCursors) {
+        if (cur.hasSelection()) {
+            // Highlight the selection
+            QTextEdit::ExtraSelection sel;
+            sel.format.setBackground(theme.selectionBackground.isValid()
+                ? theme.selectionBackground : palette().highlight().color());
+            sel.format.setForeground(theme.selectionForeground.isValid()
+                ? theme.selectionForeground : palette().highlightedText().color());
+            sel.cursor = cur;
+            m_multiCursorSelections.append(sel);
+        }
+
+        // Cursor caret marker (zero-width selection with border)
+        QTextEdit::ExtraSelection caretSel;
+        caretSel.format.setBackground(theme.foreground.isValid()
+            ? theme.foreground : palette().text().color());
+        caretSel.format.setProperty(QTextFormat::FullWidthSelection, false);
+        caretSel.cursor = cur;
+        caretSel.cursor.clearSelection();
+        // Select one character forward if possible, to draw a visible caret
+        if (!caretSel.cursor.atEnd()) {
+            caretSel.cursor.movePosition(QTextCursor::NextCharacter,
+                                          QTextCursor::KeepAnchor);
+            caretSel.format.setForeground(theme.background.isValid()
+                ? theme.background : palette().base().color());
+        }
+        m_multiCursorSelections.append(caretSel);
+    }
+
+    updateExtraSelections();
+    viewport()->update();
+}
+
+void Editor::applyMultiCursorEdit(QKeyEvent *event)
+{
+    // Collect all cursors: primary + extras
+    QVector<QTextCursor> allCursors;
+    allCursors.append(textCursor());
+    allCursors.append(m_extraCursors);
+
+    // Sort by position descending so edits don't shift earlier positions
+    std::sort(allCursors.begin(), allCursors.end(),
+        [](const QTextCursor &a, const QTextCursor &b) {
+            return a.position() > b.position();
+        });
+
+    QTextCursor editBlock(QPlainTextEdit::document());
+    editBlock.beginEditBlock();
+
+    for (auto &cur : allCursors) {
+        if (event->key() == Qt::Key_Backspace) {
+            if (cur.hasSelection()) {
+                cur.removeSelectedText();
+            } else {
+                cur.deletePreviousChar();
+            }
+        } else if (event->key() == Qt::Key_Delete) {
+            if (cur.hasSelection()) {
+                cur.removeSelectedText();
+            } else {
+                cur.deleteChar();
+            }
+        } else if (event->key() == Qt::Key_Return
+                   || event->key() == Qt::Key_Enter) {
+            // Auto-indent: match leading whitespace of current line
+            QString blockText = cur.block().text();
+            QString indent;
+            for (const QChar &ch : blockText) {
+                if (ch == ' ' || ch == '\t') indent += ch;
+                else break;
+            }
+            cur.insertText("\n" + indent);
+        } else if (!event->text().isEmpty() && event->text().at(0).isPrint()) {
+            if (cur.hasSelection()) {
+                cur.removeSelectedText();
+            }
+            cur.insertText(event->text());
+        }
+    }
+
+    editBlock.endEditBlock();
+
+    // Update primary cursor (first in original order = last in sorted order)
+    setTextCursor(allCursors.last());
+
+    // Update extra cursors (all except the primary)
+    m_extraCursors.clear();
+    for (int i = 0; i < allCursors.size() - 1; ++i) {
+        m_extraCursors.append(allCursors[i]);
+    }
+
+    updateMultiCursorSelections();
+}
+
 void Editor::paintEvent(QPaintEvent *event)
 {
     QPlainTextEdit::paintEvent(event);
@@ -1683,6 +2214,37 @@ void Editor::paintEvent(QPaintEvent *event)
 
     if (m_columnSelection.active) {
         paintColumnSelection();
+    }
+
+    // Paint extra cursor carets as 2px-wide rectangles
+    if (!m_extraCursors.isEmpty()) {
+        QPainter painter(viewport());
+        Theme theme = ThemeManager::instance().currentTheme();
+        QColor caretColor = theme.foreground.isValid()
+            ? theme.foreground : palette().text().color();
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(caretColor);
+
+        for (const auto &cur : m_extraCursors) {
+            QTextBlock block = cur.block();
+            if (!block.isVisible()) continue;
+
+            QRectF blockGeom = blockBoundingGeometry(block).translated(contentOffset());
+            if (blockGeom.bottom() < 0 || blockGeom.top() > viewport()->height())
+                continue;
+
+            QTextLayout *layout = block.layout();
+            if (!layout) continue;
+
+            int posInBlock = cur.position() - block.position();
+            QTextLine line = layout->lineForTextPosition(posInBlock);
+            if (!line.isValid()) continue;
+
+            qreal x = line.cursorToX(posInBlock);
+            qreal y = blockGeom.top() + line.y();
+            qreal h = line.height();
+            painter.drawRect(QRectF(x, y, 2.0, h));
+        }
     }
 }
 
@@ -1814,6 +2376,11 @@ void Editor::mousePressEvent(QMouseEvent *event)
     }
 
     if (event->modifiers() & Qt::AltModifier && event->button() == Qt::LeftButton) {
+        // Record Alt+Click position; we decide in mouseReleaseEvent whether
+        // this was a click (add cursor) or drag (column selection).
+        m_altClickPending = true;
+        m_altClickPos = event->pos();
+
         QTextCursor cursor = cursorForPosition(event->pos());
         m_columnSelection.active = true;
         m_columnSelection.startLine = cursor.blockNumber();
@@ -1827,6 +2394,11 @@ void Editor::mousePressEvent(QMouseEvent *event)
     if (m_columnSelection.active) {
         m_columnSelection.active = false;
         viewport()->update();
+    }
+
+    // Clicking without Alt clears extra cursors
+    if (!m_extraCursors.isEmpty()) {
+        clearExtraCursors();
     }
 
     QPlainTextEdit::mousePressEvent(event);
@@ -1846,6 +2418,26 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
 void Editor::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (m_altClickPending && event->button() == Qt::LeftButton) {
+        m_altClickPending = false;
+
+        // If the mouse didn't move significantly, treat as Alt+Click (add cursor)
+        QPoint delta = event->pos() - m_altClickPos;
+        bool wasDrag = (delta.manhattanLength() > 3);
+
+        if (!wasDrag) {
+            // Cancel the column selection that was started
+            m_columnSelection.active = false;
+
+            // Add a new cursor at the click position
+            QTextCursor cursor = cursorForPosition(event->pos());
+            addCursorAtPosition(cursor.position());
+            return;
+        }
+        // Otherwise, it was a drag — column selection stays active
+        return;
+    }
+
     if (m_columnSelection.active && event->button() == Qt::LeftButton) {
         return;
     }
@@ -1905,6 +2497,107 @@ void Editor::insertTextAtColumn(const QString &text)
 
     cursor.endEditBlock();
     setTextCursor(cursor);
+}
+
+void Editor::insertNumbersAtColumn(int initial, int increment, bool leadingZeros)
+{
+    if (!m_columnSelection.active) return;
+
+    int startLine = qMin(m_columnSelection.startLine, m_columnSelection.endLine);
+    int endLine = qMax(m_columnSelection.startLine, m_columnSelection.endLine);
+    int col = qMin(m_columnSelection.startCol, m_columnSelection.endCol);
+
+    int maxNum = initial + (endLine - startLine) * increment;
+    int width = QString::number(maxNum).length();
+
+    QTextCursor cursor = textCursor();
+    cursor.beginEditBlock();
+
+    int num = initial;
+    for (int line = startLine; line <= endLine; ++line) {
+        QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(line);
+        if (!block.isValid()) continue;
+
+        QString numStr = QString::number(num);
+        if (leadingZeros) {
+            numStr = numStr.rightJustified(width, '0');
+        }
+
+        int pos = block.position() + qMin(col, block.text().length());
+        cursor.setPosition(pos);
+        cursor.insertText(numStr);
+        num += increment;
+    }
+
+    cursor.endEditBlock();
+    setTextCursor(cursor);
+}
+
+void Editor::deleteColumnSelection()
+{
+    if (!m_columnSelection.active) return;
+
+    int startLine = qMin(m_columnSelection.startLine, m_columnSelection.endLine);
+    int endLine = qMax(m_columnSelection.startLine, m_columnSelection.endLine);
+    int startCol = qMin(m_columnSelection.startCol, m_columnSelection.endCol);
+    int endCol = qMax(m_columnSelection.startCol, m_columnSelection.endCol);
+
+    QTextCursor cursor = textCursor();
+    cursor.beginEditBlock();
+
+    for (int line = endLine; line >= startLine; --line) {
+        QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(line);
+        if (!block.isValid()) continue;
+
+        int lineLen = block.text().length();
+        int colStart = qMin(startCol, lineLen);
+        int colEnd = qMin(endCol, lineLen);
+        if (colStart >= colEnd) continue;
+
+        int posStart = block.position() + colStart;
+        int posEnd = block.position() + colEnd;
+        cursor.setPosition(posStart);
+        cursor.setPosition(posEnd, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+    }
+
+    cursor.endEditBlock();
+    setTextCursor(cursor);
+    m_columnSelection.active = false;
+    viewport()->update();
+}
+
+void Editor::pasteAtColumn()
+{
+    if (!m_columnSelection.active) return;
+
+    QString clipText = QApplication::clipboard()->text();
+    if (clipText.isEmpty()) return;
+
+    QStringList lines = clipText.split('\n');
+
+    int startLine = qMin(m_columnSelection.startLine, m_columnSelection.endLine);
+    int endLine = qMax(m_columnSelection.startLine, m_columnSelection.endLine);
+    int col = qMin(m_columnSelection.startCol, m_columnSelection.endCol);
+
+    QTextCursor cursor = textCursor();
+    cursor.beginEditBlock();
+
+    int lineCount = endLine - startLine + 1;
+    for (int i = 0; i < lineCount; ++i) {
+        QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(startLine + i);
+        if (!block.isValid()) continue;
+
+        QString pasteText = (i < lines.size()) ? lines.at(i) : QString();
+        int pos = block.position() + qMin(col, block.text().length());
+        cursor.setPosition(pos);
+        cursor.insertText(pasteText);
+    }
+
+    cursor.endEditBlock();
+    setTextCursor(cursor);
+    m_columnSelection.active = false;
+    viewport()->update();
 }
 
 void Editor::clearColumnSelection()
@@ -2081,12 +2774,27 @@ void Editor::triggerCompletion()
         return;
     }
 
+    bool isPathCompletion = !items.isEmpty()
+                            && items.first().kind == SimpleCompletionItem::Path;
+
     if (!m_completionPopup) {
         m_completionPopup = new CompletionPopup(this);
         connect(m_completionPopup, &CompletionPopup::completionSelected,
                 this, [this](const QString &completion) {
             QTextCursor cur = textCursor();
+            // Check if replacing a path segment (after last /)
             cur.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+            QString selected = cur.selectedText();
+            // For path completions, check if there's a partial filename to replace
+            int posInBlock = textCursor().positionInBlock();
+            QString lineText = textCursor().block().text();
+            int lastSlash = lineText.lastIndexOf('/', posInBlock - 1);
+            if (lastSlash >= 0 && lastSlash < posInBlock) {
+                // Check if the completion looks like a path item
+                int blockPos = textCursor().block().position();
+                cur.setPosition(blockPos + lastSlash + 1);
+                cur.setPosition(blockPos + posInBlock, QTextCursor::KeepAnchor);
+            }
             cur.insertText(completion);
         });
     }
@@ -2102,21 +2810,373 @@ QVector<SimpleCompletionItem> Editor::gatherCompletions(const QString &prefix)
     QVector<SimpleCompletionItem> results;
     QSet<QString> seen;
 
-    // Gather words from the current document
+    // Check for path completion: cursor inside quotes with path-like prefix
+    QTextCursor cur = textCursor();
+    int posInBlock = cur.positionInBlock();
+    QString lineText = cur.block().text();
+    bool insideQuotes = false;
+    QChar quoteChar;
+    int quoteStart = -1;
+    for (int i = 0; i < posInBlock; ++i) {
+        if (lineText[i] == '"' || lineText[i] == '\'') {
+            if (!insideQuotes) {
+                insideQuotes = true;
+                quoteChar = lineText[i];
+                quoteStart = i + 1;
+            } else if (lineText[i] == quoteChar) {
+                insideQuotes = false;
+            }
+        }
+    }
+    if (insideQuotes && quoteStart >= 0) {
+        QString pathPrefix = lineText.mid(quoteStart, posInBlock - quoteStart);
+        if (pathPrefix.startsWith('/') || pathPrefix.startsWith("./")
+            || pathPrefix.startsWith("../") || pathPrefix.startsWith("~/")) {
+            QVector<SimpleCompletionItem> pathItems = gatherPathCompletions(pathPrefix);
+            if (!pathItems.isEmpty()) return pathItems;
+        }
+    }
+
+    // Gather snippets for current language
+    QString lang = language();
+    QVector<SimpleCompletionItem> snippets = getSnippetsForLanguage(lang);
+    for (const SimpleCompletionItem &snip : snippets) {
+        int score = fuzzyMatchScore(snip.label, prefix);
+        if (score > 0 && !seen.contains(snip.label)) {
+            seen.insert(snip.label);
+            results.append(snip);
+        }
+    }
+
+    // Gather words from the current document with fuzzy matching
     QString text = toPlainText();
     QRegularExpression wordRe("\\b([A-Za-z_]\\w{2,})\\b");
     QRegularExpressionMatchIterator it = wordRe.globalMatch(text);
+
+    struct ScoredItem {
+        SimpleCompletionItem item;
+        int score;
+    };
+    QVector<ScoredItem> scored;
+
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         QString word = match.captured(1);
-        if (word.startsWith(prefix, Qt::CaseInsensitive) && word != prefix && !seen.contains(word)) {
+        if (word == prefix || seen.contains(word)) continue;
+
+        int score = fuzzyMatchScore(word, prefix);
+        if (score > 0) {
             seen.insert(word);
             SimpleCompletionItem item;
             item.label = word;
             item.kind = SimpleCompletionItem::Word;
-            results.append(item);
+            scored.append({item, score});
         }
     }
 
+    // Sort by score descending
+    std::sort(scored.begin(), scored.end(),
+              [](const ScoredItem &a, const ScoredItem &b) {
+                  return a.score > b.score;
+              });
+
+    for (const ScoredItem &si : scored) {
+        results.append(si.item);
+        if (results.size() >= 50) break;
+    }
+
     return results;
+}
+
+int Editor::fuzzyMatchScore(const QString &candidate, const QString &pattern)
+{
+    if (pattern.isEmpty()) return 0;
+    if (candidate.isEmpty()) return 0;
+
+    int score = 0;
+    int patIdx = 0;
+    int prevMatchPos = -1;
+    bool allMatched = true;
+    QString candLower = candidate.toLower();
+    QString patLower = pattern.toLower();
+
+    for (int i = 0; i < candLower.length() && patIdx < patLower.length(); ++i) {
+        if (candLower[i] == patLower[patIdx]) {
+            score += 1;
+            // Consecutive match bonus
+            if (prevMatchPos == i - 1) {
+                score += 3;
+            }
+            // Word boundary bonus: start, after underscore, camelCase
+            if (i == 0) {
+                score += 5;
+            } else {
+                QChar prev = candidate[i - 1];
+                if (prev == '_' || prev == '-' || prev == '.') {
+                    score += 3;
+                } else if (candidate[i].isUpper() && prev.isLower()) {
+                    score += 3;
+                }
+            }
+            // Exact case match bonus
+            if (candidate[i] == pattern[patIdx]) {
+                score += 1;
+            }
+            prevMatchPos = i;
+            ++patIdx;
+        }
+    }
+
+    // All pattern characters must be found
+    if (patIdx < patLower.length()) return 0;
+
+    // Bonus for exact prefix match
+    if (candLower.startsWith(patLower)) {
+        score += 10;
+    }
+
+    return score;
+}
+
+QVector<SimpleCompletionItem> Editor::gatherPathCompletions(const QString &prefix)
+{
+    QVector<SimpleCompletionItem> results;
+
+    QString expandedPath = prefix;
+    if (expandedPath.startsWith("~/")) {
+        expandedPath = QDir::homePath() + expandedPath.mid(1);
+    }
+
+    QFileInfo fi(expandedPath);
+    QString dirPath;
+    QString filePrefix;
+
+    if (expandedPath.endsWith('/')) {
+        dirPath = expandedPath;
+        filePrefix = QString();
+    } else {
+        dirPath = fi.path();
+        filePrefix = fi.fileName();
+    }
+
+    QDir dir(dirPath);
+    if (!dir.exists()) return results;
+
+    QFileInfoList entries = dir.entryInfoList(
+        QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name);
+
+    for (const QFileInfo &entry : entries) {
+        if (!filePrefix.isEmpty()
+            && !entry.fileName().startsWith(filePrefix, Qt::CaseInsensitive)) {
+            continue;
+        }
+
+        SimpleCompletionItem item;
+        if (entry.isDir()) {
+            item.label = entry.fileName() + "/";
+            item.detail = tr("Directory");
+        } else {
+            item.label = entry.fileName();
+            item.detail = tr("File");
+        }
+        item.kind = SimpleCompletionItem::Path;
+        results.append(item);
+
+        if (results.size() >= 30) break;
+    }
+
+    return results;
+}
+
+QVector<SimpleCompletionItem> Editor::getSnippetsForLanguage(const QString &lang)
+{
+    QVector<SimpleCompletionItem> snippets;
+    QString lowerLang = lang.toLower();
+
+    auto addSnippet = [&](const QString &trigger, const QString &expansion,
+                          const QString &detail) {
+        SimpleCompletionItem item;
+        item.label = trigger;
+        item.detail = detail;
+        item.kind = SimpleCompletionItem::Snippet;
+        Q_UNUSED(expansion);
+        snippets.append(item);
+    };
+
+    if (lowerLang == "c++" || lowerLang == "cpp" || lowerLang == "c") {
+        addSnippet("for", "for (int i = 0; i < count; ++i) {\n\t\n}",
+                   "for loop");
+        addSnippet("if", "if (condition) {\n\t\n}",
+                   "if statement");
+        addSnippet("while", "while (condition) {\n\t\n}",
+                   "while loop");
+        addSnippet("class", "class Name {\npublic:\n\tName();\n\t~Name();\n\nprivate:\n\t\n};",
+                   "class template");
+        addSnippet("switch", "switch (expr) {\ncase value:\n\tbreak;\ndefault:\n\tbreak;\n}",
+                   "switch statement");
+        addSnippet("main", "int main(int argc, char *argv[]) {\n\t\n\treturn 0;\n}",
+                   "main function");
+    } else if (lowerLang == "python") {
+        addSnippet("def", "def function_name(args):\n\t\"\"\"Docstring.\"\"\"\n\tpass",
+                   "function");
+        addSnippet("class", "class ClassName:\n\tdef __init__(self):\n\t\tpass",
+                   "class template");
+        addSnippet("for", "for item in iterable:\n\tpass",
+                   "for loop");
+        addSnippet("with", "with open(filename, 'r') as f:\n\tpass",
+                   "with statement");
+        addSnippet("try", "try:\n\tpass\nexcept Exception as e:\n\tpass",
+                   "try/except");
+        addSnippet("ifmain", "if __name__ == '__main__':\n\tmain()",
+                   "if main guard");
+    } else if (lowerLang == "javascript" || lowerLang == "js") {
+        addSnippet("fn", "function name() {\n\t\n}",
+                   "function");
+        addSnippet("afn", "const name = (args) => {\n\t\n};",
+                   "arrow function");
+        addSnippet("for", "for (let i = 0; i < count; i++) {\n\t\n}",
+                   "for loop");
+        addSnippet("foreach", "array.forEach((item) => {\n\t\n});",
+                   "forEach");
+        addSnippet("class", "class Name {\n\tconstructor() {\n\t\t\n\t}\n}",
+                   "class template");
+        addSnippet("try", "try {\n\t\n} catch (error) {\n\t\n}",
+                   "try/catch");
+    } else if (lowerLang == "typescript" || lowerLang == "ts") {
+        addSnippet("fn", "function name(): void {\n\t\n}",
+                   "function");
+        addSnippet("afn", "const name = (args: type): ReturnType => {\n\t\n};",
+                   "arrow function");
+        addSnippet("interface", "interface Name {\n\t\n}",
+                   "interface");
+        addSnippet("class", "class Name {\n\tconstructor() {\n\t\t\n\t}\n}",
+                   "class template");
+        addSnippet("for", "for (let i = 0; i < count; i++) {\n\t\n}",
+                   "for loop");
+        addSnippet("try", "try {\n\t\n} catch (error: unknown) {\n\t\n}",
+                   "try/catch");
+    } else if (lowerLang == "rust") {
+        addSnippet("fn", "fn name() {\n\t\n}",
+                   "function");
+        addSnippet("struct", "struct Name {\n\t\n}",
+                   "struct");
+        addSnippet("impl", "impl Name {\n\t\n}",
+                   "impl block");
+        addSnippet("match", "match value {\n\t_ => {},\n}",
+                   "match expression");
+    } else if (lowerLang == "go") {
+        addSnippet("fn", "func name() {\n\t\n}",
+                   "function");
+        addSnippet("struct", "type Name struct {\n\t\n}",
+                   "struct");
+        addSnippet("for", "for i := 0; i < count; i++ {\n\t\n}",
+                   "for loop");
+        addSnippet("iferr", "if err != nil {\n\treturn err\n}",
+                   "error check");
+    } else if (lowerLang == "java") {
+        addSnippet("class", "public class Name {\n\t\n}",
+                   "class");
+        addSnippet("main", "public static void main(String[] args) {\n\t\n}",
+                   "main method");
+        addSnippet("for", "for (int i = 0; i < count; i++) {\n\t\n}",
+                   "for loop");
+        addSnippet("try", "try {\n\t\n} catch (Exception e) {\n\t\n}",
+                   "try/catch");
+    }
+
+    return snippets;
+}
+
+bool Editor::tryExpandSnippet()
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::StartOfWord, QTextCursor::KeepAnchor);
+    QString word = cursor.selectedText();
+    if (word.isEmpty()) return false;
+
+    QString lang = language().toLower();
+    QVector<SimpleCompletionItem> snippets = getSnippetsForLanguage(lang);
+
+    // Build a map of trigger -> expansion
+    // We need the actual expansion text, so rebuild with a direct lookup
+    QMap<QString, QString> expansionMap;
+
+    if (lang == "c++" || lang == "cpp" || lang == "c") {
+        expansionMap["for"] = "for (int i = 0; i < count; ++i) {\n\t\n}";
+        expansionMap["if"] = "if (condition) {\n\t\n}";
+        expansionMap["while"] = "while (condition) {\n\t\n}";
+        expansionMap["class"] = "class Name {\npublic:\n\tName();\n\t~Name();\n\nprivate:\n\t\n};";
+        expansionMap["switch"] = "switch (expr) {\ncase value:\n\tbreak;\ndefault:\n\tbreak;\n}";
+        expansionMap["main"] = "int main(int argc, char *argv[]) {\n\t\n\treturn 0;\n}";
+    } else if (lang == "python") {
+        expansionMap["def"] = "def function_name(args):\n\t\"\"\"Docstring.\"\"\"\n\tpass";
+        expansionMap["class"] = "class ClassName:\n\tdef __init__(self):\n\t\tpass";
+        expansionMap["for"] = "for item in iterable:\n\tpass";
+        expansionMap["with"] = "with open(filename, 'r') as f:\n\tpass";
+        expansionMap["try"] = "try:\n\tpass\nexcept Exception as e:\n\tpass";
+        expansionMap["ifmain"] = "if __name__ == '__main__':\n\tmain()";
+    } else if (lang == "javascript" || lang == "js") {
+        expansionMap["fn"] = "function name() {\n\t\n}";
+        expansionMap["afn"] = "const name = (args) => {\n\t\n};";
+        expansionMap["for"] = "for (let i = 0; i < count; i++) {\n\t\n}";
+        expansionMap["foreach"] = "array.forEach((item) => {\n\t\n});";
+        expansionMap["class"] = "class Name {\n\tconstructor() {\n\t\t\n\t}\n}";
+        expansionMap["try"] = "try {\n\t\n} catch (error) {\n\t\n}";
+    } else if (lang == "typescript" || lang == "ts") {
+        expansionMap["fn"] = "function name(): void {\n\t\n}";
+        expansionMap["afn"] = "const name = (args: type): ReturnType => {\n\t\n};";
+        expansionMap["interface"] = "interface Name {\n\t\n}";
+        expansionMap["class"] = "class Name {\n\tconstructor() {\n\t\t\n\t}\n}";
+        expansionMap["for"] = "for (let i = 0; i < count; i++) {\n\t\n}";
+        expansionMap["try"] = "try {\n\t\n} catch (error: unknown) {\n\t\n}";
+    } else if (lang == "rust") {
+        expansionMap["fn"] = "fn name() {\n\t\n}";
+        expansionMap["struct"] = "struct Name {\n\t\n}";
+        expansionMap["impl"] = "impl Name {\n\t\n}";
+        expansionMap["match"] = "match value {\n\t_ => {},\n}";
+    } else if (lang == "go") {
+        expansionMap["fn"] = "func name() {\n\t\n}";
+        expansionMap["struct"] = "type Name struct {\n\t\n}";
+        expansionMap["for"] = "for i := 0; i < count; i++ {\n\t\n}";
+        expansionMap["iferr"] = "if err != nil {\n\treturn err\n}";
+    } else if (lang == "java") {
+        expansionMap["class"] = "public class Name {\n\t\n}";
+        expansionMap["main"] = "public static void main(String[] args) {\n\t\n}";
+        expansionMap["for"] = "for (int i = 0; i < count; i++) {\n\t\n}";
+        expansionMap["try"] = "try {\n\t\n} catch (Exception e) {\n\t\n}";
+    }
+
+    if (!expansionMap.contains(word)) return false;
+
+    QString expansion = expansionMap[word];
+
+    // Replace tabs with the configured indent string
+    QString indentStr = indentString();
+    expansion.replace("\t", indentStr);
+
+    // Get current line indent for multi-line snippets
+    QString currentIndent;
+    QString blockText = cursor.block().text();
+    for (const QChar &ch : blockText) {
+        if (ch == ' ' || ch == '\t') {
+            currentIndent += ch;
+        } else {
+            break;
+        }
+    }
+
+    // Add current indent to each new line in the expansion
+    expansion.replace("\n", "\n" + currentIndent);
+
+    cursor.beginEditBlock();
+    cursor.insertText(expansion);
+    cursor.endEditBlock();
+    setTextCursor(cursor);
+
+    // Hide completion popup if visible
+    if (m_completionPopup && m_completionPopup->isVisible()) {
+        m_completionPopup->hide();
+    }
+
+    return true;
 }

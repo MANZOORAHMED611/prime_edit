@@ -7,6 +7,10 @@
 #include "statusbar.h"
 #include "evalresultwidget.h"
 #include "endpointconfigdialog.h"
+#include "gitcommitdialog.h"
+#include "remoteconnectiondialog.h"
+#include "notificationbar.h"
+#include "core/remoteconnection.h"
 #include "core/document.h"
 #include "core/llmevaluator.h"
 #include "core/islamicbridge.h"
@@ -24,6 +28,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QInputDialog>
+#include <QStandardPaths>
 #include <QLineEdit>
 #include <QToolTip>
 #include "columneditor.h"
@@ -572,33 +577,74 @@ void MainWindow::closeTabsToLeft()
 
 void MainWindow::moveToOtherView()
 {
-    // TODO: Implement move to other view (split view)
-    statusBar()->showMessage(tr("Move to other view not yet implemented"), 3000);
+    TabWidget *source = activeTabWidget();
+    if (!source || source->count() == 0) return;
+
+    int idx = source->currentIndex();
+    Editor *editor = qobject_cast<Editor*>(source->widget(idx));
+    if (!editor) return;
+
+    // Ensure split exists
+    if (!isSplit()) {
+        splitView(Qt::Horizontal);
+    }
+
+    TabWidget *target = inactiveTabWidget();
+    if (!target) return;
+
+    QString title = source->tabText(idx);
+    QIcon icon = source->tabIcon(idx);
+    source->removeTab(idx);
+
+    int newIdx = target->addTab(editor, icon, title);
+    target->setCurrentIndex(newIdx);
+    editor->setFocus();
+
+    checkUnsplitNeeded();
 }
 
 void MainWindow::cloneToOtherView()
 {
-    // TODO: Implement clone to other view (split view)
-    statusBar()->showMessage(tr("Clone to other view not yet implemented"), 3000);
+    Editor *editor = currentEditor();
+    if (!editor || !editor->document()) return;
+
+    // Ensure split exists
+    if (!isSplit()) {
+        splitView(Qt::Horizontal);
+        return; // splitView already clones the current doc
+    }
+
+    TabWidget *target = inactiveTabWidget();
+    if (!target) return;
+
+    Document *doc = editor->document();
+    Editor *cloned = createEditor(doc);
+    QString title = doc->displayName();
+    int idx = target->addTab(cloned, title);
+    target->setTabIcon(idx, TabBar::iconForFile(doc->filePath()));
+    target->setCurrentIndex(idx);
+    cloned->setFocus();
 }
 
 void MainWindow::previousTab()
 {
-    int current = m_tabWidget->currentIndex();
+    TabWidget *tw = activeTabWidget();
+    int current = tw->currentIndex();
     if (current > 0) {
-        m_tabWidget->setCurrentIndex(current - 1);
+        tw->setCurrentIndex(current - 1);
     } else {
-        m_tabWidget->setCurrentIndex(m_tabWidget->count() - 1);
+        tw->setCurrentIndex(tw->count() - 1);
     }
 }
 
 void MainWindow::nextTab()
 {
-    int current = m_tabWidget->currentIndex();
-    if (current < m_tabWidget->count() - 1) {
-        m_tabWidget->setCurrentIndex(current + 1);
+    TabWidget *tw = activeTabWidget();
+    int current = tw->currentIndex();
+    if (current < tw->count() - 1) {
+        tw->setCurrentIndex(current + 1);
     } else {
-        m_tabWidget->setCurrentIndex(0);
+        tw->setCurrentIndex(0);
     }
 }
 
@@ -615,13 +661,26 @@ void MainWindow::columnEditor()
     if (!editor) return;
 
     ColumnEditor dialog(this);
-    if (dialog.exec() == QDialog::Accepted) {
-        // Apply column editor result
-        if (dialog.mode() == ColumnEditor::TextMode) {
-            editor->insertTextAtColumn(dialog.text());
+    if (dialog.exec() != QDialog::Accepted) return;
+
+    if (!editor->isColumnSelectionActive()) {
+        QTextCursor cursor = editor->textCursor();
+        if (!cursor.hasSelection()) {
+            statusBar()->showMessage(
+                tr("No column selection active. Use Alt+Click+Drag to select columns."), 3000);
+            return;
         }
-        // Number mode would need column selection active
     }
+
+    if (dialog.mode() == ColumnEditor::TextMode) {
+        editor->insertTextAtColumn(dialog.text());
+    } else {
+        int num = dialog.initialNumber();
+        int inc = dialog.increaseBy();
+        bool zeros = dialog.leadingZeros();
+        editor->insertNumbersAtColumn(num, inc, zeros);
+    }
+    editor->clearColumnSelection();
 }
 
 void MainWindow::beginEndSelect()
@@ -942,4 +1001,230 @@ void MainWindow::validateCurrentDocument()
         statusBar()->showMessage(
             QString("Schema: %1 errors, %2 warnings").arg(errors).arg(warnings), 10000);
     }
+}
+
+// ============================================================
+// Git operations
+// ============================================================
+
+void MainWindow::gitCommit()
+{
+    // Determine repo path from current file or working directory
+    QString repoPath;
+    Editor *editor = currentEditor();
+    if (editor && editor->document() &&
+        !editor->document()->filePath().isEmpty()) {
+        QFileInfo fi(editor->document()->filePath());
+        repoPath = fi.absolutePath();
+    } else {
+        repoPath = QDir::currentPath();
+    }
+
+    // Resolve actual git root
+    QProcess proc;
+    proc.setWorkingDirectory(repoPath);
+    proc.start("git", {"rev-parse", "--show-toplevel"});
+    proc.waitForFinished(3000);
+    if (proc.exitCode() != 0) {
+        QMessageBox::warning(this, tr("Git"),
+                             tr("Not inside a Git repository."));
+        return;
+    }
+    repoPath = QString::fromUtf8(proc.readAllStandardOutput()).trimmed();
+
+    auto *dialog = new GitCommitDialog(repoPath, this);
+    connect(dialog, &GitCommitDialog::commitCreated,
+            this, [this](const QString &hash, const QString &message) {
+        statusBar()->showMessage(
+            tr("Committed %1: %2").arg(hash, message), 5000);
+        updateGitBranch();
+    });
+    dialog->exec();
+    dialog->deleteLater();
+}
+
+void MainWindow::gitBranchSwitch()
+{
+    // Determine repo path
+    QString repoPath;
+    Editor *editor = currentEditor();
+    if (editor && editor->document() &&
+        !editor->document()->filePath().isEmpty()) {
+        QFileInfo fi(editor->document()->filePath());
+        repoPath = fi.absolutePath();
+    } else {
+        repoPath = QDir::currentPath();
+    }
+
+    QProcess proc;
+    proc.setWorkingDirectory(repoPath);
+    proc.start("git", {"rev-parse", "--show-toplevel"});
+    proc.waitForFinished(3000);
+    if (proc.exitCode() != 0) {
+        QMessageBox::warning(this, tr("Git"),
+                             tr("Not inside a Git repository."));
+        return;
+    }
+    repoPath = QString::fromUtf8(proc.readAllStandardOutput()).trimmed();
+
+    // Get branch list
+    proc.setWorkingDirectory(repoPath);
+    proc.start("git", {"branch", "--list", "--format=%(refname:short)"});
+    proc.waitForFinished(5000);
+    QStringList branches = QString::fromUtf8(proc.readAllStandardOutput())
+                               .trimmed().split('\n', Qt::SkipEmptyParts);
+
+    if (branches.isEmpty()) {
+        QMessageBox::information(this, tr("Git"),
+                                 tr("No branches found."));
+        return;
+    }
+
+    // Get current branch for pre-selection
+    proc.start("git", {"rev-parse", "--abbrev-ref", "HEAD"});
+    proc.waitForFinished(3000);
+    QString currentBranch =
+        QString::fromUtf8(proc.readAllStandardOutput()).trimmed();
+
+    bool ok;
+    QString selected = QInputDialog::getItem(
+        this, tr("Switch Branch"), tr("Select branch:"),
+        branches, branches.indexOf(currentBranch), false, &ok);
+
+    if (!ok || selected.isEmpty() || selected == currentBranch)
+        return;
+
+    proc.start("git", {"checkout", selected});
+    proc.waitForFinished(10000);
+
+    if (proc.exitCode() != 0) {
+        QString err = QString::fromUtf8(proc.readAllStandardError());
+        QMessageBox::warning(this, tr("Git"),
+                             tr("Failed to switch branch:\n%1").arg(err));
+    } else {
+        statusBar()->showMessage(
+            tr("Switched to branch: %1").arg(selected), 5000);
+        updateGitBranch();
+    }
+}
+
+void MainWindow::updateGitBranch()
+{
+    if (!m_gitBranchLabel) return;
+
+    // Determine repo path
+    QString repoPath;
+    Editor *editor = currentEditor();
+    if (editor && editor->document() &&
+        !editor->document()->filePath().isEmpty()) {
+        QFileInfo fi(editor->document()->filePath());
+        repoPath = fi.absolutePath();
+    } else {
+        repoPath = QDir::currentPath();
+    }
+
+    QProcess proc;
+    proc.setWorkingDirectory(repoPath);
+    proc.start("git", {"rev-parse", "--abbrev-ref", "HEAD"});
+    proc.waitForFinished(3000);
+
+    if (proc.exitCode() == 0) {
+        QString branch =
+            QString::fromUtf8(proc.readAllStandardOutput()).trimmed();
+        m_gitBranchLabel->setText(branch);
+        m_gitBranchLabel->setToolTip(tr("Git branch: %1").arg(branch));
+        m_gitBranchLabel->show();
+    } else {
+        m_gitBranchLabel->hide();
+    }
+}
+
+// ── Remote file editing ─────────────────────────────────────────────
+
+void MainWindow::openRemoteFile()
+{
+    auto *dlg = new RemoteConnectionDialog(this);
+
+    connect(dlg, &RemoteConnectionDialog::fileSelected,
+            this, &MainWindow::onRemoteFileSelected);
+
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->exec();
+}
+
+void MainWindow::onRemoteFileSelected(
+    const RemoteConnection::ConnectionInfo &info,
+    const QString &remotePath)
+{
+    // Build a temp local path for the downloaded file
+    QString tempDir = QStandardPaths::writableLocation(
+        QStandardPaths::TempLocation);
+    QString fileName = QFileInfo(remotePath).fileName();
+    QString localPath = tempDir + "/prime-edit-remote-" + fileName;
+
+    // Avoid collisions with already-open remote files
+    int suffix = 1;
+    while (m_remoteFiles.contains(localPath)) {
+        localPath = tempDir + "/prime-edit-remote-"
+                    + QString::number(suffix++) + "-" + fileName;
+    }
+
+    // Track this as a remote file before download completes
+    RemoteFileEntry entry;
+    entry.connInfo   = info;
+    entry.remotePath = remotePath;
+    m_remoteFiles[localPath] = entry;
+
+    // Download via scp then open
+    auto *conn = new RemoteConnection(this);
+    conn->setConnectionInfo(info);
+
+    connect(conn, &RemoteConnection::fileDownloaded,
+            this, [this, conn](const QString &local, const QString &) {
+        openFile(local);
+        if (m_notificationBar) {
+            m_notificationBar->showMessage(
+                tr("Opened remote file (auto-uploads on save)"));
+        }
+        conn->deleteLater();
+    });
+
+    connect(conn, &RemoteConnection::connectionError,
+            this, [this, conn, localPath](const QString &err) {
+        m_remoteFiles.remove(localPath);
+        QMessageBox::warning(this, tr("Remote Error"), err);
+        conn->deleteLater();
+    });
+
+    conn->downloadFile(remotePath, localPath);
+}
+
+void MainWindow::uploadRemoteFile(const QString &localPath)
+{
+    if (!m_remoteFiles.contains(localPath)) return;
+
+    const RemoteFileEntry &entry = m_remoteFiles[localPath];
+
+    auto *conn = new RemoteConnection(this);
+    conn->setConnectionInfo(entry.connInfo);
+
+    connect(conn, &RemoteConnection::fileUploaded,
+            this, [this, conn](const QString &remote) {
+        if (m_notificationBar) {
+            m_notificationBar->showMessage(
+                tr("Uploaded to %1").arg(remote));
+        }
+        conn->deleteLater();
+    });
+
+    connect(conn, &RemoteConnection::connectionError,
+            this, [this, conn](const QString &err) {
+        if (m_notificationBar) {
+            m_notificationBar->showMessage(
+                tr("Upload failed: %1").arg(err));
+        }
+        conn->deleteLater();
+    });
+
+    conn->uploadFile(localPath, entry.remotePath);
 }

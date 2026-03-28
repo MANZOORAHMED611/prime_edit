@@ -10,6 +10,7 @@
 #include "core/searchengine.h"
 #include "core/lspclient.h"
 #include "core/largefile.h"
+#include "core/gitgutter.h"
 #include "ui/completionpopup.h"
 
 class QPainter;
@@ -25,6 +26,7 @@ class Editor : public QPlainTextEdit
 public:
     static constexpr int BOOKMARK_MARGIN_WIDTH = 16;
     static constexpr int FOLD_MARGIN_WIDTH = 16;
+    static constexpr int GIT_GUTTER_WIDTH = 3;
 
     explicit Editor(Document *document, QWidget *parent = nullptr);
     ~Editor() override;
@@ -144,6 +146,23 @@ public:
 
     // Column editing
     void insertTextAtColumn(const QString &text);
+    void insertNumbersAtColumn(int initial, int increment, bool leadingZeros);
+    void deleteColumnSelection();
+    void pasteAtColumn();
+
+    // Multi-cursor editing
+    void addCursorAtPosition(int position);
+    void selectNextOccurrence();
+    void selectAllOccurrences();
+    bool hasMultipleCursors() const { return !m_extraCursors.isEmpty(); }
+
+    // Auto-close brackets
+    void setAutoCloseBrackets(bool enabled);
+    bool autoCloseBrackets() const { return m_autoCloseBrackets; }
+
+    // Rainbow brackets
+    void setRainbowBrackets(bool enabled);
+    bool rainbowBrackets() const { return m_rainbowBrackets; }
 
 public slots:
     void jumpToMatchingBracket();
@@ -215,14 +234,38 @@ private:
     QList<QTextEdit::ExtraSelection> m_markSelections;
     QList<QTextEdit::ExtraSelection> m_diagnosticSelections;
 
+    // Auto-close brackets
+    bool m_autoCloseBrackets = true;
+    bool shouldAutoClose(const QTextCursor &cursor) const;
+    bool isInsideString(const QTextCursor &cursor) const;
+
+    // Rainbow brackets
+    bool m_rainbowBrackets = false;
+    QList<QTextEdit::ExtraSelection> m_rainbowSelections;
+    void updateRainbowBrackets();
+
     QString getCommentString() const;
 
     // Auto-completion
     void triggerCompletion();
     QVector<SimpleCompletionItem> gatherCompletions(const QString &prefix);
+    QVector<SimpleCompletionItem> gatherPathCompletions(const QString &prefix);
+    static int fuzzyMatchScore(const QString &candidate, const QString &pattern);
+    QVector<SimpleCompletionItem> getSnippetsForLanguage(const QString &language);
+    bool tryExpandSnippet();
     QTimer *m_completionTimer = nullptr;
     CompletionPopup *m_completionPopup = nullptr;
     int m_consecutiveWordChars = 0;
+
+    // Multi-cursor editing
+    QVector<QTextCursor> m_extraCursors;
+    QList<QTextEdit::ExtraSelection> m_multiCursorSelections;
+    bool m_altClickPending = false;
+    QPoint m_altClickPos;
+    void clearExtraCursors();
+    void applyMultiCursorEdit(QKeyEvent *event);
+    void updateMultiCursorSelections();
+    QString wordUnderCursor() const;
 
     // Large file viewport loading
     void loadViewportContent();
@@ -233,6 +276,11 @@ private:
     void updateTextDirection();
     QTimer *m_rtlTimer = nullptr;
     bool m_hasArabicContent = false;
+
+    // Git gutter
+    GitGutter *m_gitGutter = nullptr;
+    QTimer *m_gitGutterTimer = nullptr;
+    void updateGitGutter();
 };
 
 #endif // EDITOR_H

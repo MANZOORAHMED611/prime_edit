@@ -1,266 +1,410 @@
 #include "remoteconnectiondialog.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <QGroupBox>
-#include <QLabel>
+#include <QSplitter>
+#include <QHeaderView>
+#include <QFileDialog>
 #include <QMessageBox>
-#include <QSettings>
-#include <QInputDialog>
+#include <QApplication>
+
+// ── construction ─────────────────────────────────────────────────────
 
 RemoteConnectionDialog::RemoteConnectionDialog(QWidget *parent)
     : QDialog(parent)
-    , m_currentConnection(nullptr)
 {
-    setWindowTitle(tr("Remote Connection Manager"));
-    resize(600, 500);
-    setupUI();
+    setWindowTitle(tr("Open Remote File"));
+    resize(820, 560);
+    setupUi();
     loadSavedConnections();
 }
 
-void RemoteConnectionDialog::setupUI()
+QString RemoteConnectionDialog::selectedRemotePath() const
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    return m_selectedRemotePath;
+}
 
-    // Connection details group
-    QGroupBox *detailsGroup = new QGroupBox(tr("Connection Details"));
-    QFormLayout *detailsLayout = new QFormLayout(detailsGroup);
+RemoteConnection::ConnectionInfo
+RemoteConnectionDialog::selectedConnectionInfo() const
+{
+    return m_activeInfo;
+}
 
-    m_hostEdit = new QLineEdit;
-    m_portSpin = new QSpinBox;
-    m_portSpin->setRange(1, 65535);
-    m_portSpin->setValue(22);
+// ── UI construction ──────────────────────────────────────────────────
 
-    m_usernameEdit = new QLineEdit;
-    m_passwordEdit = new QLineEdit;
-    m_passwordEdit->setEchoMode(QLineEdit::Password);
+void RemoteConnectionDialog::setupUi()
+{
+    auto *root = new QHBoxLayout(this);
 
-    m_typeCombo = new QComboBox;
-    m_typeCombo->addItem("SFTP", RemoteConnection::SFTP);
-    m_typeCombo->addItem("SSH", RemoteConnection::SSH);
-    m_typeCombo->addItem("SCP", RemoteConnection::SCP);
-
-    detailsLayout->addRow(tr("Host:"), m_hostEdit);
-    detailsLayout->addRow(tr("Port:"), m_portSpin);
-    detailsLayout->addRow(tr("Username:"), m_usernameEdit);
-    detailsLayout->addRow(tr("Password:"), m_passwordEdit);
-    detailsLayout->addRow(tr("Type:"), m_typeCombo);
-
-    // Buttons
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    m_connectButton = new QPushButton(tr("Connect"));
-    m_disconnectButton = new QPushButton(tr("Disconnect"));
-    m_disconnectButton->setEnabled(false);
-    m_saveButton = new QPushButton(tr("Save Connection"));
-    m_deleteButton = new QPushButton(tr("Delete Connection"));
-    m_browseButton = new QPushButton(tr("Browse Files"));
-    m_browseButton->setEnabled(false);
-
-    buttonLayout->addWidget(m_connectButton);
-    buttonLayout->addWidget(m_disconnectButton);
-    buttonLayout->addWidget(m_saveButton);
-    buttonLayout->addWidget(m_deleteButton);
-    buttonLayout->addWidget(m_browseButton);
-    buttonLayout->addStretch();
-
-    // Saved connections group
-    QGroupBox *savedGroup = new QGroupBox(tr("Saved Connections"));
-    QVBoxLayout *savedLayout = new QVBoxLayout(savedGroup);
+    // ---------- left panel: saved connections ----------
+    auto *leftPanel = new QVBoxLayout;
+    auto *savedGroup = new QGroupBox(tr("Saved Connections"));
+    auto *savedLayout = new QVBoxLayout(savedGroup);
 
     m_connectionsList = new QListWidget;
     savedLayout->addWidget(m_connectionsList);
 
-    // Add to main layout
-    mainLayout->addWidget(detailsGroup);
-    mainLayout->addLayout(buttonLayout);
-    mainLayout->addWidget(savedGroup);
+    auto *listBtns = new QHBoxLayout;
+    m_addBtn    = new QPushButton(tr("Add"));
+    m_editBtn   = new QPushButton(tr("Save"));
+    m_removeBtn = new QPushButton(tr("Remove"));
+    listBtns->addWidget(m_addBtn);
+    listBtns->addWidget(m_editBtn);
+    listBtns->addWidget(m_removeBtn);
+    savedLayout->addLayout(listBtns);
 
-    // Connect signals
-    connect(m_connectButton, &QPushButton::clicked, this, &RemoteConnectionDialog::connectToServer);
-    connect(m_disconnectButton, &QPushButton::clicked, this, &RemoteConnectionDialog::disconnectFromServer);
-    connect(m_saveButton, &QPushButton::clicked, this, &RemoteConnectionDialog::saveConnection);
-    connect(m_deleteButton, &QPushButton::clicked, this, &RemoteConnectionDialog::deleteConnection);
-    connect(m_browseButton, &QPushButton::clicked, this, &RemoteConnectionDialog::browseRemoteFiles);
-    connect(m_connectionsList, &QListWidget::itemDoubleClicked, this, &RemoteConnectionDialog::loadConnection);
+    leftPanel->addWidget(savedGroup);
+    root->addLayout(leftPanel, 1);
+
+    // ---------- right panel ----------
+    auto *rightPanel = new QVBoxLayout;
+
+    // -- connection form --
+    auto *formGroup = new QGroupBox(tr("Connection"));
+    auto *form = new QFormLayout(formGroup);
+
+    m_nameEdit     = new QLineEdit;
+    m_hostEdit     = new QLineEdit;
+    m_portSpin     = new QSpinBox;
+    m_portSpin->setRange(1, 65535);
+    m_portSpin->setValue(22);
+    m_usernameEdit = new QLineEdit;
+
+    m_authCombo = new QComboBox;
+    m_authCombo->addItem(tr("SSH Key"), "key");
+    m_authCombo->addItem(tr("Password (agent)"), "password");
+
+    auto *keyRow = new QHBoxLayout;
+    m_keyPathEdit  = new QLineEdit;
+    m_browseKeyBtn = new QPushButton(tr("..."));
+    m_browseKeyBtn->setFixedWidth(32);
+    keyRow->addWidget(m_keyPathEdit);
+    keyRow->addWidget(m_browseKeyBtn);
+
+    form->addRow(tr("Name:"),     m_nameEdit);
+    form->addRow(tr("Host:"),     m_hostEdit);
+    form->addRow(tr("Port:"),     m_portSpin);
+    form->addRow(tr("Username:"), m_usernameEdit);
+    form->addRow(tr("Auth:"),     m_authCombo);
+    form->addRow(tr("Key:"),      keyRow);
+
+    rightPanel->addWidget(formGroup);
+
+    // -- action buttons --
+    auto *actionRow = new QHBoxLayout;
+    m_testBtn    = new QPushButton(tr("Test Connection"));
+    m_connectBtn = new QPushButton(tr("Connect"));
+    m_statusLabel = new QLabel;
+    actionRow->addWidget(m_testBtn);
+    actionRow->addWidget(m_connectBtn);
+    actionRow->addWidget(m_statusLabel, 1);
+    rightPanel->addLayout(actionRow);
+
+    // -- remote file browser --
+    auto *browserGroup = new QGroupBox(tr("Remote Files"));
+    auto *browserLayout = new QVBoxLayout(browserGroup);
+
+    auto *pathRow = new QHBoxLayout;
+    m_pathEdit = new QLineEdit("/");
+    m_goBtn    = new QPushButton(tr("Go"));
+    pathRow->addWidget(m_pathEdit, 1);
+    pathRow->addWidget(m_goBtn);
+    browserLayout->addLayout(pathRow);
+
+    m_fileTree = new QTreeWidget;
+    m_fileTree->setHeaderLabels({tr("Name"), tr("Type")});
+    m_fileTree->header()->setStretchLastSection(true);
+    m_fileTree->setColumnWidth(0, 350);
+    m_fileTree->setRootIsDecorated(false);
+    browserLayout->addWidget(m_fileTree, 1);
+
+    m_openBtn = new QPushButton(tr("Open Selected File"));
+    browserLayout->addWidget(m_openBtn);
+
+    rightPanel->addWidget(browserGroup, 1);
+
+    root->addLayout(rightPanel, 2);
+
+    setBrowserEnabled(false);
+
+    // ---------- signals ----------
+    connect(m_addBtn, &QPushButton::clicked,
+            this, &RemoteConnectionDialog::onAddConnection);
+    connect(m_editBtn, &QPushButton::clicked,
+            this, &RemoteConnectionDialog::onEditConnection);
+    connect(m_removeBtn, &QPushButton::clicked,
+            this, &RemoteConnectionDialog::onRemoveConnection);
+    connect(m_connectionsList, &QListWidget::itemClicked,
+            this, &RemoteConnectionDialog::onConnectionClicked);
+    connect(m_testBtn, &QPushButton::clicked,
+            this, &RemoteConnectionDialog::onTestConnection);
+    connect(m_connectBtn, &QPushButton::clicked,
+            this, &RemoteConnectionDialog::onConnect);
+    connect(m_goBtn, &QPushButton::clicked, this, [this]() {
+        navigateTo(m_pathEdit->text());
+    });
+    connect(m_fileTree, &QTreeWidget::itemDoubleClicked,
+            this, &RemoteConnectionDialog::onTreeItemDoubleClicked);
+    connect(m_openBtn, &QPushButton::clicked,
+            this, &RemoteConnectionDialog::onOpenFile);
+    connect(m_browseKeyBtn, &QPushButton::clicked, this, [this]() {
+        QString path = QFileDialog::getOpenFileName(
+            this, tr("Select SSH Key"),
+            QDir::homePath() + "/.ssh");
+        if (!path.isEmpty()) {
+            m_keyPathEdit->setText(path);
+        }
+    });
+    connect(m_authCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int) {
+        bool isKey = m_authCombo->currentData().toString() == "key";
+        m_keyPathEdit->setEnabled(isKey);
+        m_browseKeyBtn->setEnabled(isKey);
+    });
 }
+
+// ── saved connections persistence ────────────────────────────────────
 
 void RemoteConnectionDialog::loadSavedConnections()
 {
-    QSettings settings;
-    int size = settings.beginReadArray("RemoteConnections");
-
-    for (int i = 0; i < size; ++i) {
-        settings.setArrayIndex(i);
-        QString name = settings.value("name").toString();
-        m_connectionsList->addItem(name);
+    m_connectionsList->clear();
+    const auto conns = RemoteConnection::savedConnections();
+    for (const auto &ci : conns) {
+        m_connectionsList->addItem(ci.name);
     }
-
-    settings.endArray();
 }
 
-void RemoteConnectionDialog::connectToServer()
+void RemoteConnectionDialog::onAddConnection()
 {
-    QString host = m_hostEdit->text();
-    int port = m_portSpin->value();
-    QString username = m_usernameEdit->text();
-    QString password = m_passwordEdit->text();
-    RemoteConnection::ConnectionType type =
-        static_cast<RemoteConnection::ConnectionType>(m_typeCombo->currentData().toInt());
-
-    if (host.isEmpty() || username.isEmpty()) {
-        QMessageBox::warning(this, tr("Invalid Input"),
-                           tr("Please enter host and username."));
+    RemoteConnection::ConnectionInfo info = formToInfo();
+    if (info.name.isEmpty()) {
+        QMessageBox::warning(this, tr("Missing Name"),
+                             tr("Enter a connection name first."));
         return;
     }
-
-    if (m_currentConnection) {
-        delete m_currentConnection;
-    }
-
-    m_currentConnection = new RemoteConnection(this);
-
-    connect(m_currentConnection, &RemoteConnection::connected, this, [this]() {
-        QMessageBox::information(this, tr("Connected"),
-                               tr("Successfully connected to remote server."));
-        updateConnectionStatus();
-    });
-
-    connect(m_currentConnection, &RemoteConnection::connectionError, this, [this](const QString &error) {
-        QMessageBox::critical(this, tr("Connection Error"),
-                            tr("Failed to connect: %1").arg(error));
-        updateConnectionStatus();
-    });
-
-    m_currentConnection->connectToHost(host, port, username, password, type);
-    m_connectButton->setEnabled(false);
-    m_connectButton->setText(tr("Connecting..."));
+    RemoteConnection::saveConnection(info);
+    loadSavedConnections();
 }
 
-void RemoteConnectionDialog::disconnectFromServer()
+void RemoteConnectionDialog::onEditConnection()
 {
-    if (m_currentConnection) {
-        m_currentConnection->disconnect();
-        delete m_currentConnection;
-        m_currentConnection = nullptr;
-    }
-
-    updateConnectionStatus();
-}
-
-void RemoteConnectionDialog::saveConnection()
-{
-    bool ok;
-    QString name = QInputDialog::getText(this, tr("Save Connection"),
-                                        tr("Connection name:"),
-                                        QLineEdit::Normal, "", &ok);
-
-    if (!ok || name.isEmpty()) {
+    RemoteConnection::ConnectionInfo info = formToInfo();
+    if (info.name.isEmpty()) {
+        QMessageBox::warning(this, tr("Missing Name"),
+                             tr("Enter a connection name first."));
         return;
     }
-
-    QSettings settings;
-    int size = settings.beginReadArray("RemoteConnections");
-    settings.endArray();
-
-    settings.beginWriteArray("RemoteConnections");
-    settings.setArrayIndex(size);
-    settings.setValue("name", name);
-    settings.setValue("host", m_hostEdit->text());
-    settings.setValue("port", m_portSpin->value());
-    settings.setValue("username", m_usernameEdit->text());
-    settings.setValue("type", m_typeCombo->currentIndex());
-    settings.endArray();
-
-    m_connectionsList->addItem(name);
-    QMessageBox::information(this, tr("Saved"),
-                           tr("Connection saved successfully."));
+    RemoteConnection::saveConnection(info);
+    loadSavedConnections();
 }
 
-void RemoteConnectionDialog::deleteConnection()
+void RemoteConnectionDialog::onRemoveConnection()
 {
-    QListWidgetItem *item = m_connectionsList->currentItem();
-    if (!item) {
-        return;
-    }
+    auto *item = m_connectionsList->currentItem();
+    if (!item) return;
 
-    QString name = item->text();
-    int row = m_connectionsList->currentRow();
+    RemoteConnection::removeConnection(item->text());
+    loadSavedConnections();
+}
 
-    QSettings settings;
-    int size = settings.beginReadArray("RemoteConnections");
-    QVector<QMap<QString, QVariant>> connections;
-
-    for (int i = 0; i < size; ++i) {
-        settings.setArrayIndex(i);
-        if (i != row) {
-            QMap<QString, QVariant> conn;
-            conn["name"] = settings.value("name");
-            conn["host"] = settings.value("host");
-            conn["port"] = settings.value("port");
-            conn["username"] = settings.value("username");
-            conn["type"] = settings.value("type");
-            connections.append(conn);
+void RemoteConnectionDialog::onConnectionClicked(QListWidgetItem *item)
+{
+    const auto conns = RemoteConnection::savedConnections();
+    for (const auto &ci : conns) {
+        if (ci.name == item->text()) {
+            populateForm(ci);
+            return;
         }
     }
-    settings.endArray();
-
-    settings.beginWriteArray("RemoteConnections");
-    for (int i = 0; i < connections.size(); ++i) {
-        settings.setArrayIndex(i);
-        settings.setValue("name", connections[i]["name"]);
-        settings.setValue("host", connections[i]["host"]);
-        settings.setValue("port", connections[i]["port"]);
-        settings.setValue("username", connections[i]["username"]);
-        settings.setValue("type", connections[i]["type"]);
-    }
-    settings.endArray();
-
-    delete item;
-    QMessageBox::information(this, tr("Deleted"),
-                           tr("Connection deleted successfully."));
 }
 
-void RemoteConnectionDialog::loadConnection()
+void RemoteConnectionDialog::populateForm(
+    const RemoteConnection::ConnectionInfo &info)
 {
-    QListWidgetItem *item = m_connectionsList->currentItem();
+    m_nameEdit->setText(info.name);
+    m_hostEdit->setText(info.host);
+    m_portSpin->setValue(info.port);
+    m_usernameEdit->setText(info.username);
+
+    int authIdx = m_authCombo->findData(info.authMethod);
+    if (authIdx >= 0) m_authCombo->setCurrentIndex(authIdx);
+
+    m_keyPathEdit->setText(info.keyPath);
+    m_pathEdit->setText(info.lastPath.isEmpty() ? "/" : info.lastPath);
+}
+
+RemoteConnection::ConnectionInfo
+RemoteConnectionDialog::formToInfo() const
+{
+    RemoteConnection::ConnectionInfo info;
+    info.name       = m_nameEdit->text().trimmed();
+    info.host       = m_hostEdit->text().trimmed();
+    info.port       = m_portSpin->value();
+    info.username   = m_usernameEdit->text().trimmed();
+    info.authMethod = m_authCombo->currentData().toString();
+    info.keyPath    = m_keyPathEdit->text().trimmed();
+    info.lastPath   = m_pathEdit->text().trimmed();
+    return info;
+}
+
+// ── connection test / connect ────────────────────────────────────────
+
+void RemoteConnectionDialog::onTestConnection()
+{
+    RemoteConnection::ConnectionInfo info = formToInfo();
+    if (info.host.isEmpty() || info.username.isEmpty()) {
+        QMessageBox::warning(this, tr("Incomplete"),
+                             tr("Fill in host and username."));
+        return;
+    }
+
+    m_statusLabel->setText(tr("Testing..."));
+    QApplication::processEvents();
+
+    RemoteConnection conn;
+    conn.setConnectionInfo(info);
+    bool ok = conn.testConnection();
+
+    m_statusLabel->setText(ok ? tr("OK - connection succeeded")
+                              : tr("FAILED - check credentials/host"));
+}
+
+void RemoteConnectionDialog::onConnect()
+{
+    RemoteConnection::ConnectionInfo info = formToInfo();
+    if (info.host.isEmpty() || info.username.isEmpty()) {
+        QMessageBox::warning(this, tr("Incomplete"),
+                             tr("Fill in host and username."));
+        return;
+    }
+
+    m_statusLabel->setText(tr("Connecting..."));
+    QApplication::processEvents();
+
+    // Create a persistent connection object for browsing
+    if (m_connection) {
+        delete m_connection;
+    }
+    m_connection = new RemoteConnection(this);
+    m_connection->setConnectionInfo(info);
+    m_activeInfo = info;
+
+    bool ok = m_connection->testConnection();
+    if (!ok) {
+        m_statusLabel->setText(tr("Connection failed"));
+        m_connected = false;
+        setBrowserEnabled(false);
+        return;
+    }
+
+    m_connected = true;
+    m_statusLabel->setText(
+        tr("Connected to %1").arg(info.host));
+    setBrowserEnabled(true);
+
+    // Wire up directory listing signal
+    connect(m_connection, &RemoteConnection::directoryListed,
+            this, [this](const QStringList &entries) {
+        m_fileTree->clear();
+        for (const QString &entry : entries) {
+            bool isDir = entry.startsWith("d:");
+            QString name = entry.mid(2);
+            auto *item = new QTreeWidgetItem(m_fileTree);
+            item->setText(0, name);
+            item->setText(1, isDir ? tr("Directory") : tr("File"));
+            item->setData(0, Qt::UserRole, isDir);
+            if (isDir) {
+                item->setIcon(0, style()->standardIcon(
+                    QStyle::SP_DirIcon));
+            } else {
+                item->setIcon(0, style()->standardIcon(
+                    QStyle::SP_FileIcon));
+            }
+        }
+    });
+
+    connect(m_connection, &RemoteConnection::connectionError,
+            this, [this](const QString &err) {
+        m_statusLabel->setText(tr("Error: %1").arg(err));
+    });
+
+    // Navigate to last path or /
+    QString startPath = info.lastPath.isEmpty() ? "/" : info.lastPath;
+    navigateTo(startPath);
+}
+
+// ── remote file browser ─────────────────────────────────────────────
+
+void RemoteConnectionDialog::navigateTo(const QString &path)
+{
+    if (!m_connection || !m_connected) return;
+
+    m_currentRemotePath = path;
+    m_pathEdit->setText(path);
+    m_fileTree->clear();
+    m_statusLabel->setText(tr("Listing %1...").arg(path));
+
+    m_connection->listDirectory(path);
+}
+
+void RemoteConnectionDialog::onTreeItemDoubleClicked(
+    QTreeWidgetItem *item, int /*column*/)
+{
+    if (!item) return;
+
+    bool isDir = item->data(0, Qt::UserRole).toBool();
+    if (!isDir) {
+        // Double-clicking a file selects and opens it
+        onOpenFile();
+        return;
+    }
+
+    // Navigate into directory
+    QString dirName = item->text(0);
+    QString newPath = m_currentRemotePath;
+    if (!newPath.endsWith('/')) newPath += '/';
+    newPath += dirName;
+
+    navigateTo(newPath);
+}
+
+void RemoteConnectionDialog::onOpenFile()
+{
+    auto *item = m_fileTree->currentItem();
     if (!item) {
+        QMessageBox::information(this, tr("No Selection"),
+                                 tr("Select a file to open."));
         return;
     }
 
-    int row = m_connectionsList->currentRow();
-    QSettings settings;
-    settings.beginReadArray("RemoteConnections");
-    settings.setArrayIndex(row);
-
-    m_hostEdit->setText(settings.value("host").toString());
-    m_portSpin->setValue(settings.value("port").toInt());
-    m_usernameEdit->setText(settings.value("username").toString());
-    m_typeCombo->setCurrentIndex(settings.value("type").toInt());
-
-    settings.endArray();
-}
-
-void RemoteConnectionDialog::browseRemoteFiles()
-{
-    if (!m_currentConnection || m_currentConnection->status() != RemoteConnection::Connected) {
-        QMessageBox::warning(this, tr("Not Connected"),
-                           tr("Please connect to a server first."));
+    bool isDir = item->data(0, Qt::UserRole).toBool();
+    if (isDir) {
+        // Navigate into directory instead
+        onTreeItemDoubleClicked(item, 0);
         return;
     }
 
-    // This would open a file browser dialog for remote files
-    // For now, just show a message
-    QMessageBox::information(this, tr("Browse Files"),
-                           tr("Remote file browser not yet implemented."));
+    QString fileName = item->text(0);
+    QString remotePath = m_currentRemotePath;
+    if (!remotePath.endsWith('/')) remotePath += '/';
+    remotePath += fileName;
+
+    m_selectedRemotePath = remotePath;
+
+    // Persist the last-browsed path
+    m_activeInfo.lastPath = m_currentRemotePath;
+    RemoteConnection::saveConnection(m_activeInfo);
+
+    emit fileSelected(m_activeInfo, remotePath);
+    accept();
 }
 
-void RemoteConnectionDialog::updateConnectionStatus()
+void RemoteConnectionDialog::setBrowserEnabled(bool enabled)
 {
-    bool connected = m_currentConnection &&
-                    m_currentConnection->status() == RemoteConnection::Connected;
-
-    m_connectButton->setEnabled(!connected);
-    m_connectButton->setText(tr("Connect"));
-    m_disconnectButton->setEnabled(connected);
-    m_browseButton->setEnabled(connected);
+    m_fileTree->setEnabled(enabled);
+    m_pathEdit->setEnabled(enabled);
+    m_goBtn->setEnabled(enabled);
+    m_openBtn->setEnabled(enabled);
 }
