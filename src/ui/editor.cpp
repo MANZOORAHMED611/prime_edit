@@ -77,15 +77,18 @@ Editor::Editor(Document *document, QWidget *parent)
         }
     }
 
-    // Use contentsChange instead of textChanged — it provides position/removed/added
-    // counts, allowing us to distinguish real edits from formatting-only changes
-    // (syntax highlighting, RTL direction, extra selections)
+    // Checksum-based modification detection.
+    // Store a hash of the original content on load. On any change, compare
+    // the current content hash against the original. If different = modified.
+    // This eliminates ALL false modified flags — no flags, no timing, no races.
+    m_originalContentHash = qHash(toPlainText());
+
     connect(QPlainTextEdit::document(), &QTextDocument::contentsChange,
             this, [this](int position, int charsRemoved, int charsAdded) {
         Q_UNUSED(position);
-        // Only mark modified if actual content changed (not just formatting)
         if ((charsRemoved > 0 || charsAdded > 0) && !m_syncing) {
-            m_document->setModified(true);
+            uint currentHash = qHash(toPlainText());
+            m_document->setModified(currentHash != m_originalContentHash);
         }
     });
 }
@@ -816,14 +819,18 @@ void Editor::syncToDocument()
     m_syncing = true;
     m_document->content()->setText(toPlainText());
     m_syncing = false;
+    // After save, current content becomes the new baseline
+    m_originalContentHash = qHash(toPlainText());
 }
 
 void Editor::syncFromDocument()
 {
-    // Sync document content to editor (called after load)
+    // Sync document content to editor (called after load/reload)
     m_syncing = true;
     setPlainText(m_document->text());
     m_syncing = false;
+    // Reset the content hash — this is now the "original" content
+    m_originalContentHash = qHash(toPlainText());
 }
 
 QString Editor::indentString() const
