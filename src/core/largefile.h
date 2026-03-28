@@ -26,12 +26,18 @@ public:
     QStringList lines(qint64 startLine, qint64 count) const;
     qint64 lineStartOffset(qint64 lineNumber) const;
 
-    // Constants
-    static constexpr qint64 SPARSE_INDEX_THRESHOLD = 100 * 1024 * 1024; // 100MB
+    // Constants — ALL large files use sparse index for fast open
+    static constexpr qint64 SPARSE_INDEX_THRESHOLD = 0; // Always sparse for large files
     static constexpr int SPARSE_INTERVAL = 1000; // index every 1000th line
+
+    bool isIndexReady() const { return m_indexReady; }
+
+signals:
+    void indexBuildComplete();
 
 private:
     void buildLineIndex();
+    void buildLineIndexAsync();
     qint64 resolveLineOffset(qint64 lineNumber) const;
     QString decodeLine(qint64 offset, qint64 length) const;
 
@@ -41,6 +47,7 @@ private:
     QVector<qint64> m_lineOffsets;
     qint64 m_totalLines = 0;
     bool m_sparseIndex = false;
+    bool m_indexReady = false;
     QString m_encoding = "UTF-8";
 };
 

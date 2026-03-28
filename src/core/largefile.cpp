@@ -1,5 +1,7 @@
 #include "largefile.h"
 #include <QFileInfo>
+#include <QThread>
+#include <QtConcurrent>
 #ifdef Q_OS_LINUX
 #include <sys/mman.h>
 #endif
@@ -53,7 +55,16 @@ bool LargeFileReader::open(const QString &filePath)
         m_encoding = "UTF-8";
     }
 
-    buildLineIndex();
+    // Quick initial estimate of line count (assume ~80 bytes per line)
+    m_totalLines = m_fileSize / 80;
+    m_sparseIndex = true;
+    m_lineOffsets.clear();
+    m_lineOffsets.append(0); // First line at offset 0
+    m_indexReady = false;
+
+    // Build the full index in a background thread — UI stays responsive
+    buildLineIndexAsync();
+
     return true;
 }
 
@@ -68,6 +79,16 @@ void LargeFileReader::close()
     }
     m_lineOffsets.clear();
     m_fileSize = 0;
+}
+
+void LargeFileReader::buildLineIndexAsync()
+{
+    // Run buildLineIndex in a background thread
+    QtConcurrent::run([this]() {
+        buildLineIndex();
+        m_indexReady = true;
+        emit indexBuildComplete();
+    });
 }
 
 void LargeFileReader::buildLineIndex()

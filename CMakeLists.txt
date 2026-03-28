@@ -15,6 +15,7 @@ find_package(Qt6 QUIET COMPONENTS
     PrintSupport
     Network
     Svg
+    Concurrent
 )
 
 if(NOT Qt6_FOUND)
@@ -26,6 +27,7 @@ if(NOT Qt6_FOUND)
         PrintSupport
         Network
         Svg
+        Concurrent
     )
     set(QT_VERSION_MAJOR 5)
 else()
@@ -181,6 +183,7 @@ target_link_libraries(prime-edit PRIVATE
     Qt${QT_VERSION_MAJOR}::PrintSupport
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Svg
+    Qt${QT_VERSION_MAJOR}::Concurrent
 )
 
 # Optional ICU support for enhanced charset detection
