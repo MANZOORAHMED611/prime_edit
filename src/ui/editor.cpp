@@ -78,18 +78,37 @@ Editor::Editor(Document *document, QWidget *parent)
     // Load content
     m_syncing = true;
     if (m_document->fileMode() == Document::LargeFile) {
-        // Large file: load directly into QTextDocument — skip PieceTable entirely
-        // This avoids: readAll→QString→PieceTable→setPlainText (4 copies, ~650MB for 93MB file)
-        // Instead: read in chunks → append to QTextDocument (1 copy)
+        // Large file mode: read first 2MB, force line breaks every 1000 chars.
+        // QTextDocument CANNOT handle long lines — even with word wrap,
+        // it computes layout for the entire line which is O(n²).
+        // The ONLY solution: insert actual newlines so every block is short.
         setUpdatesEnabled(false);
-        QTextCursor cursor(QPlainTextEdit::document());
         QFile file(m_document->filePath());
         if (file.open(QIODevice::ReadOnly)) {
-            while (!file.atEnd()) {
-                QByteArray chunk = file.read(2 * 1024 * 1024); // 2MB chunks
-                cursor.insertText(QString::fromUtf8(chunk));
-            }
+            constexpr qint64 MAX_LOAD = 2 * 1024 * 1024;
+            constexpr int LINE_LEN = 1000;
+            QByteArray raw = file.read(MAX_LOAD);
+            bool truncated = !file.atEnd();
             file.close();
+
+            // Insert newlines every LINE_LEN chars
+            QString text = QString::fromUtf8(raw);
+            raw.clear();
+            QString broken;
+            broken.reserve(text.length() + text.length() / LINE_LEN + 10);
+            for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
+                broken.append(text.mid(i, LINE_LEN));
+                if (i + LINE_LEN < text.length()) broken.append('\n');
+            }
+            text.clear();
+
+            if (truncated) {
+                broken.append(QString("\n\n--- Preview: first %1 of %2 (read-only) ---")
+                    .arg(QLocale().formattedDataSize(MAX_LOAD))
+                    .arg(QLocale().formattedDataSize(QFileInfo(m_document->filePath()).size())));
+            }
+
+            setPlainText(broken);
         }
         setUpdatesEnabled(true);
     } else if (!m_document->text().isEmpty()) {
