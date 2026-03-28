@@ -74,9 +74,16 @@ Editor::Editor(Document *document, QWidget *parent)
 
     // Medium/Large file optimizations
     if (m_document->fileMode() != Document::SmallFile) {
-        // Disable undo for large files (saves memory)
         QPlainTextEdit::document()->setUndoRedoEnabled(
-            m_document->fileMode() == Document::MediumFile); // medium: limited undo, large: none
+            m_document->fileMode() == Document::MediumFile);
+    }
+    if (m_document->fileMode() == Document::LargeFile) {
+        // Disable everything expensive for large files
+        m_bookmarkMarginVisible = false;
+        m_foldMarginVisible = false;
+        m_lineNumbersVisible = false;
+        setLineWrapMode(QPlainTextEdit::WidgetWidth); // force word wrap
+        updateLineNumberAreaWidth(0);
     }
 
     // Large file: set up dynamic viewport loading via scrollbar

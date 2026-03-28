@@ -56,13 +56,13 @@ bool Document::load(const QString &filePath)
         QByteArray encodingProbe = probe.read(8192);
         m_encoding = CharsetDetector::detect(encodingProbe);
 
-        // Read first 500KB for display — break long lines
+        // Read first 64KB for display — keep it small for instant render
         probe.seek(0);
-        QByteArray head = probe.read(500 * 1024);
+        QByteArray head = probe.read(64 * 1024);
         probe.close();
 
         QString headText = QString::fromUtf8(head);
-        const int MAX_LINE = 4000;
+        const int MAX_LINE = 200; // short lines for fast layout
 
         // Break long lines at delimiters
         QString display;
