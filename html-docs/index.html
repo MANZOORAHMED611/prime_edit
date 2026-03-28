@@ -691,7 +691,8 @@
                     <h1>PrimeEdit</h1>
                 </div>
             </div>
-            <p>A structured document execution engine for rule-bound workflows. If your document has rules, PrimeEdit enforces them.</p>
+            <p style="font-size: 20px; color: var(--text); margin-bottom: 8px;">Documents with rules are still enforced manually.</p>
+            <p style="font-size: 17px; color: var(--text-light);">PrimeEdit turns them into systems &mdash; validating, executing, and verifying them in real time.</p>
             <div class="hero-stats">
                 <div class="hero-stat">
                     <div class="number">Schema</div>
@@ -717,22 +718,26 @@
 
         <!-- Product Overview -->
         <section>
-            <p class="lead">PrimeEdit is a structured document execution engine. It validates documents against rules, transforms content via LLM endpoints, and integrates domain-specific intelligence &mdash; all inside a native, high-performance editing surface.</p>
+            <p class="lead" style="font-size: 19px; font-weight: 600; color: var(--primary-dark);">PrimeEdit turns documents into systems.</p>
 
-            <p style="color: var(--text-light); font-style: italic; margin-bottom: 20px;">Today, documents with rules are enforced manually &mdash; through checklists, spreadsheets, and review loops. PrimeEdit replaces that with real-time validation and execution.</p>
-
-            <div class="info-box note">
-                <strong>If your document has rules, PrimeEdit enforces them.</strong> Instruction files, scholarly manuscripts, compliance documents, prompt libraries &mdash; any document with structure that must be validated, transformed, or verified.
-            </div>
+            <p class="lead">Validate documents against rules. Transform content via LLM endpoints. Integrate domain-specific intelligence. All inside a native, high-performance editing surface.</p>
 
             <h3>Three Layers</h3>
             <ul>
-                <li><strong>Validation</strong> &mdash; JSON schema rules check your document in real-time. Inline violations. Health score. No other editor does this.</li>
+                <li><strong>Validation</strong> &mdash; JSON schema rules check your document in real-time. Inline violations. Health score.</li>
                 <li><strong>Execution</strong> &mdash; select text, send to any LLM endpoint, see the diff, accept or reject. The document is the interface.</li>
-                <li><strong>Domain Intelligence</strong> &mdash; connect to knowledge bases for domain-specific verification. Islamic scholarship is the reference implementation. Your domain is next.</li>
+                <li><strong>Domain Intelligence</strong> &mdash; connect to knowledge bases for domain-specific verification.</li>
             </ul>
 
-            <p style="color: var(--text-muted); margin-top: 16px;">Built on a native C++ engine with 1GB+ file handling, 81 syntax languages, LSP integration, and 9 themes. The editing surface is production-grade. But it's not the point &mdash; the intelligence layer is.</p>
+            <div class="info-box note" style="margin-top: 20px;">
+                <strong>Used in:</strong><br>
+                Legal contracts &rarr; enforce required clauses &nbsp;&bull;&nbsp;
+                AI prompts &rarr; enforce structure and constraints &nbsp;&bull;&nbsp;
+                Compliance docs &rarr; enforce audit readiness &nbsp;&bull;&nbsp;
+                Islamic scholarship &rarr; enforce citation integrity
+            </div>
+
+            <p style="color: var(--text-muted); margin-top: 16px;">Built on a native C++ engine with 1GB+ file handling, 81 syntax languages, LSP integration, and 9 themes.</p>
         </section>
 
         <div class="divider"></div>
@@ -743,24 +748,24 @@
 
             <div class="feature-grid">
                 <div class="feature-card">
+                    <div class="card-icon">&#129302;</div>
+                    <h3>AI Prompt Engineers</h3>
+                    <p>Enforce prompt structure and constraints across your entire library. Block execution transforms any selection against an LLM endpoint inline. See the diff. Accept or reject.</p>
+                </div>
+                <div class="feature-card">
                     <div class="card-icon">&#128209;</div>
-                    <h3>Technical Writers</h3>
-                    <p>Writing structured documents with validation rules &mdash; API specs, compliance docs, instruction files. Schema validation catches violations as you type.</p>
+                    <h3>Compliance &amp; Technical Writers</h3>
+                    <p>Required sections, forbidden phrases, audit readiness &mdash; enforced in real-time as you type. No more checklists. No more review loops.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#9878;</div>
+                    <h3>Legal Professionals</h3>
+                    <p>Validate contract structure &mdash; required clauses, jurisdiction checks, standardized language. Schema rules replace manual clause hunting.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-icon">&#128202;</div>
                     <h3>Large File Engineers</h3>
-                    <p>Working with log files, data dumps, and datasets over 100MB that VS Code cannot open. PrimeEdit handles 1GB+ files without blinking.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="card-icon">&#129302;</div>
-                    <h3>AI Prompt Engineers</h3>
-                    <p>Authoring AI instruction files, prompt libraries, and system prompts. Block evaluation transforms any selection against an LLM endpoint inline.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="card-icon">&#128214;</div>
-                    <h3>Scholarly Authors</h3>
-                    <p>Rule-bound writing workflows where citations must be verified, sources must be graded, and formatting must be enforced. Islamic scholarship is the reference implementation.</p>
+                    <p>Open files VS Code cannot. 1GB at 95MB RSS. Memory-mapped, viewport-loaded, background-indexed. No other editor owns this space.</p>
                 </div>
             </div>
 
