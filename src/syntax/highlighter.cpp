@@ -120,7 +120,7 @@ void SyntaxHighlighter::loadLanguageRules(const QString &language)
             {"cl", "lisp"}, {"lisp", "lisp"},
             {"rst", "restructuredtext"},
             {"tex", "latex"}, {"sty", "latex"},
-            {"sass", "scss"}, {"dockerfile", "dockerfile"},
+            {"sass", "sass"}, {"dockerfile", "dockerfile"},
             {"cmake", "cmake"}, {"makefile", "makefile"},
             {"pgsql", "postgresql"},
             {"tf", "terraform"}, {"tfvars", "terraform"},
@@ -130,6 +130,8 @@ void SyntaxHighlighter::loadLanguageRules(const QString &language)
             {"coffee", "coffeescript"},
             {"cr", "crystal"}, {"vlang", "v"},
             {"gql", "graphql"}, {"proto", "protobuf"},
+            {"protocol buffers", "protobuf"},
+            {"webassembly", "wasm"},
             {"plain text", "plaintext"},
         };
         QString alias = aliases.value(lang, lang);
@@ -383,6 +385,31 @@ void SyntaxHighlighter::loadFromDefinition(const QString &resourcePath)
         rule.pattern = QRegularExpression(
             "^\\s*" + QRegularExpression::escape(ppPrefix) + "[^\n]*");
         rule.format = m_preprocessorFormat;
+        m_rules.append(rule);
+    }
+
+    // Custom rules (for languages like Diff that need arbitrary pattern→format mappings)
+    QJsonArray customRules = obj["customRules"].toArray();
+    for (const QJsonValue &cr : customRules) {
+        QJsonObject crObj = cr.toObject();
+        QString pat = crObj["pattern"].toString();
+        QString fmt = crObj["format"].toString();
+        if (pat.isEmpty()) continue;
+
+        rule.pattern = QRegularExpression(pat);
+        if (fmt == "keyword") rule.format = m_keywordFormat;
+        else if (fmt == "type") rule.format = m_typeFormat;
+        else if (fmt == "function") rule.format = m_functionFormat;
+        else if (fmt == "string") rule.format = m_stringFormat;
+        else if (fmt == "number") rule.format = m_numberFormat;
+        else if (fmt == "comment") rule.format = m_commentFormat;
+        else if (fmt == "preprocessor") rule.format = m_preprocessorFormat;
+        else if (fmt == "operator") rule.format = m_operatorFormat;
+        else if (fmt == "tag") rule.format = m_tagFormat;
+        else if (fmt == "attribute") rule.format = m_attributeFormat;
+        else if (fmt == "variable") rule.format = m_variableFormat;
+        else continue;
+
         m_rules.append(rule);
     }
 

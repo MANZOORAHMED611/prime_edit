@@ -1,0 +1,23 @@
+{
+  "name": "Diff",
+  "keywords": [],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": [],
+  "numberPattern": "",
+  "functionPattern": "",
+  "customRules": [
+    {"pattern": "^\\+\\+\\+.*$", "format": "keyword"},
+    {"pattern": "^---.*$", "format": "keyword"},
+    {"pattern": "^@@[^@]+@@.*$", "format": "preprocessor"},
+    {"pattern": "^\\+.*$", "format": "string"},
+    {"pattern": "^-.*$", "format": "variable"},
+    {"pattern": "^diff\\s.*$", "format": "keyword"},
+    {"pattern": "^index\\s.*$", "format": "comment"},
+    {"pattern": "^(new|deleted)\\sfile\\smode.*$", "format": "comment"},
+    {"pattern": "^\\\\\\sNo\\snewline.*$", "format": "comment"}
+  ]
+}

@@ -93,7 +93,12 @@ void FunctionListPanel::refresh()
 
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
-        QString funcName = match.captured(1).trimmed();
+        // Use first non-empty capture group (supports alternation patterns)
+        QString funcName;
+        for (int g = 1; g <= match.lastCapturedIndex(); ++g) {
+            funcName = match.captured(g).trimmed();
+            if (!funcName.isEmpty()) break;
+        }
         if (funcName.isEmpty()) {
             continue;
         }

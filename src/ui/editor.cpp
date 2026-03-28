@@ -193,6 +193,13 @@ void Editor::setupEditor()
     m_insertSpaces = Settings::instance().insertSpaces();
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * m_tabWidth);
 
+    // Debounced auto-completion trigger (300ms after last keystroke)
+    m_completionTimer = new QTimer(this);
+    m_completionTimer->setSingleShot(true);
+    m_completionTimer->setInterval(300);
+    connect(m_completionTimer, &QTimer::timeout,
+            this, &Editor::triggerCompletion);
+
     // Debounced Arabic RTL direction update
     m_rtlTimer = new QTimer(this);
     m_rtlTimer->setSingleShot(true);
@@ -608,6 +615,30 @@ void Editor::keyPressEvent(QKeyEvent *event)
         return;
     }
 
+    // Completion popup interaction
+    if (m_completionPopup && m_completionPopup->isVisible()) {
+        if (event->key() == Qt::Key_Escape) {
+            m_completionPopup->hide();
+            return;
+        }
+        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+            m_completionPopup->acceptCurrent();
+            return;
+        }
+        if (event->key() == Qt::Key_Down) {
+            m_completionPopup->selectNext();
+            return;
+        }
+        if (event->key() == Qt::Key_Up) {
+            m_completionPopup->selectPrevious();
+            return;
+        }
+        if (event->key() == Qt::Key_Tab) {
+            m_completionPopup->acceptCurrent();
+            return;
+        }
+    }
+
     // Record macro event
     MacroRecorder::instance().recordKeyEvent(event);
 
@@ -668,6 +699,25 @@ void Editor::keyPressEvent(QKeyEvent *event)
     }
 
     QPlainTextEdit::keyPressEvent(event);
+
+    // Restart completion timer on word characters (letters, digits, underscore)
+    if (!event->text().isEmpty()) {
+        QChar ch = event->text().at(0);
+        if (ch.isLetterOrNumber() || ch == QLatin1Char('_')) {
+            if (m_completionTimer && m_document
+                && m_document->fileMode() == Document::SmallFile) {
+                m_completionTimer->start();
+            }
+        } else {
+            // Non-word character: dismiss completion
+            if (m_completionPopup && m_completionPopup->isVisible()) {
+                m_completionPopup->hide();
+            }
+            if (m_completionTimer) {
+                m_completionTimer->stop();
+            }
+        }
+    }
 }
 
 void Editor::wheelEvent(QWheelEvent *event)
@@ -1349,6 +1399,33 @@ void Editor::setFoldingEnabled(bool enabled)
     m_lineNumberArea->update();
 }
 
+static bool usesIndentFolding(const QString &lang)
+{
+    QString l = lang.toLower();
+    return l == "python" || l == "py" || l == "yaml" || l == "yml"
+        || l == "coffeescript" || l == "nim" || l == "haskell";
+}
+
+static int lineIndentLevel(const QTextBlock &block, int tabWidth)
+{
+    QString text = block.text();
+    int indent = 0;
+    for (int i = 0; i < text.length(); ++i) {
+        if (text.at(i) == QLatin1Char(' '))
+            indent++;
+        else if (text.at(i) == QLatin1Char('\t'))
+            indent += tabWidth;
+        else
+            break;
+    }
+    return indent;
+}
+
+static bool isBlankLine(const QTextBlock &block)
+{
+    return block.text().trimmed().isEmpty();
+}
+
 bool Editor::isFoldableLine(int blockNumber) const
 {
     if (m_foldedRegions.contains(blockNumber)) return true;
@@ -1356,6 +1433,23 @@ bool Editor::isFoldableLine(int blockNumber) const
     QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(blockNumber);
     if (!block.isValid()) return false;
 
+    QString lang = m_document ? m_document->language() : QString();
+
+    if (usesIndentFolding(lang)) {
+        // Indentation-based: foldable if a non-blank line is followed by
+        // a non-blank line with greater indentation
+        if (isBlankLine(block)) return false;
+
+        int myIndent = lineIndentLevel(block, m_tabWidth);
+        QTextBlock next = block.next();
+        while (next.isValid() && isBlankLine(next)) {
+            next = next.next();
+        }
+        if (!next.isValid()) return false;
+        return lineIndentLevel(next, m_tabWidth) > myIndent;
+    }
+
+    // Brace-based folding
     QString text = block.text().trimmed();
     if (text.endsWith('{')) return true;
     if (text == "{") return true;
@@ -1374,6 +1468,30 @@ int Editor::findFoldEnd(int blockNumber) const
         QPlainTextEdit::document()->findBlockByNumber(blockNumber);
     if (!block.isValid()) return -1;
 
+    QString lang = m_document ? m_document->language() : QString();
+
+    if (usesIndentFolding(lang)) {
+        // Fold ends when a non-blank line returns to the same or lower indent
+        int baseIndent = lineIndentLevel(block, m_tabWidth);
+        int lastContentBlock = blockNumber;
+        QTextBlock next = block.next();
+        int currentBlock = blockNumber + 1;
+
+        while (next.isValid()) {
+            if (!isBlankLine(next)) {
+                if (lineIndentLevel(next, m_tabWidth) <= baseIndent) {
+                    break;
+                }
+                lastContentBlock = currentBlock;
+            }
+            next = next.next();
+            currentBlock++;
+        }
+
+        return (lastContentBlock > blockNumber) ? lastContentBlock : -1;
+    }
+
+    // Brace-based folding
     int depth = 0;
     int currentBlock = blockNumber;
 

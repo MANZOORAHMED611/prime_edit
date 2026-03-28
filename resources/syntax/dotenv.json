@@ -1,0 +1,13 @@
+{
+  "name": "Dotenv",
+  "keywords": ["export"],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+\\b",
+  "functionPattern": "",
+  "keyPattern": "^[A-Za-z_][A-Za-z0-9_]*(?=\\s*=)"
+}

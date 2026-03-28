@@ -170,6 +170,12 @@ void TerminalWidget::executeInShell(const QString &command)
         return;
     }
 
+    // Block new commands while one is running
+    if (m_process->state() == QProcess::Running) {
+        appendOutput("Error: A command is still running. Use Stop to cancel it.\n", QColor(255, 200, 100));
+        return;
+    }
+
     // Check for cd command (need to handle specially)
     QString trimmed = command.trimmed();
     if (trimmed.startsWith("cd ")) {
@@ -211,12 +217,14 @@ void TerminalWidget::executeInShell(const QString &command)
         return;
     }
 
-    // Execute command in shell
+    // Disable input while command runs (re-enabled in onProcessFinished)
+    m_inputEdit->setEnabled(false);
+
+    // Execute command in shell (async — output arrives via readyRead signals)
     QStringList args;
     args << "-c" << command;
 
     m_process->start(m_currentShell, args);
-    m_process->waitForFinished(-1);  // Wait indefinitely for command to complete
 }
 
 void TerminalWidget::clear()
@@ -267,6 +275,10 @@ void TerminalWidget::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
         appendOutput(QString("\nProcess exited with code %1\n").arg(exitCode), QColor(255, 200, 100));
     }
 
+    // Re-enable input after command completes
+    m_inputEdit->setEnabled(true);
+    m_inputEdit->setFocus();
+
     emit processFinished(exitCode);
 }
 
@@ -295,6 +307,10 @@ void TerminalWidget::onProcessError(QProcess::ProcessError error)
     }
 
     appendOutput(QString("Error: %1\n").arg(errorStr), QColor(255, 100, 100));
+
+    // Re-enable input on error
+    m_inputEdit->setEnabled(true);
+    m_inputEdit->setFocus();
 }
 
 void TerminalWidget::onInputReturnPressed()

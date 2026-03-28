@@ -8,7 +8,7 @@
 CompletionPopup::CompletionPopup(QWidget *parent)
     : QListWidget(parent)
 {
-    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
+    setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setMaximumHeight(200);
     setMaximumWidth(400);
@@ -117,7 +117,7 @@ void CompletionPopup::showAtPosition(const QPoint &globalPos)
 {
     move(globalPos);
     show();
-    setFocus();
+    // Don't steal focus — editor handles keyboard navigation via its keyPressEvent
 }
 
 QString CompletionPopup::selectedCompletion() const
@@ -131,16 +131,15 @@ QString CompletionPopup::selectedCompletion() const
 
 void CompletionPopup::keyPressEvent(QKeyEvent *event)
 {
+    // Keyboard navigation is handled by the editor's keyPressEvent.
+    // This handler is only reached if the popup somehow receives focus.
     switch (event->key()) {
     case Qt::Key_Escape:
         hide();
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter:
-        if (currentItem()) {
-            emit completionSelected(selectedCompletion());
-            hide();
-        }
+        acceptCurrent();
         break;
     case Qt::Key_Up:
     case Qt::Key_Down:
@@ -151,7 +150,6 @@ void CompletionPopup::keyPressEvent(QKeyEvent *event)
         QListWidget::keyPressEvent(event);
         break;
     default:
-        // Pass other keys to parent (the editor)
         hide();
         event->ignore();
         break;
@@ -169,5 +167,29 @@ void CompletionPopup::onItemActivated(QListWidgetItem *item)
     if (item) {
         emit completionSelected(item->data(Qt::UserRole).toString());
         hide();
+    }
+}
+
+void CompletionPopup::acceptCurrent()
+{
+    if (currentItem()) {
+        emit completionSelected(selectedCompletion());
+        hide();
+    }
+}
+
+void CompletionPopup::selectNext()
+{
+    int row = currentRow();
+    if (row < count() - 1) {
+        setCurrentRow(row + 1);
+    }
+}
+
+void CompletionPopup::selectPrevious()
+{
+    int row = currentRow();
+    if (row > 0) {
+        setCurrentRow(row - 1);
     }
 }

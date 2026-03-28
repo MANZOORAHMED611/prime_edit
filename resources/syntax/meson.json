@@ -1,0 +1,13 @@
+{
+  "name": "Meson",
+  "keywords": ["if", "elif", "else", "endif", "foreach", "endforeach", "break", "continue", "and", "or", "not", "true", "false"],
+  "types": [],
+  "builtins": ["project", "executable", "shared_library", "static_library", "library", "both_libraries", "dependency", "declare_dependency", "find_program", "include_directories", "install_headers", "install_data", "install_man", "install_subdir", "configure_file", "custom_target", "run_command", "run_target", "subdir", "subproject", "test", "benchmark", "environment", "generator", "import", "message", "warning", "error", "summary", "files", "join_paths", "meson", "host_machine", "build_machine", "target_machine", "get_option", "add_project_arguments", "add_project_link_arguments", "add_global_arguments", "add_global_link_arguments", "add_languages", "add_test_setup", "vcs_tag", "alias_target", "assert"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "indent"
+}

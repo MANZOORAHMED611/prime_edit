@@ -23,6 +23,11 @@ public:
     void showAtPosition(const QPoint &globalPos);
     QString selectedCompletion() const;
 
+    // Navigation from parent editor's keyPressEvent
+    void acceptCurrent();
+    void selectNext();
+    void selectPrevious();
+
 signals:
     void completionSelected(const QString &completion);
 

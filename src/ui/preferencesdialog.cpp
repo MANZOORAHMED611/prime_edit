@@ -65,7 +65,7 @@ QWidget *PreferencesDialog::createEditorPage()
     QFormLayout *fontLayout = new QFormLayout(fontGroup);
 
     m_fontCombo = new QFontComboBox(fontGroup);
-    m_fontCombo->setFontFilters(QFontComboBox::MonospacedFonts);
+    m_fontCombo->setFontFilters(QFontComboBox::AllFonts);
 
     m_fontSizeSpin = new QSpinBox(fontGroup);
     m_fontSizeSpin->setRange(6, 72);

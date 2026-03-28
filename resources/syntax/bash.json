@@ -9,6 +9,7 @@
   "stringDelimiters": ["\"", "'"],
   "numberPattern": "\\b[0-9]+\\b",
   "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "functionRegex": "^\\s*(?:function\\s+([a-zA-Z_][a-zA-Z0-9_]*)|([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(\\s*\\))",
   "variablePattern": "\\$[A-Za-z_][A-Za-z0-9_]*|\\$\\{[^}]+\\}|\\$[0-9@#?$!*-]",
   "shebangPattern": "^#![^\n]*",
   "foldBased": "brace"

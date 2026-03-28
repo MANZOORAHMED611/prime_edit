@@ -11,5 +11,6 @@
   "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
   "macroPattern": "[A-Za-z_][A-Za-z0-9_]*!",
   "attributePattern": "#\\[.*\\]",
+  "functionRegex": "^\\s*(?:pub(?:\\(crate\\))?\\s+)?(?:async\\s+)?(?:unsafe\\s+)?(?:fn|struct|enum|trait|impl|mod|type)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
   "foldBased": "brace"
 }
