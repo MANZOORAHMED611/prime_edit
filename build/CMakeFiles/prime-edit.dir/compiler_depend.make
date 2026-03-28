@@ -2991,6 +2991,374 @@ CMakeFiles/prime-edit.dir/src/core/largefile.cpp.o: ../src/core/largefile.cpp \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QThread \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qthread.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdeadlinetimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qelapsedtimer.h \
+  /usr/include/c++/11/future \
+  /usr/include/c++/11/mutex \
+  /usr/include/c++/11/bits/std_mutex.h \
+  /usr/include/c++/11/bits/unique_lock.h \
+  /usr/include/c++/11/condition_variable \
+  /usr/include/c++/11/bits/atomic_futex.h \
+  /usr/include/c++/11/bits/std_thread.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrent \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrentDepends \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCore \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCoreDepends \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractanimation.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstracteventdispatcher.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qeventloop.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractnativeeventfilter.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractproxymodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qanimationgroup.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractanimation.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qanystringview.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qarraydata.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qarraydataops.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qarraydatapointer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qassociativeiterable.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qatomic.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbindingstorage.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbitarray.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbuffer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearray.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearrayalgorithms.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearraylist.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearraymatcher.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearrayview.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcache.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcalendar.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborarray.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborcommon.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcbormap.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstream.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstreamreader.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfloat16.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstreamwriter.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstreamreader.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstreamwriter.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcollator.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcommandlineoption.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcommandlineparser.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qnativeinterface.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication_platform.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcommandlineoption.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcompare.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcompilerdetection.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qconcatenatetablesproxymodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcontainerfwd.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcontainerinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcontiguouscache.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreapplication.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcryptographichash.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatastream.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdeadlinetimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdebug.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdir.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdiriterator.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qdir.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qeasingcurve.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qelapsedtimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qendian.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qeventloop.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qexception.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfactoryinterface.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfiledevice.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileselector.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfilesystemwatcher.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qflags.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfutureinterface.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmutex.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qresultstore.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture_impl.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qthreadpool.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qthread.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qrunnable.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qexception.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpromise.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfutureinterface.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfuturesynchronizer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfuturewatcher.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qgenericatomic.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qglobalstatic.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qhash.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qhashfunctions.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qidentityproxymodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractproxymodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qiodevice.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qiodevicebase.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qitemselectionmodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qiterable.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qiterator.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjnienvironment.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QScopedPointer \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qscopedpointer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjniobject.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlibrary.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlibraryinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qversionnumber.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qline.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpoint.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlockfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qloggingcategory.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmargins.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmath.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmessageauthenticationcode.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qcryptographichash.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetacontainer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetaobject.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmetatype.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmimedata.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmimedatabase.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmimetype.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmimetype.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmutex.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qnamespace.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qnativeinterface.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qnumeric.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectcleanuphandler.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qoperatingsystemversion.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpair.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qparallelanimationgroup.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qanimationgroup.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpauseanimation.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpluginloader.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlibrary.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpoint.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpointer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocessordetection.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpromise.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qproperty.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpropertyprivate.h \
+  /usr/include/c++/11/experimental/source_location \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpropertyanimation.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariantanimation.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qeasingcurve.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qpropertyprivate.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qqueue.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qrandom.h \
+  /usr/include/c++/11/random \
+  /usr/include/c++/11/bits/random.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
+  /usr/include/c++/11/bits/random.tcc \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qreadwritelock.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qrect.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qmargins.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsize.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qrefcount.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qregularexpression.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qresource.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qresultstore.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qrunnable.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsavefile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qscopedvaluerollback.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qscopeguard.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsemaphore.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsequentialanimationgroup.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsequentialiterable.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsettings.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qshareddata.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedmemory.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsignalmapper.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsimd.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/immintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/x86gprintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/ia32intrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/adxintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/bmiintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/bmi2intrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/cetintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/cldemoteintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/clflushoptintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/clwbintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/clzerointrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/enqcmdintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/fxsrintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/lzcntintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/lwpintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/movdirintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitxintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/pconfigintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/popcntintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/pkuintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/rdseedintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/rtmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/serializeintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/sgxintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/tbmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/tsxldtrkintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/uintrintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/waitpkgintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/wbnoinvdintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xsaveintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xsavecintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xsaveoptintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xsavesintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xtestintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/hresetintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/pmmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/tmmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/smmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/wmmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avxintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avxvnniintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx2intrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512fintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512erintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512pfintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512cdintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bwintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512dqintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vlbwintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vldqintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512ifmaintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512ifmavlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmiintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmivlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx5124fmapsintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx5124vnniwintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vpopcntdqintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmi2intrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmi2vlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vnniintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vnnivlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vpopcntdqvlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bitalgintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vp2intersectintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vp2intersectvlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/shaintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/fmaintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/f16cintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/gfniintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/vaesintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/vpclmulqdqintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bf16vlintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bf16intrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/amxtileintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/amxint8intrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/amxbf16intrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/prfchwintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/keylockerintrin.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsize.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsocketnotifier.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsortfilterproxymodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstack.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstandardpaths.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstorageinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringalgorithms.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringbuilder.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringconverter.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlistmodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringliteral.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringmatcher.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringtokenizer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringview.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsysinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemdetection.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemsemaphore.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtaggedpointer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtemporarydir.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtemporaryfile.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtextboundaryfinder.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtextstream.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qthreadpool.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qthreadstorage.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimeline.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbasictimer.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtimezone.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtmetamacros.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtranslator.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtransposeproxymodel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtypeinfo.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qurlquery.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qutf8stringview.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/quuid.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariant.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvariantanimation.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvarlengtharray.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qversionnumber.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qversiontagging.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qwaitcondition.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/QDeadlineTimer \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qwineventnotifier.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qxmlstream.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtcoreversion.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtaskbuilder.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrent_global.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrunbase.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentcompilertest.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfilter.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfilterkernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentiteratekernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmedian.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentthreadengine.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qwaitcondition.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtCore/qsemaphore.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmapkernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentreducekernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfunctionwrappers.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentcompilertest.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfilterkernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfunctionwrappers.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentiteratekernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmap.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmapkernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmedian.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentreducekernel.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrunbase.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrenttask.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtaskbuilder.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentthreadengine.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentversion.h \
   /usr/include/x86_64-linux-gnu/sys/mman.h \
   /usr/include/x86_64-linux-gnu/bits/mman.h \
   /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h \
@@ -21687,6 +22055,9 @@ CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o: ../src/ui/tabwidget.cpp \
   ../src/core/piecetable.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QMouseEvent \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
+  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/QContextMenuEvent \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMenu \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmenu.h \
@@ -24783,11 +25154,7 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h
 
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qmimetype.h:
-
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QMimeDatabase:
-
-../src/utils/fileutils.cpp:
 
 ../src/ui/validationpanel.cpp:
 
@@ -24795,29 +25162,17 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 
 ../src/ui/themeeditor.cpp:
 
-../src/ui/terminalwidget.cpp:
-
 ../src/ui/tabwidget.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGridLayout:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qsettings.h:
-
 ../src/ui/markdownpreview.cpp:
-
-/usr/include/c++/11/bits/random.h:
-
-/usr/include/c++/11/random:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/QRandomGenerator:
 
 /usr/include/x86_64-linux-gnu/qt6/QtPrintSupport/qprintpreviewdialog.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtPrintSupport/QPrintDialog:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qpageranges.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtPrintSupport/qprinter.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtPrintSupport/QPrinter:
 
@@ -24826,10 +25181,6 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QShortcut:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QActionGroup:
-
-/usr/include/x86_64-linux-gnu/qt6/QtPrintSupport/qtprintsupport-config.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qmimedata.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QMimeData:
 
@@ -24841,12 +25192,6 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 
 ../src/ui/gitstatusdelegate.cpp:
 
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qinputdialog.h:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMessageBox:
-
 ../src/ui/functionlist.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QCursor:
@@ -24856,8 +25201,6 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 ../src/ui/endpointconfigdialog.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtooltip.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QToolTip:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextLayout:
 
@@ -24883,10 +25226,6 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 
 ../src/syntax/languagemanager.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qcommandlineoption.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qcommandlineparser.h:
-
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QCommandLineParser:
 
 ../src/main.cpp:
@@ -24905,8 +25244,6 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 
 ../src/core/macrorecorder.cpp:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/QCoreApplication:
-
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QDebug:
 
 ../src/core/lspclient.cpp:
@@ -24917,7 +25254,263 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h:
 
+../src/ui/terminalwidget.cpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentversion.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QRandomGenerator:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrenttask.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfunctionwrappers.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentiteratekernel.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtPrintSupport/qprinter.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfilter.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrent_global.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qwineventnotifier.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qwaitcondition.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtranslator.h:
+
+../src/utils/fileutils.cpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemsemaphore.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstack.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/keylockerintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bf16intrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bf16vlintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/vpclmulqdqintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/shaintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vp2intersectintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vpopcntdqvlintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vnnivlintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmi2vlintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmi2intrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vpopcntdqintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx5124vnniwintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmivlintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512ifmaintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vldqintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512cdintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512fintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx2intrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avxvnniintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QToolTip:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avxintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/tmmintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/pmmintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xsaveoptintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/uintrintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/tsxldtrkintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/sgxintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/serializeintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/rtmintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/pkuintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/pconfigintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitxintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/movdirintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/lzcntintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/clzerointrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/clflushoptintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/cetintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/adxintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/x86gprintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/immintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsignalmapper.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsettings.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsequentialiterable.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsequentialanimationgroup.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsemaphore.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qscopedvaluerollback.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qinputdialog.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsavefile.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qresource.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qreadwritelock.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMessageBox:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h:
+
+/usr/include/c++/11/random:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qqueue.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qpropertyanimation.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vbmiintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qproperty.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qmimetype.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtPrintSupport/qtprintsupport-config.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qmimedata.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bwintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qloggingcategory.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qversionnumber.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QScopedPointer:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qvariantanimation.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qjnienvironment.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qidentityproxymodel.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfuturesynchronizer.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qpromise.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qrunnable.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qthreadpool.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qresultstore.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/prfchwintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qmutex.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfileselector.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/bmiintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qendian.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qconcatenatetablesproxymodel.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcommandlineparser.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedmemory.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcommandlineoption.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcollator.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfloat16.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstreamreader.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrunbase.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstream.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearraymatcher.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qbuffer.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/bmi2intrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qbitarray.h:
+
+/usr/include/c++/11/bits/random.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qassociativeiterable.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qanimationgroup.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractproxymodel.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractnativeeventfilter.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractanimation.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectcleanuphandler.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QtCore:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrentDepends:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QCoreApplication:
+
+/usr/include/c++/11/bits/std_thread.h:
+
+/usr/include/c++/11/bits/unique_lock.h:
+
+/usr/include/c++/11/bits/std_mutex.h:
+
+/usr/include/c++/11/future:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qelapsedtimer.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qdeadlinetimer.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QThread:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QtCoreDepends:
+
 ../src/core/largefile.cpp:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/vaesintrin.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonarray.h:
 
@@ -24975,6 +25568,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_theme.cpp:
 
 ../src/ui/tabwidget.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/smmintrin.h:
+
 ../src/ui/statusbar.h:
 
 prime-edit_autogen/YPKJ5OE7LN/moc_statusbar.cpp:
@@ -25001,6 +25596,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_markdownpreview.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmenubar.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qoperatingsystemversion.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmenu.h:
 
 /usr/include/x86_64-linux-gnu/sys/mman.h:
@@ -25015,6 +25612,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_markdownpreview.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xsavecintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QColor:
 
 ../src/ui/mainwindow.h:
@@ -25022,6 +25621,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_markdownpreview.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtoolbar.h:
 
 prime-edit_autogen/YPKJ5OE7LN/moc_mainwindow.cpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtemporarydir.h:
 
 ../src/ui/lspbridge.h:
 
@@ -25033,6 +25634,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_linenumberarea.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QFont:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx5124fmapsintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QWheelEvent:
 
 ../src/ui/hexviewer.h:
@@ -25043,9 +25646,9 @@ prime-edit_autogen/YPKJ5OE7LN/moc_hexviewer.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyleditemdelegate.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qmimedatabase.h:
-
 ../src/syntax/highlighter.cpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qmimedatabase.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStyledItemDelegate:
 
@@ -25065,6 +25668,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_gitstatusdelegate.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTreeWidget:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qlibraryinfo.h:
+
 ../src/ui/gitdiffviewer.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qstandarditemmodel.h:
@@ -25075,6 +25680,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_gitstatusdelegate.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QFileSystemModel:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/rdseedintrin.h:
+
 prime-edit_autogen/YPKJ5OE7LN/moc_fileexplorer.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qrandom.h:
@@ -25082,6 +25689,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_fileexplorer.cpp:
 ../src/ui/evalresultwidget.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QComboBox:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vlintrin.h:
 
 ../src/ui/endpointconfigdialog.h:
 
@@ -25113,9 +25722,13 @@ prime-edit_autogen/YPKJ5OE7LN/moc_completionpopup.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QCloseEvent:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsocketnotifier.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcborstreamwriter.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout:
 
@@ -25124,6 +25737,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_completionpopup.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qeventloop.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtabbar.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qjniobject.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyle.h:
 
@@ -25137,6 +25752,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_recoverydialog.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemview.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/ia32intrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistview.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlistwidget.h:
@@ -25148,6 +25765,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_editor.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QListWidget:
 
 prime-edit_autogen/YPKJ5OE7LN/moc_commandpalette.cpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsortfilterproxymodel.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qradiobutton.h:
 
@@ -25181,13 +25800,19 @@ prime-edit_autogen/YPKJ5OE7LN/moc_commandpalette.cpp:
 
 /usr/include/string.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtransposeproxymodel.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtreeview.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qpair.h:
 
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/wmmintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qrefcount.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/QDeadlineTimer:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qsize.h:
 
@@ -25209,9 +25834,17 @@ prime-edit_autogen/YPKJ5OE7LN/moc_commandpalette.cpp:
 
 /usr/include/c++/11/tr1/legendre_function.tcc:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/enqcmdintrin.h:
+
+/usr/include/c++/11/experimental/source_location:
+
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qeasingcurve.h:
+
 /usr/include/c++/11/bits/localefwd.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcborarray.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qlogging.h:
 
@@ -25221,6 +25854,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_endpointconfigdialog.cpp:
 
 ../src/core/plugininterface.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qthreadstorage.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringview.h:
 
 /usr/include/c++/11/array:
@@ -25228,6 +25863,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_endpointconfigdialog.cpp:
 prime-edit_autogen/PRMOGMWJPH/moc_llmevaluator.cpp:
 
 /usr/include/c++/11/bits/locale_classes.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfutureinterface.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:
 
@@ -25255,7 +25892,11 @@ prime-edit_autogen/YPKJ5OE7LN/moc_lspbridge.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xsavesintrin.h:
+
 /usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture_impl.h:
 
 /usr/include/c++/11/bits/node_handle.h:
 
@@ -25275,6 +25916,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_lspbridge.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qframe.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlistmodel.h:
+
 /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
@@ -25287,9 +25930,13 @@ prime-edit_autogen/YPKJ5OE7LN/moc_lspbridge.cpp:
 
 /usr/include/c++/11/vector:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/wbnoinvdintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextCursor:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfactoryinterface.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qcborvalue.h:
 
@@ -25301,6 +25948,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_lspbridge.cpp:
 
 /usr/include/wctype.h:
 
+/usr/include/c++/11/condition_variable:
+
 /usr/include/c++/11/optional:
 
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtcpsocket.h:
@@ -25308,6 +25957,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_lspbridge.cpp:
 ../src/core/llmevaluator.cpp:
 
 /usr/include/c++/11/bits/stl_vector.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:
 
 /usr/include/c++/11/cstddef:
 
@@ -25318,6 +25969,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_lspbridge.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget:
 
 /usr/include/c++/11/bits/ptr_traits.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentcompilertest.h:
 
 /usr/include/c++/11/bits/enable_special_members.h:
 
@@ -25333,6 +25986,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_lspbridge.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qarraydata.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/fxsrintrin.h:
+
 prime-edit_autogen/YPKJ5OE7LN/moc_columneditor.cpp:
 
 ../src/ui/mainwindow_extended.cpp:
@@ -25342,6 +25997,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_columneditor.cpp:
 /usr/include/c++/11/bits/hashtable.h:
 
 /usr/include/c++/11/cctype:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/clwbintrin.h:
 
 /usr/include/c++/11/iomanip:
 
@@ -25381,6 +26038,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_tabwidget.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGroupBox:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qmetaobject.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h:
 
 prime-edit_autogen/PRMOGMWJPH/moc_macrorecorder.cpp:
@@ -25391,6 +26050,8 @@ prime-edit_autogen/PRMOGMWJPH/moc_macrorecorder.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qatomic.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtimeline.h:
+
 /usr/include/stdlib.h:
 
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
@@ -25399,9 +26060,15 @@ prime-edit_autogen/PRMOGMWJPH/moc_macrorecorder.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QTextBlock:
 
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmap.h:
+
+/usr/include/c++/11/bits/atomic_futex.h:
+
 /usr/include/c++/11/cstring:
 
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QSslConfiguration:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmedian.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocessordetection.h:
 
@@ -25437,9 +26104,13 @@ prime-edit_autogen/PRMOGMWJPH/moc_macrorecorder.cpp:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentfilterkernel.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringbuilder.h:
 
 /usr/include/c++/11/ratio:
 
@@ -25477,9 +26148,13 @@ prime-edit_autogen/PRMOGMWJPH/moc_pluginmanager.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qactiongroup.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstracteventdispatcher.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringconverter.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsondocument.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bitalgintrin.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearray.h:
 
@@ -25529,6 +26204,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_gitdiffviewer.cpp:
 
 /usr/include/c++/11/chrono:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/cldemoteintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qcompilerdetection.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h:
@@ -25559,6 +26236,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_macrodialog.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xtestintrin.h:
+
 /usr/include/c++/11/bits/concept_check.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLabel:
@@ -25576,6 +26255,8 @@ prime-edit_autogen/PRMOGMWJPH/moc_largefile.cpp:
 /usr/include/x86_64-linux-gnu/bits/mman-linux.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
@@ -25625,6 +26306,8 @@ prime-edit_autogen/PRMOGMWJPH/moc_document.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qatomic_cxx11.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/popcntintrin.h:
+
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
@@ -25633,7 +26316,11 @@ prime-edit_autogen/mocs_compilation.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qtgui-config.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsimd.h:
+
 /usr/include/c++/11/pstl/pstl_config.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/waitpkgintrin.h:
 
 /usr/include/x86_64-linux-gnu/sys/single_threaded.h:
 
@@ -25701,6 +26388,8 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp:
 
 /usr/include/c++/11/atomic:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/lwpintrin.h:
+
 /usr/include/c++/11/bits/exception_defines.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
@@ -25709,9 +26398,13 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qcoreevent.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qxmlstream.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qpoint.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentmapkernel.h:
 
 /usr/include/c++/11/pstl/glue_memory_defs.h:
 
@@ -25724,6 +26417,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_functionlist.cpp:
 prime-edit_autogen/PRMOGMWJPH/moc_remoteconnection.cpp:
 
 prime-edit_autogen/SKMTTJJW33/moc_highlighter.cpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qlockfile.h:
 
 /usr/include/c++/11/bits/stl_function.h:
 
@@ -25739,11 +26434,15 @@ prime-edit_autogen/SKMTTJJW33/moc_highlighter.cpp:
 
 /usr/include/c++/11/algorithm:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qparallelanimationgroup.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslsocket.h:
 
 /usr/include/c++/11/backward/binders.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qcontainerfwd.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qpauseanimation.h:
 
 /usr/include/c++/11/bits/functional_hash.h:
 
@@ -25753,13 +26452,21 @@ prime-edit_autogen/SKMTTJJW33/moc_highlighter.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/timex.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/amxbf16intrin.h:
+
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/amxint8intrin.h:
+
 /usr/include/c++/11/bits/stl_algobase.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearrayalgorithms.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/fmaintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512erintrin.h:
 
 /usr/include/c++/11/cwchar:
 
@@ -25809,6 +26516,8 @@ prime-edit_autogen/SKMTTJJW33/moc_highlighter.cpp:
 
 ../src/ui/theme.cpp:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xsaveintrin.h:
+
 /usr/include/c++/11/bits/stringfwd.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
@@ -25820,6 +26529,8 @@ prime-edit_autogen/SKMTTJJW33/moc_highlighter.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QPixmap:
 
 /usr/include/c++/11/ext/new_allocator.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512dqintrin.h:
 
 /usr/include/c++/11/codecvt:
 
@@ -25833,6 +26544,8 @@ prime-edit_autogen/SKMTTJJW33/moc_highlighter.cpp:
 
 /usr/include/strings.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcache.h:
+
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
 /usr/include/pthread.h:
@@ -25844,6 +26557,8 @@ prime-edit_autogen/SKMTTJJW33/moc_highlighter.cpp:
 ../src/utils/settings.cpp:
 
 /usr/include/c++/11/bits/basic_string.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/amxtileintrin.h:
 
 /usr/include/c++/11/bits/shared_ptr_base.h:
 
@@ -25868,6 +26583,10 @@ prime-edit_autogen/YPKJ5OE7LN/moc_themeeditor.cpp:
 ../src/ui/mainwindow.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QSslError:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qpropertyprivate.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/QStandardItemModel:
 
@@ -25943,9 +26662,13 @@ prime-edit_autogen/YPKJ5OE7LN/moc_evalresultwidget.cpp:
 
 /usr/include/stdio.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512ifmavlintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qtemporaryfile.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vlbwintrin.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
@@ -25954,6 +26677,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_evalresultwidget.cpp:
 /usr/include/c++/11/bits/alloc_traits.h:
 
 /usr/include/errno.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qexception.h:
 
 /usr/include/c++/11/debug/assertions.h:
 
@@ -25982,6 +26707,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_evalresultwidget.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMenuBar:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/hresetintrin.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
@@ -26025,6 +26752,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_evalresultwidget.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringalgorithms.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vnniintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qconfig.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qanystringview.h:
@@ -26032,6 +26761,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_evalresultwidget.cpp:
 prime-edit_autogen/YPKJ5OE7LN/moc_toolbarmanager.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearraylist.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qfuturewatcher.h:
 
 /usr/include/c++/11/string_view:
 
@@ -26061,9 +26792,15 @@ prime-edit_autogen/YPKJ5OE7LN/moc_toolbarmanager.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qiterator.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstorageinfo.h:
+
 /usr/include/c++/11/bits/memoryfwd.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qscopedpointer.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentreducekernel.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/f16cintrin.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qabstracttextdocumentlayout.h:
 
@@ -26075,9 +26812,13 @@ prime-edit_autogen/YPKJ5OE7LN/moc_toolbarmanager.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qscopeguard.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512pfintrin.h:
+
 /usr/include/c++/11/bits/stl_relops.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qiterable.h:
+
+/usr/include/c++/11/mutex:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qslider.h:
 
@@ -26092,6 +26833,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_toolbarmanager.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qtaggedpointer.h:
 
 ../src/ui/recoverydialog.cpp:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
 
 /usr/include/c++/11/list:
 
@@ -26123,6 +26866,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_remoteconnectiondialog.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileInfo:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtcoreversion.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qfileinfo.h:
 
 /usr/include/c++/11/bits/locale_conv.h:
@@ -26132,6 +26877,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_remoteconnectiondialog.cpp:
 /usr/include/asm-generic/errno.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qiodevice.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrent:
 
 /usr/include/c++/11/cwctype:
 
@@ -26175,6 +26922,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_validationpanel.cpp:
 
 /usr/include/c++/11/bits/locale_facets_nonio.tcc:
 
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtextboundaryfinder.h:
+
 /usr/include/c++/11/bits/quoted_string.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qheaderview.h:
@@ -26182,6 +26931,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_validationpanel.cpp:
 /usr/include/c++/11/sstream:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qset.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcbormap.h:
 
 /usr/include/c++/11/istream:
 
@@ -26202,6 +26953,8 @@ prime-edit_autogen/YPKJ5OE7LN/moc_terminalwidget.cpp:
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtimezone.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qssl.h:
 
@@ -26277,6 +27030,8 @@ prime-edit_autogen/PRMOGMWJPH/moc_islamicbridge.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qpixelformat.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/gfniintrin.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qtnetworkglobal.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant:
@@ -26294,6 +27049,8 @@ prime-edit_autogen/PRMOGMWJPH/moc_islamicbridge.cpp:
 /usr/include/c++/11/bits/fs_dir.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtNetwork/qsslpresharedkeyauthenticator.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/tbmintrin.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/QMetaType:
 
@@ -26341,6 +27098,8 @@ prime-edit_autogen/PRMOGMWJPH/moc_lspclient.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qpagedpaintdevice.h:
 
+/usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vp2intersectvlintrin.h:
+
 /usr/include/c++/11/bits/streambuf_iterator.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qevent.h:
@@ -26371,13 +27130,21 @@ prime-edit_autogen/YPKJ5OE7LN/moc_preferencesdialog.cpp:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qpolygon.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtaskbuilder.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qbuttongroup.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qregion.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qline.h:
 
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentthreadengine.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qmessageauthenticationcode.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qkeysequence.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qthread.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtoolbutton.h:
 

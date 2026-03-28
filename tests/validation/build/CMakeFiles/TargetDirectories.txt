@@ -1,4 +1,6 @@
 /home/abusulaiman/dev/repository/olive_notepad/tests/validation/build/CMakeFiles/test_runner.dir
+/home/abusulaiman/dev/repository/olive_notepad/tests/validation/build/CMakeFiles/crash_test.dir
 /home/abusulaiman/dev/repository/olive_notepad/tests/validation/build/CMakeFiles/edit_cache.dir
 /home/abusulaiman/dev/repository/olive_notepad/tests/validation/build/CMakeFiles/rebuild_cache.dir
 /home/abusulaiman/dev/repository/olive_notepad/tests/validation/build/CMakeFiles/test_runner_autogen.dir
+/home/abusulaiman/dev/repository/olive_notepad/tests/validation/build/CMakeFiles/crash_test_autogen.dir

@@ -33,11 +33,10 @@ Editor::Editor(Document *document, QWidget *parent)
     // Create line number area
     m_lineNumberArea = new LineNumberArea(this);
 
-    // Create syntax highlighter (using QPlainTextEdit's document)
+    // Create syntax highlighter — but DON'T set language yet for large files
+    // (will be set after content is loaded to avoid highlighting empty document
+    // then re-highlighting after setPlainText)
     m_highlighter = new SyntaxHighlighter(QPlainTextEdit::document());
-    if (!m_document->language().isEmpty()) {
-        m_highlighter->setLanguage(m_document->language());
-    }
 
     // Connect signals (but NOT textChanged yet - we'll connect that after loading content)
     connect(this, &QPlainTextEdit::blockCountChanged, this, &Editor::updateLineNumberAreaWidth);
@@ -61,9 +60,16 @@ Editor::Editor(Document *document, QWidget *parent)
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 
-    // Load content from document BEFORE connecting textChanged signal
+    // Load content from document BEFORE connecting modification detection
+    m_syncing = true;
     if (!m_document->text().isEmpty()) {
         setPlainText(m_document->text());
+    }
+    m_syncing = false;
+
+    // NOW set the language and highlight (after content is loaded)
+    if (!m_document->language().isEmpty()) {
+        m_highlighter->setLanguage(m_document->language());
     }
 
     // Large file: set up dynamic viewport loading via scrollbar
@@ -71,24 +77,32 @@ Editor::Editor(Document *document, QWidget *parent)
         connect(verticalScrollBar(), &QScrollBar::valueChanged,
                 this, &Editor::loadViewportContent);
 
+        // Set scrollbar range based on estimated line count
+        // The actual count will be updated when the background index completes
         LargeFileReader *reader = m_document->largeFileReader();
         if (reader) {
-            verticalScrollBar()->setRange(0, static_cast<int>(reader->lineCount() - 1));
+            int lineCount = static_cast<int>(qMin(reader->lineCount(), qint64(INT_MAX)));
+            verticalScrollBar()->setRange(0, qMax(1, lineCount - 1));
+
+            // When the background index finishes, update the scrollbar range
+            connect(reader, &LargeFileReader::indexBuildComplete, this, [this]() {
+                LargeFileReader *r = m_document->largeFileReader();
+                if (r) {
+                    int lc = static_cast<int>(qMin(r->lineCount(), qint64(INT_MAX)));
+                    verticalScrollBar()->setRange(0, qMax(1, lc - 1));
+                }
+            });
         }
     }
 
-    // Checksum-based modification detection.
-    // Store a hash of the original content on load. On any change, compare
-    // the current content hash against the original. If different = modified.
-    // This eliminates ALL false modified flags — no flags, no timing, no races.
-    m_originalContentHash = qHash(toPlainText());
-
-    connect(QPlainTextEdit::document(), &QTextDocument::contentsChange,
-            this, [this](int position, int charsRemoved, int charsAdded) {
-        Q_UNUSED(position);
-        if ((charsRemoved > 0 || charsAdded > 0) && !m_syncing) {
-            uint currentHash = qHash(toPlainText());
-            m_document->setModified(currentHash != m_originalContentHash);
+    // Modification detection: track whether the document has been edited by the user.
+    // Use QTextDocument::modificationChanged which Qt manages correctly —
+    // it only fires for real content changes, not formatting.
+    QPlainTextEdit::document()->setModified(false);
+    connect(QPlainTextEdit::document(), &QTextDocument::modificationChanged,
+            this, [this](bool changed) {
+        if (!m_syncing) {
+            m_document->setModified(changed);
         }
     });
 }
@@ -818,9 +832,8 @@ void Editor::syncToDocument()
     // Sync editor content to document (called before save)
     m_syncing = true;
     m_document->content()->setText(toPlainText());
+    QPlainTextEdit::document()->setModified(false);
     m_syncing = false;
-    // After save, current content becomes the new baseline
-    m_originalContentHash = qHash(toPlainText());
 }
 
 void Editor::syncFromDocument()
@@ -828,9 +841,8 @@ void Editor::syncFromDocument()
     // Sync document content to editor (called after load/reload)
     m_syncing = true;
     setPlainText(m_document->text());
+    QPlainTextEdit::document()->setModified(false);
     m_syncing = false;
-    // Reset the content hash — this is now the "original" content
-    m_originalContentHash = qHash(toPlainText());
 }
 
 QString Editor::indentString() const
@@ -1818,6 +1830,9 @@ void Editor::loadViewportContent()
     LargeFileReader *reader = m_document->largeFileReader();
     if (!reader) return;
 
+    // Don't attempt viewport loading until the background index is ready
+    if (!reader->isIndexReady()) return;
+
     qint64 scrollLine = verticalScrollBar()->value();
     qint64 visibleLines = height() / fontMetrics().height();
 
@@ -1845,6 +1860,7 @@ void Editor::loadViewportContent()
     // Block scrollbar signals to prevent re-entrant updates
     verticalScrollBar()->blockSignals(true);
     setPlainText(lines.join('\n'));
+    QPlainTextEdit::document()->setModified(false); // viewport swap is not a user edit
     verticalScrollBar()->blockSignals(false);
 
     // Position cursor relative to viewport

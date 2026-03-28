@@ -1115,13 +1115,14 @@ PrimeEdit: CMakeFiles/prime-edit.dir/build.make
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6PrintSupport.so.6.2.4
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Network.so.6.2.4
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Svg.so.6.2.4
+PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Concurrent.so.6.2.4
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libicuuc.so
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libicudata.so
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Widgets.so.6.2.4
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Gui.so.6.2.4
-PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.2.4
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libGLX.so
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libOpenGL.so
+PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.2.4
 PrimeEdit: CMakeFiles/prime-edit.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Linking CXX executable PrimeEdit"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/prime-edit.dir/link.txt --verbose=$(VERBOSE)

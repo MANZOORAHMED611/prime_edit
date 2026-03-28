@@ -130,6 +130,19 @@ test_runner/fast:
 .PHONY : test_runner/fast
 
 #=============================================================================
+# Target rules for targets named crash_test
+
+# Build rule for target.
+crash_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 crash_test
+.PHONY : crash_test
+
+# fast build rule for target.
+crash_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/build
+.PHONY : crash_test/fast
+
+#=============================================================================
 # Target rules for targets named test_runner_autogen
 
 # Build rule for target.
@@ -142,12 +155,98 @@ test_runner_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner_autogen.dir/build.make CMakeFiles/test_runner_autogen.dir/build
 .PHONY : test_runner_autogen/fast
 
+#=============================================================================
+# Target rules for targets named crash_test_autogen
+
+# Build rule for target.
+crash_test_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 crash_test_autogen
+.PHONY : crash_test_autogen
+
+# fast build rule for target.
+crash_test_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test_autogen.dir/build.make CMakeFiles/crash_test_autogen.dir/build
+.PHONY : crash_test_autogen/fast
+
+crash_test.o: crash_test.cpp.o
+.PHONY : crash_test.o
+
+# target to build an object file
+crash_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test.cpp.o
+.PHONY : crash_test.cpp.o
+
+crash_test.i: crash_test.cpp.i
+.PHONY : crash_test.i
+
+# target to preprocess a source file
+crash_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test.cpp.i
+.PHONY : crash_test.cpp.i
+
+crash_test.s: crash_test.cpp.s
+.PHONY : crash_test.s
+
+# target to generate assembly for a file
+crash_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test.cpp.s
+.PHONY : crash_test.cpp.s
+
+crash_test_autogen/3SGCGDTO3N/qrc_resources.o: crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.o
+.PHONY : crash_test_autogen/3SGCGDTO3N/qrc_resources.o
+
+# target to build an object file
+crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.o
+.PHONY : crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.o
+
+crash_test_autogen/3SGCGDTO3N/qrc_resources.i: crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.i
+.PHONY : crash_test_autogen/3SGCGDTO3N/qrc_resources.i
+
+# target to preprocess a source file
+crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.i
+.PHONY : crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.i
+
+crash_test_autogen/3SGCGDTO3N/qrc_resources.s: crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.s
+.PHONY : crash_test_autogen/3SGCGDTO3N/qrc_resources.s
+
+# target to generate assembly for a file
+crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.s
+.PHONY : crash_test_autogen/3SGCGDTO3N/qrc_resources.cpp.s
+
+crash_test_autogen/mocs_compilation.o: crash_test_autogen/mocs_compilation.cpp.o
+.PHONY : crash_test_autogen/mocs_compilation.o
+
+# target to build an object file
+crash_test_autogen/mocs_compilation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test_autogen/mocs_compilation.cpp.o
+.PHONY : crash_test_autogen/mocs_compilation.cpp.o
+
+crash_test_autogen/mocs_compilation.i: crash_test_autogen/mocs_compilation.cpp.i
+.PHONY : crash_test_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+crash_test_autogen/mocs_compilation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test_autogen/mocs_compilation.cpp.i
+.PHONY : crash_test_autogen/mocs_compilation.cpp.i
+
+crash_test_autogen/mocs_compilation.s: crash_test_autogen/mocs_compilation.cpp.s
+.PHONY : crash_test_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+crash_test_autogen/mocs_compilation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/crash_test_autogen/mocs_compilation.cpp.s
+.PHONY : crash_test_autogen/mocs_compilation.cpp.s
+
 home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.o: home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.o
 
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.i: home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.i
@@ -156,6 +255,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.i: home/a
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.s: home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.s
@@ -164,6 +264,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.s: home/a
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/document.o: home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.o
@@ -172,6 +273,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/document.o: home/abusulai
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/document.i: home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.i
@@ -180,6 +282,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/document.i: home/abusulai
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/document.s: home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.s
@@ -188,6 +291,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/document.s: home/abusulai
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/document.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.o: home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.o
@@ -196,6 +300,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.o: home/a
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.i: home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.i
@@ -204,6 +309,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.i: home/a
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.s: home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.s
@@ -212,6 +318,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.s: home/a
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/documentmanager.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.o: home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.o
@@ -220,6 +327,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.o: home/abusulai
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.i: home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.i
@@ -228,6 +336,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.i: home/abusulai
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.s: home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.s
@@ -236,6 +345,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.s: home/abusulai
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/encoding.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.o: home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.o
@@ -244,6 +354,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.i: home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.i
@@ -252,6 +363,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.s: home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.s
@@ -260,6 +372,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.o: home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.o
@@ -268,6 +381,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.o: home/abusula
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.i: home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.i
@@ -276,6 +390,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.i: home/abusula
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.s: home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.s
@@ -284,6 +399,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.s: home/abusula
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.o: home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.o
@@ -292,6 +408,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.o: home/abus
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.i: home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.i
@@ -300,6 +417,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.i: home/abus
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.s: home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.s
@@ -308,6 +426,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.s: home/abus
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.o: home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.o
@@ -316,6 +435,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.o: home/abusula
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.i: home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.i
@@ -324,6 +444,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.i: home/abusula
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.s: home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.s
@@ -332,6 +453,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.s: home/abusula
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.o: home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.o
@@ -340,6 +462,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.o: home/abusul
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.i: home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.i
@@ -348,6 +471,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.i: home/abusul
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.s: home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.s
@@ -356,6 +480,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.s: home/abusul
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/lspmanager.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.o: home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.o
@@ -364,6 +489,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.i: home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.i
@@ -372,6 +498,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.s: home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.s
@@ -380,6 +507,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/macrorecorder.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.o: home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.o
@@ -388,6 +516,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.o: home/abusul
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.i: home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.i
@@ -396,6 +525,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.i: home/abusul
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.s: home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.s
@@ -404,6 +534,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.s: home/abusul
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/piecetable.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.o: home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.o
@@ -412,6 +543,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.i: home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.i
@@ -420,6 +552,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.s: home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.s
@@ -428,6 +561,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/pluginmanager.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.o: home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.o
@@ -436,6 +570,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.o: home/
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.i: home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.i
@@ -444,6 +579,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.i: home/
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.s: home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.s
@@ -452,6 +588,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.s: home/
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/remoteconnection.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.o: home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.o
@@ -460,6 +597,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.o: home/a
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.i: home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.i
@@ -468,6 +606,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.i: home/a
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.s: home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.s
@@ -476,6 +615,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.s: home/a
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.o: home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.o
@@ -484,6 +624,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.o: home/abus
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.i: home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.i
@@ -492,6 +633,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.i: home/abus
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.s: home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.s
@@ -500,6 +642,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.s: home/abus
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/session.o: home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.o
@@ -508,6 +651,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/session.o: home/abusulaim
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/session.i: home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.i
@@ -516,6 +660,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/session.i: home/abusulaim
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/core/session.s: home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.s
@@ -524,6 +669,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/core/session.s: home/abusulaim
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/core/session.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.o: home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.o
@@ -532,6 +678,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.i: home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.i
@@ -540,6 +687,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.s: home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.s
@@ -548,6 +696,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.o: home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.o
@@ -556,6 +705,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.o: home
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.i: home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.i
@@ -564,6 +714,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.i: home
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.s: home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.s
@@ -572,6 +723,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.s: home
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.o
@@ -580,6 +732,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.o: home/abusul
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.i
@@ -588,6 +741,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.i: home/abusul
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.s
@@ -596,6 +750,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.s: home/abusul
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.o
@@ -604,6 +759,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.o: home/abus
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.i
@@ -612,6 +768,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.i: home/abus
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.s
@@ -620,6 +777,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.s: home/abus
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.o
@@ -628,6 +786,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.i
@@ -636,6 +795,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.s
@@ -644,6 +804,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.o
@@ -652,6 +813,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.o: home/abusula
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.i
@@ -660,6 +822,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.i: home/abusula
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.s
@@ -668,6 +831,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.s: home/abusula
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.o
@@ -676,6 +840,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.o: home/abusulaiman/
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.i
@@ -684,6 +849,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.i: home/abusulaiman/
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.s
@@ -692,6 +858,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.s: home/abusulaiman/
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.o
@@ -700,6 +867,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.o: hom
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.i
@@ -708,6 +876,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.i: hom
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.s
@@ -716,6 +885,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.s: hom
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.o
@@ -724,6 +894,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.o: home/ab
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.i
@@ -732,6 +903,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.i: home/ab
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.s
@@ -740,6 +912,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.s: home/ab
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.o
@@ -748,6 +921,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.o: home/abusul
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.i
@@ -756,6 +930,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.i: home/abusul
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.s
@@ -764,6 +939,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.s: home/abusul
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.o
@@ -772,6 +948,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.o: home/abusul
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.i
@@ -780,6 +957,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.i: home/abusul
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.s
@@ -788,6 +966,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.s: home/abusul
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.o
@@ -796,6 +975,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.o: home/abusu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.i
@@ -804,6 +984,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.i: home/abusu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.s
@@ -812,6 +993,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.s: home/abusu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.o
@@ -820,6 +1002,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.o: home/a
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.i
@@ -828,6 +1011,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.i: home/a
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.s
@@ -836,6 +1020,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.s: home/a
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.o
@@ -844,6 +1029,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.o: home/abusulaim
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.i
@@ -852,6 +1038,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.i: home/abusulaim
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.s
@@ -860,6 +1047,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.s: home/abusulaim
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.o
@@ -868,6 +1056,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.o: hom
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.i
@@ -876,6 +1065,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.i: hom
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.s
@@ -884,6 +1074,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.s: hom
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.o
@@ -892,6 +1083,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.o: home/abus
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.i
@@ -900,6 +1092,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.i: home/abus
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.s
@@ -908,6 +1101,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.s: home/abus
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.o
@@ -916,6 +1110,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.o: home/abusulaim
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.i
@@ -924,6 +1119,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.i: home/abusulaim
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.s
@@ -932,6 +1128,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.s: home/abusulaim
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.o
@@ -940,6 +1137,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.o: home/abusula
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.i
@@ -948,6 +1146,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.i: home/abusula
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.s
@@ -956,6 +1155,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.s: home/abusula
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.o
@@ -964,6 +1164,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.o: home/abusulai
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.i
@@ -972,6 +1173,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.i: home/abusulai
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.s
@@ -980,6 +1182,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.s: home/abusulai
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.o
@@ -988,6 +1191,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.o: home
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.i
@@ -996,6 +1200,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.i: home
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.s
@@ -1004,6 +1209,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.s: home
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.o
@@ -1012,6 +1218,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.i
@@ -1020,6 +1227,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.s
@@ -1028,6 +1236,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.o
@@ -1036,6 +1245,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.i
@@ -1044,6 +1254,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.s
@@ -1052,6 +1263,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.o
@@ -1060,6 +1272,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.o: home/a
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.i
@@ -1068,6 +1281,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.i: home/a
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.s
@@ -1076,6 +1290,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.s: home/a
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.o
@@ -1084,6 +1299,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.o: home/abus
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.i
@@ -1092,6 +1308,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.i: home/abus
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.s
@@ -1100,6 +1317,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.s: home/abus
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.o
@@ -1108,6 +1326,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.o: h
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.i
@@ -1116,6 +1335,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.i: h
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.s
@@ -1124,6 +1344,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.s: h
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.o
@@ -1132,6 +1353,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.o: home/abusul
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.i
@@ -1140,6 +1362,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.i: home/abusul
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.s
@@ -1148,6 +1371,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.s: home/abusul
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.o
@@ -1156,6 +1380,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.o: home/
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.i
@@ -1164,6 +1389,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.i: home/
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.s
@@ -1172,6 +1398,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.s: home/
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.o
@@ -1180,6 +1407,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.o: home/abusulaim
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.i
@@ -1188,6 +1416,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.i: home/abusulaim
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.s
@@ -1196,6 +1425,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.s: home/abusulaim
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.o
@@ -1204,6 +1434,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.o: home/abusulaim
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.i
@@ -1212,6 +1443,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.i: home/abusulaim
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.s
@@ -1220,6 +1452,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.s: home/abusulaim
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.o
@@ -1228,6 +1461,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.o: home/abus
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.i
@@ -1236,6 +1470,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.i: home/abus
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.s
@@ -1244,6 +1479,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.s: home/abus
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.o
@@ -1252,6 +1488,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.o: home/abusulaiman/d
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.i
@@ -1260,6 +1497,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.i: home/abusulaiman/d
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.s
@@ -1268,6 +1506,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.s: home/abusulaiman/d
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.o
@@ -1276,6 +1515,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.o: home/abusula
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.i
@@ -1284,6 +1524,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.i: home/abusula
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.s
@@ -1292,6 +1533,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.s: home/abusula
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.o
@@ -1300,6 +1542,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.o: home/abus
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.i
@@ -1308,6 +1551,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.i: home/abus
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.s
@@ -1316,6 +1560,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.s: home/abus
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.o: home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.o
@@ -1324,6 +1569,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.o: home/abu
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.i: home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.i
@@ -1332,6 +1578,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.i: home/abu
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.s: home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.s
@@ -1340,6 +1587,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.s: home/abu
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.o: home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.o
@@ -1348,6 +1596,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.o: home/abusul
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.i: home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.i
@@ -1356,6 +1605,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.i: home/abusul
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.s: home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.s
@@ -1364,6 +1614,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.s: home/abusul
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp.s
 
 home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.o: home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.o
@@ -1372,6 +1623,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.o: home/abusula
 # target to build an object file
 home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.o
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.o
 
 home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.i: home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.i
@@ -1380,6 +1632,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.i: home/abusula
 # target to preprocess a source file
 home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.i
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.i
 
 home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.s: home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.s
@@ -1388,6 +1641,7 @@ home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.s: home/abusula
 # target to generate assembly for a file
 home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_runner.dir/build.make CMakeFiles/test_runner.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/crash_test.dir/build.make CMakeFiles/crash_test.dir/home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.s
 .PHONY : home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp.s
 
 test_all_features.o: test_all_features.cpp.o
@@ -1470,8 +1724,19 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... crash_test_autogen"
 	@echo "... test_runner_autogen"
+	@echo "... crash_test"
 	@echo "... test_runner"
+	@echo "... crash_test.o"
+	@echo "... crash_test.i"
+	@echo "... crash_test.s"
+	@echo "... crash_test_autogen/3SGCGDTO3N/qrc_resources.o"
+	@echo "... crash_test_autogen/3SGCGDTO3N/qrc_resources.i"
+	@echo "... crash_test_autogen/3SGCGDTO3N/qrc_resources.s"
+	@echo "... crash_test_autogen/mocs_compilation.o"
+	@echo "... crash_test_autogen/mocs_compilation.i"
+	@echo "... crash_test_autogen/mocs_compilation.s"
 	@echo "... home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.o"
 	@echo "... home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.i"
 	@echo "... home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.s"

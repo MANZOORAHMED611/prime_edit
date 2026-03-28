@@ -1431,8 +1431,8 @@ make -j$(nproc)
                 </div>
                 <div class="feature-card">
                     <div class="card-icon">&#128209;</div>
-                    <h3>Yameen Pipeline Aware</h3>
-                    <p>Auto-detects yameen-treatise files by extension (<code>.treatise</code>, <code>.hadith</code>), directory structure, or config files. Activates Islamic schema and bridge automatically.</p>
+                    <h3>Domain Schema Auto-Detection</h3>
+                    <p>Detects Islamic scholarly document types by file extension, directory structure, or config files. Activates the appropriate schema and knowledge bridge automatically — no manual configuration required.</p>
                 </div>
             </div>
 
@@ -1451,49 +1451,51 @@ make -j$(nproc)
         <!-- Case Study -->
         <section id="casestudy">
             <h2><span class="section-number">21</span> Case Study: All Three Layers in Action</h2>
-            <p class="lead">Schema validation + block execution + domain intelligence &mdash; the complete platform operating on a real document with real rules and real consequences.</p>
+            <p class="lead">This is what it looks like when a document is enforced instead of written.</p>
+            <p style="color: var(--text-light); margin-bottom: 8px;">PrimeEdit behaves like a compiler for documents. The moment you open a file, rules are applied. Every edit is validated in real time. The output is either correct or it isn't &mdash; just like compiled code.</p>
+            <p style="color: var(--text-muted); margin-bottom: 24px;"><em>Example: An Islamic scholarly manuscript with citation integrity rules. The same workflow applies to legal contracts, compliance documents, AI prompt libraries, or any structured document with rules.</em></p>
 
             <h3>The Workflow</h3>
 
             <div class="arch-diagram">
                 <div class="arch-layer">
                     <div class="arch-box highlight">
-                        <div class="box-title">1. Open Treatise</div>
-                        <div class="box-items">Author opens a <code>.treatise</code> file<br>PrimeEdit auto-detects yameen pipeline<br>Islamic hadith schema activates automatically<br>Arabic text renders RTL without configuration</div>
+                        <div class="box-title">1. Open Document</div>
+                        <div class="box-items">Author opens a document<br>PrimeEdit immediately applies rules to it &mdash; like a linter, but for documents<br>Errors and warnings appear before a single word is written<br>The document is now <strong>live</strong> &mdash; every change is validated in real time</div>
                     </div>
                 </div>
                 <div class="arch-connector">&darr;</div>
                 <div class="arch-layer">
                     <div class="arch-box highlight">
-                        <div class="box-title">2. Schema Validates</div>
-                        <div class="box-items">Red underline: hadith citation missing grading<br>Warning: source collection not referenced<br>Validation panel shows 3 errors, 2 warnings<br>Status bar: document health score</div>
+                        <div class="box-title">2. Issues Surface Automatically</div>
+                        <div class="box-items">Red underline: citation missing required grading authority<br>Warning: source collection not referenced<br>Validation panel lists every issue &mdash; click any to jump directly to it<br>Status bar shows a live document health score</div>
                     </div>
                 </div>
                 <div class="arch-connector">&darr;</div>
                 <div class="arch-layer">
                     <div class="arch-box highlight">
-                        <div class="box-title">3. Author Fixes</div>
-                        <div class="box-items">Adds grading authority &mdash; underline disappears<br><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> on a hadith &mdash; RAG confirms: Sahih, Bukhari<br>Citation verified against 16,000-chunk knowledge base</div>
+                        <div class="box-title">3. Author Corrects</div>
+                        <div class="box-items">Adds grading authority &mdash; red underline disappears instantly<br><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> on a citation &mdash; knowledge base confirms it is correct<br>System validates in real time &mdash; no review cycle, no waiting</div>
                     </div>
                 </div>
                 <div class="arch-connector">&darr;</div>
                 <div class="arch-layer">
                     <div class="arch-box highlight">
-                        <div class="box-title">4. Block Evaluation</div>
-                        <div class="box-items">Selects a paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>Sends to Ollama for scholarly refinement<br>Inline diff shows changes: green additions, red removals<br>Press <kbd>A</kbd> to accept into document</div>
+                        <div class="box-title">4. Content Is Transformed</div>
+                        <div class="box-items">Select any paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>System applies domain rules and suggests improvements via LLM<br>Inline diff shows exactly what changed: green additions, red removals<br>Press <kbd>A</kbd> to accept &mdash; or <kbd>Esc</kbd> to discard. Full undo either way.</div>
                     </div>
                 </div>
                 <div class="arch-connector">&darr;</div>
                 <div class="arch-layer">
                     <div class="arch-box highlight">
-                        <div class="box-title">5. All Clear</div>
-                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All citations verified. All rules pass.<br>Document is structurally valid and scholarly sound.</div>
+                        <div class="box-title">5. Verified Output</div>
+                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All rules satisfied. All validations pass.<br>The document is <strong>correct</strong> &mdash; not "ready for review". Correct.</div>
                     </div>
                 </div>
             </div>
 
             <div class="info-box note">
-                <strong>This workflow uses:</strong> schema validation (Feature 3) + block evaluation (Feature 4) + RAG bridge (Feature 5) + Arabic RTL rendering + auto-detection &mdash; five systems working as one. The Islamic domain is the proof. Legal compliance, medical protocols, AI prompt libraries, and any domain with rules can follow the same pattern.
+                <strong>The mental model shift:</strong> You are no longer writing a document and hoping it's correct. You are working inside a system that enforces correctness as you write. <strong>The same pattern works for any rule-bound document</strong> &mdash; legal contracts, compliance docs, AI prompt libraries. The domain changes. The enforcement does not.
             </div>
         </section>
 

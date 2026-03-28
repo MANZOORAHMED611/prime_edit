@@ -23,17 +23,32 @@ bool Document::load(const QString &filePath)
 {
     QFileInfo fi(filePath);
 
-    // Large file mode
+    // Large file mode — ANY file above threshold uses mmap or fails gracefully
     if (fi.size() > LARGE_FILE_THRESHOLD) {
         m_largeFileReader = new LargeFileReader(this);
         if (!m_largeFileReader->open(filePath)) {
             delete m_largeFileReader;
             m_largeFileReader = nullptr;
-            // Guard: if file exceeds read-only threshold, don't attempt normal load
-            if (fi.size() > READONLY_FILE_THRESHOLD) {
-                return false;
+            // mmap failed — DO NOT fall through to readAll() for large files
+            // readAll() would block the UI for minutes on a 100MB+ file
+            // Instead, read just the first 200KB directly for preview
+            QFile preview(filePath);
+            if (preview.open(QIODevice::ReadOnly)) {
+                QByteArray head = preview.read(200 * 1024);
+                preview.close();
+                m_filePath = filePath;
+                m_encoding = CharsetDetector::detect(head);
+                QString headText = QString::fromUtf8(head);
+                int lastNL = headText.lastIndexOf('\n');
+                if (lastNL > 0) headText.truncate(lastNL);
+                m_content.setText(headText);
+                m_modified = false;
+                setReadOnly(true);
+                emit filePathChanged(m_filePath);
+                emit encodingChanged(m_encoding);
+                return true;
             }
-            // Fall through to normal loading
+            return false;
         } else {
             m_filePath = filePath;
             m_encoding = m_largeFileReader->encoding();

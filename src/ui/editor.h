@@ -184,7 +184,6 @@ private:
     int m_baseFontSize;
 
     bool m_syncing = false;
-    uint m_originalContentHash = 0;
 
     // Code folding
     QMap<int, QStringList> m_foldedRegions;
