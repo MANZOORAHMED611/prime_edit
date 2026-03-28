@@ -26,7 +26,7 @@ public:
     // 2. Medium (20-100MB): reduced — no PieceTable copy, no highlighting, limited undo
     // 3. Large/Extreme (>100MB OR single mega-line): viewer mode — chunked, read-only
     static constexpr qint64 MEDIUM_FILE_THRESHOLD = 20 * 1024 * 1024;     // 20MB
-    static constexpr qint64 LARGE_FILE_THRESHOLD = 100 * 1024 * 1024;     // 100MB
+    static constexpr qint64 LARGE_FILE_THRESHOLD = 50 * 1024 * 1024;      // 50MB
     static constexpr qint64 READONLY_FILE_THRESHOLD = 100 * 1024 * 1024;  // same as large
 
     enum FileMode { SmallFile, MediumFile, LargeFile };

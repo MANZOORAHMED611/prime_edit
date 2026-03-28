@@ -29,7 +29,21 @@ bool Document::load(const QString &filePath)
     if (fileSize > LARGE_FILE_THRESHOLD) {
         m_fileMode = LargeFile;
     } else if (fileSize > MEDIUM_FILE_THRESHOLD) {
-        m_fileMode = MediumFile;
+        // Check if file is minified (very few newlines) — treat as Large
+        QFile probe(filePath);
+        if (probe.open(QIODevice::ReadOnly)) {
+            QByteArray sample = probe.read(100000); // check first 100KB
+            probe.close();
+            int newlines = sample.count('\n');
+            // If less than 10 newlines in 100KB, it's minified → Large mode
+            if (newlines < 10 && fileSize > 5 * 1024 * 1024) {
+                m_fileMode = LargeFile;
+            } else {
+                m_fileMode = MediumFile;
+            }
+        } else {
+            m_fileMode = MediumFile;
+        }
     } else {
         m_fileMode = SmallFile;
     }
