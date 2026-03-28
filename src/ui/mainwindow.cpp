@@ -833,7 +833,7 @@ bool MainWindow::closeFile(int index)
     }
 
     Document *doc = editor->document();
-    if (doc && doc->isModified()) {
+    if (doc && doc->isModified() && !doc->isReadOnly()) {
         QMessageBox::StandardButton result = QMessageBox::question(
             this, tr("Save Changes"),
             tr("Do you want to save changes to '%1'?").arg(doc->displayName()),

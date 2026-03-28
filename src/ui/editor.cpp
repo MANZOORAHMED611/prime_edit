@@ -111,6 +111,60 @@ Editor::Editor(Document *document, QWidget *parent)
             setPlainText(broken);
         }
         setUpdatesEnabled(true);
+        // Reset modified — the line-broken preview is not a user edit
+        QPlainTextEdit::document()->setModified(false);
+        m_document->setModified(false);
+
+        // Lazy load: when user scrolls near the end, load more chunks
+        m_largeFileOffset = 2 * 1024 * 1024; // matches MAX_LOAD above
+        connect(verticalScrollBar(), &QScrollBar::valueChanged, this, [this]() {
+            if (!m_document || m_document->fileMode() != Document::LargeFile) return;
+            // If scrollbar is near the bottom (within 90%), load more
+            int maxScroll = verticalScrollBar()->maximum();
+            int current = verticalScrollBar()->value();
+            if (maxScroll > 0 && current > maxScroll * 9 / 10 && m_largeFileOffset > 0) {
+                QFile file(m_document->filePath());
+                if (file.open(QIODevice::ReadOnly)) {
+                    file.seek(m_largeFileOffset);
+                    constexpr qint64 CHUNK = 2 * 1024 * 1024;
+                    constexpr int LINE_LEN = 1000;
+                    QByteArray raw = file.read(CHUNK);
+                    if (raw.isEmpty()) {
+                        m_largeFileOffset = 0; // no more data
+                        file.close();
+                        return;
+                    }
+                    bool moreData = !file.atEnd();
+                    m_largeFileOffset = moreData ? file.pos() : 0;
+                    file.close();
+
+                    QString text = QString::fromUtf8(raw);
+                    raw.clear();
+                    QString broken;
+                    broken.reserve(text.length() + text.length() / LINE_LEN);
+                    for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
+                        broken.append(text.mid(i, LINE_LEN));
+                        if (i + LINE_LEN < text.length()) broken.append('\n');
+                    }
+                    text.clear();
+
+                    // Append to document
+                    m_syncing = true;
+                    QTextCursor cursor(QPlainTextEdit::document());
+                    cursor.movePosition(QTextCursor::End);
+                    cursor.insertText("\n" + broken);
+                    QPlainTextEdit::document()->setModified(false);
+                    m_document->setModified(false);
+                    m_syncing = false;
+
+                    if (!moreData) {
+                        // Append end notice
+                        cursor.movePosition(QTextCursor::End);
+                        cursor.insertText("\n\n--- End of file ---");
+                    }
+                }
+            }
+        });
     } else if (!m_document->text().isEmpty()) {
         setPlainText(m_document->text());
     }
