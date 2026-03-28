@@ -40,9 +40,20 @@ bool Document::load(const QString &filePath)
             if (fi.size() > READONLY_FILE_THRESHOLD) {
                 setReadOnly(true);
             }
-            // Load first 1000 lines into piece table for display
-            QStringList firstLines = m_largeFileReader->lines(0, 1000);
-            m_content.setText(firstLines.join('\n'));
+            // Read first ~200KB directly from file for instant display
+            // Don't use the line index (may not be ready yet)
+            {
+                QFile preview(filePath);
+                if (preview.open(QIODevice::ReadOnly)) {
+                    qint64 previewSize = qMin(fi.size(), qint64(200 * 1024));
+                    QByteArray head = preview.read(previewSize);
+                    preview.close();
+                    QString headText = QString::fromUtf8(head);
+                    int lastNL = headText.lastIndexOf('\n');
+                    if (lastNL > 0) headText.truncate(lastNL);
+                    m_content.setText(headText);
+                }
+            }
             m_modified = false;
             emit filePathChanged(m_filePath);
             emit encodingChanged(m_encoding);
