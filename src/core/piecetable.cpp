@@ -77,9 +77,13 @@ void PieceTable::insert(qint64 position, const QString &text)
     invalidateCache();
 }
 
-void PieceTable::remove(qint64 position, qint64 length)
+void PieceTable::remove(qint64 position, qint64 len)
 {
-    if (length <= 0) return;
+    if (len <= 0) return;
+    // Clamp to actual content length
+    qint64 totalLen = this->length();
+    if (position >= totalLen) return;
+    qint64 length = qMin(len, totalLen - position);
 
     // Record removed text for undo
     UndoEntry entry;
@@ -398,9 +402,12 @@ void PieceTable::insertInternal(qint64 position, const QString &text)
     invalidateCache();
 }
 
-void PieceTable::removeInternal(qint64 position, qint64 length)
+void PieceTable::removeInternal(qint64 position, qint64 len)
 {
-    if (length <= 0) return;
+    if (len <= 0) return;
+    qint64 totalLen = this->length();
+    if (position >= totalLen) return;
+    qint64 length = qMin(len, totalLen - position);
 
     qint64 remaining = length;
     qint64 pos = position;

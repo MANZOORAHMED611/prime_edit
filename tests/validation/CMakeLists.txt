@@ -75,6 +75,71 @@ set(TEST_SOURCES
 
 add_executable(test_runner ${TEST_SOURCES})
 
+# Crash test executable
+add_executable(crash_test
+    crash_test.cpp
+    ${SRC_DIR}/core/piecetable.cpp
+    ${SRC_DIR}/core/document.cpp
+    ${SRC_DIR}/core/documentmanager.cpp
+    ${SRC_DIR}/core/encoding.cpp
+    ${SRC_DIR}/core/charsetdetector.cpp
+    ${SRC_DIR}/core/searchengine.cpp
+    ${SRC_DIR}/core/schemavalidator.cpp
+    ${SRC_DIR}/core/largefile.cpp
+    ${SRC_DIR}/core/macrorecorder.cpp
+    ${SRC_DIR}/core/session.cpp
+    ${SRC_DIR}/core/lspclient.cpp
+    ${SRC_DIR}/core/lspmanager.cpp
+    ${SRC_DIR}/core/pluginmanager.cpp
+    ${SRC_DIR}/core/remoteconnection.cpp
+    ${SRC_DIR}/core/llmevaluator.cpp
+    ${SRC_DIR}/core/islamicbridge.cpp
+    ${SRC_DIR}/syntax/highlighter.cpp
+    ${SRC_DIR}/syntax/languagemanager.cpp
+    ${SRC_DIR}/utils/settings.cpp
+    ${SRC_DIR}/utils/fileutils.cpp
+    ${SRC_DIR}/ui/theme.cpp
+    ${SRC_DIR}/ui/editor.cpp
+    ${SRC_DIR}/ui/linenumberarea.cpp
+    ${SRC_DIR}/ui/tabwidget.cpp
+    ${SRC_DIR}/ui/statusbar.cpp
+    ${SRC_DIR}/ui/mainwindow.cpp
+    ${SRC_DIR}/ui/mainwindow_extended.cpp
+    ${SRC_DIR}/ui/toolbarmanager.cpp
+    ${SRC_DIR}/ui/searchdialog.cpp
+    ${SRC_DIR}/ui/searchresultspanel.cpp
+    ${SRC_DIR}/ui/incrementalsearchbar.cpp
+    ${SRC_DIR}/ui/completionpopup.cpp
+    ${SRC_DIR}/ui/columneditor.cpp
+    ${SRC_DIR}/ui/documentmap.cpp
+    ${SRC_DIR}/ui/functionlist.cpp
+    ${SRC_DIR}/ui/notificationbar.cpp
+    ${SRC_DIR}/ui/validationpanel.cpp
+    ${SRC_DIR}/ui/evalresultwidget.cpp
+    ${SRC_DIR}/ui/endpointconfigdialog.cpp
+    ${SRC_DIR}/ui/macrodialog.cpp
+    ${SRC_DIR}/ui/recoverydialog.cpp
+    ${SRC_DIR}/ui/lspbridge.cpp
+    ${SRC_DIR}/ui/preferencesdialog.cpp
+    ${SRC_DIR}/ui/commandpalette.cpp
+    ${SRC_DIR}/ui/terminalwidget.cpp
+    ${SRC_DIR}/ui/fileexplorer.cpp
+    ${SRC_DIR}/ui/gitstatusdelegate.cpp
+    ${SRC_DIR}/ui/gitdiffviewer.cpp
+    ${SRC_DIR}/ui/hexviewer.cpp
+    ${SRC_DIR}/ui/markdownpreview.cpp
+    ${SRC_DIR}/ui/themeeditor.cpp
+    ${SRC_DIR}/ui/remoteconnectiondialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../resources/resources.qrc
+)
+target_include_directories(crash_test PRIVATE ${SRC_DIR})
+target_link_libraries(crash_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport
+    Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Svg
+    Qt${QT_VERSION_MAJOR}::Test
+)
+
 target_include_directories(test_runner PRIVATE ${SRC_DIR})
 
 target_link_libraries(test_runner PRIVATE
