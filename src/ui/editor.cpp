@@ -170,9 +170,13 @@ Editor::Editor(Document *document, QWidget *parent)
     }
     m_syncing = false;
 
-    // Set language — but skip syntax highlighting for medium/large files
-    if (!m_document->language().isEmpty() && m_document->fileMode() == Document::SmallFile) {
-        m_highlighter->setLanguage(m_document->language());
+    // Set language — skip syntax highlighting if file is over 5MB
+    // (regex on thousands of 2000+ char lines causes noticeable lag)
+    if (!m_document->language().isEmpty()) {
+        qint64 size = QFileInfo(m_document->filePath()).size();
+        if (size < 5 * 1024 * 1024 && m_document->fileMode() == Document::SmallFile) {
+            m_highlighter->setLanguage(m_document->language());
+        }
     }
 
     // Large file: set up dynamic viewport loading via scrollbar
