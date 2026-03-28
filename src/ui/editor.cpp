@@ -173,6 +173,9 @@ void Editor::applySettings()
 
 void Editor::updateTextDirection()
 {
+    // Skip for medium/large files — scanning every block is too expensive
+    if (m_document && m_document->fileMode() != Document::SmallFile) return;
+
     QTextBlock block = QPlainTextEdit::document()->begin();
     bool foundArabic = false;
     bool wasModified = m_document->isModified();
@@ -656,6 +659,12 @@ void Editor::highlightCurrentLine()
 void Editor::matchBrackets()
 {
     m_bracketSelections.clear();
+
+    // Skip bracket matching for medium/large files — toPlainText() is too expensive
+    if (m_document && m_document->fileMode() != Document::SmallFile) {
+        updateExtraSelections();
+        return;
+    }
 
     QTextCursor cursor = textCursor();
     int pos = cursor.position();
