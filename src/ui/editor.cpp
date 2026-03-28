@@ -78,36 +78,40 @@ Editor::Editor(Document *document, QWidget *parent)
     // Load content
     m_syncing = true;
     if (m_document->fileMode() == Document::LargeFile) {
-        // Large file: QTextDocument CANNOT handle a single block with millions
-        // of characters — WrapAnywhere doesn't help, the internal data structures
-        // still explode to 2.5GB. The ONLY working solution: insert real newlines
-        // so every QTextBlock is short. Load full file in chunks.
+        // Large file: load first 2MB only. QTextDocument cannot handle
+        // 93MB in any form — full load, chunked load, WrapAnywhere all
+        // cause 2.5GB RSS and crash. 2MB preview is the only stable approach.
         setUpdatesEnabled(false);
         QFile file(m_document->filePath());
         if (file.open(QIODevice::ReadOnly)) {
-            constexpr int LINE_LEN = 1000;
-            QTextCursor cursor(QPlainTextEdit::document());
-
-            while (!file.atEnd()) {
-                QByteArray chunk = file.read(2 * 1024 * 1024); // 2MB
-                QString text = QString::fromUtf8(chunk);
-                chunk.clear();
-
-                // Only break lines if they're extremely long (minified)
-                if (m_document->isMinified()) {
-                    QString broken;
-                    broken.reserve(text.length() + text.length() / LINE_LEN);
-                    for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
-                        if (i > 0) broken.append('\n');
-                        broken.append(text.mid(i, LINE_LEN));
-                    }
-                    cursor.insertText(broken);
-                } else {
-                    // Normal multi-line file — insert as-is
-                    cursor.insertText(text);
-                }
-            }
+            constexpr qint64 PREVIEW_SIZE = 2 * 1024 * 1024;
+            QByteArray raw = file.read(PREVIEW_SIZE);
+            bool truncated = !file.atEnd();
+            qint64 totalSize = file.size();
             file.close();
+
+            QString text = QString::fromUtf8(raw);
+            raw.clear();
+
+            // For minified files: break long lines so QTextDocument doesn't choke
+            if (m_document->isMinified()) {
+                constexpr int LINE_LEN = 1000;
+                QString broken;
+                broken.reserve(text.length() + text.length() / LINE_LEN);
+                for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
+                    if (i > 0) broken.append('\n');
+                    broken.append(text.mid(i, LINE_LEN));
+                }
+                text = broken;
+            }
+
+            if (truncated) {
+                text.append(QString("\n\n[ Showing first %1 of %2 — file is read-only ]")
+                    .arg(QLocale().formattedDataSize(PREVIEW_SIZE))
+                    .arg(QLocale().formattedDataSize(totalSize)));
+            }
+
+            setPlainText(text);
         }
         setUpdatesEnabled(true);
         QPlainTextEdit::document()->setModified(false);
