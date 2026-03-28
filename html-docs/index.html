@@ -615,7 +615,10 @@
             <a href="#schema">Schema Validation</a>
             <a href="#blockeval">Block Execution</a>
             <a href="#islamic">Domain Integration</a>
-            <a href="#casestudy">Case Study</a>
+            <a href="#casestudy">Islamic Scholarship</a>
+            <a href="#case-legal">Legal Contracts</a>
+            <a href="#case-prompts">AI Prompt Systems</a>
+            <a href="#case-compliance">Compliance Documents</a>
         </div>
 
         <div class="section-label" onclick="toggleNav(this)">Architecture</div>
@@ -715,6 +718,8 @@
         <!-- Product Overview -->
         <section>
             <p class="lead">PrimeEdit is a structured document execution engine. It validates documents against rules, transforms content via LLM endpoints, and integrates domain-specific intelligence &mdash; all inside a native, high-performance editing surface.</p>
+
+            <p style="color: var(--text-light); font-style: italic; margin-bottom: 20px;">Today, documents with rules are enforced manually &mdash; through checklists, spreadsheets, and review loops. PrimeEdit replaces that with real-time validation and execution.</p>
 
             <div class="info-box note">
                 <strong>If your document has rules, PrimeEdit enforces them.</strong> Instruction files, scholarly manuscripts, compliance documents, prompt libraries &mdash; any document with structure that must be validated, transformed, or verified.
@@ -1489,9 +1494,185 @@ make -j$(nproc)
 
         <div class="divider"></div>
 
+        <!-- Case Study: Legal Contracts -->
+        <section id="case-legal">
+            <h2><span class="section-number">22</span> Case Study: Legal Contracts</h2>
+            <p class="lead">Enforcing structural integrity in legal documents &mdash; required clauses, forbidden phrases, standardized language.</p>
+
+            <div class="arch-diagram">
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">1. Open Contract</div>
+                        <div class="box-items">Attorney opens a service agreement<br>PrimeEdit detects <code>.olive-schema.json</code> in project root<br>Legal contract schema activates automatically</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">2. Schema Validates</div>
+                        <div class="box-items"><strong style="color: #dc2626;">Red underline: Missing indemnity clause</strong><br>Warning: No jurisdiction specified<br>Warning: Termination clause missing notice period<br>Validation panel: 2 errors, 1 warning</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">3. Attorney Fixes</div>
+                        <div class="box-items">Adds indemnity clause &mdash; red underline disappears<br>Adds jurisdiction &mdash; warning clears<br>Adds 30-day notice period to termination clause</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">4. Block Execution</div>
+                        <div class="box-items">Selects liability paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>LLM rewrites in standardized legal language<br>Diff shows changes &mdash; accept or reject</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">5. All Clear</div>
+                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All required clauses present. No forbidden phrases. Audit-ready.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Example Schema</h3>
+            <pre><code>{
+  "type": "legal-contract",
+  "rules": [
+    { "name": "indemnity_required", "pattern": "\\b(indemnif|hold harmless)\\b",
+      "mustExist": true, "message": "Missing indemnity clause", "severity": "error", "scope": "document" },
+    { "name": "jurisdiction_required", "pattern": "\\b(jurisdiction|governing law)\\b",
+      "mustExist": true, "message": "No jurisdiction specified", "severity": "error", "scope": "document" },
+    { "name": "no_best_effort", "pattern": "\\bbest effort\\b",
+      "mustExist": false, "message": "Disallowed phrase: 'best effort'", "severity": "warning", "scope": "line" }
+  ]
+}</code></pre>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Case Study: AI Prompt Systems -->
+        <section id="case-prompts">
+            <h2><span class="section-number">23</span> Case Study: AI Prompt Systems</h2>
+            <p class="lead">Enforcing prompt integrity across a prompt library &mdash; required sections, consistent structure, quality control.</p>
+
+            <div class="arch-diagram">
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">1. Open Prompt File</div>
+                        <div class="box-items">Engineer opens a system prompt from the library<br>PrimeEdit detects prompt schema in project root<br>Prompt integrity rules activate</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">2. Schema Validates</div>
+                        <div class="box-items"><strong style="color: #dc2626;">Error: Missing output format section</strong><br>Warning: No constraints block defined<br>Warning: Prompt exceeds 2000 tokens<br>Validation panel: 1 error, 2 warnings</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">3. Engineer Fixes</div>
+                        <div class="box-items">Adds output format section &mdash; error clears<br>Adds constraints block &mdash; warning clears<br>Trims verbose instructions</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">4. Block Execution</div>
+                        <div class="box-items">Selects instruction paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>LLM tightens language, removes ambiguity<br>Inline diff: green additions, red removals &mdash; accept</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">5. All Clear</div>
+                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All required sections present. Structure consistent. Ready for deployment.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Example Schema</h3>
+            <pre><code>{
+  "type": "ai-prompt",
+  "rules": [
+    { "name": "output_format_required", "pattern": "(?i)(output format|response format|return format)",
+      "mustExist": true, "message": "Missing output format section", "severity": "error", "scope": "document" },
+    { "name": "constraints_required", "pattern": "(?i)(constraints|rules|boundaries|limitations)",
+      "mustExist": true, "message": "No constraints block defined", "severity": "warning", "scope": "document" },
+    { "name": "no_ambiguity", "pattern": "\\b(maybe|perhaps|might|could possibly)\\b",
+      "mustExist": false, "message": "Ambiguous instruction detected", "severity": "warning", "scope": "line" }
+  ]
+}</code></pre>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Case Study: Compliance Documents -->
+        <section id="case-compliance">
+            <h2><span class="section-number">24</span> Case Study: Compliance Documents</h2>
+            <p class="lead">Enforcing audit readiness &mdash; required sections, forbidden phrases, standardized formatting for regulatory review.</p>
+
+            <div class="arch-diagram">
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">1. Open Policy Document</div>
+                        <div class="box-items">Compliance officer opens an internal policy<br>PrimeEdit detects compliance schema<br>Audit readiness rules activate</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">2. Schema Validates</div>
+                        <div class="box-items"><strong style="color: #dc2626;">Violation: Disallowed phrase &mdash; 'best effort'</strong><br>Error: Missing data retention section<br>Warning: No review date specified<br>Validation panel: 2 errors, 1 warning</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">3. Officer Fixes</div>
+                        <div class="box-items">Replaces "best effort" with "commercially reasonable" &mdash; violation clears<br>Adds data retention section &mdash; error clears<br>Adds review date &mdash; warning clears</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">4. Block Execution</div>
+                        <div class="box-items">Selects policy language &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>LLM converts to audit-ready standardized format<br>Diff view &mdash; accept normalized language</div>
+                    </div>
+                </div>
+                <div class="arch-connector">&darr;</div>
+                <div class="arch-layer">
+                    <div class="arch-box highlight">
+                        <div class="box-title">5. All Clear</div>
+                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All required sections present. No forbidden phrases. Audit-ready.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Example Schema</h3>
+            <pre><code>{
+  "type": "compliance",
+  "rules": [
+    { "name": "data_retention_required", "pattern": "(?i)(data retention|retention period|data lifecycle)",
+      "mustExist": true, "message": "Missing data retention section", "severity": "error", "scope": "document" },
+    { "name": "review_date_required", "pattern": "(?i)(review date|next review|reviewed on)",
+      "mustExist": true, "message": "No review date specified", "severity": "warning", "scope": "document" },
+    { "name": "no_best_effort", "pattern": "\\bbest effort\\b",
+      "mustExist": false, "message": "Disallowed phrase: 'best effort'", "severity": "error", "scope": "line" },
+    { "name": "no_reasonable_efforts", "pattern": "\\breasonable efforts\\b",
+      "mustExist": false, "message": "Vague commitment: 'reasonable efforts'", "severity": "warning", "scope": "line" }
+  ]
+}</code></pre>
+        </section>
+
+        <div class="divider"></div>
+
         <!-- Themes -->
         <section id="themes">
-            <h2><span class="section-number">23</span> Themes &amp; Customization</h2>
+            <h2><span class="section-number">25</span> Themes &amp; Customization</h2>
             <p>9 built-in themes with live switching. Syntax colors update instantly.</p>
 
             <table>
@@ -1861,7 +2042,7 @@ QT_QPA_PLATFORM=offscreen ./crash_test</code></pre>
         <!-- Footer -->
         <div class="footer">
             <img src="prime_edit_icon.png" alt="PrimeEdit">
-            <div>PrimeEdit &mdash; The editor for structured knowledge work</div>
+            <div>PrimeEdit &mdash; From writing documents to executing them</div>
             <div style="margin-top: 4px;">&copy; 2026 Green Olive Tech LLC. All rights reserved.</div>
         </div>
 
