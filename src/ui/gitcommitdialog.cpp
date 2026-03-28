@@ -117,7 +117,7 @@ void GitCommitDialog::loadFileList()
     m_fileTree->clear();
 
     // Get status -- porcelain for easy parsing
-    QString status = runGit({"status", "--porcelain", "-uall"});
+    QString status = runGit({"status", "--porcelain", "-unormal"});
     const QStringList lines = status.split('\n', Qt::SkipEmptyParts);
 
     for (const QString &line : lines) {
@@ -142,6 +142,11 @@ void GitCommitDialog::loadFileList()
         } else if (indexStatus == 'R') {
             statusText = tr("Renamed");
             staged = true;
+            // Renamed entries use "old -> new" format; extract the new name
+            int arrowIdx = filePath.indexOf(" -> ");
+            if (arrowIdx >= 0) {
+                filePath = filePath.mid(arrowIdx + 4);
+            }
         } else if (workStatus == 'M') {
             statusText = tr("Modified");
         } else if (workStatus == 'D') {

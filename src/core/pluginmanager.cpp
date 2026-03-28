@@ -115,9 +115,23 @@ void PluginManager::loadPlugin(const QString &filePath)
     }
 
     // Initialise with the EditorAPI
-    if (!iface->initialize(m_editorAPI)) {
-        emit pluginError(filePath,
-                         "Plugin initialisation failed: " + pluginName);
+    try {
+        if (!iface->initialize(m_editorAPI)) {
+            emit pluginError(filePath,
+                             "Plugin initialisation failed: " + pluginName);
+            loader->unload();
+            delete loader;
+            return;
+        }
+    } catch (const std::exception &e) {
+        qWarning() << "Plugin" << pluginName << "crashed during initialize:" << e.what();
+        emit pluginError(filePath, "Plugin crashed during initialize: " + pluginName);
+        loader->unload();
+        delete loader;
+        return;
+    } catch (...) {
+        qWarning() << "Plugin" << pluginName << "crashed during initialize with unknown exception";
+        emit pluginError(filePath, "Plugin crashed during initialize: " + pluginName);
         loader->unload();
         delete loader;
         return;
@@ -146,7 +160,11 @@ void PluginManager::unloadPlugin(const QString &pluginName)
     PluginEntry entry = m_plugins.take(pluginName);
 
     if (entry.loaded && entry.interface) {
-        entry.interface->shutdown();
+        try {
+            entry.interface->shutdown();
+        } catch (...) {
+            qWarning() << "Plugin" << entry.name << "threw in shutdown";
+        }
     }
 
     if (entry.loader) {
@@ -244,7 +262,11 @@ void PluginManager::broadcastFileOpened(const QString &path)
 {
     for (const PluginEntry &e : m_plugins) {
         if (e.loaded && e.interface) {
-            e.interface->onFileOpened(path);
+            try {
+                e.interface->onFileOpened(path);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onFileOpened";
+            }
         }
     }
 }
@@ -253,7 +275,11 @@ void PluginManager::broadcastFileSaved(const QString &path)
 {
     for (const PluginEntry &e : m_plugins) {
         if (e.loaded && e.interface) {
-            e.interface->onFileSaved(path);
+            try {
+                e.interface->onFileSaved(path);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onFileSaved";
+            }
         }
     }
 }
@@ -262,7 +288,11 @@ void PluginManager::broadcastFileClosed(const QString &path)
 {
     for (const PluginEntry &e : m_plugins) {
         if (e.loaded && e.interface) {
-            e.interface->onFileClosed(path);
+            try {
+                e.interface->onFileClosed(path);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onFileClosed";
+            }
         }
     }
 }
@@ -271,7 +301,11 @@ void PluginManager::broadcastTextChanged()
 {
     for (const PluginEntry &e : m_plugins) {
         if (e.loaded && e.interface) {
-            e.interface->onTextChanged();
+            try {
+                e.interface->onTextChanged();
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onTextChanged";
+            }
         }
     }
 }
@@ -280,7 +314,11 @@ void PluginManager::broadcastSelectionChanged(const QString &text)
 {
     for (const PluginEntry &e : m_plugins) {
         if (e.loaded && e.interface) {
-            e.interface->onSelectionChanged(text);
+            try {
+                e.interface->onSelectionChanged(text);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onSelectionChanged";
+            }
         }
     }
 }
@@ -289,7 +327,11 @@ void PluginManager::broadcastLanguageChanged(const QString &lang)
 {
     for (const PluginEntry &e : m_plugins) {
         if (e.loaded && e.interface) {
-            e.interface->onLanguageChanged(lang);
+            try {
+                e.interface->onLanguageChanged(lang);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onLanguageChanged";
+            }
         }
     }
 }

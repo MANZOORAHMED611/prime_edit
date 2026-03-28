@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QRegularExpression>
+#include <QTemporaryFile>
 
 GitGutter::GitGutter(QObject *parent)
     : QObject(parent)
@@ -50,8 +51,52 @@ void GitGutter::updateForFile(const QString &filePath,
         // Diff the saved file against HEAD
         proc.start("git", {"diff", "--no-color", "-U0", "HEAD", "--", relPath});
     } else {
-        // Pipe current (unsaved) content via stdin
-        proc.start("git", {"diff", "--no-color", "-U0", "HEAD", "--", relPath});
+        // Unsaved content: write to temp file and diff against HEAD version
+        QTemporaryFile tmpFile;
+        tmpFile.setAutoRemove(true);
+        if (!tmpFile.open()) return;
+        tmpFile.write(currentContent.toUtf8());
+        tmpFile.flush();
+
+        // Get the HEAD version of the file
+        QProcess catProc;
+        catProc.setWorkingDirectory(repoRoot);
+        catProc.start("git", {"show", "HEAD:" + relPath});
+        catProc.waitForFinished(3000);
+
+        if (catProc.exitCode() != 0) {
+            // File is new/untracked -- all lines are Added
+            m_changes.clear();
+            int lineCount = currentContent.count('\n') + 1;
+            GitLineChange change;
+            change.type = GitLineChange::Added;
+            change.startLine = 1;
+            change.lineCount = lineCount;
+            m_changes.append(change);
+            emit gutterUpdated();
+            return;
+        }
+
+        // Write HEAD version to another temp file
+        QTemporaryFile headFile;
+        headFile.setAutoRemove(true);
+        if (!headFile.open()) return;
+        headFile.write(catProc.readAllStandardOutput());
+        headFile.flush();
+
+        // Diff the two temp files
+        proc.start("git", {"diff", "--no-color", "--no-index", "-U0",
+                           "--", headFile.fileName(), tmpFile.fileName()});
+        proc.waitForFinished(5000);
+        if (proc.exitCode() != 0 && proc.exitCode() != 1) {
+            emit gutterUpdated();
+            return;
+        }
+
+        QString output = QString::fromUtf8(proc.readAllStandardOutput());
+        parseDiff(output);
+        emit gutterUpdated();
+        return;
     }
 
     proc.waitForFinished(5000);

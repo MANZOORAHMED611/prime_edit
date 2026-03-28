@@ -37,6 +37,19 @@ Editor::Editor(Document *document, QWidget *parent)
     // Create line number area
     m_lineNumberArea = new LineNumberArea(this);
 
+    // Git gutter — debounced update on text changes
+    m_gitGutter = new GitGutter(this);
+    m_gitGutterTimer = new QTimer(this);
+    m_gitGutterTimer->setSingleShot(true);
+    m_gitGutterTimer->setInterval(1000);
+    connect(m_gitGutterTimer, &QTimer::timeout,
+            this, &Editor::updateGitGutter);
+    connect(m_gitGutter, &GitGutter::gutterUpdated,
+            m_lineNumberArea, QOverload<>::of(&QWidget::update));
+    connect(this, &QPlainTextEdit::textChanged, this, [this]() {
+        m_gitGutterTimer->start();
+    });
+
     // Create syntax highlighter — but DON'T set language yet for large files
     // (will be set after content is loaded to avoid highlighting empty document
     // then re-highlighting after setPlainText)
@@ -167,6 +180,15 @@ Editor::Editor(Document *document, QWidget *parent)
             m_document->setModified(changed);
         }
     });
+
+    // Clear stale multi-cursors on undo/redo and invalidate rainbow bracket cache
+    connect(QPlainTextEdit::document(), &QTextDocument::contentsChanged,
+            this, [this]() {
+        m_cachedRainbowFirstBlock = -1;
+        if (!m_inMultiCursorEdit && !m_extraCursors.isEmpty()) {
+            clearExtraCursors();
+        }
+    });
 }
 
 Editor::~Editor()
@@ -214,18 +236,6 @@ void Editor::setupEditor()
         m_rtlTimer->start();
     });
 
-    // Git gutter — debounced update on text changes
-    m_gitGutter = new GitGutter(this);
-    m_gitGutterTimer = new QTimer(this);
-    m_gitGutterTimer->setSingleShot(true);
-    m_gitGutterTimer->setInterval(1000);
-    connect(m_gitGutterTimer, &QTimer::timeout,
-            this, &Editor::updateGitGutter);
-    connect(m_gitGutter, &GitGutter::gutterUpdated,
-            m_lineNumberArea, QOverload<>::of(&QWidget::update));
-    connect(this, &QPlainTextEdit::textChanged, this, [this]() {
-        m_gitGutterTimer->start();
-    });
 }
 
 void Editor::applySettings()
@@ -616,23 +626,23 @@ bool Editor::findPrevious(const QString &text, QTextDocument::FindFlags flags)
 
 int Editor::replaceAll(const QString &findText, const QString &replaceText, QTextDocument::FindFlags flags)
 {
-    if (findText.isEmpty()) {
-        return 0;
-    }
+    if (findText.isEmpty()) return 0;
 
     int count = 0;
-    QTextCursor cursor = textCursor();
+    QTextCursor cursor(QPlainTextEdit::document());
     cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::Start);
-    setTextCursor(cursor);
 
-    while (findNext(findText, flags)) {
-        QTextCursor current = textCursor(); // get the cursor with selection from findNext
-        current.insertText(replaceText);
+    while (true) {
+        QTextCursor found = QPlainTextEdit::document()->find(findText, cursor, flags);
+        if (found.isNull()) break;
+
+        found.insertText(replaceText);
+        // Move cursor past the replacement to avoid re-matching
+        cursor.setPosition(found.position());
         ++count;
     }
 
-    cursor = textCursor();
     cursor.endEditBlock();
     return count;
 }
@@ -1115,17 +1125,24 @@ void Editor::updateRainbowBrackets()
         lastBlock = next;
     }
 
-    // We need global depth, so scan from document start to first visible
+    // Compute depth at first visible block — use cache when possible
+    int firstVisibleNum = block.blockNumber();
     int depth = 0;
-    QTextBlock scanBlock = QPlainTextEdit::document()->begin();
-    while (scanBlock.isValid() && scanBlock != block) {
-        QString text = scanBlock.text();
-        for (int i = 0; i < text.length(); ++i) {
-            QChar ch = text.at(i);
-            if (ch == '(' || ch == '[' || ch == '{') depth++;
-            else if (ch == ')' || ch == ']' || ch == '}') depth--;
+    if (firstVisibleNum == m_cachedRainbowFirstBlock) {
+        depth = m_cachedRainbowDepth;
+    } else {
+        QTextBlock scanBlock = QPlainTextEdit::document()->begin();
+        while (scanBlock.isValid() && scanBlock.blockNumber() < firstVisibleNum) {
+            QString text = scanBlock.text();
+            for (int i = 0; i < text.length(); ++i) {
+                QChar ch = text.at(i);
+                if (ch == '(' || ch == '[' || ch == '{') depth++;
+                else if (ch == ')' || ch == ']' || ch == '}') depth--;
+            }
+            scanBlock = scanBlock.next();
         }
-        scanBlock = scanBlock.next();
+        m_cachedRainbowFirstBlock = firstVisibleNum;
+        m_cachedRainbowDepth = depth;
     }
 
     // Now color visible brackets
@@ -2134,16 +2151,36 @@ void Editor::updateMultiCursorSelections()
 
 void Editor::applyMultiCursorEdit(QKeyEvent *event)
 {
+    m_inMultiCursorEdit = true;
+
     // Collect all cursors: primary + extras
     QVector<QTextCursor> allCursors;
-    allCursors.append(textCursor());
+    allCursors.append(textCursor());  // primary is index 0
     allCursors.append(m_extraCursors);
+
+    // Save primary cursor position before sorting
+    int primaryPos = textCursor().position();
 
     // Sort by position descending so edits don't shift earlier positions
     std::sort(allCursors.begin(), allCursors.end(),
         [](const QTextCursor &a, const QTextCursor &b) {
             return a.position() > b.position();
         });
+
+    // Find which index the primary ended up at after sorting
+    int primaryIdx = 0;
+    for (int i = 0; i < allCursors.size(); ++i) {
+        if (allCursors[i].position() == primaryPos) {
+            primaryIdx = i;
+            break;
+        }
+    }
+
+    // Bracket pair map for auto-close
+    static const QVector<QPair<QChar, QChar>> bracketPairs = {
+        {'(', ')'}, {'[', ']'}, {'{', '}'},
+        {'"', '"'}, {'\'', '\''}, {'`', '`'}
+    };
 
     QTextCursor editBlock(QPlainTextEdit::document());
     editBlock.beginEditBlock();
@@ -2175,22 +2212,43 @@ void Editor::applyMultiCursorEdit(QKeyEvent *event)
             if (cur.hasSelection()) {
                 cur.removeSelectedText();
             }
-            cur.insertText(event->text());
+            // Auto-close brackets in multi-cursor mode
+            bool handled = false;
+            if (m_autoCloseBrackets) {
+                QChar ch = event->text().at(0);
+                for (const auto &pair : bracketPairs) {
+                    if (ch == pair.first) {
+                        if (pair.first == pair.second && isInsideString(cur)) {
+                            break;
+                        }
+                        cur.insertText(QString(pair.first) + QString(pair.second));
+                        cur.movePosition(QTextCursor::PreviousCharacter);
+                        handled = true;
+                        break;
+                    }
+                }
+            }
+            if (!handled) {
+                cur.insertText(event->text());
+            }
         }
     }
 
     editBlock.endEditBlock();
 
-    // Update primary cursor (first in original order = last in sorted order)
-    setTextCursor(allCursors.last());
+    // Restore primary cursor correctly
+    setTextCursor(allCursors[primaryIdx]);
 
-    // Update extra cursors (all except the primary)
+    // Rebuild extra cursors (everything except primary)
     m_extraCursors.clear();
-    for (int i = 0; i < allCursors.size() - 1; ++i) {
-        m_extraCursors.append(allCursors[i]);
+    for (int i = 0; i < allCursors.size(); ++i) {
+        if (i != primaryIdx) {
+            m_extraCursors.append(allCursors[i]);
+        }
     }
 
     updateMultiCursorSelections();
+    m_inMultiCursorEdit = false;
 }
 
 void Editor::paintEvent(QPaintEvent *event)

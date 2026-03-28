@@ -3,6 +3,21 @@
 #include <QFileInfo>
 #include <QDir>
 
+// ── Helpers ─────────────────────────────────────────────────────────
+
+static QString shellQuote(const QString &s)
+{
+    QString quoted = s;
+    quoted.replace("'", "'\\''");
+    return "'" + quoted + "'";
+}
+
+static bool validHostInfo(const QString &host, const QString &username)
+{
+    return !host.isEmpty() && !host.startsWith('-') &&
+           !username.isEmpty() && !username.startsWith('-');
+}
+
 // ── RemoteConnection ────────────────────────────────────────────────
 
 RemoteConnection::RemoteConnection(QObject *parent)
@@ -27,7 +42,7 @@ RemoteConnection::ConnectionInfo RemoteConnection::connectionInfo() const
 QStringList RemoteConnection::sshArgs() const
 {
     QStringList args;
-    args << "-o" << "StrictHostKeyChecking=accept-new"
+    args << "-o" << "StrictHostKeyChecking=yes"
          << "-o" << "BatchMode=yes"
          << "-o" << "ConnectTimeout=10"
          << "-p" << QString::number(m_info.port);
@@ -43,7 +58,7 @@ QStringList RemoteConnection::sshArgs() const
 QStringList RemoteConnection::scpArgs() const
 {
     QStringList args;
-    args << "-o" << "StrictHostKeyChecking=accept-new"
+    args << "-o" << "StrictHostKeyChecking=yes"
          << "-o" << "BatchMode=yes"
          << "-o" << "ConnectTimeout=10"
          << "-P" << QString::number(m_info.port);
@@ -59,9 +74,12 @@ QStringList RemoteConnection::scpArgs() const
 
 bool RemoteConnection::testConnection()
 {
+    if (!validHostInfo(m_info.host, m_info.username))
+        return false;
+
     QProcess proc;
     QStringList args;
-    args << "-o" << "StrictHostKeyChecking=accept-new"
+    args << "-o" << "StrictHostKeyChecking=yes"
          << "-o" << "BatchMode=yes"
          << "-o" << "ConnectTimeout=5"
          << "-p" << QString::number(m_info.port);
@@ -96,9 +114,12 @@ bool RemoteConnection::testConnection()
 
 void RemoteConnection::listDirectory(const QString &remotePath)
 {
+    if (!validHostInfo(m_info.host, m_info.username))
+        return;
+
     auto *proc = new QProcess(this);
     QStringList args = sshArgs();
-    args << QStringLiteral("ls -laF %1").arg(remotePath);
+    args << QStringLiteral("ls -laF -- %1").arg(shellQuote(remotePath));
 
     connect(proc,
             QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
@@ -165,13 +186,16 @@ void RemoteConnection::listDirectory(const QString &remotePath)
 void RemoteConnection::downloadFile(const QString &remotePath,
                                     const QString &localPath)
 {
+    if (!validHostInfo(m_info.host, m_info.username))
+        return;
+
     // Ensure the local directory exists
     QDir().mkpath(QFileInfo(localPath).absolutePath());
 
     auto *proc = new QProcess(this);
     QStringList args = scpArgs();
     args << QStringLiteral("%1@%2:%3")
-                .arg(m_info.username, m_info.host, remotePath)
+                .arg(m_info.username, m_info.host, shellQuote(remotePath))
          << localPath;
 
     connect(proc,
@@ -195,11 +219,14 @@ void RemoteConnection::downloadFile(const QString &remotePath,
 void RemoteConnection::uploadFile(const QString &localPath,
                                   const QString &remotePath)
 {
+    if (!validHostInfo(m_info.host, m_info.username))
+        return;
+
     auto *proc = new QProcess(this);
     QStringList args = scpArgs();
     args << localPath
          << QStringLiteral("%1@%2:%3")
-                .arg(m_info.username, m_info.host, remotePath);
+                .arg(m_info.username, m_info.host, shellQuote(remotePath));
 
     connect(proc,
             QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),

@@ -280,6 +280,7 @@ private:
     Editor *createEditor(Document *document);
     int findEditorIndex(Editor *editor) const;
     int findEditorIndex(Document *document) const;
+    void updateTabTextForDocument(Document *doc);
 
     void printDocument(QPrinter *printer, Editor *editor);
     TabWidget *activeTabWidget() const;
@@ -294,6 +295,7 @@ private:
     // Split view
     QSplitter *m_splitter = nullptr;
     TabWidget *m_tabWidget2 = nullptr;
+    TabWidget *m_lastActiveTabWidget = nullptr;
 
     TabWidget *m_tabWidget = nullptr;
     StatusBarWidget *m_statusBar = nullptr;

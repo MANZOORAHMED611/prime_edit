@@ -543,10 +543,11 @@ void MainWindow::unfoldCurrentLevel()
 // Document/Tab operations
 void MainWindow::closeOtherTabs()
 {
-    int current = m_tabWidget->currentIndex();
+    TabWidget *tw = activeTabWidget();
+    int current = tw->currentIndex();
 
     // Close tabs after current
-    for (int i = m_tabWidget->count() - 1; i > current; --i) {
+    for (int i = tw->count() - 1; i > current; --i) {
         closeFile(i);
     }
 
@@ -558,16 +559,18 @@ void MainWindow::closeOtherTabs()
 
 void MainWindow::closeTabsToRight()
 {
-    int current = m_tabWidget->currentIndex();
+    TabWidget *tw = activeTabWidget();
+    int current = tw->currentIndex();
 
-    for (int i = m_tabWidget->count() - 1; i > current; --i) {
+    for (int i = tw->count() - 1; i > current; --i) {
         closeFile(i);
     }
 }
 
 void MainWindow::closeTabsToLeft()
 {
-    int current = m_tabWidget->currentIndex();
+    TabWidget *tw = activeTabWidget();
+    int current = tw->currentIndex();
 
     // Close tabs at index 0 repeatedly (each close shifts remaining tabs left)
     for (int i = 0; i < current; ++i) {

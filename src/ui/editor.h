@@ -243,6 +243,8 @@ private:
     bool m_rainbowBrackets = false;
     QList<QTextEdit::ExtraSelection> m_rainbowSelections;
     void updateRainbowBrackets();
+    int m_cachedRainbowFirstBlock = -1;
+    int m_cachedRainbowDepth = 0;
 
     QString getCommentString() const;
 
@@ -262,6 +264,7 @@ private:
     QList<QTextEdit::ExtraSelection> m_multiCursorSelections;
     bool m_altClickPending = false;
     QPoint m_altClickPos;
+    bool m_inMultiCursorEdit = false;
     void clearExtraCursors();
     void applyMultiCursorEdit(QKeyEvent *event);
     void updateMultiCursorSelections();

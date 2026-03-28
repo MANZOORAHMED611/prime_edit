@@ -121,6 +121,17 @@ void MainWindow::setupUi()
     connect(m_tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     connect(m_tabWidget, &QTabWidget::tabCloseRequested, this, &MainWindow::onTabCloseRequested);
 
+    // Track last-focused tab widget so activeTabWidget() works during menus/dialogs
+    connect(qApp, &QApplication::focusChanged, this, [this](QWidget*, QWidget *now) {
+        if (!now) return;
+        QWidget *w = now;
+        while (w) {
+            if (w == m_tabWidget) { m_lastActiveTabWidget = m_tabWidget; return; }
+            if (w == m_tabWidget2) { m_lastActiveTabWidget = m_tabWidget2; return; }
+            w = w->parentWidget();
+        }
+    });
+
     connect(m_incrementalSearchBar, &IncrementalSearchBar::searchChanged,
             this, &MainWindow::onIncrementalSearchChanged);
     connect(m_incrementalSearchBar, &IncrementalSearchBar::findNext, this, &MainWindow::findNext);
@@ -750,19 +761,24 @@ void MainWindow::openFile(const QString &filePath)
         return;
     }
 
-    // Check if already open
-    int existingIndex = -1;
+    // Check if already open in either split
     for (int i = 0; i < m_tabWidget->count(); ++i) {
         Editor *ed = qobject_cast<Editor*>(m_tabWidget->widget(i));
         if (ed && ed->document() && ed->document()->filePath() == path) {
-            existingIndex = i;
-            break;
+            m_tabWidget->setCurrentIndex(i);
+            m_tabWidget->currentWidget()->setFocus();
+            return;
         }
     }
-
-    if (existingIndex >= 0) {
-        m_tabWidget->setCurrentIndex(existingIndex);
-        return;
+    if (m_tabWidget2) {
+        for (int i = 0; i < m_tabWidget2->count(); ++i) {
+            Editor *ed = qobject_cast<Editor*>(m_tabWidget2->widget(i));
+            if (ed && ed->document() && ed->document()->filePath() == path) {
+                m_tabWidget2->setCurrentIndex(i);
+                m_tabWidget2->currentWidget()->setFocus();
+                return;
+            }
+        }
     }
 
     Document *doc = DocumentManager::instance().openDocument(path);
@@ -807,10 +823,7 @@ void MainWindow::saveFile()
     if (doc->save()) {
         PluginManager::instance().broadcastFileSaved(doc->filePath());
         updateWindowTitle();
-        int index = findEditorIndex(editor);
-        if (index >= 0) {
-            m_tabWidget->setTabText(index, doc->displayName());
-        }
+        updateTabTextForDocument(doc);
 
         // Auto-upload if this is a remote file
         QString localPath = doc->filePath();
@@ -846,10 +859,7 @@ void MainWindow::saveFileAs()
         doc->setLanguage(language);
 
         updateWindowTitle();
-        int index = findEditorIndex(editor);
-        if (index >= 0) {
-            m_tabWidget->setTabText(index, doc->displayName());
-        }
+        updateTabTextForDocument(doc);
     } else {
         QMessageBox::warning(this, tr("Error"), tr("Could not save file."));
     }
@@ -857,13 +867,19 @@ void MainWindow::saveFileAs()
 
 void MainWindow::saveAllFiles()
 {
-    for (int i = 0; i < m_tabWidget->count(); ++i) {
-        Editor *editor = qobject_cast<Editor*>(m_tabWidget->widget(i));
-        if (editor && editor->document() && editor->document()->isModified()) {
-            m_tabWidget->setCurrentIndex(i);
-            saveFile();
+    auto saveInWidget = [this](TabWidget *tw) {
+        if (!tw) return;
+        for (int i = 0; i < tw->count(); ++i) {
+            Editor *editor = qobject_cast<Editor*>(tw->widget(i));
+            if (editor && editor->document() && editor->document()->isModified()) {
+                tw->setCurrentIndex(i);
+                editor->setFocus();
+                saveFile();
+            }
         }
-    }
+    };
+    saveInWidget(m_tabWidget);
+    saveInWidget(m_tabWidget2);
 }
 
 void MainWindow::reloadFromDisk()
@@ -891,15 +907,17 @@ void MainWindow::reloadFromDisk()
 
 bool MainWindow::closeFile(int index)
 {
+    TabWidget *tw = activeTabWidget();
+
     if (index < 0) {
-        index = m_tabWidget->currentIndex();
+        index = tw->currentIndex();
     }
 
-    if (index < 0 || index >= m_tabWidget->count()) {
+    if (index < 0 || index >= tw->count()) {
         return false;
     }
 
-    Editor *editor = qobject_cast<Editor*>(m_tabWidget->widget(index));
+    Editor *editor = qobject_cast<Editor*>(tw->widget(index));
     if (!editor) {
         return false;
     }
@@ -915,7 +933,8 @@ bool MainWindow::closeFile(int index)
             return false;
         }
         if (result == QMessageBox::Save) {
-            m_tabWidget->setCurrentIndex(index);
+            tw->setCurrentIndex(index);
+            editor->setFocus();
             saveFile();
             if (doc->isModified()) {
                 return false;  // Save failed or canceled
@@ -925,13 +944,19 @@ bool MainWindow::closeFile(int index)
 
     const QString closedPath = doc ? doc->filePath() : QString();
 
-    m_tabWidget->removeTab(index);
+    tw->removeTab(index);
+    editor->deleteLater();
     if (doc) {
         DocumentManager::instance().closeDocument(doc, true);
     }
 
     if (!closedPath.isEmpty()) {
         PluginManager::instance().broadcastFileClosed(closedPath);
+    }
+
+    // Auto-unsplit if split 2 is now empty
+    if (tw == m_tabWidget2) {
+        checkUnsplitNeeded();
     }
 
     // Create new empty tab if all closed (but not if we're closing all to exit)
@@ -947,6 +972,23 @@ bool MainWindow::closeAllFiles()
 {
     // Prevent closeFile from creating new tabs while we're closing all
     m_closingAll = true;
+
+    // Close split 2 tabs first (unsplits automatically when empty)
+    if (m_tabWidget2 && m_tabWidget2->count() > 0) {
+        // Focus split 2 so closeFile operates on it
+        if (m_tabWidget2->currentWidget())
+            m_tabWidget2->currentWidget()->setFocus();
+        while (m_tabWidget2 && m_tabWidget2->count() > 0) {
+            if (!closeFile(0)) {
+                m_closingAll = false;
+                return false;
+            }
+        }
+    }
+
+    // Close split 1 tabs
+    if (m_tabWidget->currentWidget())
+        m_tabWidget->currentWidget()->setFocus();
     while (m_tabWidget->count() > 0) {
         if (!closeFile(0)) {
             m_closingAll = false;
@@ -985,12 +1027,17 @@ Editor *MainWindow::currentEditor() const
 QStringList MainWindow::openFilePaths() const
 {
     QStringList paths;
-    for (int i = 0; i < m_tabWidget->count(); ++i) {
-        Editor *editor = qobject_cast<Editor*>(m_tabWidget->widget(i));
-        if (editor && editor->document() && !editor->document()->isUntitled()) {
-            paths.append(editor->document()->filePath());
+    auto collectFromWidget = [&](TabWidget *tw) {
+        if (!tw) return;
+        for (int i = 0; i < tw->count(); ++i) {
+            Editor *editor = qobject_cast<Editor*>(tw->widget(i));
+            if (editor && editor->document() && !editor->document()->isUntitled()) {
+                paths.append(editor->document()->filePath());
+            }
         }
-    }
+    };
+    collectFromWidget(m_tabWidget);
+    collectFromWidget(m_tabWidget2);
     return paths;
 }
 
@@ -1055,39 +1102,13 @@ void MainWindow::onTabCloseRequested(int index)
 
 void MainWindow::onDocumentModified(bool modified)
 {
+    Q_UNUSED(modified);
     Document *doc = qobject_cast<Document*>(sender());
     if (!doc) {
         return;
     }
 
-    int index = findEditorIndex(doc);
-    if (index >= 0) {
-        QString title = doc->displayName();
-        if (modified) {
-            title += " *";
-        }
-        m_tabWidget->setTabText(index, title);
-
-        // Update icon: tint red when modified, restore when saved
-        QString filePath = doc->filePath();
-        if (modified) {
-            QPixmap px(16, 16);
-            px.fill(QColor("#e53935"));
-            QPainter p(&px);
-            QFont f = p.font();
-            f.setPixelSize(7);
-            f.setBold(true);
-            p.setFont(f);
-            p.setPen(Qt::white);
-            p.drawText(px.rect(), Qt::AlignCenter, "MOD");
-            p.end();
-            m_tabWidget->setTabIcon(index, QIcon(px));
-        } else {
-            m_tabWidget->setTabIcon(index,
-                TabBar::iconForFile(filePath));
-        }
-    }
-
+    updateTabTextForDocument(doc);
     updateWindowTitle();
 }
 
@@ -1164,8 +1185,7 @@ void MainWindow::printDocument(QPrinter *printer, Editor *editor)
     QTextDocument *doc = editor->QPlainTextEdit::document();
     if (!doc) return;
 
-    const double dpi = printer->resolution();
-    const double margin = 0.75 * dpi;
+    const double margin = 0.75 * 72.0;  // 0.75 inches in points
 
     printer->setPageMargins(QMarginsF(margin, margin, margin, margin), QPageLayout::Point);
 
@@ -2038,6 +2058,13 @@ int MainWindow::findEditorIndex(Editor *editor) const
             return i;
         }
     }
+    if (m_tabWidget2) {
+        for (int i = 0; i < m_tabWidget2->count(); ++i) {
+            if (m_tabWidget2->widget(i) == editor) {
+                return i;
+            }
+        }
+    }
     return -1;
 }
 
@@ -2049,7 +2076,51 @@ int MainWindow::findEditorIndex(Document *document) const
             return i;
         }
     }
+    if (m_tabWidget2) {
+        for (int i = 0; i < m_tabWidget2->count(); ++i) {
+            Editor *editor = qobject_cast<Editor*>(m_tabWidget2->widget(i));
+            if (editor && editor->document() == document) {
+                return i;
+            }
+        }
+    }
     return -1;
+}
+
+void MainWindow::updateTabTextForDocument(Document *doc)
+{
+    if (!doc) return;
+    auto updateInWidget = [&](TabWidget *tw) {
+        if (!tw) return;
+        for (int i = 0; i < tw->count(); ++i) {
+            Editor *e = qobject_cast<Editor*>(tw->widget(i));
+            if (e && e->document() == doc) {
+                QString title = doc->displayName();
+                if (doc->isModified()) title += " *";
+                tw->setTabText(i, title);
+
+                // Update icon: tint red when modified, restore when saved
+                QString filePath = doc->filePath();
+                if (doc->isModified()) {
+                    QPixmap px(16, 16);
+                    px.fill(QColor("#e53935"));
+                    QPainter p(&px);
+                    QFont f = p.font();
+                    f.setPixelSize(7);
+                    f.setBold(true);
+                    p.setFont(f);
+                    p.setPen(Qt::white);
+                    p.drawText(px.rect(), Qt::AlignCenter, "MOD");
+                    p.end();
+                    tw->setTabIcon(i, QIcon(px));
+                } else {
+                    tw->setTabIcon(i, TabBar::iconForFile(filePath));
+                }
+            }
+        }
+    };
+    updateInWidget(m_tabWidget);
+    updateInWidget(m_tabWidget2);
 }
 
 // ============================================================
@@ -2059,7 +2130,7 @@ int MainWindow::findEditorIndex(Document *document) const
 TabWidget *MainWindow::activeTabWidget() const
 {
     if (m_tabWidget2) {
-        // Check if any widget inside m_tabWidget2 has focus
+        // Try focus-based detection first
         QWidget *focused = QApplication::focusWidget();
         if (focused) {
             QWidget *parent = focused;
@@ -2069,6 +2140,9 @@ TabWidget *MainWindow::activeTabWidget() const
                 parent = parent->parentWidget();
             }
         }
+        // Fall back to last known active (handles menus/dialogs)
+        if (m_lastActiveTabWidget && m_lastActiveTabWidget == m_tabWidget2)
+            return m_tabWidget2;
     }
     return m_tabWidget;
 }
@@ -2229,6 +2303,7 @@ void MainWindow::onTab2CloseRequested(int index)
     }
 
     m_tabWidget2->removeTab(index);
+    if (editor) editor->deleteLater();
 
     // If the document has no other editors, close it
     if (!hasOtherEditor) {
