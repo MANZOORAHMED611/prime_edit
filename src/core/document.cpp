@@ -42,23 +42,18 @@ bool Document::load(const QString &filePath)
     // With word wrap ON, it only lays out the visible wrapped portion.
     // ================================================================
     if (m_fileMode == LargeFile) {
-        QFile file(filePath);
-        if (!file.open(QIODevice::ReadOnly)) return false;
-
-        QByteArray data = file.readAll();
-        file.close();
-
-        m_encoding = CharsetDetector::detect(data);
-        QString text = QString::fromUtf8(data);
-        data.clear();
-
-        m_lineEnding = detectLineEnding(text);
-        text = normalizeLineEndings(text, Unix);
-
-        m_content.setText(text);
+        // Don't load into PieceTable at all — Editor will load directly
+        // into QTextDocument to avoid the double/triple copy that causes OOM
         m_filePath = filePath;
         m_modified = false;
         setReadOnly(true);
+
+        // Detect encoding from first 8KB only
+        QFile probe(filePath);
+        if (!probe.open(QIODevice::ReadOnly)) return false;
+        m_encoding = CharsetDetector::detect(probe.read(8192));
+        probe.close();
+
         emit filePathChanged(m_filePath);
         emit encodingChanged(m_encoding);
         return true;

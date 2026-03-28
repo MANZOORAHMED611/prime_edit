@@ -77,15 +77,23 @@ Editor::Editor(Document *document, QWidget *parent)
 
     // Load content
     m_syncing = true;
-    if (!m_document->text().isEmpty()) {
-        // For large files, disable updates during load for speed
-        if (m_document->fileMode() == Document::LargeFile) {
-            setUpdatesEnabled(false);
+    if (m_document->fileMode() == Document::LargeFile) {
+        // Large file: load directly into QTextDocument — skip PieceTable entirely
+        // This avoids: readAll→QString→PieceTable→setPlainText (4 copies, ~650MB for 93MB file)
+        // Instead: read in chunks → append to QTextDocument (1 copy)
+        setUpdatesEnabled(false);
+        QTextCursor cursor(QPlainTextEdit::document());
+        QFile file(m_document->filePath());
+        if (file.open(QIODevice::ReadOnly)) {
+            while (!file.atEnd()) {
+                QByteArray chunk = file.read(2 * 1024 * 1024); // 2MB chunks
+                cursor.insertText(QString::fromUtf8(chunk));
+            }
+            file.close();
         }
+        setUpdatesEnabled(true);
+    } else if (!m_document->text().isEmpty()) {
         setPlainText(m_document->text());
-        if (m_document->fileMode() == Document::LargeFile) {
-            setUpdatesEnabled(true);
-        }
     }
     m_syncing = false;
 
