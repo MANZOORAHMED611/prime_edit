@@ -144,12 +144,14 @@
         <div class="section-label">FAQ Categories</div>
         <a href="#general">General</a>
         <a href="#editing">Editing</a>
+        <a href="#multicursor">Multi-Cursor &amp; Selection</a>
         <a href="#files">Files &amp; Encoding</a>
         <a href="#search-faq">Search &amp; Replace</a>
         <a href="#languages">Languages &amp; LSP</a>
+        <a href="#git-remote">Git &amp; Remote</a>
+        <a href="#plugins-faq">Plugins</a>
         <a href="#performance">Performance</a>
-        <a href="#schema-faq">Schema &amp; Validation</a>
-        <a href="#eval-faq">Block Evaluation</a>
+        <a href="#ai-features">AI Features</a>
         <a href="#config-faq">Configuration</a>
         <a href="#troubleshooting">Troubleshooting</a>
 
@@ -174,22 +176,21 @@
             <div class="faq-item open">
                 <div class="faq-question">What is PrimeEdit?</div>
                 <div class="faq-answer">
-                    <p>PrimeEdit is a native text editor for Linux, purpose-built for structured documents. It combines the editing speed of Notepad++ with unique capabilities: document schema validation, LLM-powered block evaluation, and Islamic scholarly knowledge integration.</p>
-                    <p>It is <strong>not</strong> an IDE (no debugger, no project management). It is <strong>not</strong> an AI assistant (no chat sidebar). It is the editor for documents that are executed, validated, or consumed by systems.</p>
+                    <p>PrimeEdit is a fast, native text editor for Linux built in C++17 with Qt. It combines the speed and simplicity of Notepad++ with modern features from VS Code &mdash; LSP integration, multi-cursor editing, Git integration, split-screen views &mdash; all in a ~7MB native binary that starts in under a second.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">What is PrimeEdit built with?</div>
                 <div class="faq-answer">
-                    <p>C++17 with Qt (supports both Qt 5 and Qt 6). The build system is CMake. The binary is approximately 7MB and has no runtime dependencies beyond Qt.</p>
+                    <p>C++17, Qt 5/6, CMake. The binary is approximately ~7MB with no runtime dependencies beyond Qt.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">Does PrimeEdit run on Windows or macOS?</div>
                 <div class="faq-answer">
-                    <p>Currently, PrimeEdit is Linux-only. The codebase uses Qt (cross-platform) and standard C++17, so a Windows or macOS port is technically feasible. However, some features use Linux-specific APIs (<code>mmap</code>/<code>madvise</code> for large file handling). A cross-platform release is not currently planned.</p>
+                    <p>Currently, PrimeEdit is Linux-only. The codebase uses Qt (cross-platform) and standard C++17, so a Windows or macOS port is technically feasible. However, a cross-platform release is not currently planned.</p>
                 </div>
             </div>
 
@@ -203,14 +204,14 @@
             <div class="faq-item">
                 <div class="faq-question">How does PrimeEdit compare to VS Code?</div>
                 <div class="faq-answer">
-                    <p>PrimeEdit is native C++ (not Electron), so it starts faster and uses far less memory. It handles 1GB+ files that VS Code cannot open. However, VS Code has a much larger extension ecosystem, built-in debugging, and a broader feature set as an IDE. PrimeEdit is the better choice when you need: raw file performance, document validation, or structured knowledge work. VS Code is better when you need: debugging, extensive language extensions, or remote development.</p>
+                    <p>PrimeEdit is native C++ (not Electron), so it starts faster and uses far less memory. It handles 1GB+ files that VS Code cannot open. VS Code has a larger extension ecosystem and built-in debugging. PrimeEdit is the better choice when you need raw editing speed, lightweight resource usage, and large file handling. VS Code is better when you need extensive language extensions, debugging, or remote development containers.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How does PrimeEdit compare to Notepad++?</div>
                 <div class="faq-answer">
-                    <p>PrimeEdit was originally modeled on Notepad++ and shares many of the same editing features (tabbed interface, find/replace dialog, macros, bookmarks, code folding). PrimeEdit goes beyond Notepad++ with: LSP integration, document schema validation, block evaluation, large file handling (1GB at 95MB RAM), and 81 syntax languages loaded from JSON definitions.</p>
+                    <p>PrimeEdit was originally modeled on Notepad++ and shares many of the same editing features (tabbed interface, find/replace dialog, macros, bookmarks, code folding). PrimeEdit goes beyond Notepad++ with: LSP integration, multi-cursor editing, Git integration, split-screen views, remote file editing, 96 syntax languages loaded from JSON definitions, and a plugin system.</p>
                 </div>
             </div>
         </div>
@@ -247,6 +248,39 @@
             <div class="faq-item">
                 <div class="faq-question">How do I toggle comments?</div>
                 <div class="faq-answer"><p><kbd>Ctrl</kbd>+<kbd>/</kbd> toggles single-line comments. For HTML/XML, it uses <code>&lt;!-- --&gt;</code> block comments automatically.</p></div>
+            </div>
+        </div>
+
+        <!-- Multi-Cursor & Selection -->
+        <div class="faq-category" id="multicursor">
+            <h2>Multi-Cursor &amp; Selection</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I use multi-cursor editing?</div>
+                <div class="faq-answer">
+                    <p><kbd>Alt</kbd>+Click to add cursors at any position. <kbd>Ctrl</kbd>+<kbd>D</kbd> to select the next occurrence of the current word. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> to select all occurrences of the current word at once. Type to edit at all cursor positions simultaneously. Press <kbd>Escape</kbd> to return to a single cursor.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I split the screen?</div>
+                <div class="faq-answer">
+                    <p><kbd>Ctrl</kbd>+<kbd>\</kbd> for a vertical split. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> for a horizontal split. <kbd>F6</kbd> switches focus between panes. You can also clone a document to the other view &mdash; both views share the same content and edits sync in real time.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Does multi-cursor work with auto-close brackets?</div>
+                <div class="faq-answer">
+                    <p>Yes. When you type an opening bracket, the closing bracket is automatically inserted at all cursor positions. This applies to parentheses, square brackets, curly braces, and quote characters.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I undo multi-cursor edits?</div>
+                <div class="faq-answer">
+                    <p>Yes. All multi-cursor edits are atomic &mdash; one <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the entire operation across all cursor positions.</p>
+                </div>
             </div>
         </div>
 
@@ -322,7 +356,7 @@
 
             <div class="faq-item">
                 <div class="faq-question">How many languages does PrimeEdit support?</div>
-                <div class="faq-answer"><p>81 languages have syntax highlighting definitions. Language is auto-detected from file extension, filename, shebang line, or content analysis.</p></div>
+                <div class="faq-answer"><p>96 languages have syntax highlighting definitions. Language is auto-detected from file extension, filename, shebang line, or content analysis.</p></div>
             </div>
 
             <div class="faq-item">
@@ -343,6 +377,65 @@
                 <div class="faq-question">Why aren't LSP features working?</div>
                 <div class="faq-answer">
                     <p>Check that: (1) the language server is installed and on your PATH, (2) the file has the correct extension so the language is detected, (3) the project has necessary configuration files (e.g., <code>compile_commands.json</code> for clangd). LSP features only activate for languages with configured servers.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Git & Remote -->
+        <div class="faq-category" id="git-remote">
+            <h2>Git &amp; Remote</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I see Git changes in the editor?</div>
+                <div class="faq-answer">
+                    <p>PrimeEdit shows colored gutter indicators: green for added lines, yellow for modified, red for deleted. These update automatically as you edit. The indicators appear in the left margin next to the line numbers.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I commit from PrimeEdit?</div>
+                <div class="faq-answer">
+                    <p><strong>Git &gt; Commit</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) opens a commit dialog with file staging checkboxes, a diff preview for each file, and a commit message editor. Stage the files you want, write your message, and click Commit.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I switch branches?</div>
+                <div class="faq-answer">
+                    <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select the branch you want to switch to. PrimeEdit will reload any open files that changed between branches.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I open a remote file?</div>
+                <div class="faq-answer">
+                    <p><strong>File &gt; Open Remote</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd>) opens the connection manager. Add SSH connections with hostname, username, and key file. Browse remote directories and open files. Changes are automatically uploaded on save.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plugins -->
+        <div class="faq-category" id="plugins-faq">
+            <h2>Plugins</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">Where are plugins stored?</div>
+                <div class="faq-answer">
+                    <p><code>~/.config/PrimeEdit/plugins/</code> for user plugins, <code>/usr/lib/prime-edit/plugins/</code> for system-wide plugins.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I enable/disable a plugin?</div>
+                <div class="faq-answer">
+                    <p><strong>Tools &gt; Plugins</strong> opens the plugin management dialog. Toggle the checkbox next to any plugin to enable or disable it. Changes take effect immediately &mdash; no restart required.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How do I write a plugin?</div>
+                <div class="faq-answer">
+                    <p>Create a Qt shared library (<code>.so</code>) implementing the <code>PluginInterface</code>. Plugins receive an <code>EditorAPI</code> object with access to the buffer, file operations, UI elements, and settings. See the <a href="index.html">Technical Documentation</a> for the full plugin API reference.</p>
                 </div>
             </div>
         </div>
@@ -369,53 +462,35 @@
             </div>
         </div>
 
-        <!-- Schema -->
-        <div class="faq-category" id="schema-faq">
-            <h2>Schema &amp; Validation</h2>
-
-            <div class="faq-item">
-                <div class="faq-question">What is schema validation?</div>
-                <div class="faq-answer"><p>Schema validation is like linting for documents. You define rules in a JSON file, and PrimeEdit checks your document against those rules in real-time. Violations appear as inline underlines and in a panel at the bottom. No other editor has this capability.</p></div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">How do I create a schema?</div>
-                <div class="faq-answer">
-                    <p>Create a file called <code>.olive-schema.json</code> in your project root directory. PrimeEdit finds it automatically. The schema contains a type name and an array of rules. Rules can be built-in names (like <code>must_include_grading</code>) or custom objects with pattern, scope, and severity.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">What kinds of rules can I create?</div>
-                <div class="faq-answer">
-                    <ul>
-                        <li><strong>Must exist</strong> &mdash; a pattern that must appear in the document/block/line</li>
-                        <li><strong>Must not exist</strong> &mdash; a pattern that should not appear (e.g., "TODO")</li>
-                        <li><strong>Scopes:</strong> document (whole file), block (paragraph), or line (per-line)</li>
-                        <li><strong>Severities:</strong> error (red underline), warning (orange), info (blue)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Block Evaluation -->
-        <div class="faq-category" id="eval-faq">
-            <h2>Block Evaluation</h2>
+        <!-- AI Features -->
+        <div class="faq-category" id="ai-features">
+            <h2>AI Features</h2>
 
             <div class="faq-item">
                 <div class="faq-question">What is block evaluation?</div>
-                <div class="faq-answer"><p>It sends selected text to an LLM endpoint (like Ollama running locally) and shows you the result as an inline diff. You see exactly what changed, then press <kbd>A</kbd> to accept or <kbd>Escape</kbd> to reject. It's AI as an execution primitive, not an assistant.</p></div>
+                <div class="faq-answer">
+                    <p>Select text and press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd> to send it to an LLM. An inline diff view appears showing additions (green) and removals (red). Press <kbd>A</kbd> to accept the changes into your document, or <kbd>Escape</kbd> to discard them.</p>
+                </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">Do I need an internet connection?</div>
-                <div class="faq-answer"><p>No, if you use Ollama (the default). Ollama runs locally on your machine. You can also configure any OpenAI-compatible endpoint if you prefer a cloud-based model.</p></div>
+                <div class="faq-answer">
+                    <p>No, if you use Ollama (the default). Ollama runs locally on your machine. You can also configure any OpenAI-compatible endpoint if you prefer a cloud-based model.</p>
+                </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How do I set up Ollama?</div>
                 <div class="faq-answer">
                     <p>Install Ollama from <code>ollama.ai</code>, then pull a model: <code>ollama pull llama3</code>. PrimeEdit connects to <code>localhost:11434</code> by default. No additional configuration needed.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Block evaluation returns an error</div>
+                <div class="faq-answer">
+                    <p>Verify that: (1) Ollama is running (<code>ollama serve</code>), (2) you have a model pulled (<code>ollama list</code>), (3) the endpoint URL in <strong>Tools &gt; Configure Endpoint</strong> matches your Ollama address (default: <code>http://localhost:11434/api/generate</code>).</p>
                 </div>
             </div>
         </div>
@@ -435,13 +510,6 @@
                 <div class="faq-question">Where are sessions stored?</div>
                 <div class="faq-answer">
                     <p><code>~/.local/share/PrimeEdit/sessions/</code> &mdash; open tabs, cursor positions, bookmarks, fold state. Unsaved documents are cached in the <code>unsaved/</code> subdirectory.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Where are plugins stored?</div>
-                <div class="faq-answer">
-                    <p><code>~/.config/PrimeEdit/plugins/</code> for user plugins, <code>/usr/lib/prime-edit/plugins/</code> for system-wide plugins.</p>
                 </div>
             </div>
 
@@ -490,18 +558,11 @@
                     <p>Theme changes should apply instantly. If they don't: (1) make sure you clicked <strong>Apply</strong> or <strong>OK</strong> in Preferences, (2) try restarting PrimeEdit, (3) delete <code>~/.config/PrimeEdit/settings.json</code> and restart to reset to defaults.</p>
                 </div>
             </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Block evaluation returns an error</div>
-                <div class="faq-answer">
-                    <p>Verify that: (1) Ollama is running (<code>ollama serve</code>), (2) you have a model pulled (<code>ollama list</code>), (3) the endpoint URL in <strong>Tools &gt; Configure Endpoint</strong> matches your Ollama address (default: <code>http://localhost:11434/api/generate</code>).</p>
-                </div>
-            </div>
         </div>
 
         <div class="footer">
             <img src="prime_edit_icon.png" alt="PrimeEdit">
-            <div>PrimeEdit &mdash; The editor for structured knowledge work</div>
+            <div>PrimeEdit &mdash; A fast native text editor for Linux</div>
             <div style="margin-top: 4px;">&copy; 2026 Green Olive Tech LLC. All rights reserved.</div>
         </div>
     </div>

@@ -603,22 +603,11 @@
         <div class="tagline">Technical Documentation</div>
     </div>
     <div class="sidebar-nav">
-        <div class="section-label" onclick="toggleNav(this)">The Platform</div>
+        <div class="section-label" onclick="toggleNav(this)">Overview</div>
         <div class="nav-group">
             <a href="#overview">What PrimeEdit Is</a>
             <a href="#who">Who This Is For</a>
-            <a href="#why">Why PrimeEdit</a>
-        </div>
-
-        <div class="section-label" onclick="toggleNav(this)">Intelligence Layer</div>
-        <div class="nav-group">
-            <a href="#schema">Schema Validation</a>
-            <a href="#blockeval">Block Execution</a>
-            <a href="#islamic">Domain Integration</a>
-            <a href="#casestudy">Islamic Scholarship</a>
-            <a href="#case-legal">Legal Contracts</a>
-            <a href="#case-prompts">AI Prompt Systems</a>
-            <a href="#case-compliance">Compliance Documents</a>
+            <a href="#comparison">Editor Comparison</a>
         </div>
 
         <div class="section-label" onclick="toggleNav(this)">Architecture</div>
@@ -628,23 +617,43 @@
             <a href="#benchmarks">Performance Benchmarks</a>
         </div>
 
-        <div class="section-label collapsed" onclick="toggleNav(this)">Engine Capabilities</div>
-        <div class="nav-group collapsed">
+        <div class="section-label" onclick="toggleNav(this)">Editing</div>
+        <div class="nav-group">
             <a href="#editing">Editing &amp; Navigation</a>
-            <a href="#gutter">Gutter &amp; Margins</a>
-            <a href="#folding">Code Folding</a>
+            <a href="#multicursor">Multi-Cursor Editing</a>
+            <a href="#splitscreen">Split-Screen Editing</a>
+            <a href="#brackets">Bracket Features</a>
             <a href="#column">Column Selection</a>
+            <a href="#folding">Code Folding</a>
+        </div>
+
+        <div class="section-label collapsed" onclick="toggleNav(this)">Search &amp; Navigation</div>
+        <div class="nav-group collapsed">
             <a href="#search">Search System</a>
             <a href="#findinfiles">Find in Files</a>
             <a href="#marks">Mark &amp; Highlight</a>
+            <a href="#gutter">Gutter &amp; Margins</a>
         </div>
 
-        <div class="section-label collapsed" onclick="toggleNav(this)">Language &amp; File Support</div>
+        <div class="section-label collapsed" onclick="toggleNav(this)">Language &amp; Intelligence</div>
         <div class="nav-group collapsed">
             <a href="#syntax">Syntax Highlighting</a>
-            <a href="#languages">81 Languages</a>
+            <a href="#languages">96 Languages</a>
             <a href="#lsp">LSP Integration</a>
-            <a href="#completion">Auto-Completion</a>
+            <a href="#completion">Auto-Completion &amp; Snippets</a>
+            <a href="#ai">AI-Assisted Editing</a>
+        </div>
+
+        <div class="section-label collapsed" onclick="toggleNav(this)">Integration</div>
+        <div class="nav-group collapsed">
+            <a href="#git">Git Integration</a>
+            <a href="#remote">Remote File Editing</a>
+            <a href="#plugins">Plugin System</a>
+            <a href="#terminal">Terminal</a>
+        </div>
+
+        <div class="section-label collapsed" onclick="toggleNav(this)">File &amp; Encoding</div>
+        <div class="nav-group collapsed">
             <a href="#encoding">Encoding &amp; Detection</a>
             <a href="#persistence">Persistent Documents</a>
             <a href="#monitoring">File Monitoring</a>
@@ -654,7 +663,7 @@
         <div class="nav-group collapsed">
             <a href="#themes">Themes</a>
             <a href="#panels">Panels &amp; Docks</a>
-            <a href="#macros">Macros &amp; Plugins</a>
+            <a href="#macros">Macros</a>
             <a href="#shortcuts">Keyboard Shortcuts</a>
         </div>
 
@@ -691,24 +700,24 @@
                     <h1>PrimeEdit</h1>
                 </div>
             </div>
-            <p style="font-size: 20px; color: var(--text); margin-bottom: 8px;">Documents with rules are still enforced manually.</p>
-            <p style="font-size: 17px; color: var(--text-light);">PrimeEdit turns them into systems &mdash; validating, executing, and verifying them in real time.</p>
+            <p style="font-size: 20px; color: var(--text); margin-bottom: 8px;">A Fast Native Text Editor for Linux</p>
+            <p style="font-size: 17px; color: var(--text-light);">Built in C++ with Qt. 96 language definitions, LSP integration, multi-cursor editing, Git gutter, split-screen, remote files, and plugin system &mdash; all in a ~7MB binary that starts in under a second and handles 1GB+ files without breaking a sweat.</p>
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <div class="number">Schema</div>
-                    <div class="label">Document Validation</div>
+                    <div class="number">96</div>
+                    <div class="label">Languages</div>
                 </div>
                 <div class="hero-stat">
-                    <div class="number">Execute</div>
-                    <div class="label">Block Transformation</div>
+                    <div class="number">~7MB</div>
+                    <div class="label">Binary</div>
                 </div>
                 <div class="hero-stat">
-                    <div class="number">Domain</div>
-                    <div class="label">Knowledge Integration</div>
+                    <div class="number">&lt;1s</div>
+                    <div class="label">Startup</div>
                 </div>
                 <div class="hero-stat">
                     <div class="number">1GB+</div>
-                    <div class="label">Native Performance</div>
+                    <div class="label">Files</div>
                 </div>
             </div>
         </div>
@@ -718,26 +727,22 @@
 
         <!-- Product Overview -->
         <section>
-            <p class="lead" style="font-size: 19px; font-weight: 600; color: var(--primary-dark);">PrimeEdit turns documents into systems.</p>
+            <p class="lead" style="font-size: 19px; font-weight: 600; color: var(--primary-dark);">The editor VS Code should have been &mdash; if it wasn't built on Electron.</p>
 
-            <p class="lead">Validate documents against rules. Transform content via LLM endpoints. Integrate domain-specific intelligence. All inside a native, high-performance editing surface.</p>
+            <p class="lead">PrimeEdit is a native C++ text editor designed for developers who want speed, low memory usage, and full-featured editing without the overhead of a browser runtime. It is not an IDE. It is the fastest way to open, edit, and navigate code and text files on Linux.</p>
 
-            <h3>Three Layers</h3>
+            <h3>What You Get</h3>
             <ul>
-                <li><strong>Validation</strong> &mdash; JSON schema rules check your document in real-time. Inline violations. Health score.</li>
-                <li><strong>Execution</strong> &mdash; select text, send to any LLM endpoint, see the diff, accept or reject. The document is the interface.</li>
-                <li><strong>Domain Intelligence</strong> &mdash; connect to knowledge bases for domain-specific verification.</li>
+                <li><strong>Native performance</strong> &mdash; C++17 compiled binary. No Electron. No JVM. No runtime. Starts instantly, stays fast.</li>
+                <li><strong>96 syntax languages</strong> &mdash; data-driven JSON definitions with auto-detection from extension, shebang, filename, and content heuristics.</li>
+                <li><strong>LSP integration</strong> &mdash; hover docs, go-to-definition, find references, rename symbol, inline diagnostics. Built-in configs for clangd, pylsp, typescript-language-server, rust-analyzer, gopls.</li>
+                <li><strong>Large file handling</strong> &mdash; memory-mapped I/O with sparse line indexing. Opens 1GB files at 95MB RSS. VS Code cannot do this.</li>
+                <li><strong>Multi-cursor, split-screen, Git gutter, remote editing, plugin system, macros, 9 themes</strong> &mdash; everything you expect from a modern editor, without the bloat.</li>
             </ul>
 
             <div class="info-box note" style="margin-top: 20px;">
-                <strong>Used in:</strong><br>
-                Legal contracts &rarr; enforce required clauses &nbsp;&bull;&nbsp;
-                AI prompts &rarr; enforce structure and constraints &nbsp;&bull;&nbsp;
-                Compliance docs &rarr; enforce audit readiness &nbsp;&bull;&nbsp;
-                Islamic scholarship &rarr; enforce citation integrity
+                <strong>Positioning:</strong> If VS Code is too heavy, Sublime is too proprietary, Kate is too KDE-coupled, and Notepad++ doesn't run on Linux &mdash; PrimeEdit is what you want.
             </div>
-
-            <p style="color: var(--text-muted); margin-top: 16px;">Built on a native C++ engine with 1GB+ file handling, 81 syntax languages, LSP integration, and 9 themes.</p>
         </section>
 
         <div class="divider"></div>
@@ -748,72 +753,54 @@
 
             <div class="feature-grid">
                 <div class="feature-card">
-                    <div class="card-icon">&#129302;</div>
-                    <h3>AI Prompt Engineers</h3>
-                    <p>Enforce prompt structure and constraints across your entire library. Block execution transforms any selection against an LLM endpoint inline. See the diff. Accept or reject.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="card-icon">&#128209;</div>
-                    <h3>Compliance &amp; Technical Writers</h3>
-                    <p>Required sections, forbidden phrases, audit readiness &mdash; enforced in real-time as you type. No more checklists. No more review loops.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="card-icon">&#9878;</div>
-                    <h3>Legal Professionals</h3>
-                    <p>Validate contract structure &mdash; required clauses, jurisdiction checks, standardized language. Schema rules replace manual clause hunting.</p>
+                    <div class="card-icon">&#9881;</div>
+                    <h3>Linux Developers</h3>
+                    <p>A native editor that respects your system resources. No Electron process tree. No 300MB install. Just a fast binary with LSP, syntax highlighting, and everything else you need.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-icon">&#128202;</div>
                     <h3>Large File Engineers</h3>
-                    <p>Open files VS Code cannot. 1GB at 95MB RSS. Memory-mapped, viewport-loaded, background-indexed. No other editor owns this space.</p>
+                    <p>Open files VS Code cannot. 1GB at 95MB RSS. Memory-mapped, viewport-loaded, background-indexed. Scrolls at 60fps. Regex search with progressive results.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128187;</div>
+                    <h3>Server &amp; DevOps Engineers</h3>
+                    <p>SSH remote file editing, integrated terminal, Git gutter and commit dialog, and a ~7MB binary that installs anywhere. Edit config files on remote servers without leaving the editor.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#9998;</div>
+                    <h3>Power Text Editors</h3>
+                    <p>Multi-cursor editing, column selection, macros, regex search with backreferences, split-screen views, and session persistence. All the Notepad++ features you miss, natively on Linux.</p>
                 </div>
             </div>
 
             <div class="info-box tip">
-                <strong>Not for:</strong> If you need a debugger, project management, or AI chat sidebar, use an IDE. PrimeEdit is for the document itself &mdash; validating it, transforming it, and making it correct.
+                <strong>Not for:</strong> If you need a debugger, project management, or integrated build system, use an IDE. PrimeEdit is for editing &mdash; fast, focused, and uncompromised.
             </div>
         </section>
 
         <div class="divider"></div>
 
-        <!-- Why PrimeEdit -->
-        <section id="why">
-            <h2><span class="section-number"></span> Why PrimeEdit</h2>
-            <p class="lead">What you get that other editors cannot give you.</p>
+        <!-- Editor Comparison -->
+        <section id="comparison">
+            <h2><span class="section-number"></span> Editor Comparison</h2>
+            <p class="lead">How PrimeEdit stacks up against the editors developers actually use.</p>
 
             <table>
-                <thead><tr><th>If You Need</th><th>Other Editors</th><th>PrimeEdit</th></tr></thead>
+                <thead><tr><th>Feature</th><th>VS Code</th><th>Sublime Text</th><th>Kate</th><th>PrimeEdit</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td>Open a 500MB log file</td>
-                        <td>VS Code: hangs or refuses. Notepad++: slow, high memory.</td>
-                        <td>Opens in &lt;2 seconds. Memory-mapped. Scrolls at 60fps.</td>
-                    </tr>
-                    <tr>
-                        <td>Validate document structure</td>
-                        <td>No editor does this. Linters exist for code, not documents.</td>
-                        <td>JSON schema rules. Inline violations. Real-time health score.</td>
-                    </tr>
-                    <tr>
-                        <td>Transform a text block with AI</td>
-                        <td>Copy to ChatGPT. Paste back. Lose context.</td>
-                        <td>Select. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd>. See diff. Accept or reject. Never leave the document.</td>
-                    </tr>
-                    <tr>
-                        <td>Verify a hadith citation</td>
-                        <td>No editor has any concept of this.</td>
-                        <td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd>. Grading, source, and authority from a 16,000-chunk RAG system.</td>
-                    </tr>
-                    <tr>
-                        <td>Unsaved files survive restart</td>
-                        <td>Notepad++: yes. VS Code: yes (with workspace).</td>
-                        <td>Yes. Silent. No prompts. No workspace required.</td>
-                    </tr>
-                    <tr>
-                        <td>81 languages, LSP, native speed</td>
-                        <td>Notepad++: no LSP. VS Code: Electron, not native.</td>
-                        <td>C++ native. 6.9MB binary. LSP built-in. 81 syntax definitions.</td>
-                    </tr>
+                    <tr><td>Native (not Electron)</td><td>No</td><td>Yes</td><td>Yes</td><td><strong>Yes</strong></td></tr>
+                    <tr><td>Binary size</td><td>~300MB</td><td>~30MB</td><td>~50MB</td><td><strong>~7MB</strong></td></tr>
+                    <tr><td>Startup time</td><td>~3s</td><td>&lt;1s</td><td>~2s</td><td><strong>&lt;1s</strong></td></tr>
+                    <tr><td>1GB+ files</td><td>No</td><td>Partial</td><td>No</td><td><strong>Yes</strong></td></tr>
+                    <tr><td>Multi-cursor</td><td>Yes</td><td>Yes</td><td>Yes</td><td><strong>Yes</strong></td></tr>
+                    <tr><td>Split-screen</td><td>Yes</td><td>Yes</td><td>Yes</td><td><strong>Yes</strong></td></tr>
+                    <tr><td>LSP</td><td>Yes</td><td>Partial</td><td>Yes</td><td><strong>Yes</strong></td></tr>
+                    <tr><td>Git gutter</td><td>Extension</td><td>Extension</td><td>Plugin</td><td><strong>Built-in</strong></td></tr>
+                    <tr><td>Plugin system</td><td>Yes</td><td>Yes</td><td>Yes</td><td><strong>Yes</strong></td></tr>
+                    <tr><td>Remote editing</td><td>Yes</td><td>No</td><td>No</td><td><strong>Yes</strong></td></tr>
+                    <tr><td>Syntax languages</td><td>100+</td><td>50+</td><td>300+</td><td><strong>96</strong></td></tr>
+                    <tr><td>License</td><td>Proprietary</td><td>Proprietary</td><td>Open Source</td><td><strong>Open Source</strong></td></tr>
                 </tbody>
             </table>
         </section>
@@ -829,7 +816,7 @@
                 <div class="arch-layer">
                     <div class="arch-box highlight">
                         <div class="box-title">UI Layer</div>
-                        <div class="box-items">MainWindow &middot; Editor &middot; TabWidget &middot; StatusBar<br>SearchDialog &middot; DocumentMap &middot; FunctionList<br>CompletionPopup &middot; ValidationPanel &middot; EvalResult</div>
+                        <div class="box-items">MainWindow &middot; Editor &middot; TabWidget &middot; StatusBar<br>SearchDialog &middot; DocumentMap &middot; FunctionList<br>CompletionPopup &middot; GitCommitDialog &middot; PluginDialog</div>
                     </div>
                 </div>
                 <div class="arch-connector">&darr;</div>
@@ -843,22 +830,22 @@
                 <div class="arch-layer">
                     <div class="arch-box">
                         <div class="box-title">Core</div>
-                        <div class="box-items">Document &middot; PieceTable &middot; DocumentManager<br>Session &middot; Encoding &middot; CharsetDetector</div>
+                        <div class="box-items">Document &middot; PieceTable &middot; DocumentManager<br>Session &middot; Encoding &middot; CharsetDetector<br>GitGutter &middot; PluginManager &middot; RemoteConnection</div>
                     </div>
                     <div class="arch-box">
                         <div class="box-title">Intelligence</div>
-                        <div class="box-items">LSPClient &middot; LSPManager<br>SearchEngine &middot; LLMEvaluator<br>SchemaValidator &middot; IslamicBridge</div>
+                        <div class="box-items">LSPClient &middot; LSPManager<br>SearchEngine &middot; LLMEvaluator</div>
                     </div>
                     <div class="arch-box">
                         <div class="box-title">Syntax</div>
-                        <div class="box-items">SyntaxHighlighter<br>LanguageManager<br>81 JSON Definitions</div>
+                        <div class="box-items">SyntaxHighlighter<br>LanguageManager<br>96 JSON Definitions</div>
                     </div>
                 </div>
                 <div class="arch-connector">&darr;</div>
                 <div class="arch-layer">
                     <div class="arch-box">
                         <div class="box-title">Platform</div>
-                        <div class="box-items">Qt Widgets &middot; QProcess (LSP) &middot; QNetworkAccessManager (LLM/RAG) &middot; QFileSystemWatcher &middot; mmap (Large Files)</div>
+                        <div class="box-items">Qt Widgets &middot; QProcess (LSP/Git/SSH) &middot; QNetworkAccessManager (LLM) &middot; QFileSystemWatcher &middot; mmap (Large Files)</div>
                     </div>
                 </div>
             </div>
@@ -872,8 +859,10 @@
                     <tr><td>Text Buffer</td><td>PieceTable</td><td>Efficient insertions/deletions with undo</td></tr>
                     <tr><td>Large Files</td><td>mmap + Line Index</td><td>Memory-mapped I/O with viewport loading</td></tr>
                     <tr><td>LSP Transport</td><td>JSON-RPC over stdio</td><td>Language server protocol communication</td></tr>
-                    <tr><td>LLM Integration</td><td>HTTP/JSON (Ollama/OpenAI)</td><td>Block evaluation endpoint</td></tr>
-                    <tr><td>RAG Bridge</td><td>FastAPI client</td><td>Islamic knowledge ChromaDB queries</td></tr>
+                    <tr><td>LLM Integration</td><td>HTTP/JSON (Ollama/OpenAI)</td><td>AI-assisted text evaluation endpoint</td></tr>
+                    <tr><td>Git</td><td>QProcess</td><td>Git diff, commit, branch operations</td></tr>
+                    <tr><td>Remote</td><td>SSH/SCP</td><td>Remote file browsing and editing</td></tr>
+                    <tr><td>Plugins</td><td>QPluginLoader</td><td>Dynamic shared library extensions</td></tr>
                 </tbody>
             </table>
         </section>
@@ -934,11 +923,6 @@ make -j$(nproc)
                     <p>UPPERCASE, lowercase, Title Case, Sentence Case, iNVERT cASE, rAnDoM CaSe. Apply to selection or current word.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="card-icon">{}</div>
-                    <h3>Bracket Matching</h3>
-                    <p>Highlight matching <code>()[]&#123;&#125;</code> pairs. Green for matched, red for unmatched. <kbd>Ctrl</kbd>+<kbd>B</kbd> jumps to matching bracket.</p>
-                </div>
-                <div class="feature-card">
                     <div class="card-icon">&middot;</div>
                     <h3>Whitespace Visualization</h3>
                     <p>Toggle spaces (centered dots), tabs (arrows), and EOL symbols (pilcrow). Each independently toggleable via View menu.</p>
@@ -948,31 +932,127 @@ make -j$(nproc)
                     <h3>Indent Guides</h3>
                     <p>Vertical dotted lines at each tab-stop level. Theme-aware colors. Helps visualize block structure in deeply nested code.</p>
                 </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#9999;</div>
+                    <h3>Comment Toggle</h3>
+                    <p><kbd>Ctrl</kbd>+<kbd>/</kbd> toggles line comments. Supports all 96 language comment styles including HTML/XML block comments (<code>&lt;!-- --&gt;</code>).</p>
+                </div>
             </div>
         </section>
 
         <div class="divider"></div>
 
-        <!-- Gutter -->
-        <section id="gutter">
-            <h2><span class="section-number">04</span> Three-Column Gutter</h2>
-            <p>The editor gutter has three distinct columns:</p>
+        <!-- Multi-Cursor Editing -->
+        <section id="multicursor">
+            <h2><span class="section-number">04</span> Multi-Cursor Editing</h2>
+            <p class="lead">Edit multiple locations simultaneously with full multi-cursor support.</p>
 
-            <table>
-                <thead><tr><th>Column</th><th>Width</th><th>Function</th></tr></thead>
-                <tbody>
-                    <tr><td>Bookmark Margin</td><td>16px</td><td>Click to toggle bookmarks (blue circle). <kbd>F2</kbd>/<kbd>Shift</kbd>+<kbd>F2</kbd> navigates between bookmarks.</td></tr>
-                    <tr><td>Line Numbers</td><td>Variable</td><td>Current line highlighted. Correct absolute numbers for large-file viewport loading.</td></tr>
-                    <tr><td>Fold Margin</td><td>16px</td><td>Click <code>[-]</code>/<code>[+]</code> indicators to fold/unfold code blocks.</td></tr>
-                </tbody>
-            </table>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="card-icon">&#8853;</div>
+                    <h3>Add Cursors</h3>
+                    <p><kbd>Alt</kbd>+Click to place additional cursors anywhere in the document. Each cursor operates independently with its own selection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128270;</div>
+                    <h3>Select Next Occurrence</h3>
+                    <p><kbd>Ctrl</kbd>+<kbd>D</kbd> selects the next occurrence of the current word. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> selects all occurrences at once.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#9997;</div>
+                    <h3>Simultaneous Editing</h3>
+                    <p>Typing, deletion, and bracket insertion happen at all cursor positions simultaneously. All standard editing operations work across all cursors.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#8630;</div>
+                    <h3>Atomic Undo</h3>
+                    <p>Undo and redo operations are atomic across all cursors. A single <kbd>Ctrl</kbd>+<kbd>Z</kbd> reverts all changes made by all cursors in that edit.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Split-Screen Editing -->
+        <section id="splitscreen">
+            <h2><span class="section-number">05</span> Split-Screen Editing</h2>
+            <p class="lead">View and edit multiple files side by side, or two views of the same file.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="card-icon">&#9776;</div>
+                    <h3>Vertical &amp; Horizontal Split</h3>
+                    <p><kbd>Ctrl</kbd>+<kbd>\</kbd> creates a vertical split. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> creates a horizontal split. Each pane operates independently.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128196;</div>
+                    <h3>Clone Document</h3>
+                    <p>Clone a document to the other view &mdash; both panes share the same underlying QTextDocument. Edits in one pane appear instantly in the other.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#8646;</div>
+                    <h3>Move Tabs Between Views</h3>
+                    <p>Drag tabs between split panes or use the context menu to move a tab to the other view. <kbd>F6</kbd> switches focus between panes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128205;</div>
+                    <h3>Independent Positions</h3>
+                    <p>Each split pane maintains its own cursor position, scroll offset, and selection. Navigate different sections of the same file simultaneously.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Bracket Features -->
+        <section id="brackets">
+            <h2><span class="section-number">06</span> Bracket Features</h2>
+            <p class="lead">Smart bracket handling with auto-close, rainbow coloring, and pair navigation.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="card-icon">{}</div>
+                    <h3>Auto-Close Brackets</h3>
+                    <p>Typing <code>(</code>, <code>[</code>, <code>{</code>, <code>"</code>, <code>'</code>, or <code>`</code> automatically inserts the closing pair. Cursor is placed between them for immediate typing.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#10140;</div>
+                    <h3>Skip-Over &amp; Pair Delete</h3>
+                    <p>Typing a closing bracket when the cursor is before one skips over it instead of inserting a duplicate. Backspace on an empty pair deletes both characters.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#127752;</div>
+                    <h3>Rainbow Bracket Coloring</h3>
+                    <p>Brackets are colored by nesting depth with 6 cycling colors. Matching pairs share the same color, making deeply nested code easy to read at a glance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#8596;</div>
+                    <h3>Jump to Matching Bracket</h3>
+                    <p><kbd>Ctrl</kbd>+<kbd>B</kbd> jumps between matching bracket pairs. Matching brackets highlight green; unmatched brackets highlight red.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Column Selection -->
+        <section id="column">
+            <h2><span class="section-number">07</span> Column / Block Selection</h2>
+            <p><kbd>Alt</kbd>+<strong>drag</strong> creates a rectangular column selection with semi-transparent blue overlay. Typing inserts at each line simultaneously.</p>
+
+            <h3>Column Editor Dialog</h3>
+            <p>Accessible via <strong>Edit &gt; Column Editor</strong> (<kbd>Alt</kbd>+<kbd>C</kbd>):</p>
+            <ul>
+                <li><strong>Text mode:</strong> Insert text at column position across all selected lines</li>
+                <li><strong>Number mode:</strong> Insert sequential numbers with configurable start, step, and leading zeros</li>
+            </ul>
         </section>
 
         <div class="divider"></div>
 
         <!-- Code Folding -->
         <section id="folding">
-            <h2><span class="section-number">05</span> Code Folding</h2>
+            <h2><span class="section-number">08</span> Code Folding</h2>
             <p>Block-caching fold implementation (reliable on Qt5 and Qt6):</p>
             <ul>
                 <li><strong>Brace-based folding</strong> for C-like languages (C, C++, Java, JavaScript, Rust, Go, etc.)</li>
@@ -986,24 +1066,9 @@ make -j$(nproc)
 
         <div class="divider"></div>
 
-        <!-- Column Selection -->
-        <section id="column">
-            <h2><span class="section-number">06</span> Column / Block Selection</h2>
-            <p><kbd>Alt</kbd>+<strong>drag</strong> creates a rectangular column selection with semi-transparent blue overlay. Typing inserts at each line simultaneously.</p>
-
-            <h3>Column Editor Dialog</h3>
-            <p>Accessible via <strong>Edit &gt; Column Editor</strong> (<kbd>Alt</kbd>+<kbd>C</kbd>):</p>
-            <ul>
-                <li><strong>Text mode:</strong> Insert text at column position across all selected lines</li>
-                <li><strong>Number mode:</strong> Insert sequential numbers with configurable start, step, and leading zeros</li>
-            </ul>
-        </section>
-
-        <div class="divider"></div>
-
         <!-- Large File Handling -->
         <section id="largefile">
-            <h2><span class="section-number">07</span> Large File Handling</h2>
+            <h2><span class="section-number">09</span> Large File Handling</h2>
             <p class="lead">PrimeEdit handles files that other editors cannot open. Files over 1GB are first-class citizens.</p>
 
             <table>
@@ -1037,7 +1102,7 @@ make -j$(nproc)
 
         <!-- Search System -->
         <section id="search">
-            <h2><span class="section-number">08</span> Search System</h2>
+            <h2><span class="section-number">10</span> Search System</h2>
             <p class="lead">Notepad++-class search with four-tab dialog, three search modes, and a dockable results panel.</p>
 
             <h3>Tabbed Search Dialog</h3>
@@ -1069,7 +1134,7 @@ make -j$(nproc)
 
         <!-- Find in Files -->
         <section id="findinfiles">
-            <h2><span class="section-number">09</span> Find in Files</h2>
+            <h2><span class="section-number">11</span> Find in Files</h2>
             <p>Search across files on disk with directory picker, semicolon-separated glob filters (e.g., <code>*.cpp;*.h</code>), recursive subdirectory option, and hidden folder inclusion.</p>
             <p>Results appear in the <strong>Search Results Panel</strong> (bottom dock), grouped by file. Double-click any result to open the file and navigate to the match.</p>
             <p>For large files, PrimeEdit uses <strong>threaded chunk-based search</strong> with progressive result streaming and progress reporting.</p>
@@ -1079,15 +1144,32 @@ make -j$(nproc)
 
         <!-- Marks -->
         <section id="marks">
-            <h2><span class="section-number">10</span> Mark &amp; Highlight</h2>
+            <h2><span class="section-number">12</span> Mark &amp; Highlight</h2>
             <p>The Mark tab in the search dialog highlights all matches with a persistent yellow background. Optionally bookmarks all marked lines. <strong>Clear All Marks</strong> removes highlights.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Gutter -->
+        <section id="gutter">
+            <h2><span class="section-number">13</span> Three-Column Gutter</h2>
+            <p>The editor gutter has three distinct columns:</p>
+
+            <table>
+                <thead><tr><th>Column</th><th>Width</th><th>Function</th></tr></thead>
+                <tbody>
+                    <tr><td>Bookmark Margin</td><td>16px</td><td>Click to toggle bookmarks (blue circle). <kbd>F2</kbd>/<kbd>Shift</kbd>+<kbd>F2</kbd> navigates between bookmarks.</td></tr>
+                    <tr><td>Line Numbers</td><td>Variable</td><td>Current line highlighted. Correct absolute numbers for large-file viewport loading.</td></tr>
+                    <tr><td>Fold Margin</td><td>16px</td><td>Click <code>[-]</code>/<code>[+]</code> indicators to fold/unfold code blocks.</td></tr>
+                </tbody>
+            </table>
         </section>
 
         <div class="divider"></div>
 
         <!-- Syntax Highlighting -->
         <section id="syntax">
-            <h2><span class="section-number">11</span> Syntax Highlighting</h2>
+            <h2><span class="section-number">14</span> Syntax Highlighting</h2>
             <p class="lead">Data-driven syntax highlighting powered by JSON definition files. No hardcoded language rules.</p>
 
             <h3>How It Works</h3>
@@ -1118,15 +1200,17 @@ make -j$(nproc)
 
         <div class="divider"></div>
 
-        <!-- 81 Languages -->
+        <!-- 96 Languages -->
         <section id="languages">
-            <h2><span class="section-number">12</span> 81 Supported Languages</h2>
+            <h2><span class="section-number">15</span> 96 Supported Languages</h2>
 
             <div class="lang-grid">
                 <div class="lang-tag">Ada</div>
                 <div class="lang-tag">Apache</div>
                 <div class="lang-tag">Assembly</div>
+                <div class="lang-tag">AWK</div>
                 <div class="lang-tag">Bash</div>
+                <div class="lang-tag">Batch</div>
                 <div class="lang-tag">C</div>
                 <div class="lang-tag">C#</div>
                 <div class="lang-tag">C++</div>
@@ -1140,7 +1224,10 @@ make -j$(nproc)
                 <div class="lang-tag">CUDA</div>
                 <div class="lang-tag">D</div>
                 <div class="lang-tag">Dart</div>
+                <div class="lang-tag">Diff</div>
                 <div class="lang-tag">Dockerfile</div>
+                <div class="lang-tag">Dotenv</div>
+                <div class="lang-tag">EditorConfig</div>
                 <div class="lang-tag">Elixir</div>
                 <div class="lang-tag">Erlang</div>
                 <div class="lang-tag">F#</div>
@@ -1158,6 +1245,7 @@ make -j$(nproc)
                 <div class="lang-tag">Java</div>
                 <div class="lang-tag">JavaScript</div>
                 <div class="lang-tag">JSON</div>
+                <div class="lang-tag">Jsonnet</div>
                 <div class="lang-tag">Julia</div>
                 <div class="lang-tag">Kotlin</div>
                 <div class="lang-tag">LaTeX</div>
@@ -1167,15 +1255,18 @@ make -j$(nproc)
                 <div class="lang-tag">Makefile</div>
                 <div class="lang-tag">Markdown</div>
                 <div class="lang-tag">MATLAB</div>
+                <div class="lang-tag">Meson</div>
                 <div class="lang-tag">MySQL</div>
                 <div class="lang-tag">Nginx</div>
                 <div class="lang-tag">Nim</div>
+                <div class="lang-tag">Nix</div>
                 <div class="lang-tag">Objective-C</div>
                 <div class="lang-tag">Objective-C++</div>
                 <div class="lang-tag">OCaml</div>
                 <div class="lang-tag">Pascal</div>
                 <div class="lang-tag">Perl</div>
                 <div class="lang-tag">PHP</div>
+                <div class="lang-tag">Pkl</div>
                 <div class="lang-tag">PostgreSQL</div>
                 <div class="lang-tag">PowerShell</div>
                 <div class="lang-tag">Prolog</div>
@@ -1185,12 +1276,16 @@ make -j$(nproc)
                 <div class="lang-tag">reStructuredText</div>
                 <div class="lang-tag">Ruby</div>
                 <div class="lang-tag">Rust</div>
+                <div class="lang-tag">Sass</div>
                 <div class="lang-tag">Scala</div>
                 <div class="lang-tag">Scheme</div>
                 <div class="lang-tag">SCSS</div>
                 <div class="lang-tag">Solidity</div>
                 <div class="lang-tag">SQL</div>
+                <div class="lang-tag">Starlark</div>
+                <div class="lang-tag">Svelte</div>
                 <div class="lang-tag">Swift</div>
+                <div class="lang-tag">Systemd</div>
                 <div class="lang-tag">Tcl</div>
                 <div class="lang-tag">Terraform</div>
                 <div class="lang-tag">TOML</div>
@@ -1200,7 +1295,9 @@ make -j$(nproc)
                 <div class="lang-tag">VHDL</div>
                 <div class="lang-tag">Vim</div>
                 <div class="lang-tag">Visual Basic</div>
+                <div class="lang-tag">Vue</div>
                 <div class="lang-tag">WASM</div>
+                <div class="lang-tag">WGSL</div>
                 <div class="lang-tag">XML</div>
                 <div class="lang-tag">YAML</div>
                 <div class="lang-tag">Zig</div>
@@ -1211,7 +1308,7 @@ make -j$(nproc)
 
         <!-- LSP Integration -->
         <section id="lsp">
-            <h2><span class="section-number">13</span> LSP Integration</h2>
+            <h2><span class="section-number">16</span> LSP Integration</h2>
             <p class="lead">Full Language Server Protocol client with JSON-RPC transport over stdio.</p>
 
             <div class="feature-grid">
@@ -1262,125 +1359,46 @@ make -j$(nproc)
 
         <div class="divider"></div>
 
-        <!-- Auto-Completion -->
+        <!-- Auto-Completion & Snippets -->
         <section id="completion">
-            <h2><span class="section-number">14</span> Auto-Completion</h2>
-            <p>Two completion sources, with LSP taking priority when available:</p>
-            <ul>
-                <li><strong>LSP completions</strong> &mdash; when a language server is active, completions come from the server</li>
-                <li><strong>Keyword + document words</strong> &mdash; fallback: language keywords from JSON definitions + unique words (4+ chars) from open documents</li>
-            </ul>
+            <h2><span class="section-number">17</span> Auto-Completion &amp; Snippets</h2>
+            <p class="lead">Intelligent completion with fuzzy matching, file path awareness, and snippet expansion.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="card-icon">&#9731;</div>
+                    <h3>Fuzzy Matching</h3>
+                    <p>Completions are scored using word boundary matching. Typing "gf" matches <code>getFile</code> and <code>globalFilter</code>. Results ranked by relevance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128193;</div>
+                    <h3>File Path Completion</h3>
+                    <p>Inside quotes, typing <code>/</code>, <code>./</code>, <code>../</code>, or <code>~/</code> triggers file path completion. Browses the actual filesystem with directory traversal.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#9889;</div>
+                    <h3>Snippet Expansion</h3>
+                    <p>Type a trigger word and press <kbd>Tab</kbd> to expand. Built-in snippets for C++, Python, JavaScript/TypeScript, Rust, Go, and Java. Common patterns like <code>for</code>, <code>if</code>, <code>fn</code>, <code>class</code>.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128279;</div>
+                    <h3>LSP Override</h3>
+                    <p>When an LSP server is active, its completions take priority over the word-list fallback. Two completion sources, seamlessly merged.</p>
+                </div>
+            </div>
+
             <p><strong>Triggers:</strong> <kbd>Ctrl</kbd>+<kbd>Space</kbd> (manual) or automatically after typing 3+ consecutive word characters.</p>
         </section>
 
         <div class="divider"></div>
 
-        <!-- Encoding -->
-        <section id="encoding">
-            <h2><span class="section-number">15</span> Encoding &amp; Detection</h2>
-
-            <h3>Heuristic Charset Detection</h3>
-            <p>PrimeEdit detects file encoding automatically using a multi-stage approach:</p>
-            <ol>
-                <li><strong>BOM detection</strong> &mdash; UTF-8-BOM, UTF-16 LE/BE, UTF-32 LE</li>
-                <li><strong>UTF-8 validation</strong> &mdash; if all bytes decode cleanly, assume UTF-8</li>
-                <li><strong>Byte-frequency heuristics</strong> &mdash; Windows-1252 (0x80-0x9F range), ISO-8859-1, Shift-JIS (lead byte patterns), GB2312, Big5</li>
-            </ol>
-
-            <h3>Supported Encodings</h3>
-            <p>Always available: UTF-8, UTF-8-BOM, UTF-16 LE/BE, UTF-32 LE/BE, Latin-1. With ICU: Windows-1252, ISO-8859-2 through 15, KOI8-R/U, Shift-JIS, EUC-JP, GB2312/GBK/GB18030, Big5.</p>
-
-            <h3>Status Bar Integration</h3>
-            <p>Encoding and line ending indicators in the status bar are <strong>clickable</strong> &mdash; click to convert between encodings or line endings.</p>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- Persistent Documents -->
-        <section id="persistence">
-            <h2><span class="section-number">16</span> Persistent Unsaved Documents</h2>
-            <div class="info-box note">
-                <strong>Signature feature:</strong> This is the Notepad++ behavior users love most. Untitled and modified documents survive application close without prompting.
-            </div>
-            <ul>
-                <li><strong>Untitled tabs with content</strong> are silently serialized to <code>~/.local/share/PrimeEdit/sessions/unsaved/</code></li>
-                <li><strong>Named files with unsaved changes</strong> have their modified content cached alongside the file path</li>
-                <li><strong>No save prompt on quit</strong> &mdash; everything is persisted. The prompt only appears for explicit tab close (<kbd>Ctrl</kbd>+<kbd>W</kbd>)</li>
-                <li><strong>Recovery dialog</strong> on startup if crash-recovery files are detected</li>
-                <li><strong>Auto-recovery timer</strong> saves recovery data every 5 seconds</li>
-            </ul>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- File Monitoring -->
-        <section id="monitoring">
-            <h2><span class="section-number">17</span> File Change Monitoring</h2>
-            <p>PrimeEdit watches all open files via <code>QFileSystemWatcher</code>. When a file is modified externally, a yellow notification bar appears:</p>
-            <div class="info-box warning">
-                The file "main.cpp" has been modified by another program. Do you want to reload it? &nbsp; <strong>[Yes]</strong> &nbsp; <strong>[No]</strong>
-            </div>
-            <p><strong>Reload from Disk</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) also available manually via File menu.</p>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- Schema Validation -->
-        <section id="schema">
-            <h2><span class="section-number">18</span> Schema Validation <span class="badge badge-new">Core</span></h2>
-            <p class="lead">The validation layer that makes PrimeEdit a platform, not an editor. Linting exists for code. Nothing equivalent exists for documents that have rules &mdash; until now.</p>
-
-            <h3>How It Works</h3>
-            <ol>
-                <li>Place a <code>.olive-schema.json</code> file in your project root</li>
-                <li>PrimeEdit detects it automatically when opening files in that directory (searches up to 5 parent levels)</li>
-                <li>Rules are validated against the document content in real-time</li>
-                <li>Violations appear as inline underlines and in the Validation Panel</li>
-            </ol>
-
-            <h3>Schema Format</h3>
-            <pre><code>{
-  "type": "hadith",
-  "rules": [
-    "must_include_grading",
-    "must_include_source",
-    "no_weak_hadith",
-    {
-      "name": "custom_rule",
-      "pattern": "\\bTODO\\b",
-      "mustExist": false,
-      "message": "TODO items should be resolved",
-      "severity": "warning",
-      "scope": "line"
-    }
-  ]
-}</code></pre>
-
-            <h3>Built-in Rules</h3>
-            <table>
-                <thead><tr><th>Rule</th><th>Scope</th><th>Severity</th><th>Description</th></tr></thead>
-                <tbody>
-                    <tr><td><code>must_include_grading</code></td><td>Block</td><td>Error</td><td>Hadith citation must include grading (sahih/hasan/da'if)</td></tr>
-                    <tr><td><code>must_include_source</code></td><td>Block</td><td>Warning</td><td>Citation must reference source collection (Bukhari, Muslim, etc.)</td></tr>
-                    <tr><td><code>no_weak_hadith</code></td><td>Line</td><td>Warning</td><td>Flags weak/fabricated hadith references</td></tr>
-                    <tr><td><code>must_include_arabic</code></td><td>Block</td><td>Info</td><td>Block should contain Arabic text</td></tr>
-                    <tr><td><code>quran_citation_format</code></td><td>Document</td><td>Warning</td><td>Quranic citations should follow Surah:Ayah format</td></tr>
-                </tbody>
-            </table>
-
-            <h3>Validation Panel</h3>
-            <p>Bottom dock showing all violations grouped by severity. Click any violation to navigate to its location. Status bar shows health indicator: <span style="color: var(--success); font-weight: 700;">All clear</span> or <span style="color: #c62828; font-weight: 700;">3 errors, 2 warnings</span>.</p>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- Block Evaluation -->
-        <section id="blockeval">
-            <h2><span class="section-number">19</span> Block Execution <span class="badge badge-new">Core</span></h2>
-            <p class="lead">The execution layer. Any block of text becomes a transformation pipeline. Select, execute against any endpoint, see the diff, accept or reject. The document is the interface. The result lives in the document.</p>
+        <!-- AI-Assisted Editing -->
+        <section id="ai">
+            <h2><span class="section-number">18</span> AI-Assisted Editing</h2>
+            <p class="lead">Inline LLM text transformation. Select text, execute against any endpoint, see the diff, accept or reject. The document is the interface.</p>
 
             <div class="info-box tip">
-                <strong>This is not Copilot.</strong> Other editors add AI as an assistant layer &mdash; a sidebar, a chat window, a suggestion ghost. PrimeEdit adds AI as an <em>execution primitive</em>. You select text. You press a key. The text is transformed. You see exactly what changed. You decide. That's it.
+                <strong>This is not Copilot.</strong> No sidebar. No chat window. No suggestion ghost. You select text. You press a key. The text is transformed. You see exactly what changed. You decide. That's it.
             </div>
 
             <h3>Workflow</h3>
@@ -1408,278 +1426,160 @@ make -j$(nproc)
 
         <div class="divider"></div>
 
-        <!-- Islamic Knowledge -->
-        <section id="islamic">
-            <h2><span class="section-number">20</span> Domain Integration: Islamic Scholarship <span class="badge badge-core">Reference</span></h2>
-            <p class="lead">This is not a feature. This is the product. Schema validation + block execution + RAG-powered verification + domain-aware rendering &mdash; all three platform layers working as one, applied to a real domain with real stakes. This is the proof that the system works. Legal compliance, medical protocols, AI prompt systems &mdash; your domain is next.</p>
+        <!-- Git Integration -->
+        <section id="git">
+            <h2><span class="section-number">19</span> Git Integration</h2>
+            <p class="lead">Built-in Git support with gutter indicators, commit dialog, and branch management &mdash; no extensions required.</p>
 
             <div class="feature-grid">
                 <div class="feature-card">
-                    <div class="card-icon">&#128218;</div>
-                    <h3>Hadith Inline Lookup</h3>
-                    <p><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> on a hadith reference validates against the 16,000-chunk RAG system via ChromaDB/FastAPI. Returns grading, source, and authority.</p>
+                    <div class="card-icon">&#9679;</div>
+                    <h3>Gutter Indicators</h3>
+                    <p>The editor gutter shows real-time diff status: <strong style="color: #16A34A;">green</strong> for added lines, <strong style="color: #EAB308;">yellow</strong> for modified lines, <strong style="color: #DC2626;">red</strong> for deleted lines. Updates on every save.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="card-icon">&#128214;</div>
-                    <h3>Quranic Verse Validation</h3>
-                    <p>Surah/ayah citations checked against the Uthmanic rasm corpus. Returns Arabic text and translation for verification.</p>
+                    <div class="card-icon">&#128230;</div>
+                    <h3>Commit Dialog</h3>
+                    <p>Integrated commit dialog with file staging checkboxes. Select which files to include, write a commit message, and commit &mdash; all without leaving the editor.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="card-icon">&#1575;</div>
-                    <h3>Arabic RTL Rendering</h3>
-                    <p>Per-block text direction detection. Blocks containing Arabic characters (U+0600-U+06FF) automatically render right-to-left. Font fallback: Noto Sans Arabic, Amiri.</p>
+                    <div class="card-icon">&#128268;</div>
+                    <h3>Branch Switching</h3>
+                    <p>Switch branches via the Git menu. Current branch name is displayed in the status bar at all times.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="card-icon">&#128209;</div>
-                    <h3>Domain Schema Auto-Detection</h3>
-                    <p>Detects Islamic scholarly document types by file extension, directory structure, or config files. Activates the appropriate schema and knowledge bridge automatically — no manual configuration required.</p>
+                    <div class="card-icon">&#128196;</div>
+                    <h3>Status Bar Integration</h3>
+                    <p>Current branch displayed in the status bar. Clickable for quick branch operations. Shows dirty/clean state at a glance.</p>
                 </div>
             </div>
+        </section>
 
-            <h3>ChromaDB Bridge</h3>
-            <p>Connects to a local FastAPI instance (default: <code>http://localhost:8000</code>) providing:</p>
+        <div class="divider"></div>
+
+        <!-- Remote File Editing -->
+        <section id="remote">
+            <h2><span class="section-number">20</span> Remote File Editing</h2>
+            <p class="lead">Edit files on remote servers over SSH/SCP &mdash; no additional dependencies required.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="card-icon">&#127760;</div>
+                    <h3>SSH/SCP Based</h3>
+                    <p>Uses the system SSH client &mdash; no libssh2 dependency. Works with your existing SSH config, keys, and agent forwarding.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128190;</div>
+                    <h3>Connection Manager</h3>
+                    <p>Save connection profiles with hostname, port, username, and key path. Quick-connect to frequently used servers.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128193;</div>
+                    <h3>Remote Directory Browser</h3>
+                    <p>Browse remote directory trees in the file explorer panel. Navigate, open, and edit remote files as if they were local.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128274;</div>
+                    <h3>Security</h3>
+                    <p>Strict host key verification. Auto-upload on save pushes changes back to the remote server. All operations go through the system SSH binary.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Plugin System -->
+        <section id="plugins">
+            <h2><span class="section-number">21</span> Plugin System</h2>
+            <p class="lead">Extend PrimeEdit with C++ shared library plugins loaded at runtime via QPluginLoader.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="card-icon">&#128268;</div>
+                    <h3>Full Editor API</h3>
+                    <p>Plugins get access to buffer content, file operations, UI registration, and settings. The <code>EditorAPI</code> interface exposes everything needed to build meaningful extensions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128276;</div>
+                    <h3>Event Hooks</h3>
+                    <p>Register callbacks for <code>onFileOpened</code>, <code>onFileSaved</code>, <code>onTextChanged</code>, and <code>onSelectionChanged</code>. React to editor events in real time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#9881;</div>
+                    <h3>Plugin Management</h3>
+                    <p>Plugin management dialog with enable/disable toggles. Plugins are loaded from <code>~/.config/PrimeEdit/plugins/</code> and <code>/usr/lib/prime-edit/plugins/</code>.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">&#128737;</div>
+                    <h3>Crash Isolation</h3>
+                    <p>All plugin calls are wrapped in try-catch blocks. A misbehaving plugin cannot crash the editor &mdash; it is disabled with an error notification.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Terminal -->
+        <section id="terminal">
+            <h2><span class="section-number">22</span> Integrated Terminal</h2>
+            <p>Toggle with <kbd>Ctrl</kbd>+<kbd>'</kbd>. Full terminal emulator in a bottom dock panel. Runs the user's default shell. Supports standard terminal escape sequences for colors and cursor positioning.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Encoding -->
+        <section id="encoding">
+            <h2><span class="section-number">23</span> Encoding &amp; Detection</h2>
+
+            <h3>Heuristic Charset Detection</h3>
+            <p>PrimeEdit detects file encoding automatically using a multi-stage approach:</p>
+            <ol>
+                <li><strong>BOM detection</strong> &mdash; UTF-8-BOM, UTF-16 LE/BE, UTF-32 LE</li>
+                <li><strong>UTF-8 validation</strong> &mdash; if all bytes decode cleanly, assume UTF-8</li>
+                <li><strong>Byte-frequency heuristics</strong> &mdash; Windows-1252 (0x80-0x9F range), ISO-8859-1, Shift-JIS (lead byte patterns), GB2312, Big5</li>
+            </ol>
+
+            <h3>Supported Encodings</h3>
+            <p>Always available: UTF-8, UTF-8-BOM, UTF-16 LE/BE, UTF-32 LE/BE, Latin-1. With ICU: Windows-1252, ISO-8859-2 through 15, KOI8-R/U, Shift-JIS, EUC-JP, GB2312/GBK/GB18030, Big5.</p>
+
+            <h3>Status Bar Integration</h3>
+            <p>Encoding and line ending indicators in the status bar are <strong>clickable</strong> &mdash; click to convert between encodings or line endings.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Persistent Documents -->
+        <section id="persistence">
+            <h2><span class="section-number">24</span> Persistent Unsaved Documents</h2>
+            <div class="info-box note">
+                <strong>Signature feature:</strong> This is the Notepad++ behavior users love most. Untitled and modified documents survive application close without prompting.
+            </div>
             <ul>
-                <li><code>/api/hadith/validate</code> &mdash; Hadith text validation and grading</li>
-                <li><code>/api/quran/validate</code> &mdash; Quranic citation verification</li>
-                <li><code>/api/scholar/lookup</code> &mdash; Scholar attribution check</li>
-                <li><code>/health</code> &mdash; Connection status</li>
+                <li><strong>Untitled tabs with content</strong> are silently serialized to <code>~/.local/share/PrimeEdit/sessions/unsaved/</code></li>
+                <li><strong>Named files with unsaved changes</strong> have their modified content cached alongside the file path</li>
+                <li><strong>No save prompt on quit</strong> &mdash; everything is persisted. The prompt only appears for explicit tab close (<kbd>Ctrl</kbd>+<kbd>W</kbd>)</li>
+                <li><strong>Recovery dialog</strong> on startup if crash-recovery files are detected</li>
+                <li><strong>Auto-recovery timer</strong> saves recovery data every 5 seconds</li>
             </ul>
         </section>
 
         <div class="divider"></div>
 
-        <!-- Case Study -->
-        <section id="casestudy">
-            <h2><span class="section-number">21</span> Case Study: All Three Layers in Action</h2>
-            <p class="lead">This is what it looks like when a document is enforced instead of written.</p>
-            <p style="color: var(--text-light); margin-bottom: 8px;">PrimeEdit behaves like a compiler for documents. The moment you open a file, rules are applied. Every edit is validated in real time. The output is either correct or it isn't &mdash; just like compiled code.</p>
-            <p style="color: var(--text-muted); margin-bottom: 24px;"><em>Example: An Islamic scholarly manuscript with citation integrity rules. The same workflow applies to legal contracts, compliance documents, AI prompt libraries, or any structured document with rules.</em></p>
-
-            <h3>The Workflow</h3>
-
-            <div class="arch-diagram">
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">1. Open Document</div>
-                        <div class="box-items">Author opens a document<br>PrimeEdit immediately applies rules to it &mdash; like a linter, but for documents<br>Errors and warnings appear before a single word is written<br>The document is now <strong>live</strong> &mdash; every change is validated in real time</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">2. Issues Surface Automatically</div>
-                        <div class="box-items">Red underline: citation missing required grading authority<br>Warning: source collection not referenced<br>Validation panel lists every issue &mdash; click any to jump directly to it<br>Status bar shows a live document health score</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">3. Author Corrects</div>
-                        <div class="box-items">Adds grading authority &mdash; red underline disappears instantly<br><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> on a citation &mdash; knowledge base confirms it is correct<br>System validates in real time &mdash; no review cycle, no waiting</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">4. Content Is Transformed</div>
-                        <div class="box-items">Select any paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>System applies domain rules and suggests improvements via LLM<br>Inline diff shows exactly what changed: green additions, red removals<br>Press <kbd>A</kbd> to accept &mdash; or <kbd>Esc</kbd> to discard. Full undo either way.</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">5. Verified Output</div>
-                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All rules satisfied. All validations pass.<br>The document is <strong>correct</strong> &mdash; not "ready for review". Correct.</div>
-                    </div>
-                </div>
+        <!-- File Monitoring -->
+        <section id="monitoring">
+            <h2><span class="section-number">25</span> File Change Monitoring</h2>
+            <p>PrimeEdit watches all open files via <code>QFileSystemWatcher</code>. When a file is modified externally, a yellow notification bar appears:</p>
+            <div class="info-box warning">
+                The file "main.cpp" has been modified by another program. Do you want to reload it? &nbsp; <strong>[Yes]</strong> &nbsp; <strong>[No]</strong>
             </div>
-
-            <div class="info-box note">
-                <strong>The mental model shift:</strong> You are no longer writing a document and hoping it's correct. You are working inside a system that enforces correctness as you write. <strong>The same pattern works for any rule-bound document</strong> &mdash; legal contracts, compliance docs, AI prompt libraries. The domain changes. The enforcement does not.
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- Case Study: Legal Contracts -->
-        <section id="case-legal">
-            <h2><span class="section-number">22</span> Case Study: Legal Contracts</h2>
-            <p class="lead">Enforcing structural integrity in legal documents &mdash; required clauses, forbidden phrases, standardized language.</p>
-
-            <div class="arch-diagram">
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">1. Open Contract</div>
-                        <div class="box-items">Attorney opens a service agreement<br>PrimeEdit detects <code>.olive-schema.json</code> in project root<br>Legal contract schema activates automatically</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">2. Schema Validates</div>
-                        <div class="box-items"><strong style="color: #dc2626;">Red underline: Missing indemnity clause</strong><br>Warning: No jurisdiction specified<br>Warning: Termination clause missing notice period<br>Validation panel: 2 errors, 1 warning</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">3. Attorney Fixes</div>
-                        <div class="box-items">Adds indemnity clause &mdash; red underline disappears<br>Adds jurisdiction &mdash; warning clears<br>Adds 30-day notice period to termination clause</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">4. Block Execution</div>
-                        <div class="box-items">Selects liability paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>LLM rewrites in standardized legal language<br>Diff shows changes &mdash; accept or reject</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">5. All Clear</div>
-                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All required clauses present. No forbidden phrases. Audit-ready.</div>
-                    </div>
-                </div>
-            </div>
-
-            <h3>Example Schema</h3>
-            <pre><code>{
-  "type": "legal-contract",
-  "rules": [
-    { "name": "indemnity_required", "pattern": "\\b(indemnif|hold harmless)\\b",
-      "mustExist": true, "message": "Missing indemnity clause", "severity": "error", "scope": "document" },
-    { "name": "jurisdiction_required", "pattern": "\\b(jurisdiction|governing law)\\b",
-      "mustExist": true, "message": "No jurisdiction specified", "severity": "error", "scope": "document" },
-    { "name": "no_best_effort", "pattern": "\\bbest effort\\b",
-      "mustExist": false, "message": "Disallowed phrase: 'best effort'", "severity": "warning", "scope": "line" }
-  ]
-}</code></pre>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- Case Study: AI Prompt Systems -->
-        <section id="case-prompts">
-            <h2><span class="section-number">23</span> Case Study: AI Prompt Systems</h2>
-            <p class="lead">Enforcing prompt integrity across a prompt library &mdash; required sections, consistent structure, quality control.</p>
-
-            <div class="arch-diagram">
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">1. Open Prompt File</div>
-                        <div class="box-items">Engineer opens a system prompt from the library<br>PrimeEdit detects prompt schema in project root<br>Prompt integrity rules activate</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">2. Schema Validates</div>
-                        <div class="box-items"><strong style="color: #dc2626;">Error: Missing output format section</strong><br>Warning: No constraints block defined<br>Warning: Prompt exceeds 2000 tokens<br>Validation panel: 1 error, 2 warnings</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">3. Engineer Fixes</div>
-                        <div class="box-items">Adds output format section &mdash; error clears<br>Adds constraints block &mdash; warning clears<br>Trims verbose instructions</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">4. Block Execution</div>
-                        <div class="box-items">Selects instruction paragraph &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>LLM tightens language, removes ambiguity<br>Inline diff: green additions, red removals &mdash; accept</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">5. All Clear</div>
-                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All required sections present. Structure consistent. Ready for deployment.</div>
-                    </div>
-                </div>
-            </div>
-
-            <h3>Example Schema</h3>
-            <pre><code>{
-  "type": "ai-prompt",
-  "rules": [
-    { "name": "output_format_required", "pattern": "(?i)(output format|response format|return format)",
-      "mustExist": true, "message": "Missing output format section", "severity": "error", "scope": "document" },
-    { "name": "constraints_required", "pattern": "(?i)(constraints|rules|boundaries|limitations)",
-      "mustExist": true, "message": "No constraints block defined", "severity": "warning", "scope": "document" },
-    { "name": "no_ambiguity", "pattern": "\\b(maybe|perhaps|might|could possibly)\\b",
-      "mustExist": false, "message": "Ambiguous instruction detected", "severity": "warning", "scope": "line" }
-  ]
-}</code></pre>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- Case Study: Compliance Documents -->
-        <section id="case-compliance">
-            <h2><span class="section-number">24</span> Case Study: Compliance Documents</h2>
-            <p class="lead">Enforcing audit readiness &mdash; required sections, forbidden phrases, standardized formatting for regulatory review.</p>
-
-            <div class="arch-diagram">
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">1. Open Policy Document</div>
-                        <div class="box-items">Compliance officer opens an internal policy<br>PrimeEdit detects compliance schema<br>Audit readiness rules activate</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">2. Schema Validates</div>
-                        <div class="box-items"><strong style="color: #dc2626;">Violation: Disallowed phrase &mdash; 'best effort'</strong><br>Error: Missing data retention section<br>Warning: No review date specified<br>Validation panel: 2 errors, 1 warning</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">3. Officer Fixes</div>
-                        <div class="box-items">Replaces "best effort" with "commercially reasonable" &mdash; violation clears<br>Adds data retention section &mdash; error clears<br>Adds review date &mdash; warning clears</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">4. Block Execution</div>
-                        <div class="box-items">Selects policy language &mdash; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd><br>LLM converts to audit-ready standardized format<br>Diff view &mdash; accept normalized language</div>
-                    </div>
-                </div>
-                <div class="arch-connector">&darr;</div>
-                <div class="arch-layer">
-                    <div class="arch-box highlight">
-                        <div class="box-title">5. All Clear</div>
-                        <div class="box-items">Status bar: <strong style="color: #16A34A;">Schema: All clear</strong><br>All required sections present. No forbidden phrases. Audit-ready.</div>
-                    </div>
-                </div>
-            </div>
-
-            <h3>Example Schema</h3>
-            <pre><code>{
-  "type": "compliance",
-  "rules": [
-    { "name": "data_retention_required", "pattern": "(?i)(data retention|retention period|data lifecycle)",
-      "mustExist": true, "message": "Missing data retention section", "severity": "error", "scope": "document" },
-    { "name": "review_date_required", "pattern": "(?i)(review date|next review|reviewed on)",
-      "mustExist": true, "message": "No review date specified", "severity": "warning", "scope": "document" },
-    { "name": "no_best_effort", "pattern": "\\bbest effort\\b",
-      "mustExist": false, "message": "Disallowed phrase: 'best effort'", "severity": "error", "scope": "line" },
-    { "name": "no_reasonable_efforts", "pattern": "\\breasonable efforts\\b",
-      "mustExist": false, "message": "Vague commitment: 'reasonable efforts'", "severity": "warning", "scope": "line" }
-  ]
-}</code></pre>
+            <p><strong>Reload from Disk</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) also available manually via File menu.</p>
         </section>
 
         <div class="divider"></div>
 
         <!-- Themes -->
         <section id="themes">
-            <h2><span class="section-number">25</span> Themes &amp; Customization</h2>
+            <h2><span class="section-number">26</span> Themes &amp; Customization</h2>
             <p>9 built-in themes with live switching. Syntax colors update instantly.</p>
 
             <table>
@@ -1703,7 +1603,7 @@ make -j$(nproc)
 
         <!-- Panels & Docks -->
         <section id="panels">
-            <h2><span class="section-number">24</span> Panels &amp; Docks</h2>
+            <h2><span class="section-number">27</span> Panels &amp; Docks</h2>
 
             <table>
                 <thead><tr><th>Panel</th><th>Position</th><th>Toggle</th><th>Purpose</th></tr></thead>
@@ -1711,34 +1611,23 @@ make -j$(nproc)
                     <tr><td>Document Map</td><td>Right</td><td>View menu</td><td>Minimap with viewport highlight and click-to-navigate</td></tr>
                     <tr><td>Function List</td><td>Left</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td><td>Regex-based function extraction, double-click to jump</td></tr>
                     <tr><td>Search Results</td><td>Bottom</td><td>Auto (on search)</td><td>Find All results grouped by file</td></tr>
-                    <tr><td>Validation</td><td>Bottom</td><td>Auto (on schema)</td><td>Schema violations with click-to-navigate</td></tr>
                     <tr><td>Terminal</td><td>Bottom</td><td><kbd>Ctrl</kbd>+<kbd>'</kbd></td><td>Integrated terminal emulator</td></tr>
-                    <tr><td>File Explorer</td><td>Left</td><td>View menu</td><td>Directory tree browser</td></tr>
+                    <tr><td>File Explorer</td><td>Left</td><td>View menu</td><td>Directory tree browser (local and remote)</td></tr>
                 </tbody>
             </table>
         </section>
 
         <div class="divider"></div>
 
-        <!-- Macros & Plugins -->
+        <!-- Macros -->
         <section id="macros">
-            <h2><span class="section-number">23</span> Macros &amp; Plugins</h2>
+            <h2><span class="section-number">28</span> Macros</h2>
 
-            <h3>Macro System</h3>
             <ul>
                 <li><strong>Record:</strong> <kbd>F9</kbd> (start), <kbd>Shift</kbd>+<kbd>F9</kbd> (stop)</li>
                 <li><strong>Playback:</strong> <kbd>F10</kbd></li>
                 <li><strong>Run Multiple Times:</strong> Macro menu &gt; dialog with count or "until end of file"</li>
-                <li><strong>Save/Load:</strong> Persist macros to files for reuse</li>
-            </ul>
-
-            <h3>Plugin System</h3>
-            <ul>
-                <li>C++ shared library plugin API (<code>PluginInterface</code>)</li>
-                <li>Event hooks: file opened/saved/closed, text changed, selection changed, cursor moved</li>
-                <li>Custom commands registered by plugins</li>
-                <li>Plugin directories: <code>~/.config/PrimeEdit/plugins/</code> and <code>/usr/lib/prime-edit/plugins/</code></li>
-                <li>Plugins menu with enable/disable toggle</li>
+                <li><strong>Save/Load:</strong> Persist macros to JSON files for reuse across sessions</li>
             </ul>
         </section>
 
@@ -1746,7 +1635,7 @@ make -j$(nproc)
 
         <!-- Keyboard Shortcuts -->
         <section id="shortcuts">
-            <h2><span class="section-number">25</span> Keyboard Shortcuts</h2>
+            <h2><span class="section-number">29</span> Keyboard Shortcuts</h2>
 
             <h4>File</h4>
             <div class="shortcut-grid">
@@ -1769,6 +1658,20 @@ make -j$(nproc)
                 <div class="shortcut-item"><span class="action">Move Line Down</span><kbd>Alt+Down</kbd></div>
                 <div class="shortcut-item"><span class="action">Toggle Comment</span><kbd>Ctrl+/</kbd></div>
                 <div class="shortcut-item"><span class="action">Column Editor</span><kbd>Alt+C</kbd></div>
+            </div>
+
+            <h4>Multi-Cursor</h4>
+            <div class="shortcut-grid">
+                <div class="shortcut-item"><span class="action">Add Cursor</span><kbd>Alt+Click</kbd></div>
+                <div class="shortcut-item"><span class="action">Select Next Occurrence</span><kbd>Ctrl+D</kbd></div>
+                <div class="shortcut-item"><span class="action">Select All Occurrences</span><kbd>Ctrl+Shift+L</kbd></div>
+            </div>
+
+            <h4>Split Screen</h4>
+            <div class="shortcut-grid">
+                <div class="shortcut-item"><span class="action">Vertical Split</span><kbd>Ctrl+\</kbd></div>
+                <div class="shortcut-item"><span class="action">Horizontal Split</span><kbd>Ctrl+Shift+\</kbd></div>
+                <div class="shortcut-item"><span class="action">Switch Focus</span><kbd>F6</kbd></div>
             </div>
 
             <h4>Search</h4>
@@ -1802,10 +1705,9 @@ make -j$(nproc)
                 <div class="shortcut-item"><span class="action">Function List</span><kbd>Ctrl+Shift+L</kbd></div>
             </div>
 
-            <h4>Unique Features</h4>
+            <h4>AI &amp; Tools</h4>
             <div class="shortcut-grid">
                 <div class="shortcut-item"><span class="action">Evaluate Selection</span><kbd>Ctrl+Shift+E</kbd></div>
-                <div class="shortcut-item"><span class="action">Hadith Lookup</span><kbd>Ctrl+Shift+H</kbd></div>
                 <div class="shortcut-item"><span class="action">Accept Evaluation</span><kbd>A</kbd></div>
                 <div class="shortcut-item"><span class="action">Reject Evaluation</span><kbd>Escape</kbd></div>
             </div>
@@ -1815,14 +1717,14 @@ make -j$(nproc)
 
         <!-- Configuration Files -->
         <section id="config">
-            <h2><span class="section-number">26</span> Configuration Files</h2>
+            <h2><span class="section-number">30</span> Configuration Files</h2>
 
             <table>
                 <thead><tr><th>File</th><th>Location</th><th>Purpose</th></tr></thead>
                 <tbody>
                     <tr><td>LSP servers</td><td><code>~/.config/PrimeEdit/lsp-servers.json</code></td><td>Per-language LSP server command and arguments</td></tr>
                     <tr><td>Eval endpoint</td><td><code>~/.config/PrimeEdit/eval-endpoint.json</code></td><td>LLM endpoint URL, model, API key, system prompt</td></tr>
-                    <tr><td>Document schema</td><td><code>.olive-schema.json</code> (project root)</td><td>Validation rules for structured documents</td></tr>
+                    <tr><td>Remote connections</td><td><code>~/.config/PrimeEdit/remote-connections.json</code></td><td>Saved SSH connection profiles</td></tr>
                     <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/sessions/</code></td><td>Open tabs, cursor positions, fold state, bookmarks</td></tr>
                     <tr><td>Unsaved cache</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved/</code></td><td>Persistent unsaved document content</td></tr>
                     <tr><td>Recovery data</td><td><code>~/.local/share/PrimeEdit/recovery/</code></td><td>Auto-save crash recovery files (5s interval)</td></tr>
@@ -1836,7 +1738,7 @@ make -j$(nproc)
 
         <!-- CLI -->
         <section id="cli">
-            <h2><span class="section-number">27</span> Command Line Interface</h2>
+            <h2><span class="section-number">31</span> Command Line Interface</h2>
 
             <pre><code>PrimeEdit [options] [files...]
 
@@ -1857,7 +1759,7 @@ Examples:
 
         <!-- Performance Benchmarks -->
         <section id="benchmarks">
-            <h2><span class="section-number">28</span> Performance Benchmarks</h2>
+            <h2><span class="section-number">32</span> Performance Benchmarks</h2>
             <p class="lead">Validated against real test files from 1MB to 1GB. Every number below is measured, not estimated.</p>
 
             <h3>Large File Stress Test Results</h3>
@@ -1897,7 +1799,7 @@ Examples:
 
         <!-- Quality Assurance -->
         <section id="qa">
-            <h2><span class="section-number">29</span> Quality Assurance</h2>
+            <h2><span class="section-number">33</span> Quality Assurance</h2>
             <p class="lead">Two full audit passes identified and fixed 60 issues across every component. Zero known critical issues remain.</p>
 
             <h3>Audit Summary</h3>
@@ -1961,7 +1863,7 @@ Examples:
 
         <!-- Validation Test Suite -->
         <section id="validation">
-            <h2><span class="section-number">30</span> Validation Test Suite</h2>
+            <h2><span class="section-number">34</span> Validation Test Suite</h2>
             <p class="lead">148 automated tests across 12 categories. Every claimed capability is verified programmatically.</p>
 
             <div class="info-box tip">
@@ -1976,14 +1878,14 @@ Examples:
                     <tr><td>2. Document Core</td><td>10</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Create, save/load round-trip, encoding, line ending detection, modified flag, UUID recovery, thresholds</td></tr>
                     <tr><td>3. Encoding &amp; Charset</td><td>9</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>BOM detection (UTF-8/16LE/16BE), ASCII, multibyte UTF-8, encode/decode round-trip</td></tr>
                     <tr><td>4. Search Engine</td><td>13</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Normal/Regex/Extended modes, case sensitivity, whole word, wrap around, replace, escape sequences</td></tr>
-                    <tr><td>5. Schema Validation</td><td>6</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Hadith schema, missing grading detection, weak hadith warning, custom rules</td></tr>
+                    <tr><td>5. Schema Validation</td><td>6</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Schema rules, missing field detection, custom pattern rules</td></tr>
                     <tr><td>6. Syntax &amp; Languages</td><td>45</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Extension/shebang/filename/content detection, 24 JSON definitions verified, keyword counts</td></tr>
                     <tr><td>7. Large File Reader</td><td>9</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Open, line count (100K), first/last/middle line access, batch read, encoding, close/reopen</td></tr>
                     <tr><td>8. Settings</td><td>12</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>All defaults, save/load round-trip, reset restores defaults, QFont construction</td></tr>
                     <tr><td>9. Themes</td><td>12</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>All 9 themes exist, JSON round-trip, stylesheet generation, new color fields valid</td></tr>
                     <tr><td>10. Macro Recorder</td><td>7</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Record, stop, text recording, save/load persistence, clear</td></tr>
                     <tr><td>11. File I/O Edge Cases</td><td>5</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Non-existent file, read-only location, empty file, binary file, unicode filenames</td></tr>
-                    <tr><td>12. Resource Integrity</td><td>7</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Icon exists, 4 theme JSONs, 80+ syntax definitions, all parse correctly</td></tr>
+                    <tr><td>12. Resource Integrity</td><td>7</td><td style="color: #16A34A; font-weight: 700;">PASS</td><td>Icon exists, 4 theme JSONs, 96 syntax definitions, all parse correctly</td></tr>
                 </tbody>
             </table>
 
@@ -1999,7 +1901,7 @@ QT_QPA_PLATFORM=offscreen ./test_runner</code></pre>
 
         <!-- Crash Stress Test -->
         <section id="crashtest">
-            <h2><span class="section-number">31</span> Crash Stress Test</h2>
+            <h2><span class="section-number">35</span> Crash Stress Test</h2>
             <p class="lead">70 automated crash tests across 18 categories. Every permutation of actions tested to destruction.</p>
 
             <div class="info-box tip">
@@ -2031,13 +1933,6 @@ QT_QPA_PLATFORM=offscreen ./test_runner</code></pre>
                 </tbody>
             </table>
 
-            <h3>Bug Found &amp; Fixed</h3>
-            <p><strong>PieceTable::remove() infinite loop</strong> &mdash; calling <code>remove(0, 100)</code> on a 2-character document caused the removal loop to hang. Fixed by clamping the length parameter to the actual content length.</p>
-
-            <h3>Modified Detection: Checksum Approach</h3>
-            <p>During stress testing, the false "modified" flag issue was traced to multiple sources: syntax highlighting, RTL direction detection, viewport content swaps, and theme rehighlighting all triggered <code>contentsChange</code> signals that falsely marked the document as modified.</p>
-            <p>The solution: <strong>content hash comparison</strong>. On file load, a hash of the content is stored. On any change event, the current content hash is compared against the original. If equal &mdash; not modified. If different &mdash; modified. This eliminates all false positives regardless of the source.</p>
-
             <h3>Running Crash Tests</h3>
             <pre><code>cd tests/validation/build
 cmake .. && make -j$(nproc) crash_test
@@ -2049,7 +1944,7 @@ QT_QPA_PLATFORM=offscreen ./crash_test</code></pre>
         <!-- Footer -->
         <div class="footer">
             <img src="prime_edit_icon.png" alt="PrimeEdit">
-            <div>PrimeEdit &mdash; From writing documents to executing them</div>
+            <div>PrimeEdit &mdash; A fast native text editor for Linux</div>
             <div style="margin-top: 4px;">&copy; 2026 Green Olive Tech LLC. All rights reserved.</div>
         </div>
 
