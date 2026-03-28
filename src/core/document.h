@@ -21,8 +21,10 @@ public:
         ClassicMac  // CR (\r)
     };
 
-    static constexpr qint64 LARGE_FILE_THRESHOLD = 10 * 1024 * 1024;      // 10MB
-    static constexpr qint64 READONLY_FILE_THRESHOLD = 100 * 1024 * 1024;   // 100MB
+    // Files under 200MB: load fully into QPlainTextEdit (handles 1M+ lines fine)
+    // Files over 200MB: mmap + viewport loading (only for truly huge files)
+    static constexpr qint64 LARGE_FILE_THRESHOLD = 200 * 1024 * 1024;     // 200MB
+    static constexpr qint64 READONLY_FILE_THRESHOLD = 500 * 1024 * 1024;   // 500MB
 
     explicit Document(QObject *parent = nullptr);
     ~Document() override;

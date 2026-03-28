@@ -67,9 +67,20 @@ Editor::Editor(Document *document, QWidget *parent)
     }
     m_syncing = false;
 
-    // NOW set the language and highlight (after content is loaded)
+    // Set language and highlight — but for large documents (>1MB text),
+    // defer highlighting to avoid blocking the UI during initial render
     if (!m_document->language().isEmpty()) {
-        m_highlighter->setLanguage(m_document->language());
+        qint64 textLen = m_document->text().length();
+        if (textLen > 1000000) {
+            // Defer highlighting — let the UI render first, then highlight
+            QTimer::singleShot(100, this, [this]() {
+                if (m_document && !m_document->language().isEmpty()) {
+                    m_highlighter->setLanguage(m_document->language());
+                }
+            });
+        } else {
+            m_highlighter->setLanguage(m_document->language());
+        }
     }
 
     // Large file: set up dynamic viewport loading via scrollbar
