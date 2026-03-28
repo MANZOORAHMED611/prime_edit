@@ -18,6 +18,7 @@ public:
     QStringList extensionsForLanguage(const QString &language) const;
 
     QString detectLanguage(const QString &filename, const QString &content) const;
+    QString definitionPath(const QString &language) const;
 
 private:
     LanguageManager();

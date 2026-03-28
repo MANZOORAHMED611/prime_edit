@@ -1,0 +1,13 @@
+{
+  "name": "V",
+  "keywords": ["as", "asm", "assert", "atomic", "break", "const", "continue", "defer", "dump", "else", "enum", "false", "fn", "for", "go", "goto", "if", "import", "in", "interface", "is", "isreftype", "lock", "match", "module", "mut", "none", "or", "pub", "return", "rlock", "select", "shared", "sizeof", "spawn", "static", "struct", "true", "type", "typeof", "union", "unsafe", "volatile", "__offsetof"],
+  "types": ["bool", "byte", "i8", "i16", "int", "i64", "i128", "u8", "u16", "u32", "u64", "u128", "rune", "f32", "f64", "isize", "usize", "char", "string", "voidptr", "byteptr", "charptr", "array", "map", "chan", "none", "thread"],
+  "builtins": ["print", "println", "eprint", "eprintln", "panic", "exit", "error", "typeof", "sizeof", "isreftype", "dump", "__offsetof"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F_]+\\b|\\b0[oO][0-7_]+\\b|\\b0[bB][01_]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "brace"
+}

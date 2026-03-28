@@ -1,0 +1,14 @@
+{
+  "name": "Fish",
+  "keywords": ["if", "else", "end", "switch", "case", "for", "in", "while", "begin", "function", "return", "break", "continue", "and", "or", "not", "builtin", "command", "exec", "set", "set_color", "true", "false"],
+  "types": [],
+  "builtins": ["abbr", "alias", "bg", "bind", "block", "breakpoint", "cd", "commandline", "complete", "contains", "count", "dirh", "dirs", "disown", "echo", "emit", "eval", "fg", "fish", "fish_breakpoint_prompt", "fish_config", "fish_indent", "fish_key_reader", "fish_mode_prompt", "fish_opt", "fish_prompt", "fish_right_prompt", "fish_update_completions", "fish_vcs_prompt", "funced", "funcsave", "functions", "help", "history", "isatty", "jobs", "math", "nextd", "open", "popd", "prevd", "printf", "prompt_hostname", "prompt_login", "prompt_pwd", "psub", "pushd", "pwd", "random", "read", "realpath", "set_color", "source", "status", "string", "suspend", "test", "time", "trap", "type", "ulimit", "umask", "vared", "wait"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b",
+  "functionPattern": "",
+  "variablePattern": "\\$[A-Za-z_][A-Za-z0-9_]*",
+  "foldBased": "keyword"
+}

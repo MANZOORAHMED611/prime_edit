@@ -32,6 +32,14 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/lib/x86_64-linux-gnu/cmake/Qt6/QtPublicPluginHelpers.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/Qt6/QtPublicTargetHelpers.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/Qt6/QtPublicWalkLibsHelpers.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentAdditionalTargetInfo.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentConfig.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentConfigVersion.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentConfigVersionImpl.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentDependencies.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentTargets-none.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentTargets.cmake"
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6Concurrent/Qt6ConcurrentVersionlessTargets.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreConfig.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreConfigExtras.cmake"
@@ -142,6 +150,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.22/Modules/Compiler/GNU-CXX.cmake"
   "/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake"
   "/usr/share/cmake-3.22/Modules/FeatureSummary.cmake"
+  "/usr/share/cmake-3.22/Modules/FindICU.cmake"
   "/usr/share/cmake-3.22/Modules/FindOpenGL.cmake"
   "/usr/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
   "/usr/share/cmake-3.22/Modules/FindPackageMessage.cmake"
@@ -155,6 +164,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake"
   "/usr/share/cmake-3.22/Modules/Platform/Linux.cmake"
   "/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake"
+  "/usr/share/cmake-3.22/Modules/SelectLibraryConfigurations.cmake"
   )
 
 # The corresponding makefile is:
@@ -165,13 +175,14 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/olive-notepad_autogen.dir/AutogenInfo.json"
-  "CMakeFiles/olive-notepad_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json"
+  "CMakeFiles/prime-edit_autogen.dir/AutogenInfo.json"
+  "CMakeFiles/prime-edit_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Info.json"
+  "prime-edit.desktop"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/olive-notepad.dir/DependInfo.cmake"
-  "CMakeFiles/olive-notepad_autogen.dir/DependInfo.cmake"
+  "CMakeFiles/prime-edit.dir/DependInfo.cmake"
+  "CMakeFiles/prime-edit_autogen.dir/DependInfo.cmake"
   )

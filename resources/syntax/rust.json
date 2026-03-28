@@ -1,0 +1,16 @@
+{
+  "name": "Rust",
+  "keywords": ["as", "break", "const", "continue", "crate", "else", "enum", "extern", "false", "fn", "for", "if", "impl", "in", "let", "loop", "match", "mod", "move", "mut", "pub", "ref", "return", "self", "Self", "static", "struct", "super", "trait", "true", "type", "unsafe", "use", "where", "while", "async", "await", "dyn", "abstract", "become", "box", "do", "final", "macro", "override", "priv", "try", "typeof", "unsized", "virtual", "yield"],
+  "types": ["i8", "i16", "i32", "i64", "i128", "u8", "u16", "u32", "u64", "u128", "isize", "usize", "f32", "f64", "bool", "char", "str", "String", "Vec", "Option", "Result", "Box", "Rc", "Arc", "Cell", "RefCell", "HashMap", "HashSet", "BTreeMap", "BTreeSet", "VecDeque", "LinkedList", "BinaryHeap", "Cow", "Pin", "PhantomData"],
+  "builtins": ["println", "eprintln", "format", "vec", "panic", "assert", "assert_eq", "assert_ne", "dbg", "todo", "unimplemented", "unreachable", "cfg", "include", "include_str", "include_bytes", "env", "file", "line", "column", "stringify", "concat"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?(_[0-9]+)*([eE][+-]?[0-9]+)?[if]?(8|16|32|64|128|size)?\\b|\\b0[xX][0-9a-fA-F_]+\\b|\\b0[oO][0-7_]+\\b|\\b0[bB][01_]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "macroPattern": "[A-Za-z_][A-Za-z0-9_]*!",
+  "attributePattern": "#\\[.*\\]",
+  "functionRegex": "^\\s*(?:pub(?:\\(crate\\))?\\s+)?(?:async\\s+)?(?:unsafe\\s+)?(?:fn|struct|enum|trait|impl|mod|type)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+  "foldBased": "brace"
+}

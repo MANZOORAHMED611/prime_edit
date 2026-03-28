@@ -1,0 +1,14 @@
+{
+  "name": "GLSL",
+  "keywords": ["attribute", "const", "uniform", "varying", "buffer", "shared", "coherent", "volatile", "restrict", "readonly", "writeonly", "layout", "centroid", "flat", "smooth", "noperspective", "patch", "sample", "break", "continue", "do", "for", "while", "switch", "case", "default", "if", "else", "subroutine", "in", "out", "inout", "true", "false", "invariant", "precise", "discard", "return", "struct", "precision", "highp", "mediump", "lowp"],
+  "types": ["void", "bool", "int", "uint", "float", "double", "vec2", "vec3", "vec4", "dvec2", "dvec3", "dvec4", "bvec2", "bvec3", "bvec4", "ivec2", "ivec3", "ivec4", "uvec2", "uvec3", "uvec4", "mat2", "mat3", "mat4", "mat2x2", "mat2x3", "mat2x4", "mat3x2", "mat3x3", "mat3x4", "mat4x2", "mat4x3", "mat4x4", "dmat2", "dmat3", "dmat4", "sampler1D", "sampler2D", "sampler3D", "samplerCube", "sampler1DShadow", "sampler2DShadow", "samplerCubeShadow", "sampler1DArray", "sampler2DArray", "image1D", "image2D", "image3D", "imageCube"],
+  "builtins": ["radians", "degrees", "sin", "cos", "tan", "asin", "acos", "atan", "sinh", "cosh", "tanh", "pow", "exp", "log", "exp2", "log2", "sqrt", "inversesqrt", "abs", "sign", "floor", "trunc", "round", "roundEven", "ceil", "fract", "mod", "modf", "min", "max", "clamp", "mix", "step", "smoothstep", "isnan", "isinf", "length", "distance", "dot", "cross", "normalize", "faceforward", "reflect", "refract", "matrixCompMult", "outerProduct", "transpose", "determinant", "inverse", "lessThan", "lessThanEqual", "greaterThan", "greaterThanEqual", "equal", "notEqual", "any", "all", "not", "texture", "textureProj", "textureLod", "textureOffset", "textureProjOffset", "textureLodOffset", "textureGrad", "texelFetch", "texelFetchOffset", "textureSize", "dFdx", "dFdy", "fwidth", "noise1", "noise2", "noise3", "noise4", "EmitVertex", "EndPrimitive", "barrier", "memoryBarrier", "memoryBarrierAtomicCounter", "memoryBarrierBuffer", "memoryBarrierShared", "memoryBarrierImage", "groupMemoryBarrier", "gl_Position", "gl_FragCoord", "gl_FragColor", "gl_FragDepth", "gl_VertexID", "gl_InstanceID", "gl_PointSize", "gl_FrontFacing"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": [],
+  "preprocessorPrefix": "#",
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?[fF]?\\b|\\b0[xX][0-9a-fA-F]+[uU]?\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "brace"
+}

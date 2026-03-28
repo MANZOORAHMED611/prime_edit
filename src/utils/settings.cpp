@@ -134,7 +134,7 @@ void Settings::save()
 
 void Settings::reset()
 {
-    m_fontFamily = "Monospace";
+    m_fontFamily = "DejaVu Sans Mono";
     m_fontSize = 10;
     m_tabWidth = 4;
     m_insertSpaces = true;
@@ -143,13 +143,15 @@ void Settings::reset()
     m_showMinimap = true;
     m_highlightCurrentLine = true;
     m_autoSave = false;
-    m_autoSaveInterval = 1000;
-    m_theme = "Default Dark";
+    m_autoSaveInterval = 30000;
+    m_theme = "Notepad++";
     m_restoreSession = true;
     m_defaultEncoding = "UTF-8";
     m_defaultLineEnding = "LF";
     m_trimTrailingWhitespace = true;
     m_insertFinalNewline = true;
+    m_recentFiles.clear();
+    m_customSettings.clear();
 
     emit fontChanged();
     emit tabSettingsChanged();

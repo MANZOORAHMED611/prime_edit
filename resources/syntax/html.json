@@ -1,0 +1,15 @@
+{
+  "name": "HTML",
+  "keywords": ["DOCTYPE", "html", "head", "body", "div", "span", "p", "a", "img", "table", "tr", "td", "th", "form", "input", "button", "select", "option", "textarea", "label", "script", "style", "link", "meta", "title", "header", "footer", "nav", "main", "section", "article", "aside", "ul", "ol", "li", "h1", "h2", "h3", "h4", "h5", "h6", "br", "hr", "pre", "code", "blockquote", "iframe", "canvas", "svg", "video", "audio", "source"],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "",
+  "multiLineCommentStart": "<!--",
+  "multiLineCommentEnd": "-->",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b",
+  "functionPattern": "",
+  "tagPattern": "</?[A-Za-z][A-Za-z0-9]*",
+  "attributePattern": "\\b[A-Za-z-]+(?=\\s*=)",
+  "foldBased": "tag"
+}

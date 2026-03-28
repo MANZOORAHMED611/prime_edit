@@ -1,6 +1,7 @@
 #ifndef THEME_H
 #define THEME_H
 
+#include <QObject>
 #include <QString>
 #include <QColor>
 #include <QFont>
@@ -46,6 +47,17 @@ struct Theme {
     QColor accentSecondary;
     QColor borderColor;
 
+    // Gutter colors
+    QColor foldMarginBackground;
+    QColor bookmarkMarginBackground;
+
+    // Editor feature colors
+    QColor indentGuideColor;
+    QColor whitespaceColor;
+    QColor markHighlightColor;
+    QColor bracketMatchBackground;
+    QColor bracketErrorBackground;
+
     // Diagnostic colors
     QColor errorForeground;
     QColor warningForeground;
@@ -68,9 +80,11 @@ struct Theme {
     static Theme monokai();
     static Theme dracula();
     static Theme nord();
+    static Theme notepadpp();
 };
 
-class ThemeManager {
+class ThemeManager : public QObject {
+    Q_OBJECT
 public:
     static ThemeManager& instance();
 
@@ -92,11 +106,12 @@ public:
     bool importTheme(const QString &filePath);
     bool exportTheme(const QString &name, const QString &filePath);
 
+signals:
+    void themeChanged(const Theme &theme);
+
 private:
     ThemeManager();
     ~ThemeManager();
-    ThemeManager(const ThemeManager&) = delete;
-    ThemeManager& operator=(const ThemeManager&) = delete;
 
     QString themesDirectory() const;
     void loadBuiltInThemes();

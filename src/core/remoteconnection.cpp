@@ -1,367 +1,325 @@
 #include "remoteconnection.h"
 #include <QRegularExpression>
+#include <QFileInfo>
 #include <QDir>
-#include <QStandardPaths>
-#include <QDebug>
+
+// ── Helpers ─────────────────────────────────────────────────────────
+
+static QString shellQuote(const QString &s)
+{
+    QString quoted = s;
+    quoted.replace("'", "'\\''");
+    return "'" + quoted + "'";
+}
+
+static bool validHostInfo(const QString &host, const QString &username)
+{
+    return !host.isEmpty() && !host.startsWith('-') &&
+           !username.isEmpty() && !username.startsWith('-');
+}
+
+// ── RemoteConnection ────────────────────────────────────────────────
 
 RemoteConnection::RemoteConnection(QObject *parent)
     : QObject(parent)
-    , m_status(Disconnected)
-    , m_type(SFTP)
-    , m_port(22)
-    , m_process(nullptr)
 {
 }
 
-RemoteConnection::~RemoteConnection()
+RemoteConnection::~RemoteConnection() = default;
+
+void RemoteConnection::setConnectionInfo(const ConnectionInfo &info)
 {
-    disconnect();
+    m_info = info;
 }
 
-void RemoteConnection::connectToHost(const QString &host, int port, const QString &username,
-                                    const QString &password, ConnectionType type)
+RemoteConnection::ConnectionInfo RemoteConnection::connectionInfo() const
 {
-    if (m_status == Connected || m_status == Connecting) {
-        return;
-    }
+    return m_info;
+}
 
-    m_host = host;
-    m_port = port;
-    m_username = username;
-    m_password = password;
-    m_type = type;
+// --- helper: common SSH options ----------------------------------------
 
-    setStatus(Connecting);
-
-    // Test connection with a simple command
+QStringList RemoteConnection::sshArgs() const
+{
     QStringList args;
-    args << "-o" << "StrictHostKeyChecking=no"
-         << "-o" << "UserKnownHostsFile=/dev/null"
-         << "-p" << QString::number(port)
-         << QString("%1@%2").arg(username, host)
-         << "echo" << "connected";
+    args << "-o" << "StrictHostKeyChecking=yes"
+         << "-o" << "BatchMode=yes"
+         << "-o" << "ConnectTimeout=10"
+         << "-p" << QString::number(m_info.port);
 
-    m_process = new QProcess(this);
-    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            this, [this](int exitCode, QProcess::ExitStatus status) {
-        if (exitCode == 0 && status == QProcess::NormalExit) {
-            setStatus(Connected);
-            emit connected();
-        } else {
-            m_errorString = m_process->errorString();
-            setStatus(Error);
-            emit connectionError(m_errorString);
-        }
-    });
-
-    m_process->start("ssh", args);
-}
-
-void RemoteConnection::disconnect()
-{
-    if (m_process) {
-        m_process->kill();
-        m_process->deleteLater();
-        m_process = nullptr;
+    if (m_info.authMethod == "key" && !m_info.keyPath.isEmpty()) {
+        args << "-i" << m_info.keyPath;
     }
 
-    setStatus(Disconnected);
-    emit disconnected();
+    args << QStringLiteral("%1@%2").arg(m_info.username, m_info.host);
+    return args;
 }
 
-void RemoteConnection::setStatus(ConnectionStatus status)
+QStringList RemoteConnection::scpArgs() const
 {
-    if (m_status != status) {
-        m_status = status;
-    }
-}
-
-void RemoteConnection::downloadFile(const QString &remotePath, const QString &localPath)
-{
-    if (m_status != Connected) {
-        emit operationError("download", "Not connected");
-        return;
-    }
-
-    m_pendingDownloads[remotePath] = localPath;
-    m_currentOperation = "download:" + remotePath;
-
     QStringList args;
-    if (m_type == SFTP || m_type == SCP) {
-        args << "-P" << QString::number(m_port)
-             << "-o" << "StrictHostKeyChecking=no"
-             << "-o" << "UserKnownHostsFile=/dev/null"
-             << QString("%1@%2:%3").arg(m_username, m_host, remotePath)
-             << localPath;
+    args << "-o" << "StrictHostKeyChecking=yes"
+         << "-o" << "BatchMode=yes"
+         << "-o" << "ConnectTimeout=10"
+         << "-P" << QString::number(m_info.port);
 
-        QProcess *proc = new QProcess(this);
-        connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                this, [this, remotePath, localPath, proc](int exitCode, QProcess::ExitStatus status) {
-            if (exitCode == 0 && status == QProcess::NormalExit) {
-                emit downloadComplete(remotePath, localPath);
-            } else {
-                emit operationError("download", proc->errorString());
-            }
-            m_pendingDownloads.remove(remotePath);
-            proc->deleteLater();
-        });
-
-        proc->start("scp", args);
-    }
-}
-
-void RemoteConnection::uploadFile(const QString &localPath, const QString &remotePath)
-{
-    if (m_status != Connected) {
-        emit operationError("upload", "Not connected");
-        return;
+    if (m_info.authMethod == "key" && !m_info.keyPath.isEmpty()) {
+        args << "-i" << m_info.keyPath;
     }
 
-    m_pendingUploads[localPath] = remotePath;
-    m_currentOperation = "upload:" + remotePath;
-
-    QStringList args;
-    if (m_type == SFTP || m_type == SCP) {
-        args << "-P" << QString::number(m_port)
-             << "-o" << "StrictHostKeyChecking=no"
-             << "-o" << "UserKnownHostsFile=/dev/null"
-             << localPath
-             << QString("%1@%2:%3").arg(m_username, m_host, remotePath);
-
-        QProcess *proc = new QProcess(this);
-        connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                this, [this, remotePath, localPath, proc](int exitCode, QProcess::ExitStatus status) {
-            if (exitCode == 0 && status == QProcess::NormalExit) {
-                emit uploadComplete(remotePath);
-            } else {
-                emit operationError("upload", proc->errorString());
-            }
-            m_pendingUploads.remove(localPath);
-            proc->deleteLater();
-        });
-
-        proc->start("scp", args);
-    }
+    return args;
 }
 
-void RemoteConnection::listDirectory(const QString &path)
+// --- testConnection (synchronous) ----------------------------------------
+
+bool RemoteConnection::testConnection()
 {
-    if (m_status != Connected) {
-        emit operationError("list", "Not connected");
-        return;
-    }
-
-    QStringList args;
-    args << "-p" << QString::number(m_port)
-         << "-o" << "StrictHostKeyChecking=no"
-         << "-o" << "UserKnownHostsFile=/dev/null"
-         << QString("%1@%2").arg(m_username, m_host)
-         << "ls" << "-la" << path;
-
-    QProcess *proc = new QProcess(this);
-    connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            this, [this, proc](int exitCode, QProcess::ExitStatus status) {
-        if (exitCode == 0 && status == QProcess::NormalExit) {
-            QString output = proc->readAllStandardOutput();
-            QVector<RemoteFileInfo> files = parseLsOutput(output);
-            emit directoryListed(files);
-        } else {
-            emit operationError("list", proc->errorString());
-        }
-        proc->deleteLater();
-    });
-
-    proc->start("ssh", args);
-}
-
-void RemoteConnection::deleteFile(const QString &remotePath)
-{
-    if (m_status != Connected) {
-        emit operationError("delete", "Not connected");
-        return;
-    }
-
-    QStringList args;
-    args << "-p" << QString::number(m_port)
-         << "-o" << "StrictHostKeyChecking=no"
-         << "-o" << "UserKnownHostsFile=/dev/null"
-         << QString("%1@%2").arg(m_username, m_host)
-         << "rm" << remotePath;
-
-    QProcess *proc = new QProcess(this);
-    connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            this, [this, proc](int exitCode, QProcess::ExitStatus status) {
-        if (exitCode != 0 || status != QProcess::NormalExit) {
-            emit operationError("delete", proc->errorString());
-        }
-        proc->deleteLater();
-    });
-
-    proc->start("ssh", args);
-}
-
-void RemoteConnection::createDirectory(const QString &remotePath)
-{
-    if (m_status != Connected) {
-        emit operationError("mkdir", "Not connected");
-        return;
-    }
-
-    QStringList args;
-    args << "-p" << QString::number(m_port)
-         << "-o" << "StrictHostKeyChecking=no"
-         << "-o" << "UserKnownHostsFile=/dev/null"
-         << QString("%1@%2").arg(m_username, m_host)
-         << "mkdir" << "-p" << remotePath;
-
-    QProcess *proc = new QProcess(this);
-    connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            this, [this, proc](int exitCode, QProcess::ExitStatus status) {
-        if (exitCode != 0 || status != QProcess::NormalExit) {
-            emit operationError("mkdir", proc->errorString());
-        }
-        proc->deleteLater();
-    });
-
-    proc->start("ssh", args);
-}
-
-QVector<RemoteFileInfo> RemoteConnection::parseLsOutput(const QString &output)
-{
-    QVector<RemoteFileInfo> files;
-    QStringList lines = output.split('\n', Qt::SkipEmptyParts);
-
-    for (const QString &line : lines) {
-        if (line.startsWith("total")) {
-            continue;
-        }
-
-        // Parse ls -la output
-        // Example: drwxr-xr-x 2 user group 4096 Jan 1 12:00 filename
-        QRegularExpression regex("^([d-])([rwx-]{9})\\s+(\\d+)\\s+(\\w+)\\s+(\\w+)\\s+(\\d+)\\s+(.+?)\\s+(\\d{1,2}:\\d{2}|\\w+\\s+\\d+\\s+\\d+)\\s+(.+)$");
-        QRegularExpressionMatch match = regex.match(line);
-
-        if (match.hasMatch()) {
-            RemoteFileInfo info;
-            info.isDirectory = match.captured(1) == "d";
-            info.permissions = match.captured(2);
-            info.owner = match.captured(4);
-            info.group = match.captured(5);
-            info.size = match.captured(6).toLongLong();
-            info.name = match.captured(9);
-            info.path = info.name;
-
-            files.append(info);
-        }
-    }
-
-    return files;
-}
-
-// RemoteFileManager implementation
-RemoteFileManager::RemoteFileManager()
-{
-}
-
-RemoteFileManager::~RemoteFileManager()
-{
-    qDeleteAll(m_connections);
-}
-
-RemoteFileManager& RemoteFileManager::instance()
-{
-    static RemoteFileManager instance;
-    return instance;
-}
-
-void RemoteFileManager::addConnection(const QString &name, RemoteConnection *connection)
-{
-    if (m_connections.contains(name)) {
-        delete m_connections[name];
-    }
-    m_connections[name] = connection;
-}
-
-void RemoteFileManager::removeConnection(const QString &name)
-{
-    if (m_connections.contains(name)) {
-        delete m_connections[name];
-        m_connections.remove(name);
-    }
-}
-
-RemoteConnection* RemoteFileManager::connection(const QString &name) const
-{
-    return m_connections.value(name, nullptr);
-}
-
-QStringList RemoteFileManager::connectionNames() const
-{
-    return m_connections.keys();
-}
-
-QString RemoteFileManager::openRemoteFile(const QString &connectionName, const QString &remotePath)
-{
-    RemoteConnection *conn = connection(connectionName);
-    if (!conn) {
-        emit error("Connection not found: " + connectionName);
-        return QString();
-    }
-
-    if (conn->status() != RemoteConnection::Connected) {
-        emit error("Not connected to: " + connectionName);
-        return QString();
-    }
-
-    // Create temporary file
-    QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-    QString fileName = QFileInfo(remotePath).fileName();
-    QString localPath = tempDir + "/notepad-supreme-remote-" + fileName;
-
-    // Download file
-    conn->downloadFile(remotePath, localPath);
-
-    // Store mapping
-    m_remoteFiles[localPath] = remotePath;
-    m_fileConnections[localPath] = connectionName;
-
-    connect(conn, &RemoteConnection::downloadComplete,
-            this, [this](const QString &remote, const QString &local) {
-        emit remoteFileOpened(local, remote);
-    });
-
-    return localPath;
-}
-
-bool RemoteFileManager::saveRemoteFile(const QString &localPath, const QString &connectionName, const QString &remotePath)
-{
-    RemoteConnection *conn = connection(connectionName);
-    if (!conn) {
-        emit error("Connection not found: " + connectionName);
+    if (!validHostInfo(m_info.host, m_info.username))
         return false;
+
+    QProcess proc;
+    QStringList args;
+    args << "-o" << "StrictHostKeyChecking=yes"
+         << "-o" << "BatchMode=yes"
+         << "-o" << "ConnectTimeout=5"
+         << "-p" << QString::number(m_info.port);
+
+    if (m_info.authMethod == "key" && !m_info.keyPath.isEmpty()) {
+        args << "-i" << m_info.keyPath;
     }
 
-    if (conn->status() != RemoteConnection::Connected) {
-        emit error("Not connected to: " + connectionName);
-        return false;
+    args << QStringLiteral("%1@%2").arg(m_info.username, m_info.host)
+         << "echo" << "ok";
+
+    proc.start("ssh", args);
+    proc.waitForFinished(10000);
+
+    bool ok = (proc.exitCode() == 0 &&
+               proc.exitStatus() == QProcess::NormalExit);
+
+    QString msg = ok
+        ? QStringLiteral("Connected successfully")
+        : QString::fromUtf8(proc.readAllStandardError()).trimmed();
+
+    if (msg.isEmpty() && !ok) {
+        msg = QStringLiteral("Connection failed (exit code %1)")
+                  .arg(proc.exitCode());
     }
 
-    // Upload file
-    conn->uploadFile(localPath, remotePath);
-
-    connect(conn, &RemoteConnection::uploadComplete,
-            this, [this](const QString &remote) {
-        emit remoteFileSaved(remote);
-    });
-
-    return true;
+    emit connectionTestResult(ok, msg);
+    return ok;
 }
 
-void RemoteFileManager::closeRemoteFile(const QString &localPath)
-{
-    m_remoteFiles.remove(localPath);
-    m_fileConnections.remove(localPath);
+// --- listDirectory (async) -----------------------------------------------
 
-    // Delete temporary file
-    QFile::remove(localPath);
+void RemoteConnection::listDirectory(const QString &remotePath)
+{
+    if (!validHostInfo(m_info.host, m_info.username))
+        return;
+
+    auto *proc = new QProcess(this);
+    QStringList args = sshArgs();
+    args << QStringLiteral("ls -laF -- %1").arg(shellQuote(remotePath));
+
+    connect(proc,
+            QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, [this, proc, remotePath](int exitCode, QProcess::ExitStatus) {
+        if (exitCode != 0) {
+            QString err = QString::fromUtf8(proc->readAllStandardError()).trimmed();
+            emit connectionError(
+                QStringLiteral("Failed to list %1: %2").arg(remotePath, err));
+            proc->deleteLater();
+            return;
+        }
+
+        QString output = QString::fromUtf8(proc->readAllStandardOutput());
+        QStringList entries;
+
+        const QStringList lines = output.split('\n', Qt::SkipEmptyParts);
+        for (const QString &line : lines) {
+            if (line.startsWith("total")) {
+                continue;
+            }
+
+            // ls -laF output example:
+            // drwxr-xr-x  2 user group 4096 Mar 27 10:00 subdir/
+            // -rw-r--r--  1 user group  123 Mar 27 10:00 file.txt
+            QStringList cols = line.split(QRegularExpression("\\s+"),
+                                          Qt::SkipEmptyParts);
+            if (cols.size() < 9) {
+                continue;
+            }
+
+            // Name is everything from column 9 onward (handles spaces)
+            QString name;
+            for (int i = 8; i < cols.size(); ++i) {
+                if (!name.isEmpty()) name += ' ';
+                name += cols[i];
+            }
+
+            // Skip . and ..
+            if (name == "." || name == ".." ||
+                name == "./" || name == "../") {
+                continue;
+            }
+
+            bool isDir = cols[0].startsWith('d');
+            // Remove trailing / or @ from ls -F
+            if (name.endsWith('/') || name.endsWith('@') ||
+                name.endsWith('*')) {
+                name.chop(1);
+            }
+
+            entries << (isDir ? QStringLiteral("d:%1").arg(name)
+                              : QStringLiteral("f:%1").arg(name));
+        }
+
+        emit directoryListed(entries);
+        proc->deleteLater();
+    });
+
+    proc->start("ssh", args);
+}
+
+// --- downloadFile (async) ------------------------------------------------
+
+void RemoteConnection::downloadFile(const QString &remotePath,
+                                    const QString &localPath)
+{
+    if (!validHostInfo(m_info.host, m_info.username))
+        return;
+
+    // Ensure the local directory exists
+    QDir().mkpath(QFileInfo(localPath).absolutePath());
+
+    auto *proc = new QProcess(this);
+    QStringList args = scpArgs();
+    args << QStringLiteral("%1@%2:%3")
+                .arg(m_info.username, m_info.host, shellQuote(remotePath))
+         << localPath;
+
+    connect(proc,
+            QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, [this, proc, remotePath, localPath](int exitCode, QProcess::ExitStatus) {
+        if (exitCode == 0) {
+            emit fileDownloaded(localPath, remotePath);
+        } else {
+            QString err = QString::fromUtf8(proc->readAllStandardError()).trimmed();
+            emit connectionError(
+                QStringLiteral("Download failed for %1: %2").arg(remotePath, err));
+        }
+        proc->deleteLater();
+    });
+
+    proc->start("scp", args);
+}
+
+// --- uploadFile (async) --------------------------------------------------
+
+void RemoteConnection::uploadFile(const QString &localPath,
+                                  const QString &remotePath)
+{
+    if (!validHostInfo(m_info.host, m_info.username))
+        return;
+
+    auto *proc = new QProcess(this);
+    QStringList args = scpArgs();
+    args << localPath
+         << QStringLiteral("%1@%2:%3")
+                .arg(m_info.username, m_info.host, shellQuote(remotePath));
+
+    connect(proc,
+            QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, [this, proc, remotePath](int exitCode, QProcess::ExitStatus) {
+        if (exitCode == 0) {
+            emit fileUploaded(remotePath);
+        } else {
+            QString err = QString::fromUtf8(proc->readAllStandardError()).trimmed();
+            emit connectionError(
+                QStringLiteral("Upload failed for %1: %2").arg(remotePath, err));
+        }
+        proc->deleteLater();
+    });
+
+    proc->start("scp", args);
+}
+
+// --- Saved-connection persistence via QSettings --------------------------
+
+QVector<RemoteConnection::ConnectionInfo> RemoteConnection::savedConnections()
+{
+    QVector<ConnectionInfo> list;
+    QSettings settings;
+    int count = settings.beginReadArray("RemoteConnections");
+    for (int i = 0; i < count; ++i) {
+        settings.setArrayIndex(i);
+        ConnectionInfo ci;
+        ci.name       = settings.value("name").toString();
+        ci.host       = settings.value("host").toString();
+        ci.port       = settings.value("port", 22).toInt();
+        ci.username   = settings.value("username").toString();
+        ci.authMethod = settings.value("authMethod", "key").toString();
+        ci.keyPath    = settings.value("keyPath").toString();
+        ci.lastPath   = settings.value("lastPath", "/").toString();
+        list.append(ci);
+    }
+    settings.endArray();
+    return list;
+}
+
+void RemoteConnection::saveConnection(const ConnectionInfo &info)
+{
+    QVector<ConnectionInfo> all = savedConnections();
+
+    // Update existing or append
+    bool found = false;
+    for (auto &ci : all) {
+        if (ci.name == info.name) {
+            ci = info;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        all.append(info);
+    }
+
+    QSettings settings;
+    settings.beginWriteArray("RemoteConnections", all.size());
+    for (int i = 0; i < all.size(); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue("name",       all[i].name);
+        settings.setValue("host",       all[i].host);
+        settings.setValue("port",       all[i].port);
+        settings.setValue("username",   all[i].username);
+        settings.setValue("authMethod", all[i].authMethod);
+        settings.setValue("keyPath",    all[i].keyPath);
+        settings.setValue("lastPath",   all[i].lastPath);
+    }
+    settings.endArray();
+}
+
+void RemoteConnection::removeConnection(const QString &name)
+{
+    QVector<ConnectionInfo> all = savedConnections();
+    QVector<ConnectionInfo> filtered;
+    for (const auto &ci : all) {
+        if (ci.name != name) {
+            filtered.append(ci);
+        }
+    }
+
+    QSettings settings;
+    settings.beginWriteArray("RemoteConnections", filtered.size());
+    for (int i = 0; i < filtered.size(); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue("name",       filtered[i].name);
+        settings.setValue("host",       filtered[i].host);
+        settings.setValue("port",       filtered[i].port);
+        settings.setValue("username",   filtered[i].username);
+        settings.setValue("authMethod", filtered[i].authMethod);
+        settings.setValue("keyPath",    filtered[i].keyPath);
+        settings.setValue("lastPath",   filtered[i].lastPath);
+    }
+    settings.endArray();
 }

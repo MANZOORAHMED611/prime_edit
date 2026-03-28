@@ -1,0 +1,14 @@
+{
+  "name": "Swift",
+  "keywords": ["actor", "any", "as", "associatedtype", "async", "await", "break", "case", "catch", "class", "continue", "default", "defer", "deinit", "didSet", "do", "else", "enum", "extension", "fallthrough", "false", "fileprivate", "final", "for", "func", "get", "guard", "if", "import", "in", "indirect", "infix", "init", "inout", "internal", "is", "lazy", "let", "mutating", "nil", "nonmutating", "open", "operator", "optional", "override", "postfix", "precedencegroup", "prefix", "private", "protocol", "public", "repeat", "required", "rethrows", "return", "self", "Self", "set", "some", "static", "struct", "subscript", "super", "switch", "throw", "throws", "true", "try", "typealias", "unowned", "var", "weak", "where", "while", "willSet"],
+  "types": ["Any", "AnyObject", "Array", "Bool", "Character", "Dictionary", "Double", "Float", "Int", "Int8", "Int16", "Int32", "Int64", "Optional", "Result", "Set", "String", "UInt", "UInt8", "UInt16", "UInt32", "UInt64", "Void", "Error", "Codable", "Comparable", "Equatable", "Hashable", "Identifiable", "Sequence", "Collection", "IteratorProtocol", "CustomStringConvertible", "Decodable", "Encodable"],
+  "builtins": ["print", "debugPrint", "dump", "fatalError", "precondition", "preconditionFailure", "assert", "assertionFailure", "abs", "max", "min", "stride", "zip", "swap", "type", "unsafeBitCast", "withUnsafePointer", "withUnsafeMutablePointer"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\""],
+  "preprocessorPrefix": "#",
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+(\\.[0-9a-fA-F]+)?([pP][+-]?[0-9]+)?\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "brace"
+}

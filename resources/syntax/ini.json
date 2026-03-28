@@ -1,0 +1,15 @@
+{
+  "name": "INI",
+  "keywords": ["true", "false", "yes", "no", "on", "off", "null", "none"],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": ";",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b",
+  "functionPattern": "",
+  "keyPattern": "^\\s*[A-Za-z0-9_.-]+(?=\\s*=)",
+  "sectionPattern": "\\[[A-Za-z0-9_. -]+\\]",
+  "foldBased": "section"
+}

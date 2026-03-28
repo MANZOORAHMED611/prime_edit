@@ -54,6 +54,8 @@ public:
     void hover(const QString &uri, int line, int character);
     void gotoDefinition(const QString &uri, int line, int character);
     void references(const QString &uri, int line, int character);
+    void rename(const QString &uri, int line, int character,
+                const QString &newName);
 
     bool isInitialized() const { return m_initialized; }
     bool isRunning() const;
@@ -66,6 +68,7 @@ signals:
     void definitionResult(const Location &location);
     void referencesResult(const QVector<Location> &locations);
     void diagnosticsPublished(const QString &uri, const QVector<Diagnostic> &diagnostics);
+    void renameResult(const QJsonObject &workspaceEdit);
     void errorOccurred(const QString &error);
 
 private slots:
@@ -80,7 +83,6 @@ private:
     void handleResponse(const QJsonObject &response);
     void handleNotification(const QString &method, const QJsonObject &params);
 
-    QString readContentLength();
     QJsonObject parseMessage(const QByteArray &data);
 
     QProcess *m_process;
@@ -93,6 +95,7 @@ private:
 
     QByteArray m_buffer;
     QMap<int, QString> m_pendingRequests;  // id -> method
+    QMap<QString, int> m_documentVersions;  // uri -> version counter
 };
 
 #endif // LSPCLIENT_H

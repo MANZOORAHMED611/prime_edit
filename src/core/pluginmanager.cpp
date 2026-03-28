@@ -1,21 +1,28 @@
 #include "pluginmanager.h"
 #include <QDir>
 #include <QDebug>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QCoreApplication>
 
 PluginManager::PluginManager()
 {
-    // Add default plugin directories
+    // Default plugin directories (most-specific first)
     QString appDir = QCoreApplication::applicationDirPath();
     m_pluginDirs.append(appDir + "/plugins");
 
-    QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString configDir = QStandardPaths::writableLocation(
+        QStandardPaths::AppConfigLocation);
+    m_pluginDirs.append(configDir + "/plugins");
+
+    QString dataDir = QStandardPaths::writableLocation(
+        QStandardPaths::AppDataLocation);
     m_pluginDirs.append(dataDir + "/plugins");
 
-    // System-wide plugins
-    m_pluginDirs.append("/usr/share/notepad-supreme/plugins");
-    m_pluginDirs.append("/usr/local/share/notepad-supreme/plugins");
+    // System-wide locations
+    m_pluginDirs.append("/usr/lib/prime-edit/plugins");
+    m_pluginDirs.append("/usr/share/prime-edit/plugins");
+    m_pluginDirs.append("/usr/local/share/prime-edit/plugins");
 }
 
 PluginManager::~PluginManager()
@@ -23,11 +30,20 @@ PluginManager::~PluginManager()
     unloadAllPlugins();
 }
 
-PluginManager& PluginManager::instance()
+PluginManager &PluginManager::instance()
 {
-    static PluginManager instance;
-    return instance;
+    static PluginManager inst;
+    return inst;
 }
+
+void PluginManager::setEditorAPI(EditorAPI *api)
+{
+    m_editorAPI = api;
+}
+
+// ----------------------------------------------------------------
+// Loading / unloading
+// ----------------------------------------------------------------
 
 void PluginManager::loadPlugins()
 {
@@ -46,17 +62,16 @@ void PluginManager::loadPlugins()
         filters << "*.so";
 #endif
 
-        QStringList plugins = pluginDir.entryList(filters, QDir::Files);
-        for (const QString &plugin : plugins) {
-            QString fullPath = pluginDir.absoluteFilePath(plugin);
-            loadPlugin(fullPath);
+        const QStringList files = pluginDir.entryList(filters, QDir::Files);
+        for (const QString &file : files) {
+            loadPlugin(pluginDir.absoluteFilePath(file));
         }
     }
 }
 
 void PluginManager::loadPlugin(const QString &filePath)
 {
-    QPluginLoader *loader = new QPluginLoader(filePath);
+    auto *loader = new QPluginLoader(filePath);
     QObject *pluginObj = loader->instance();
 
     if (!pluginObj) {
@@ -65,40 +80,75 @@ void PluginManager::loadPlugin(const QString &filePath)
         return;
     }
 
-    PluginInterface *plugin = qobject_cast<PluginInterface*>(pluginObj);
-    if (!plugin) {
-        emit pluginError(filePath, "Not a valid Olive Notepad plugin");
+    auto *iface = qobject_cast<PluginInterface *>(pluginObj);
+    if (!iface) {
+        emit pluginError(filePath, "Not a valid PrimeEdit plugin");
         loader->unload();
         delete loader;
         return;
     }
 
-    PluginInfo info = plugin->info();
+    const QString pluginName = iface->name();
 
-    // Check if already loaded
-    if (m_plugins.contains(info.name)) {
-        emit pluginError(filePath, "Plugin already loaded: " + info.name);
+    // Duplicate guard
+    if (m_plugins.contains(pluginName)) {
+        emit pluginError(filePath, "Plugin already loaded: " + pluginName);
         loader->unload();
         delete loader;
         return;
     }
 
-    // Initialize plugin
-    if (!plugin->initialize(qApp)) {
-        emit pluginError(filePath, "Plugin initialization failed: " + info.name);
+    // Check persisted enabled state (default: enabled)
+    if (!isPluginEnabled(pluginName)) {
+        // Store metadata but don't initialise
+        PluginEntry entry;
+        entry.loader = loader;
+        entry.interface = iface;
+        entry.filePath = filePath;
+        entry.name = pluginName;
+        entry.version = iface->version();
+        entry.author = iface->author();
+        entry.description = iface->description();
+        entry.loaded = false;
+        m_plugins[pluginName] = entry;
+        return;
+    }
+
+    // Initialise with the EditorAPI
+    try {
+        if (!iface->initialize(m_editorAPI)) {
+            emit pluginError(filePath,
+                             "Plugin initialisation failed: " + pluginName);
+            loader->unload();
+            delete loader;
+            return;
+        }
+    } catch (const std::exception &e) {
+        qWarning() << "Plugin" << pluginName << "crashed during initialize:" << e.what();
+        emit pluginError(filePath, "Plugin crashed during initialize: " + pluginName);
+        loader->unload();
+        delete loader;
+        return;
+    } catch (...) {
+        qWarning() << "Plugin" << pluginName << "crashed during initialize with unknown exception";
+        emit pluginError(filePath, "Plugin crashed during initialize: " + pluginName);
         loader->unload();
         delete loader;
         return;
     }
 
-    // Store plugin
     PluginEntry entry;
     entry.loader = loader;
-    entry.interface = plugin;
-    entry.info = info;
-    m_plugins[info.name] = entry;
+    entry.interface = iface;
+    entry.filePath = filePath;
+    entry.name = pluginName;
+    entry.version = iface->version();
+    entry.author = iface->author();
+    entry.description = iface->description();
+    entry.loaded = true;
+    m_plugins[pluginName] = entry;
 
-    emit pluginLoaded(info.name);
+    emit pluginLoaded(pluginName);
 }
 
 void PluginManager::unloadPlugin(const QString &pluginName)
@@ -109,8 +159,12 @@ void PluginManager::unloadPlugin(const QString &pluginName)
 
     PluginEntry entry = m_plugins.take(pluginName);
 
-    if (entry.interface) {
-        entry.interface->shutdown();
+    if (entry.loaded && entry.interface) {
+        try {
+            entry.interface->shutdown();
+        } catch (...) {
+            qWarning() << "Plugin" << entry.name << "threw in shutdown";
+        }
     }
 
     if (entry.loader) {
@@ -123,24 +177,46 @@ void PluginManager::unloadPlugin(const QString &pluginName)
 
 void PluginManager::unloadAllPlugins()
 {
-    QStringList names = m_plugins.keys();
+    const QStringList names = m_plugins.keys();
     for (const QString &name : names) {
         unloadPlugin(name);
     }
 }
 
-QVector<PluginInterface*> PluginManager::plugins() const
+// ----------------------------------------------------------------
+// Enable / disable persistence
+// ----------------------------------------------------------------
+
+bool PluginManager::isPluginEnabled(const QString &name) const
 {
-    QVector<PluginInterface*> result;
-    for (const PluginEntry &entry : m_plugins) {
-        result.append(entry.interface);
+    QSettings settings;
+    return settings.value("Plugins/Enabled/" + name, true).toBool();
+}
+
+void PluginManager::setPluginEnabled(const QString &name, bool enabled)
+{
+    QSettings settings;
+    settings.setValue("Plugins/Enabled/" + name, enabled);
+}
+
+// ----------------------------------------------------------------
+// Queries
+// ----------------------------------------------------------------
+
+QVector<PluginInterface *> PluginManager::plugins() const
+{
+    QVector<PluginInterface *> result;
+    for (const PluginEntry &e : m_plugins) {
+        if (e.loaded && e.interface) {
+            result.append(e.interface);
+        }
     }
     return result;
 }
 
-PluginInterface* PluginManager::plugin(const QString &name) const
+PluginInterface *PluginManager::plugin(const QString &name) const
 {
-    if (m_plugins.contains(name)) {
+    if (m_plugins.contains(name) && m_plugins[name].loaded) {
         return m_plugins[name].interface;
     }
     return nullptr;
@@ -156,6 +232,16 @@ bool PluginManager::hasPlugin(const QString &name) const
     return m_plugins.contains(name);
 }
 
+QVector<PluginManager::PluginEntry> PluginManager::allEntries() const
+{
+    QVector<PluginEntry> result;
+    result.reserve(m_plugins.size());
+    for (const PluginEntry &e : m_plugins) {
+        result.append(e);
+    }
+    return result;
+}
+
 QStringList PluginManager::pluginDirectories() const
 {
     return m_pluginDirs;
@@ -168,75 +254,84 @@ void PluginManager::addPluginDirectory(const QString &dir)
     }
 }
 
-void PluginManager::broadcastFileOpened(Document *document)
-{
-    for (const PluginEntry &entry : m_plugins) {
-        entry.interface->onFileOpened(document);
-    }
-}
+// ----------------------------------------------------------------
+// Event broadcasting
+// ----------------------------------------------------------------
 
-void PluginManager::broadcastFileSaved(Document *document)
+void PluginManager::broadcastFileOpened(const QString &path)
 {
-    for (const PluginEntry &entry : m_plugins) {
-        entry.interface->onFileSaved(document);
-    }
-}
-
-void PluginManager::broadcastFileClosed(Document *document)
-{
-    for (const PluginEntry &entry : m_plugins) {
-        entry.interface->onFileClosed(document);
-    }
-}
-
-void PluginManager::broadcastTextChanged(Editor *editor)
-{
-    for (const PluginEntry &entry : m_plugins) {
-        entry.interface->onTextChanged(editor);
-    }
-}
-
-void PluginManager::broadcastSelectionChanged(Editor *editor)
-{
-    for (const PluginEntry &entry : m_plugins) {
-        entry.interface->onSelectionChanged(editor);
-    }
-}
-
-void PluginManager::broadcastCursorMoved(Editor *editor)
-{
-    for (const PluginEntry &entry : m_plugins) {
-        entry.interface->onCursorMoved(editor);
-    }
-}
-
-QStringList PluginManager::allCommands() const
-{
-    QStringList commands;
-    for (const PluginEntry &entry : m_plugins) {
-        QStringList pluginCommands = entry.interface->commands();
-        for (const QString &cmd : pluginCommands) {
-            commands.append(entry.info.name + "::" + cmd);
+    for (const PluginEntry &e : m_plugins) {
+        if (e.loaded && e.interface) {
+            try {
+                e.interface->onFileOpened(path);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onFileOpened";
+            }
         }
     }
-    return commands;
 }
 
-bool PluginManager::executeCommand(const QString &command, Editor *editor)
+void PluginManager::broadcastFileSaved(const QString &path)
 {
-    // Command format: "PluginName::CommandName"
-    QStringList parts = command.split("::");
-    if (parts.size() != 2) {
-        return false;
+    for (const PluginEntry &e : m_plugins) {
+        if (e.loaded && e.interface) {
+            try {
+                e.interface->onFileSaved(path);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onFileSaved";
+            }
+        }
     }
+}
 
-    QString pluginName = parts[0];
-    QString cmd = parts[1];
-
-    if (!m_plugins.contains(pluginName)) {
-        return false;
+void PluginManager::broadcastFileClosed(const QString &path)
+{
+    for (const PluginEntry &e : m_plugins) {
+        if (e.loaded && e.interface) {
+            try {
+                e.interface->onFileClosed(path);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onFileClosed";
+            }
+        }
     }
+}
 
-    m_plugins[pluginName].interface->executeCommand(cmd, editor);
-    return true;
+void PluginManager::broadcastTextChanged()
+{
+    for (const PluginEntry &e : m_plugins) {
+        if (e.loaded && e.interface) {
+            try {
+                e.interface->onTextChanged();
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onTextChanged";
+            }
+        }
+    }
+}
+
+void PluginManager::broadcastSelectionChanged(const QString &text)
+{
+    for (const PluginEntry &e : m_plugins) {
+        if (e.loaded && e.interface) {
+            try {
+                e.interface->onSelectionChanged(text);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onSelectionChanged";
+            }
+        }
+    }
+}
+
+void PluginManager::broadcastLanguageChanged(const QString &lang)
+{
+    for (const PluginEntry &e : m_plugins) {
+        if (e.loaded && e.interface) {
+            try {
+                e.interface->onLanguageChanged(lang);
+            } catch (...) {
+                qWarning() << "Plugin" << e.name << "threw in onLanguageChanged";
+            }
+        }
+    }
 }

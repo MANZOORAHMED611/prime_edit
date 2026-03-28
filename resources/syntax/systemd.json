@@ -1,0 +1,15 @@
+{
+  "name": "Systemd",
+  "keywords": ["Type", "ExecStart", "ExecStartPre", "ExecStartPost", "ExecStop", "ExecStopPost", "ExecReload", "Restart", "RestartSec", "TimeoutStartSec", "TimeoutStopSec", "WantedBy", "RequiredBy", "After", "Before", "Requires", "Wants", "Conflicts", "PartOf", "BindsTo", "Description", "Documentation", "WorkingDirectory", "User", "Group", "Environment", "EnvironmentFile", "StandardOutput", "StandardError", "SyslogIdentifier", "PIDFile", "KillMode", "KillSignal", "PrivateTmp", "ProtectSystem", "ProtectHome", "NoNewPrivileges", "ReadWritePaths", "ReadOnlyPaths", "LimitNOFILE", "LimitNPROC", "MemoryLimit", "CPUQuota", "RuntimeDirectory", "StateDirectory", "CacheDirectory", "LogsDirectory", "ConfigurationDirectory"],
+  "types": ["simple", "forking", "oneshot", "dbus", "notify", "idle", "always", "on-failure", "on-abnormal", "on-abort", "on-watchdog", "no", "yes", "full", "strict", "true", "false", "journal", "syslog", "kmsg", "console", "inherit", "null"],
+  "builtins": [],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+[smhd]?\\b",
+  "functionPattern": "",
+  "sectionPattern": "^\\[(?:Unit|Service|Install|Timer|Socket|Mount|Automount|Swap|Path|Slice|Scope)\\]",
+  "keyPattern": "^[A-Za-z][A-Za-z0-9]*(?=\\s*=)",
+  "variablePattern": "%[a-zA-Z]|\\$[A-Za-z_][A-Za-z0-9_]*"
+}

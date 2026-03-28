@@ -21,11 +21,17 @@ public:
     void loadSession(const QString &name, MainWindow *window);
     void deleteSession(const QString &name);
 
+    // Unsaved document persistence
+    void saveUnsavedDocuments(MainWindow *window);
+    void restoreUnsavedDocuments(MainWindow *window);
+    void clearUnsavedCache();
+
 private:
     Session();
 
     QString sessionFilePath() const;
     QString namedSessionPath(const QString &name) const;
+    QString unsavedCacheDir() const;
     QJsonObject windowToJson(MainWindow *window) const;
     void jsonToWindow(const QJsonObject &json, MainWindow *window);
 };

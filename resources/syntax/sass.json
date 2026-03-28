@@ -1,0 +1,17 @@
+{
+  "name": "SASS",
+  "keywords": ["if", "else", "for", "each", "while", "mixin", "include", "extend", "import", "use", "forward", "at-root", "function", "return", "warn", "debug", "error", "content"],
+  "types": [],
+  "builtins": ["rgb", "rgba", "hsl", "hsla", "red", "green", "blue", "mix", "lighten", "darken", "saturate", "desaturate", "grayscale", "complement", "invert", "alpha", "opacity", "percentage", "round", "ceil", "floor", "abs", "min", "max", "length", "nth", "join", "append", "zip", "index", "map-get", "map-merge", "map-keys", "map-values", "map-has-key", "selector-nest", "selector-append", "type-of", "unit", "unitless", "comparable", "str-length", "str-insert", "str-index", "str-slice", "to-upper-case", "to-lower-case", "unquote", "quote", "if", "unique-id"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "-?\\b[0-9]+(\\.[0-9]+)?(px|em|rem|%|vh|vw|vmin|vmax|pt|cm|mm|in|pc|ex|ch|deg|rad|grad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?\\b",
+  "functionPattern": "\\b([a-zA-Z_-][a-zA-Z0-9_-]*)\\s*\\(",
+  "variablePattern": "\\$[a-zA-Z_-][a-zA-Z0-9_-]*",
+  "selectorPattern": "^\\s*[.#%&>+~][a-zA-Z0-9_-]+|^\\s*[a-zA-Z][a-zA-Z0-9-]*(?=\\s|$|,|\\{)",
+  "propertyPattern": "\\b[a-z-]+(?=\\s*:)",
+  "preprocessorPrefix": "@",
+  "foldBased": "indent"
+}

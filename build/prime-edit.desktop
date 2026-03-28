@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=PrimeEdit
+Comment=The editor for structured knowledge work
+GenericName=Text Editor
+Exec=/home/abusulaiman/dev/repository/olive_notepad/build/PrimeEdit %F
+Icon=/home/abusulaiman/.local/share/icons/hicolor/256x256/apps/prime-edit.png
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;Development;
+StartupWMClass=PrimeEdit

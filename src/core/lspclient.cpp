@@ -71,7 +71,7 @@ void LSPClient::shutdown()
     }
 
     if (m_process) {
-        delete m_process;
+        m_process->deleteLater();
         m_process = nullptr;
     }
 
@@ -100,7 +100,8 @@ void LSPClient::didChange(const QString &uri, const QString &text)
     QJsonObject params;
     QJsonObject textDocument;
     textDocument["uri"] = uri;
-    textDocument["version"] = m_nextId++;  // Simple versioning
+    int version = ++m_documentVersions[uri];
+    textDocument["version"] = version;
     params["textDocument"] = textDocument;
 
     QJsonArray contentChanges;
@@ -208,6 +209,25 @@ void LSPClient::references(const QString &uri, int line, int character)
     sendRequest("textDocument/references", params);
 }
 
+void LSPClient::rename(const QString &uri, int line, int character,
+                       const QString &newName)
+{
+    if (!m_initialized) return;
+
+    QJsonObject params;
+    QJsonObject textDocument;
+    textDocument["uri"] = uri;
+    params["textDocument"] = textDocument;
+
+    QJsonObject position;
+    position["line"] = line;
+    position["character"] = character;
+    params["position"] = position;
+    params["newName"] = newName;
+
+    sendRequest("textDocument/rename", params);
+}
+
 bool LSPClient::isRunning() const
 {
     return m_process && m_process->state() == QProcess::Running;
@@ -275,7 +295,10 @@ void LSPClient::onReadyRead()
             }
         }
 
-        if (contentLength == 0) break;
+        if (contentLength == 0) {
+            m_buffer.remove(0, headerEnd + 4);
+            continue;
+        }
 
         int messageStart = headerEnd + 4;
         if (m_buffer.size() < messageStart + contentLength) break;
@@ -394,16 +417,48 @@ void LSPClient::handleResponse(const QJsonObject &response)
         emit hoverResult(hoverText);
     } else if (method == "textDocument/definition") {
         QJsonValue result = response["result"];
-        if (result.isObject()) {
+        Location location;
+        if (result.isArray()) {
+            QJsonArray arr = result.toArray();
+            if (!arr.isEmpty()) {
+                QJsonObject loc = arr.first().toObject();
+                location.uri = loc["uri"].toString();
+                QJsonObject range = loc["range"].toObject();
+                QJsonObject start = range["start"].toObject();
+                location.line = start["line"].toInt();
+                location.character = start["character"].toInt();
+            }
+        } else if (result.isObject()) {
             QJsonObject loc = result.toObject();
-            Location location;
             location.uri = loc["uri"].toString();
             QJsonObject range = loc["range"].toObject();
             QJsonObject start = range["start"].toObject();
             location.line = start["line"].toInt();
             location.character = start["character"].toInt();
+        }
+        if (!location.uri.isEmpty()) {
             emit definitionResult(location);
         }
+    } else if (method == "textDocument/references") {
+        QVector<Location> locations;
+        QJsonValue result = response["result"];
+        if (result.isArray()) {
+            QJsonArray arr = result.toArray();
+            for (const QJsonValue &val : arr) {
+                QJsonObject loc = val.toObject();
+                Location l;
+                l.uri = loc["uri"].toString();
+                QJsonObject range = loc["range"].toObject();
+                QJsonObject start = range["start"].toObject();
+                l.line = start["line"].toInt();
+                l.character = start["character"].toInt();
+                locations.append(l);
+            }
+        }
+        emit referencesResult(locations);
+    } else if (method == "textDocument/rename") {
+        QJsonObject result = response["result"].toObject();
+        emit renameResult(result);
     }
 }
 

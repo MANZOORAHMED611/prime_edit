@@ -1,0 +1,13 @@
+{
+  "name": "Scheme",
+  "keywords": ["and", "begin", "case", "cond", "define", "define-macro", "define-record-type", "define-syntax", "define-values", "delay", "do", "else", "if", "import", "include", "include-ci", "lambda", "let", "let*", "let-syntax", "let-values", "letrec", "letrec*", "letrec-syntax", "library", "not", "or", "quasiquote", "quote", "set!", "syntax-rules", "unless", "unquote", "unquote-splicing", "when"],
+  "types": ["boolean", "bytevector", "char", "complex", "eof-object", "inexact", "integer", "list", "null", "number", "pair", "port", "procedure", "rational", "real", "string", "symbol", "vector"],
+  "builtins": ["abs", "append", "apply", "assoc", "assq", "assv", "boolean?", "car", "cdr", "caar", "cadr", "cdar", "cddr", "ceiling", "char?", "char->integer", "close-input-port", "close-output-port", "cons", "display", "eof-object?", "eq?", "equal?", "eqv?", "error", "even?", "exact", "exact?", "expt", "floor", "for-each", "gcd", "inexact", "inexact?", "integer?", "integer->char", "length", "list", "list?", "list-ref", "list-tail", "map", "max", "member", "memq", "memv", "min", "modulo", "negative?", "newline", "not", "null?", "number?", "number->string", "odd?", "open-input-file", "open-output-file", "pair?", "positive?", "procedure?", "quotient", "rational?", "read", "real?", "remainder", "reverse", "round", "string?", "string->number", "string->symbol", "string-append", "string-length", "string-ref", "substring", "symbol?", "symbol->string", "truncate", "values", "vector?", "vector-length", "vector-ref", "vector-set!", "write", "zero?"],
+  "singleLineComment": ";",
+  "multiLineCommentStart": "#|",
+  "multiLineCommentEnd": "|#",
+  "stringDelimiters": ["\""],
+  "numberPattern": "[+-]?\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|#[bodxei]",
+  "functionPattern": "\\(([a-zA-Z_!?*+<>=./-][a-zA-Z0-9_!?*+<>=./-]*)",
+  "foldBased": "paren"
+}

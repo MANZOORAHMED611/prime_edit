@@ -1,5 +1,10 @@
 #include "lspmanager.h"
 #include <QDir>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QStandardPaths>
 
 LSPManager::LSPManager()
 {
@@ -31,7 +36,17 @@ bool LSPManager::hasServerForLanguage(const QString &language) const
 {
     QString lang = language.toLower();
 
-    // Check if we have a configuration for this language
+    // Check user config first
+    QString configPath = QStandardPaths::writableLocation(
+        QStandardPaths::AppConfigLocation) + "/lsp-servers.json";
+    QFile configFile(configPath);
+    if (configFile.open(QIODevice::ReadOnly)) {
+        QJsonDocument doc = QJsonDocument::fromJson(configFile.readAll());
+        QJsonObject obj = doc.object();
+        if (obj.contains(lang)) return true;
+    }
+
+    // Check hardcoded defaults
     if (lang == "python" || lang == "py") return true;
     if (lang == "c++" || lang == "cpp" || lang == "c") return true;
     if (lang == "javascript" || lang == "js" || lang == "typescript" || lang == "ts") return true;
@@ -100,6 +115,25 @@ LSPManager::ServerConfig LSPManager::getServerConfig(const QString &language) co
     ServerConfig config;
     QString lang = language.toLower();
 
+    // Try user config first
+    QString configPath = QStandardPaths::writableLocation(
+        QStandardPaths::AppConfigLocation) + "/lsp-servers.json";
+    QFile configFile(configPath);
+    if (configFile.open(QIODevice::ReadOnly)) {
+        QJsonDocument doc = QJsonDocument::fromJson(configFile.readAll());
+        QJsonObject obj = doc.object();
+        if (obj.contains(lang)) {
+            QJsonObject serverObj = obj[lang].toObject();
+            config.command = serverObj["command"].toString();
+            QJsonArray argsArray = serverObj["args"].toArray();
+            for (const QJsonValue &v : argsArray) {
+                config.args.append(v.toString());
+            }
+            if (!config.command.isEmpty()) return config;
+        }
+    }
+
+    // Fall back to hardcoded defaults
     if (lang == "python" || lang == "py") {
         // Python Language Server (pylsp)
         config.command = "pylsp";

@@ -15,6 +15,7 @@ public:
 
     void setLanguage(const QString &language);
     QString language() const { return m_language; }
+    void setupFormats();
 
 protected:
     void highlightBlock(const QString &text) override;
@@ -24,22 +25,8 @@ private:
         QRegularExpression pattern;
         QTextCharFormat format;
     };
-
-    void setupFormats();
     void loadLanguageRules(const QString &language);
-    void loadCppRules();
-    void loadPythonRules();
-    void loadJavaScriptRules();
-    void loadHtmlRules();
-    void loadCssRules();
-    void loadJsonRules();
-    void loadYamlRules();
-    void loadMarkdownRules();
-    void loadBashRules();
-    void loadRustRules();
-    void loadGoRules();
-    void loadJavaRules();
-    void loadSqlRules();
+    void loadFromDefinition(const QString &resourcePath);
 
     QString m_language;
     QVector<HighlightingRule> m_rules;

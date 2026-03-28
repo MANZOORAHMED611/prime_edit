@@ -1,0 +1,14 @@
+{
+  "name": "EditorConfig",
+  "keywords": ["root", "indent_style", "indent_size", "tab_width", "end_of_line", "charset", "trim_trailing_whitespace", "insert_final_newline", "max_line_length"],
+  "types": ["true", "false", "space", "tab", "lf", "cr", "crlf", "utf-8", "utf-8-bom", "utf-16be", "utf-16le", "latin1", "unset"],
+  "builtins": [],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": [],
+  "numberPattern": "\\b[0-9]+\\b",
+  "functionPattern": "",
+  "sectionPattern": "^\\[.*\\]",
+  "keyPattern": "^[a-zA-Z_][a-zA-Z0-9_]*(?=\\s*=)"
+}

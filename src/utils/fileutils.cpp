@@ -96,17 +96,17 @@ QString allFilesFilter()
 
 QString textFilesFilter()
 {
-    return QObject::tr("Text Files (*.txt *.text *.md *.markdown *.rst)");
+    return QObject::tr("Text Files (*.txt *.text *.log *.md *.markdown *.rst *.csv *.json *.xml *.yaml *.yml *.toml *.ini *.cfg *.conf)");
 }
 
 QString sourceFilesFilter()
 {
-    return QObject::tr("Source Files (*.cpp *.c *.h *.hpp *.py *.js *.ts *.java *.rs *.go)");
+    return QObject::tr("Source Files (*.cpp *.c *.h *.hpp *.cc *.cxx *.py *.js *.ts *.jsx *.tsx *.java *.rs *.go *.rb *.php *.cs *.swift *.kt *.scala *.dart *.lua *.sh *.bash *.sql *.html *.css *.scss)");
 }
 
 QString combinedFilter()
 {
-    return textFilesFilter() + ";;" + sourceFilesFilter() + ";;" + allFilesFilter();
+    return allFilesFilter() + ";;" + textFilesFilter() + ";;" + sourceFilesFilter();
 }
 
 QString createBackup(const QString &path)

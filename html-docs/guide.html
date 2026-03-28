@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrimeEdit — User Guide</title>
+    <link rel="icon" type="image/png" href="prime_edit_icon.png">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-light: #3B82F6;
+            --primary-dark: #1D4ED8;
+            --accent: #60A5FA;
+            --bg: #F8FAFC;
+            --bg-white: #FFFFFF;
+            --bg-code: #EFF4FB;
+            --bg-sidebar: #FFFFFF;
+            --bg-sidebar-hover: #F1F5F9;
+            --text: #0F172A;
+            --text-light: #475569;
+            --text-muted: #94A3B8;
+            --text-sidebar: #475569;
+            --text-sidebar-active: #1D4ED8;
+            --border: #CBD5E1;
+            --border-light: #E2E8F0;
+            --success: #16A34A;
+            --warning: #EA580C;
+            --info: #2563EB;
+            --shadow: rgba(37, 99, 235, 0.06);
+            --shadow-lg: rgba(37, 99, 235, 0.10);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font); color: var(--text); background: var(--bg); line-height: 1.7; font-size: 15px; }
+
+        .sidebar {
+            position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+            background: var(--bg-sidebar); border-right: 1px solid var(--border-light);
+            overflow-y: auto; z-index: 100; padding-bottom: 40px;
+        }
+        .sidebar-header { padding: 28px 24px 20px; border-bottom: 1px solid var(--border-light); }
+        .sidebar-header img { height: 36px; margin-bottom: 6px; }
+        .sidebar-header .tagline { font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+        .sidebar-nav { padding: 16px 0; }
+        .sidebar-nav .section-label {
+            padding: 12px 24px 6px; font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-muted);
+        }
+        .sidebar-nav a {
+            display: block; padding: 7px 24px 7px 32px; color: var(--text-sidebar);
+            text-decoration: none; font-size: 13.5px; transition: all 0.15s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-nav a:hover { background: var(--bg-sidebar-hover); color: var(--text-sidebar-active); border-left-color: var(--primary-light); }
+        .sidebar-nav a.doc-link { color: var(--primary); font-weight: 600; margin-top: 8px; }
+
+        .main { margin-left: 280px; min-height: 100vh; }
+
+        .hero {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            color: var(--text); padding: 60px 60px 48px; position: relative;
+        }
+        .hero h1 { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+        .hero p { font-size: 17px; color: var(--text-light); max-width: 600px; }
+
+        .content { max-width: 800px; padding: 48px 60px 80px; }
+        section { margin-bottom: 48px; }
+        h2 { font-size: 24px; font-weight: 700; color: var(--primary-dark); margin-bottom: 16px; padding-top: 16px; }
+        h3 { font-size: 18px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+        p { margin-bottom: 14px; color: var(--text-light); }
+        .lead { font-size: 16px; color: var(--text); line-height: 1.8; margin-bottom: 20px; }
+        .divider { height: 1px; background: var(--border-light); margin: 36px 0; }
+
+        .step-list { list-style: none; margin: 16px 0; padding: 0; counter-reset: step; }
+        .step-list li {
+            counter-increment: step; padding: 16px 20px 16px 60px; position: relative;
+            background: var(--bg-white); border: 1px solid var(--border-light);
+            border-radius: var(--radius); margin-bottom: 10px;
+        }
+        .step-list li::before {
+            content: counter(step); position: absolute; left: 16px; top: 16px;
+            width: 28px; height: 28px; background: var(--primary); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700;
+        }
+        .step-list li strong { color: var(--text); }
+
+        kbd {
+            display: inline-block; padding: 2px 7px; font-family: var(--font-mono);
+            font-size: 12px; background: var(--bg-white); border: 1px solid var(--border);
+            border-radius: 4px; box-shadow: 0 1px 0 var(--border); color: var(--text);
+        }
+        code {
+            font-family: var(--font-mono); font-size: 13px; background: var(--bg-code);
+            padding: 2px 6px; border-radius: 4px; color: var(--primary-dark);
+        }
+        pre {
+            background: #F1F5F9; color: #334155; padding: 20px 24px;
+            border-radius: var(--radius); overflow-x: auto; margin: 16px 0;
+            font-family: var(--font-mono); font-size: 13px; line-height: 1.6;
+        }
+        pre code { background: none; padding: 0; color: inherit; }
+
+        .info-box { padding: 16px 20px; border-radius: var(--radius); margin: 20px 0; font-size: 14px; }
+        .info-box.note { background: #EFF6FF; border-left: 4px solid var(--primary); color: #1E40AF; }
+        .info-box.tip { background: #F0FDF4; border-left: 4px solid #16A34A; color: #166534; }
+        .info-box.warning { background: #FFF7ED; border-left: 4px solid #EA580C; color: #9A3412; }
+
+        ul, ol { margin: 12px 0 12px 24px; color: var(--text-light); }
+        li { margin-bottom: 6px; }
+
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; background: var(--bg-white); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 3px var(--shadow); }
+        thead { background: #EFF6FF; color: var(--primary-dark); }
+        th { padding: 10px 16px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; }
+        td { padding: 10px 16px; border-bottom: 1px solid var(--border-light); color: var(--text-light); }
+        tr:last-child td { border-bottom: none; }
+
+        .footer { margin-top: 60px; padding: 32px 0; border-top: 1px solid var(--border-light); text-align: center; color: var(--text-muted); font-size: 13px; }
+        .footer img { height: 24px; opacity: 0.5; margin-bottom: 8px; }
+
+        @media (max-width: 1024px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; }
+            .content { padding: 32px 24px; }
+            .hero { padding: 40px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <img src="prime_edit_logo.png" alt="PrimeEdit">
+        <div class="tagline">User Guide</div>
+    </div>
+    <div class="sidebar-nav">
+        <div class="section-label">Getting Started</div>
+        <a href="#getting-started">Install &amp; First Launch</a>
+        <a href="#shortcuts">Keyboard Shortcuts</a>
+
+        <div class="section-label">Core Features</div>
+        <a href="#multicursor">Multi-Cursor Editing</a>
+        <a href="#splitscreen">Split-Screen</a>
+        <a href="#find">Search &amp; Replace</a>
+        <a href="#code-intel">Code Intelligence</a>
+
+        <div class="section-label">Integrations</div>
+        <a href="#git">Git Integration</a>
+        <a href="#remote">Remote Editing</a>
+
+        <div class="section-label">Customization</div>
+        <a href="#themes">Themes</a>
+        <a href="#macros">Macros</a>
+        <a href="#largefile">Large Files</a>
+        <a href="#plugins">Plugins</a>
+        <a href="#config">Configuration</a>
+
+        <div class="section-label">Other Pages</div>
+        <a href="index.html" class="doc-link">Technical Documentation</a>
+        <a href="faq.html" class="doc-link">FAQ</a>
+    </div>
+</nav>
+
+<div class="main">
+    <header class="hero">
+        <h1>User Guide</h1>
+        <p>Get started with PrimeEdit &mdash; a fast native text editor for Linux.</p>
+    </header>
+
+    <div class="content">
+
+        <!-- Getting Started -->
+        <section id="getting-started">
+            <h2>Getting Started</h2>
+
+            <h3>Installation</h3>
+            <p>PrimeEdit requires Qt 6 (or Qt 5) development libraries and CMake.</p>
+            <pre><code># Ubuntu / Debian
+sudo apt install qt6-base-dev qt6-tools-dev qt6-svg-dev cmake build-essential
+
+# Fedora
+sudo dnf install qt6-qtbase-devel qt6-qtsvg-devel cmake gcc-c++
+
+# Arch Linux
+sudo pacman -S qt6-base qt6-svg cmake base-devel</code></pre>
+
+            <h3>Build &amp; Run</h3>
+            <pre><code>git clone &lt;repository-url&gt; prime-edit
+cd prime-edit
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+./PrimeEdit</code></pre>
+
+            <div class="info-box tip">
+                <strong>Tip:</strong> After building, PrimeEdit automatically installs its icon and desktop launcher to <code>~/.local/share/</code>. You can find it in your application menu by searching "PrimeEdit".
+            </div>
+
+            <h3>First Launch</h3>
+            <p>When you open PrimeEdit for the first time:</p>
+            <ul>
+                <li>The editor opens with the <strong>Notepad++ theme</strong> (white background, blue keywords)</li>
+                <li>An empty <strong>Untitled 1</strong> tab is ready for typing</li>
+                <li>The <strong>toolbar</strong> shows common actions as 16x16 icons in a single row</li>
+                <li>The <strong>status bar</strong> at the bottom shows line/column, encoding, and line ending</li>
+            </ul>
+
+            <div class="info-box note">
+                <strong>Unsaved work is safe.</strong> If you close PrimeEdit with unsaved content in any tab &mdash; even untitled tabs &mdash; everything is silently preserved. Next time you open PrimeEdit, all your tabs reappear exactly as you left them. No prompts. No save dialogs on quit.
+            </div>
+
+            <h3>Interface Overview</h3>
+            <table>
+                <thead><tr><th>Area</th><th>Location</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Menu Bar</strong></td><td>Top</td><td>12 menus: File, Edit, Search, View, Encoding, Language, Settings, Tools, Macro, Run, Plugins, Window, ?</td></tr>
+                    <tr><td><strong>Toolbar</strong></td><td>Below menu</td><td>Quick access to common actions (file, edit, search, view, macro)</td></tr>
+                    <tr><td><strong>Tab Bar</strong></td><td>Below toolbar</td><td>Switch between open documents. Colored icons by file type.</td></tr>
+                    <tr><td><strong>Gutter</strong></td><td>Left of editor</td><td>Bookmark margin, line numbers, fold margin, Git indicators</td></tr>
+                    <tr><td><strong>Editor</strong></td><td>Center</td><td>Main editing area with syntax highlighting</td></tr>
+                    <tr><td><strong>Status Bar</strong></td><td>Bottom</td><td>Ln/Col/Sel/Pos, Length/Lines, EOL (clickable), Encoding (clickable), INS/OVR</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Basic Editing</h3>
+            <ul>
+                <li><strong>New file:</strong> <kbd>Ctrl</kbd>+<kbd>N</kbd> or double-click empty tab bar area</li>
+                <li><strong>Open file:</strong> <kbd>Ctrl</kbd>+<kbd>O</kbd> &mdash; or drag files from your file manager</li>
+                <li><strong>Save:</strong> <kbd>Ctrl</kbd>+<kbd>S</kbd> &mdash; prompts for untitled files</li>
+                <li><strong>Close tab:</strong> <kbd>Ctrl</kbd>+<kbd>W</kbd>, click the X, or middle-click the tab</li>
+                <li><strong>Switch tabs:</strong> <kbd>Ctrl</kbd>+<kbd>PgUp</kbd> / <kbd>Ctrl</kbd>+<kbd>PgDn</kbd></li>
+            </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Keyboard Shortcuts -->
+        <section id="shortcuts">
+            <h2>Keyboard Shortcuts</h2>
+
+            <h3>File Operations</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>New file</td><td><kbd>Ctrl</kbd>+<kbd>N</kbd></td></tr>
+                    <tr><td>Open file</td><td><kbd>Ctrl</kbd>+<kbd>O</kbd></td></tr>
+                    <tr><td>Open remote file</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd></td></tr>
+                    <tr><td>Save</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td></tr>
+                    <tr><td>Save As</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td></tr>
+                    <tr><td>Reload from Disk</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd></td></tr>
+                    <tr><td>Close tab</td><td><kbd>Ctrl</kbd>+<kbd>W</kbd></td></tr>
+                    <tr><td>Print Preview</td><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Editing</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Undo / Redo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd></td></tr>
+                    <tr><td>Cut / Copy / Paste</td><td><kbd>Ctrl</kbd>+<kbd>X</kbd> / <kbd>C</kbd> / <kbd>V</kbd></td></tr>
+                    <tr><td>Select All</td><td><kbd>Ctrl</kbd>+<kbd>A</kbd></td></tr>
+                    <tr><td>Duplicate Line</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd></td></tr>
+                    <tr><td>Delete Line</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></td></tr>
+                    <tr><td>Move Line Up / Down</td><td><kbd>Alt</kbd>+<kbd>Up</kbd> / <kbd>Alt</kbd>+<kbd>Down</kbd></td></tr>
+                    <tr><td>Toggle Comment</td><td><kbd>Ctrl</kbd>+<kbd>/</kbd></td></tr>
+                    <tr><td>Go to Line</td><td><kbd>Ctrl</kbd>+<kbd>G</kbd></td></tr>
+                    <tr><td>Jump to Bracket</td><td><kbd>Ctrl</kbd>+<kbd>B</kbd></td></tr>
+                    <tr><td>Zoom In / Out / Reset</td><td><kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>-</kbd> / <kbd>0</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Multi-Cursor &amp; Selection</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Add cursor</td><td><kbd>Alt</kbd>+Click</td></tr>
+                    <tr><td>Select next occurrence</td><td><kbd>Ctrl</kbd>+<kbd>D</kbd></td></tr>
+                    <tr><td>Select all occurrences</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td></tr>
+                    <tr><td>Column (rectangular) selection</td><td><kbd>Alt</kbd>+Drag</td></tr>
+                    <tr><td>Column Editor</td><td><kbd>Alt</kbd>+<kbd>C</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Split-Screen</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Split vertical</td><td><kbd>Ctrl</kbd>+<kbd>\</kbd></td></tr>
+                    <tr><td>Split horizontal</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd></td></tr>
+                    <tr><td>Switch focus between panes</td><td><kbd>F6</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Search</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Incremental search</td><td><kbd>Ctrl</kbd>+<kbd>I</kbd></td></tr>
+                    <tr><td>Find dialog</td><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td></tr>
+                    <tr><td>Replace dialog</td><td><kbd>Ctrl</kbd>+<kbd>H</kbd></td></tr>
+                    <tr><td>Find in Files</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Code Intelligence</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Trigger auto-complete</td><td><kbd>Ctrl</kbd>+<kbd>Space</kbd></td></tr>
+                    <tr><td>Hover documentation</td><td><kbd>Ctrl</kbd>+<kbd>K</kbd></td></tr>
+                    <tr><td>Go to definition</td><td><kbd>F12</kbd> or <kbd>Ctrl</kbd>+Click</td></tr>
+                    <tr><td>Find references</td><td><kbd>Shift</kbd>+<kbd>F12</kbd></td></tr>
+                    <tr><td>Rename symbol</td><td><kbd>F2</kbd></td></tr>
+                    <tr><td>Expand snippet</td><td><kbd>Tab</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Git &amp; Remote</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Git commit</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td></tr>
+                    <tr><td>Open remote file</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Macros &amp; Tools</h3>
+            <table>
+                <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Start recording macro</td><td><kbd>F9</kbd></td></tr>
+                    <tr><td>Stop recording macro</td><td><kbd>Shift</kbd>+<kbd>F9</kbd></td></tr>
+                    <tr><td>Play macro</td><td><kbd>F10</kbd></td></tr>
+                    <tr><td>Toggle bookmark</td><td>Click bookmark margin</td></tr>
+                    <tr><td>Next / Previous bookmark</td><td><kbd>F2</kbd> / <kbd>Shift</kbd>+<kbd>F2</kbd></td></tr>
+                    <tr><td>Toggle terminal</td><td><kbd>Ctrl</kbd>+<kbd>'</kbd></td></tr>
+                    <tr><td>Block evaluation (AI)</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Multi-Cursor Editing -->
+        <section id="multicursor">
+            <h2>Multi-Cursor Editing</h2>
+            <p>Multi-cursor editing lets you type, delete, and paste at multiple positions simultaneously.</p>
+
+            <h3>Adding Cursors</h3>
+            <ul>
+                <li><kbd>Alt</kbd>+Click anywhere in the document to place an additional cursor</li>
+                <li><kbd>Ctrl</kbd>+<kbd>D</kbd> selects the next occurrence of the current word and adds a cursor there</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> selects all occurrences of the current word at once</li>
+                <li>Press <kbd>Escape</kbd> to return to a single cursor</li>
+            </ul>
+
+            <h3>What Works with Multi-Cursor</h3>
+            <ul>
+                <li>Typing, deleting, and pasting text</li>
+                <li>Auto-close brackets and quotes (inserted at all cursor positions)</li>
+                <li>Line operations (duplicate, delete, move)</li>
+                <li>Toggle comments</li>
+            </ul>
+
+            <h3>Column Selection</h3>
+            <p>Hold <kbd>Alt</kbd> and <strong>drag</strong> with the mouse to create a rectangular (column) selection. Type to insert text at every line. Use <kbd>Alt</kbd>+<kbd>C</kbd> to open the Column Editor dialog for text or number sequence insertion.</p>
+
+            <div class="info-box tip">
+                <strong>Atomic undo:</strong> All multi-cursor edits are grouped &mdash; one <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the entire operation across all cursor positions.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Split-Screen -->
+        <section id="splitscreen">
+            <h2>Split-Screen</h2>
+            <p>View two files side by side, or two different parts of the same file.</p>
+
+            <h3>Splitting</h3>
+            <ul>
+                <li><kbd>Ctrl</kbd>+<kbd>\</kbd> splits the editor <strong>vertically</strong> (side by side)</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> splits <strong>horizontally</strong> (top and bottom)</li>
+                <li><kbd>F6</kbd> switches focus between panes</li>
+            </ul>
+
+            <h3>Cloning a Document</h3>
+            <p>Right-click a tab and select <strong>Clone to Other View</strong>. Both views share the same document &mdash; edits in one pane appear instantly in the other. This is useful for editing one part of a file while referencing another part.</p>
+
+            <h3>Moving Tabs</h3>
+            <p>Drag a tab from one pane to the other, or right-click and select <strong>Move to Other View</strong>.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Search & Replace -->
+        <section id="find">
+            <h2>Search &amp; Replace</h2>
+
+            <h3>Quick Search</h3>
+            <p><kbd>Ctrl</kbd>+<kbd>I</kbd> opens the <strong>incremental search bar</strong> &mdash; a compact bar that highlights matches as you type. Press <kbd>Enter</kbd> for next match, <kbd>Shift</kbd>+<kbd>Enter</kbd> for previous, <kbd>Escape</kbd> to close.</p>
+
+            <h3>Full Search Dialog</h3>
+            <p><kbd>Ctrl</kbd>+<kbd>F</kbd> opens the <strong>tabbed search dialog</strong> with four tabs:</p>
+
+            <ol class="step-list">
+                <li><strong>Find</strong> &mdash; Find Next, Count, Find All in Current Document, Find All in All Open Documents</li>
+                <li><strong>Replace</strong> (<kbd>Ctrl</kbd>+<kbd>H</kbd>) &mdash; Replace one, Replace All, Replace in All Open Documents</li>
+                <li><strong>Find in Files</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>) &mdash; Search across files on disk with directory picker and filters</li>
+                <li><strong>Mark</strong> &mdash; Highlight all matches with yellow background. Optionally bookmark marked lines.</li>
+            </ol>
+
+            <h3>Search Modes</h3>
+            <ul>
+                <li><strong>Normal</strong> &mdash; literal text matching</li>
+                <li><strong>Extended</strong> &mdash; recognizes <code>\n</code> (newline), <code>\t</code> (tab), <code>\r</code> (return), <code>\xNN</code> (hex byte)</li>
+                <li><strong>Regular Expression</strong> &mdash; full regex with backreferences in replace (<code>\1</code>, <code>$1</code>)</li>
+            </ul>
+
+            <h3>Search Results Panel</h3>
+            <p>When you use "Find All", results appear in a <strong>bottom panel</strong> grouped by file. Double-click any result to jump to that location.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Code Intelligence -->
+        <section id="code-intel">
+            <h2>Code Intelligence</h2>
+            <p>PrimeEdit provides smart editing features through its built-in LSP client, auto-completion engine, and snippet system.</p>
+
+            <h3>LSP Setup</h3>
+            <p>Install the language server for your language. PrimeEdit connects automatically when you open a file.</p>
+            <table>
+                <thead><tr><th>Language</th><th>Server</th><th>Install Command</th></tr></thead>
+                <tbody>
+                    <tr><td>C / C++</td><td>clangd</td><td><code>sudo apt install clangd</code></td></tr>
+                    <tr><td>Python</td><td>pylsp</td><td><code>pip install python-lsp-server</code></td></tr>
+                    <tr><td>JavaScript/TypeScript</td><td>typescript-language-server</td><td><code>npm i -g typescript-language-server</code></td></tr>
+                    <tr><td>Rust</td><td>rust-analyzer</td><td><code>rustup component add rust-analyzer</code></td></tr>
+                    <tr><td>Go</td><td>gopls</td><td><code>go install golang.org/x/tools/gopls@latest</code></td></tr>
+                </tbody>
+            </table>
+            <p>For other languages, create <code>~/.config/PrimeEdit/lsp-servers.json</code>:</p>
+            <pre><code>{
+  "python": {"command": "pylsp", "args": []},
+  "c++": {"command": "clangd", "args": ["--background-index"]},
+  "rust": {"command": "rust-analyzer", "args": []}
+}</code></pre>
+
+            <h3>Completions</h3>
+            <ul>
+                <li><kbd>Ctrl</kbd>+<kbd>Space</kbd> to trigger manually, or type 3+ characters for automatic popup</li>
+                <li><kbd>Enter</kbd> or <kbd>Tab</kbd> to accept, <kbd>Escape</kbd> to dismiss</li>
+                <li>Sources (in priority order): LSP completions, language keywords, document words</li>
+            </ul>
+
+            <h3>Diagnostics</h3>
+            <p>LSP diagnostics appear as wave underlines in the editor &mdash; red for errors, yellow for warnings. Hover over an underline (or press <kbd>Ctrl</kbd>+<kbd>K</kbd>) to see the diagnostic message.</p>
+
+            <h3>Navigation</h3>
+            <table>
+                <thead><tr><th>Feature</th><th>Shortcut</th></tr></thead>
+                <tbody>
+                    <tr><td>Go to definition</td><td><kbd>F12</kbd> or <kbd>Ctrl</kbd>+click</td></tr>
+                    <tr><td>Find references</td><td><kbd>Shift</kbd>+<kbd>F12</kbd></td></tr>
+                    <tr><td>Rename symbol</td><td><kbd>F2</kbd></td></tr>
+                    <tr><td>Hover documentation</td><td>Mouse hover or <kbd>Ctrl</kbd>+<kbd>K</kbd></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Snippets</h3>
+            <p>Type a snippet prefix and press <kbd>Tab</kbd> to expand. PrimeEdit includes built-in snippets for common language patterns. Snippet completions appear in the auto-complete popup with a snippet icon.</p>
+
+            <h3>Block Evaluation (AI)</h3>
+            <p>Select text and press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd> to send it to an LLM endpoint (Ollama by default). An inline diff appears &mdash; press <kbd>A</kbd> to accept or <kbd>Escape</kbd> to discard. Configure the endpoint via <strong>Tools &gt; Configure Endpoint</strong>.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Git Integration -->
+        <section id="git">
+            <h2>Git Integration</h2>
+            <p>PrimeEdit provides built-in Git support for common workflows without leaving the editor.</p>
+
+            <h3>Gutter Indicators</h3>
+            <p>When you edit a file in a Git repository, colored indicators appear in the left gutter:</p>
+            <ul>
+                <li><strong style="color: #16A34A;">Green</strong> &mdash; added lines (new content)</li>
+                <li><strong style="color: #CA8A04;">Yellow</strong> &mdash; modified lines (changed from last commit)</li>
+                <li><strong style="color: #DC2626;">Red</strong> &mdash; deleted lines (a triangle marker shows where lines were removed)</li>
+            </ul>
+            <p>These indicators update automatically as you type.</p>
+
+            <h3>Committing</h3>
+            <p><strong>Git &gt; Commit</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) opens the commit dialog:</p>
+            <ul>
+                <li>File list with <strong>staging checkboxes</strong> &mdash; select which files to include</li>
+                <li><strong>Diff preview</strong> for each file &mdash; review changes before committing</li>
+                <li><strong>Commit message editor</strong> with subject/body separation</li>
+            </ul>
+
+            <h3>Branch Switching</h3>
+            <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select one to switch. PrimeEdit reloads any open files that changed between branches.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Remote Editing -->
+        <section id="remote">
+            <h2>Remote Editing</h2>
+            <p>Edit files on remote servers over SSH without leaving PrimeEdit.</p>
+
+            <h3>Setting Up a Connection</h3>
+            <ol class="step-list">
+                <li>Open <strong>File &gt; Open Remote</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd>)</li>
+                <li>Click <strong>Add Connection</strong> and enter hostname, username, port, and key file path</li>
+                <li>Browse the remote filesystem and open files</li>
+            </ol>
+
+            <h3>Editing Remote Files</h3>
+            <p>Remote files open like any local file. When you save (<kbd>Ctrl</kbd>+<kbd>S</kbd>), changes are automatically uploaded to the remote server. The tab title shows the remote path with a network icon to distinguish remote files from local ones.</p>
+
+            <div class="info-box note">
+                <strong>SSH keys:</strong> PrimeEdit uses your SSH key for authentication. Make sure your key is added to <code>ssh-agent</code> or specify the key file path in the connection settings.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Themes -->
+        <section id="themes">
+            <h2>Themes</h2>
+            <p>Open <strong>Settings &gt; Preferences</strong>, go to the <strong>Appearance</strong> tab, and select a theme from the dropdown. The change applies instantly &mdash; including syntax highlighting colors.</p>
+
+            <h3>Available Themes</h3>
+            <p>Notepad++ (default), Default Light, Default Dark, Olive, Monokai, Dracula, Nord, Solarized Light, Solarized Dark.</p>
+
+            <p>Custom themes can be created as JSON files and imported via the Theme Editor.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Macros -->
+        <section id="macros">
+            <h2>Macros</h2>
+            <p>Record a sequence of actions and replay them.</p>
+            <ol class="step-list">
+                <li>Press <kbd>F9</kbd> to <strong>start recording</strong></li>
+                <li>Perform your editing actions (typing, navigation, etc.)</li>
+                <li>Press <kbd>Shift</kbd>+<kbd>F9</kbd> to <strong>stop recording</strong></li>
+                <li>Press <kbd>F10</kbd> to <strong>play back</strong> the macro</li>
+            </ol>
+
+            <h3>Run Multiple Times</h3>
+            <p>Via <strong>Macro &gt; Run Multiple Times</strong>: enter a count, or choose "Run until end of file" to repeat the macro until the cursor reaches the last line.</p>
+
+            <h3>Save &amp; Load</h3>
+            <p>Macros can be saved to disk and loaded later. Saved macros persist across restarts via <code>~/.config/PrimeEdit/macros.json</code>.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Large Files -->
+        <section id="largefile">
+            <h2>Large Files</h2>
+            <p>PrimeEdit handles files that other editors cannot open.</p>
+            <ul>
+                <li>Files <strong>&gt;10MB</strong> automatically open in <strong>large file mode</strong> &mdash; memory-mapped, viewport-loaded</li>
+                <li>Files <strong>&gt;100MB</strong> open in <strong>read-only mode</strong> by default</li>
+                <li>A <strong>1GB file uses only 95MB of memory</strong> (verified by stress testing)</li>
+                <li>Scrolling is smooth &mdash; only visible lines plus a buffer are in memory</li>
+            </ul>
+            <div class="info-box tip">
+                <strong>No special action needed.</strong> Just open the file normally. PrimeEdit detects the file size and switches modes automatically.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Plugins -->
+        <section id="plugins">
+            <h2>Plugins</h2>
+            <p>PrimeEdit supports a plugin system for extending the editor with custom functionality.</p>
+
+            <h3>Plugin Locations</h3>
+            <ul>
+                <li><strong>User plugins:</strong> <code>~/.config/PrimeEdit/plugins/</code></li>
+                <li><strong>System-wide plugins:</strong> <code>/usr/lib/prime-edit/plugins/</code></li>
+            </ul>
+
+            <h3>Managing Plugins</h3>
+            <p>Open <strong>Tools &gt; Plugins</strong> to see all installed plugins. Toggle the checkbox next to any plugin to enable or disable it. Changes take effect immediately.</p>
+
+            <h3>Writing a Plugin</h3>
+            <p>Plugins are Qt shared libraries (<code>.so</code>) implementing the <code>PluginInterface</code>. Each plugin receives an <code>EditorAPI</code> object with access to:</p>
+            <ul>
+                <li><strong>Buffer API</strong> &mdash; read and modify document content</li>
+                <li><strong>File API</strong> &mdash; open, save, and manage files</li>
+                <li><strong>UI API</strong> &mdash; add menus, toolbar buttons, and panels</li>
+                <li><strong>Settings API</strong> &mdash; read and write configuration</li>
+            </ul>
+            <p>See the <a href="index.html">Technical Documentation</a> for the full plugin API reference.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Configuration -->
+        <section id="config">
+            <h2>Configuration</h2>
+            <p>Open via <strong>Settings &gt; Preferences</strong>.</p>
+
+            <h3>Settings Paths</h3>
+            <table>
+                <thead><tr><th>File</th><th>Location</th></tr></thead>
+                <tbody>
+                    <tr><td>Editor settings</td><td><code>~/.config/PrimeEdit/settings.json</code></td></tr>
+                    <tr><td>LSP server config</td><td><code>~/.config/PrimeEdit/lsp-servers.json</code></td></tr>
+                    <tr><td>Saved macros</td><td><code>~/.config/PrimeEdit/macros.json</code></td></tr>
+                    <tr><td>AI endpoint config</td><td><code>~/.config/PrimeEdit/eval-endpoint.json</code></td></tr>
+                    <tr><td>User plugins</td><td><code>~/.config/PrimeEdit/plugins/</code></td></tr>
+                    <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/sessions/</code></td></tr>
+                    <tr><td>Unsaved document cache</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved/</code></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Editor Preferences</h3>
+            <ul>
+                <li><strong>Font family</strong> &mdash; choose any monospace font (default: DejaVu Sans Mono)</li>
+                <li><strong>Font size</strong> &mdash; 6pt to 72pt</li>
+                <li><strong>Tab width</strong> &mdash; 1 to 16 spaces</li>
+                <li><strong>Insert spaces</strong> &mdash; tabs vs spaces</li>
+                <li><strong>Word wrap, line numbers, highlight current line, minimap</strong></li>
+            </ul>
+
+            <h3>File Defaults</h3>
+            <ul>
+                <li><strong>Default encoding</strong> and <strong>line ending</strong></li>
+                <li><strong>Trim trailing whitespace</strong> and <strong>insert final newline</strong> on save</li>
+                <li><strong>Auto-save interval</strong> (default: 30 seconds)</li>
+                <li><strong>Restore session on startup</strong></li>
+            </ul>
+
+            <div class="info-box note">
+                Settings are saved to <code>~/.config/PrimeEdit/settings.json</code> and take effect immediately. Click <strong>Apply</strong> to see changes without closing the dialog. To reset everything, delete the settings file and restart PrimeEdit.
+            </div>
+        </section>
+
+        <div class="footer">
+            <img src="prime_edit_icon.png" alt="PrimeEdit">
+            <div>PrimeEdit &mdash; A fast native text editor for Linux</div>
+            <div style="margin-top: 4px;">&copy; 2026 Green Olive Tech LLC. All rights reserved.</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

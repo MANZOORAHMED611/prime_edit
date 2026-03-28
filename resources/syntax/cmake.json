@@ -1,0 +1,14 @@
+{
+  "name": "CMake",
+  "keywords": ["if", "elseif", "else", "endif", "foreach", "endforeach", "while", "endwhile", "function", "endfunction", "macro", "endmacro", "return", "break", "continue", "block", "endblock"],
+  "types": [],
+  "builtins": ["cmake_minimum_required", "project", "add_executable", "add_library", "add_subdirectory", "add_custom_command", "add_custom_target", "add_definitions", "add_dependencies", "add_test", "target_link_libraries", "target_include_directories", "target_compile_definitions", "target_compile_options", "target_compile_features", "target_sources", "set", "unset", "get_property", "set_property", "get_target_property", "set_target_properties", "list", "string", "math", "file", "find_package", "find_library", "find_path", "find_program", "find_file", "include", "include_directories", "install", "configure_file", "message", "option", "execute_process", "cmake_parse_arguments", "cmake_path", "enable_testing"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "#[[",
+  "multiLineCommentEnd": "]]",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "variablePattern": "\\$\\{[^}]+\\}|\\$ENV\\{[^}]+\\}|\\$CACHE\\{[^}]+\\}",
+  "foldBased": "keyword"
+}

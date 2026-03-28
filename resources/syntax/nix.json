@@ -1,0 +1,14 @@
+{
+  "name": "Nix",
+  "keywords": ["if", "then", "else", "let", "in", "with", "rec", "inherit", "import", "assert", "or", "and", "builtins", "throw", "abort"],
+  "types": ["true", "false", "null"],
+  "builtins": ["derivation", "fetchurl", "fetchTarball", "fetchGit", "baseNameOf", "dirOf", "toString", "toPath", "toFile", "toJSON", "fromJSON", "map", "filter", "foldl", "foldr", "head", "tail", "length", "elem", "concatLists", "concatMap", "concatStringsSep", "replaceStrings", "split", "match", "genList", "listToAttrs", "attrNames", "attrValues", "hasAttr", "getAttr", "intersectAttrs", "removeAttrs", "isNull", "isBool", "isInt", "isFloat", "isString", "isList", "isAttrs", "isFunction", "isPath", "typeOf", "tryEval", "seq", "deepSeq", "trace", "readFile", "readDir", "pathExists", "hashString", "hashFile", "placeholder", "fetchurl", "fetchGit"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_'-]*)\\s*=\\s*(?:\\{|[a-zA-Z_].*:)",
+  "variablePattern": "\\$\\{[^}]+\\}",
+  "foldBased": "brace"
+}

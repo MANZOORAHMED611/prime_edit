@@ -4,8 +4,11 @@
 #include <QObject>
 #include <QString>
 #include <QFileInfo>
+#include <QUuid>
 #include <memory>
 #include "piecetable.h"
+
+class LargeFileReader;
 
 class Document : public QObject
 {
@@ -17,6 +20,18 @@ public:
         Windows,    // CRLF (\r\n)
         ClassicMac  // CR (\r)
     };
+
+    // Three file modes:
+    // 1. Small (<20MB): full features — PieceTable, syntax highlighting, undo
+    // 2. Medium (20-100MB): reduced — no PieceTable copy, no highlighting, limited undo
+    // 3. Large/Extreme (>100MB OR single mega-line): viewer mode — chunked, read-only
+    static constexpr qint64 MEDIUM_FILE_THRESHOLD = 20 * 1024 * 1024;     // 20MB
+    static constexpr qint64 LARGE_FILE_THRESHOLD = 50 * 1024 * 1024;      // 50MB
+    static constexpr qint64 READONLY_FILE_THRESHOLD = 100 * 1024 * 1024;  // same as large
+
+    enum FileMode { SmallFile, MediumFile, LargeFile };
+    FileMode fileMode() const { return m_fileMode; }
+    bool isMinified() const { return m_isMinified; }
 
     explicit Document(QObject *parent = nullptr);
     ~Document() override;
@@ -64,6 +79,10 @@ public:
     bool isReadOnly() const { return m_readOnly; }
     void setReadOnly(bool readOnly);
 
+    // Large file support
+    bool isLargeFile() const { return m_largeFileReader != nullptr; }
+    LargeFileReader *largeFileReader() const { return m_largeFileReader; }
+
     // Recovery
     bool hasRecoveryFile() const;
     bool loadRecovery();
@@ -90,8 +109,11 @@ private:
     QString m_language;
     bool m_modified = false;
     bool m_readOnly = false;
+    FileMode m_fileMode = SmallFile;
+    bool m_isMinified = false;
+    LargeFileReader *m_largeFileReader = nullptr;
+    QString m_uuid;
 
-    static QString detectEncoding(const QByteArray &data);
     static LineEnding detectLineEnding(const QString &text);
     QString normalizeLineEndings(const QString &text, LineEnding target);
     QString recoveryFilePath() const;

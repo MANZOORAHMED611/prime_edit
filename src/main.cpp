@@ -3,27 +3,40 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QIcon>
+#include <QPixmap>
 #include "ui/mainwindow.h"
+#include "ui/editor.h"
+#include "ui/recoverydialog.h"
 #include "ui/theme.h"
+#include "ui/tabwidget.h"
+#include "core/document.h"
 #include "utils/settings.h"
 #include "core/session.h"
+#include "core/pluginmanager.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName("Olive Notepad");
+    app.setApplicationName("PrimeEdit");
     app.setApplicationVersion("1.0.0");
-    app.setOrganizationName("OliveNotepad");
-    app.setOrganizationDomain("olive-notepad.org");
-    // Set window icon - try olive icon first, fallback to legacy icons
-    QIcon appIcon(":/icons/olive_notepad_icon.png");
-    if (appIcon.isNull()) {
-        appIcon = QIcon(":/icons/notepad-supreme.svg");
-    }
-    if (appIcon.isNull()) {
-        appIcon = QIcon(":/icons/notepad_supreme_icon.png");
+    app.setOrganizationName("PrimeEdit");
+    app.setOrganizationDomain("primeedit.dev");
+    // Set window icon — add at multiple sizes for proper WM display
+    QIcon appIcon;
+    QPixmap iconPixmap(":/icons/prime_edit_icon.png");
+    if (!iconPixmap.isNull()) {
+        // Add scaled versions for taskbar (48), titlebar (32), and small (16)
+        appIcon.addPixmap(iconPixmap.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        appIcon.addPixmap(iconPixmap.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     app.setWindowIcon(appIcon);
+
+    // Set the desktop filename for proper icon association in GNOME/KDE
+    app.setDesktopFileName("prime-edit");
 
     // Ensure config directories exist
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
@@ -35,7 +48,7 @@ int main(int argc, char *argv[])
 
     // Parse command line arguments
     QCommandLineParser parser;
-    parser.setApplicationDescription("A native Linux text editor");
+    parser.setApplicationDescription("The editor for structured knowledge work");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("files", "Files to open", "[files...]");
@@ -51,16 +64,19 @@ int main(int argc, char *argv[])
     // Load settings
     Settings::instance().load();
 
-    // Load and apply Olive theme
+    // Load and apply theme from settings
     ThemeManager::instance().loadThemes();
-    ThemeManager::instance().applyTheme("Olive");
+    ThemeManager::instance().applyTheme(Settings::instance().theme());
 
-    // Apply theme stylesheet to application
-    app.setStyleSheet(ThemeManager::instance().currentTheme().toStyleSheet());
+    // Unsaved documents are restored silently by Session::restore()
+    // via restoreUnsavedDocuments() — no dialog, Notepad++ behavior
 
     // Create main window
     MainWindow mainWindow;
     mainWindow.show();
+
+    // Load plugins
+    PluginManager::instance().loadPlugins();
 
     // Open files from command line
     const QStringList files = parser.positionalArguments();
@@ -80,13 +96,16 @@ int main(int argc, char *argv[])
     // Restore session if no files specified and setting enabled
     if (files.isEmpty() && Settings::instance().restoreSession()) {
         Session::instance().restore(&mainWindow);
+        // Close the initial empty "Untitled 1" tab if session restored files
+        if (mainWindow.tabWidget()->count() > 1) {
+            Editor *first = qobject_cast<Editor*>(mainWindow.tabWidget()->widget(0));
+            if (first && first->document() && first->document()->isUntitled() && first->toPlainText().isEmpty()) {
+                mainWindow.closeFile(0);
+            }
+        }
     }
 
     int result = app.exec();
-
-    // Save session on exit
-    Session::instance().save(&mainWindow);
-    Settings::instance().save();
 
     return result;
 }

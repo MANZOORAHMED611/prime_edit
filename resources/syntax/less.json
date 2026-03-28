@@ -1,0 +1,14 @@
+{
+  "name": "LESS",
+  "keywords": ["import", "extend", "mixin", "when", "not", "and", "or", "important"],
+  "types": [],
+  "builtins": ["rgb", "rgba", "hsl", "hsla", "calc", "var", "url", "linear-gradient", "radial-gradient", "min", "max", "darken", "lighten", "saturate", "desaturate", "fadein", "fadeout", "fade", "spin", "mix", "contrast", "ceil", "floor", "round", "percentage", "length", "extract", "escape", "unit", "color", "data-uri", "iscolor", "isnumber", "isstring", "iskeyword", "isurl", "ispixel", "isem", "ispercentage"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]*)?(px|em|rem|%|vh|vw|pt|deg|s|ms)?\\b|#[0-9A-Fa-f]{3,8}\\b",
+  "functionPattern": "\\b([a-zA-Z_-][a-zA-Z0-9_-]*)\\s*\\(",
+  "variablePattern": "@[A-Za-z_-][A-Za-z0-9_-]*",
+  "foldBased": "brace"
+}

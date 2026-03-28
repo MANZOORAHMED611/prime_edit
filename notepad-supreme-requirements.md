@@ -1,24 +1,24 @@
-# Notepad Supreme: Requirements Specification
+# PrimeEdit: Requirements Specification
 
-**Project:** Native Linux Text Editor  
-**Version:** 1.0  
-**Target Platform:** Linux (Ubuntu primary, cross-distribution support)  
-**License:** Open Source (GPL or MIT)  
+**Project:** A fast, native text editor for Linux
+**Version:** 1.0
+**Target Platform:** Linux (Ubuntu primary, cross-distribution support)
+**License:** Open Source (MIT)
 **Recommended Stack:** C++ with Qt or GTK toolkit
 
 ---
 
 ## 1. Project Overview
 
-Notepad Supreme is a native Linux text editor designed to match and exceed Notepad++ functionality while incorporating modern features from VS Code and Sublime Text. The application must be lightweight, fast, and deeply integrated with the Linux desktop environment.
+PrimeEdit is a fast, native text editor for Linux built to deliver native speed, lightweight resource usage, and modern developer features. It matches and exceeds Notepad++ functionality while incorporating capabilities from VS Code and Sublime Text, all in a single compiled binary deeply integrated with the Linux desktop environment.
 
 ### 1.1 Core Objectives
 
-- Full feature parity with Notepad++
-- Native Linux platform integration (GNOME/KDE)
-- Lightweight resource consumption
-- Extensible plugin architecture
-- Modern developer-focused features (LSP, integrated terminal, Git)
+- Native speed — sub-second startup, 60 FPS scrolling, instant response on large files
+- Lightweight footprint — minimal memory and CPU usage
+- Modern developer features (LSP, multi-cursor, split-screen, integrated terminal, Git integration)
+- Extensible plugin architecture with C++ API
+- Full feature parity with Notepad++ and beyond
 
 ---
 
@@ -87,7 +87,7 @@ Notepad Supreme is a native Linux text editor designed to match and exceed Notep
 
 ### 3.1 Syntax Highlighting
 
-**Minimum Required Languages (100+):**
+**Minimum Required Languages (96+):**
 
 | Category | Languages |
 |----------|-----------|
@@ -277,7 +277,7 @@ Notepad Supreme is a native Linux text editor designed to match and exceed Notep
 
 - File explorer panel (tree view)
 - Open folder as project
-- Project-specific settings (.notepad-supreme folder or similar)
+- Project-specific settings (.primeedit folder or similar)
 - File exclusion patterns (node_modules, .git, etc.)
 - Quick file open (fuzzy search by filename)
 - Quick symbol search (functions, classes across project)
@@ -420,7 +420,7 @@ Notepad Supreme is a native Linux text editor designed to match and exceed Notep
 **Backup Frequency:** Every 5-10 seconds (configurable)
 
 **Backup Location:** 
-- `~/.local/share/notepad-supreme/recovery/` or XDG-compliant path
+- `~/.local/share/primeedit/recovery/` or XDG-compliant path
 - Hidden from user unless recovery needed
 
 **Backed Up Data:**

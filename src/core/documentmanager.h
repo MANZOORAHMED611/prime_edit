@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QTimer>
+#include <QFileSystemWatcher>
 #include "document.h"
 
 class DocumentManager : public QObject
@@ -39,6 +40,7 @@ signals:
     void documentClosed(Document *document);
     void documentModifiedChanged(Document *document);
     void recentFilesChanged();
+    void fileExternallyModified(const QString &filePath);
 
 private:
     explicit DocumentManager(QObject *parent = nullptr);
@@ -47,6 +49,7 @@ private:
     QList<Document*> m_documents;
     QStringList m_recentFiles;
     QTimer m_recoveryTimer;
+    QFileSystemWatcher *m_fileWatcher;
     int m_untitledCount = 0;
 
     static const int MAX_RECENT_FILES = 20;
@@ -55,6 +58,7 @@ private:
 private slots:
     void onDocumentModifiedChanged(bool modified);
     void saveRecoveryData();
+    void onFileChanged(const QString &path);
 };
 
 #endif // DOCUMENTMANAGER_H

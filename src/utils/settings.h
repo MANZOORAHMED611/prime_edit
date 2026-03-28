@@ -85,7 +85,7 @@ signals:
 private:
     explicit Settings(QObject *parent = nullptr);
 
-    QString m_fontFamily = "Monospace";
+    QString m_fontFamily = "DejaVu Sans Mono";
     int m_fontSize = 10;
     int m_tabWidth = 4;
     bool m_insertSpaces = true;
@@ -94,8 +94,8 @@ private:
     bool m_showMinimap = true;
     bool m_highlightCurrentLine = true;
     bool m_autoSave = false;
-    int m_autoSaveInterval = 1000;
-    QString m_theme = "Default Dark";
+    int m_autoSaveInterval = 30000;
+    QString m_theme = "Notepad++";
     bool m_restoreSession = true;
     QStringList m_recentFiles;
     QString m_defaultEncoding = "UTF-8";

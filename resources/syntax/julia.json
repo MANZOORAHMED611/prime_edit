@@ -1,0 +1,13 @@
+{
+  "name": "Julia",
+  "keywords": ["abstract", "baremodule", "begin", "break", "catch", "const", "continue", "do", "else", "elseif", "end", "export", "false", "finally", "for", "function", "global", "if", "import", "in", "let", "local", "macro", "module", "mutable", "outer", "primitive", "quote", "return", "struct", "true", "try", "type", "using", "while", "where", "isa"],
+  "types": ["Any", "Union", "UnionAll", "Tuple", "NamedTuple", "AbstractArray", "AbstractVector", "AbstractMatrix", "Array", "Vector", "Matrix", "BitArray", "Dict", "Set", "Pair", "Symbol", "Expr", "Module", "Function", "Method", "DataType", "Type", "Nothing", "Missing", "Some", "IO", "IOBuffer", "IOStream", "Regex", "SubString", "String", "Char", "Bool", "Int", "Int8", "Int16", "Int32", "Int64", "Int128", "UInt", "UInt8", "UInt16", "UInt32", "UInt64", "UInt128", "Float16", "Float32", "Float64", "BigInt", "BigFloat", "Complex", "Rational", "Irrational", "Real", "Integer", "Signed", "Unsigned", "AbstractFloat", "Number"],
+  "builtins": ["println", "print", "show", "display", "repr", "string", "sizeof", "typeof", "isa", "convert", "promote", "parse", "tryparse", "length", "size", "ndims", "axes", "eachindex", "eltype", "collect", "push!", "pop!", "append!", "prepend!", "insert!", "deleteat!", "splice!", "empty!", "sort!", "sort", "reverse", "reverse!", "unique", "unique!", "filter", "filter!", "map", "map!", "foreach", "reduce", "foldl", "foldr", "any", "all", "count", "sum", "prod", "minimum", "maximum", "extrema", "argmin", "argmax", "findmin", "findmax", "findfirst", "findlast", "findall", "first", "last", "keys", "values", "pairs", "enumerate", "zip", "range", "fill", "fill!", "zeros", "ones", "rand", "randn", "error", "throw", "rethrow", "@assert", "@show", "@info", "@warn", "@error", "@debug", "@time", "@elapsed", "@allocated"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "#=",
+  "multiLineCommentEnd": "=#",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?(im)?\\b|\\b0[xX][0-9a-fA-F]+(\\.[0-9a-fA-F]+)?([pP][+-]?[0-9]+)?\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_!]*)\\s*\\(",
+  "foldBased": "keyword"
+}

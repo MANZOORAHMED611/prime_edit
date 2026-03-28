@@ -1,0 +1,16 @@
+{
+  "name": "Svelte",
+  "keywords": ["var", "let", "const", "function", "return", "if", "else", "for", "while", "do", "switch", "case", "break", "continue", "new", "delete", "typeof", "instanceof", "this", "class", "extends", "super", "import", "export", "from", "default", "async", "await", "yield", "try", "catch", "finally", "throw", "of", "in", "true", "false", "null", "undefined", "template", "script", "style", "each", "as", "then", "key", "html", "debug", "await"],
+  "types": ["Array", "Object", "String", "Number", "Boolean", "Map", "Set", "Promise", "Date", "RegExp", "Error", "Symbol"],
+  "builtins": ["console", "Math", "JSON", "parseInt", "parseFloat", "setTimeout", "setInterval", "fetch", "onMount", "onDestroy", "beforeUpdate", "afterUpdate", "createEventDispatcher", "setContext", "getContext", "tick", "writable", "readable", "derived", "get"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'", "`"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b",
+  "functionPattern": "\\b([a-zA-Z_$][a-zA-Z0-9_$]*)\\s*\\(",
+  "functionRegex": "^\\s*(?:export\\s+)?(?:async\\s+)?(?:function\\*?|class)\\s+([a-zA-Z_$][a-zA-Z0-9_$]*)",
+  "tagPattern": "</?[a-zA-Z][a-zA-Z0-9:.-]*",
+  "attributePattern": "\\b[a-zA-Z:@][a-zA-Z0-9._:-]*(?=\\s*=)",
+  "foldBased": "brace"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "LaTeX",
+  "keywords": ["documentclass", "usepackage", "begin", "end", "newcommand", "renewcommand", "newenvironment", "renewenvironment", "providecommand", "def", "let", "input", "include", "includeonly", "bibliography", "bibliographystyle", "title", "author", "date", "maketitle", "tableofcontents", "listoffigures", "listoftables", "chapter", "section", "subsection", "subsubsection", "paragraph", "subparagraph", "part", "appendix", "label", "ref", "pageref", "cite", "footnote", "textbf", "textit", "texttt", "underline", "emph", "textsc", "textrm", "textsf", "textsl", "textup", "item", "caption", "centering", "raggedleft", "raggedright", "hfill", "vfill", "hspace", "vspace", "newline", "newpage", "clearpage", "cleardoublepage", "linebreak", "pagebreak", "noindent", "indent", "par"],
+  "types": [],
+  "builtins": ["document", "figure", "table", "tabular", "itemize", "enumerate", "description", "verbatim", "equation", "align", "gather", "multline", "array", "matrix", "cases", "abstract", "quotation", "quote", "verse", "minipage", "flushleft", "flushright", "center", "thebibliography", "lstlisting", "minted", "tikzpicture", "pgfplots"],
+  "singleLineComment": "%",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": [],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b",
+  "functionPattern": "",
+  "commandPattern": "\\\\[a-zA-Z@]+",
+  "foldBased": "keyword"
+}

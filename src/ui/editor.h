@@ -3,7 +3,18 @@
 
 #include <QPlainTextEdit>
 #include <QTextDocument>
+#include <QMap>
+#include <QSet>
+#include <QTimer>
 
+#include "core/searchengine.h"
+#include "core/lspclient.h"
+#include "core/largefile.h"
+#include "core/gitgutter.h"
+#include "ui/completionpopup.h"
+
+class QPainter;
+struct Theme;
 class Document;
 class SyntaxHighlighter;
 class LineNumberArea;
@@ -13,6 +24,10 @@ class Editor : public QPlainTextEdit
     Q_OBJECT
 
 public:
+    static constexpr int BOOKMARK_MARGIN_WIDTH = 16;
+    static constexpr int FOLD_MARGIN_WIDTH = 16;
+    static constexpr int GIT_GUTTER_WIDTH = 3;
+
     explicit Editor(Document *document, QWidget *parent = nullptr);
     ~Editor() override;
 
@@ -23,6 +38,23 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void setLineNumbersVisible(bool visible);
     bool lineNumbersVisible() const { return m_lineNumbersVisible; }
+
+    // Bookmarks
+    void toggleBookmark(int line);
+    void nextBookmark();
+    void previousBookmark();
+    void clearBookmarks();
+    QSet<int> bookmarks() const { return m_bookmarks; }
+
+    // Gutter section widths
+    int bookmarkMarginWidth() const;
+    int foldMarginWidth() const;
+
+    // Expose protected QPlainTextEdit methods for LineNumberArea
+    using QPlainTextEdit::firstVisibleBlock;
+    using QPlainTextEdit::blockBoundingGeometry;
+    using QPlainTextEdit::blockBoundingRect;
+    using QPlainTextEdit::contentOffset;
 
     // Settings
     void setWordWrapEnabled(bool enabled);
@@ -48,13 +80,29 @@ public:
     int replaceAll(const QString &findText, const QString &replaceText,
                    QTextDocument::FindFlags flags = QTextDocument::FindFlags());
 
+    // Mark system
+    void markAll(const QString &pattern, const SearchEngine::Options &opts);
+    void clearMarks();
+    int markCount() const { return m_markSelections.size(); }
+
     // Selection
     QString selectedText() const;
     void replaceSelection(const QString &text);
 
+    // Column/block selection
+    bool isColumnSelectionActive() const { return m_columnSelection.active; }
+    void clearColumnSelection();
+
     // Language
     void setLanguage(const QString &language);
     QString language() const;
+
+    // LSP integration
+    void setDiagnostics(const QVector<Diagnostic> &diagnostics);
+    void showLSPCompletions(const QVector<CompletionItem> &items);
+    void requestHover(int line, int character);
+    void requestGotoDefinition();
+    void requestLSPCompletion();
 
     // Sync
     void syncToDocument();
@@ -81,14 +129,52 @@ public:
     void foldAll();
     void unfoldAll();
     void toggleFoldAtCursor();
+    void foldAt(int blockNumber);
+    void unfoldAt(int blockNumber);
+    void toggleFoldAt(int blockNumber);
+    bool isFoldableLine(int blockNumber) const;
+    bool isFoldedLine(int blockNumber) const;
+    QMap<int, QStringList> foldedRegions() const { return m_foldedRegions; }
 
-signals:
-    void cursorPositionChanged();
+    // Whitespace / EOL / indent guide visualization
+    void setShowWhitespace(bool show);
+    bool showWhitespace() const { return m_showWhitespace; }
+    void setShowEOL(bool show);
+    bool showEOL() const { return m_showEOL; }
+    void setShowIndentGuide(bool show);
+    bool showIndentGuide() const { return m_showIndentGuide; }
+
+    // Column editing
+    void insertTextAtColumn(const QString &text);
+    void insertNumbersAtColumn(int initial, int increment, bool leadingZeros);
+    void deleteColumnSelection();
+    void pasteAtColumn();
+
+    // Multi-cursor editing
+    void addCursorAtPosition(int position);
+    void selectNextOccurrence();
+    void selectAllOccurrences();
+    bool hasMultipleCursors() const { return !m_extraCursors.isEmpty(); }
+
+    // Auto-close brackets
+    void setAutoCloseBrackets(bool enabled);
+    bool autoCloseBrackets() const { return m_autoCloseBrackets; }
+
+    // Rainbow brackets
+    void setRainbowBrackets(bool enabled);
+    bool rainbowBrackets() const { return m_rainbowBrackets; }
+
+public slots:
+    void jumpToMatchingBracket();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -105,6 +191,10 @@ private:
     SyntaxHighlighter *m_highlighter;
     LineNumberArea *m_lineNumberArea;
 
+    QSet<int> m_bookmarks;
+    bool m_bookmarkMarginVisible = true;
+    bool m_foldMarginVisible = true;
+
     int m_tabWidth = 4;
     bool m_insertSpaces = true;
     bool m_lineNumbersVisible = true;
@@ -113,8 +203,87 @@ private:
     int m_baseFontSize;
 
     bool m_syncing = false;
+    qint64 m_largeFileOffset = 0;
+
+    // Code folding
+    QMap<int, QStringList> m_foldedRegions;
+    int findFoldEnd(int blockNumber) const;
+
+    // Column/block selection
+    struct ColumnSelection {
+        int startLine = -1, startCol = -1;
+        int endLine = -1, endCol = -1;
+        bool active = false;
+    };
+    ColumnSelection m_columnSelection;
+    void paintColumnSelection();
+
+    // Whitespace / EOL / indent guide visualization
+    bool m_showWhitespace = false;
+    bool m_showEOL = false;
+    bool m_showIndentGuide = false;
+    void paintWhitespace(QPainter &painter, const Theme &theme);
+    void paintEOL(QPainter &painter, const Theme &theme);
+    void paintIndentGuides(QPainter &painter, const Theme &theme);
+
+    // Bracket matching
+    void matchBrackets();
+    int findMatchingBracket(int position, QChar open, QChar close, bool forward) const;
+    void updateExtraSelections();
+    QList<QTextEdit::ExtraSelection> m_bracketSelections;
+    QList<QTextEdit::ExtraSelection> m_markSelections;
+    QList<QTextEdit::ExtraSelection> m_diagnosticSelections;
+
+    // Auto-close brackets
+    bool m_autoCloseBrackets = true;
+    bool shouldAutoClose(const QTextCursor &cursor) const;
+    bool isInsideString(const QTextCursor &cursor) const;
+
+    // Rainbow brackets
+    bool m_rainbowBrackets = false;
+    QList<QTextEdit::ExtraSelection> m_rainbowSelections;
+    void updateRainbowBrackets();
+    int m_cachedRainbowFirstBlock = -1;
+    int m_cachedRainbowDepth = 0;
 
     QString getCommentString() const;
+
+    // Auto-completion
+    void triggerCompletion();
+    QVector<SimpleCompletionItem> gatherCompletions(const QString &prefix);
+    QVector<SimpleCompletionItem> gatherPathCompletions(const QString &prefix);
+    static int fuzzyMatchScore(const QString &candidate, const QString &pattern);
+    QVector<SimpleCompletionItem> getSnippetsForLanguage(const QString &language);
+    bool tryExpandSnippet();
+    QTimer *m_completionTimer = nullptr;
+    CompletionPopup *m_completionPopup = nullptr;
+    int m_consecutiveWordChars = 0;
+
+    // Multi-cursor editing
+    QVector<QTextCursor> m_extraCursors;
+    QList<QTextEdit::ExtraSelection> m_multiCursorSelections;
+    bool m_altClickPending = false;
+    QPoint m_altClickPos;
+    bool m_inMultiCursorEdit = false;
+    void clearExtraCursors();
+    void applyMultiCursorEdit(QKeyEvent *event);
+    void updateMultiCursorSelections();
+    QString wordUnderCursor() const;
+
+    // Large file viewport loading
+    void loadViewportContent();
+    qint64 m_viewportStartLine = 0;
+    static constexpr int VIEWPORT_BUFFER = 500;
+
+    // Arabic RTL support
+    void updateTextDirection();
+    QTimer *m_rtlTimer = nullptr;
+    bool m_hasArabicContent = false;
+
+    // Git gutter
+    GitGutter *m_gitGutter = nullptr;
+    QTimer *m_gitGutterTimer = nullptr;
+    void updateGitGutter();
 };
 
 #endif // EDITOR_H

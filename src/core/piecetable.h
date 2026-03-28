@@ -42,6 +42,7 @@ public:
         Type type;
         qint64 position;
         QString text;
+        int groupId = 0;
     };
 
     bool canUndo() const;
@@ -65,11 +66,14 @@ private:
     QVector<UndoEntry> m_redoStack;
     int m_undoGroupDepth = 0;
     QVector<UndoEntry> m_currentGroup;
+    int m_nextGroupId = 1;
 
     mutable qint64 m_cachedLength = -1;
     mutable QVector<qint64> m_lineStarts;
     mutable bool m_lineStartsValid = false;
 
+    void insertInternal(qint64 position, const QString &text);
+    void removeInternal(qint64 position, qint64 length);
     void invalidateCache();
     void rebuildLineCache() const;
     qint64 pieceIndexForPosition(qint64 position, qint64 &offsetInPiece) const;

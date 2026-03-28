@@ -1,0 +1,14 @@
+{
+  "name": "CUDA",
+  "keywords": ["__global__", "__device__", "__host__", "__shared__", "__constant__", "__managed__", "__restrict__", "__noinline__", "__forceinline__", "__launch_bounds__", "alignas", "alignof", "and", "and_eq", "asm", "auto", "bitand", "bitor", "bool", "break", "case", "catch", "char", "char16_t", "char32_t", "class", "compl", "const", "constexpr", "const_cast", "continue", "decltype", "default", "delete", "do", "double", "dynamic_cast", "else", "enum", "explicit", "export", "extern", "false", "float", "for", "friend", "goto", "if", "inline", "int", "long", "mutable", "namespace", "new", "noexcept", "not", "not_eq", "nullptr", "operator", "or", "or_eq", "private", "protected", "public", "register", "reinterpret_cast", "return", "short", "signed", "sizeof", "static", "static_assert", "static_cast", "struct", "switch", "template", "this", "thread_local", "throw", "true", "try", "typedef", "typeid", "typename", "union", "unsigned", "using", "virtual", "void", "volatile", "wchar_t", "while", "xor", "xor_eq", "override", "final"],
+  "types": ["dim3", "int1", "int2", "int3", "int4", "uint1", "uint2", "uint3", "uint4", "float1", "float2", "float3", "float4", "double1", "double2", "double3", "double4", "char1", "char2", "char3", "char4", "uchar1", "uchar2", "uchar3", "uchar4", "short1", "short2", "short3", "short4", "ushort1", "ushort2", "ushort3", "ushort4", "long1", "long2", "long3", "long4", "ulong1", "ulong2", "ulong3", "ulong4", "longlong1", "longlong2", "ulonglong1", "ulonglong2", "cudaError_t", "cudaEvent_t", "cudaStream_t", "cudaDeviceProp", "size_t"],
+  "builtins": ["cudaMalloc", "cudaFree", "cudaMemcpy", "cudaMemset", "cudaDeviceSynchronize", "cudaGetDeviceCount", "cudaGetDevice", "cudaSetDevice", "cudaGetDeviceProperties", "cudaStreamCreate", "cudaStreamDestroy", "cudaStreamSynchronize", "cudaEventCreate", "cudaEventDestroy", "cudaEventRecord", "cudaEventSynchronize", "cudaEventElapsedTime", "cudaGetLastError", "cudaPeekAtLastError", "atomicAdd", "atomicSub", "atomicExch", "atomicMin", "atomicMax", "atomicInc", "atomicDec", "atomicCAS", "atomicAnd", "atomicOr", "atomicXor", "__syncthreads", "__threadfence", "__threadfence_block", "__threadfence_system", "threadIdx", "blockIdx", "blockDim", "gridDim", "warpSize"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "preprocessorPrefix": "#",
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?[fFlLuU]*\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "brace"
+}

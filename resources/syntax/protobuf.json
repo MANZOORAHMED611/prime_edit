@@ -1,0 +1,13 @@
+{
+  "name": "Protocol Buffers",
+  "keywords": ["syntax", "import", "weak", "public", "package", "option", "message", "group", "oneof", "map", "extensions", "to", "max", "reserved", "enum", "service", "rpc", "returns", "stream", "extend", "optional", "required", "repeated", "true", "false"],
+  "types": ["double", "float", "int32", "int64", "uint32", "uint64", "sint32", "sint64", "fixed32", "fixed64", "sfixed32", "sfixed64", "bool", "string", "bytes", "Any", "Timestamp", "Duration", "Empty", "Struct", "Value", "FieldMask", "Wrapper"],
+  "builtins": [],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b",
+  "functionPattern": "",
+  "foldBased": "brace"
+}

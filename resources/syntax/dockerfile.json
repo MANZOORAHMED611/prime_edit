@@ -1,0 +1,14 @@
+{
+  "name": "Dockerfile",
+  "keywords": ["FROM", "AS", "RUN", "CMD", "LABEL", "MAINTAINER", "EXPOSE", "ENV", "ADD", "COPY", "ENTRYPOINT", "VOLUME", "USER", "WORKDIR", "ARG", "ONBUILD", "STOPSIGNAL", "HEALTHCHECK", "SHELL", "NONE"],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b",
+  "functionPattern": "",
+  "variablePattern": "\\$[A-Za-z_][A-Za-z0-9_]*|\\$\\{[^}]+\\}",
+  "foldBased": ""
+}

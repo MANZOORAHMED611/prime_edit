@@ -1,4 +1,4 @@
-# Building Notepad Supreme
+# Building PrimeEdit
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ cmake ..
 make -j$(nproc)
 
 # Run
-./notepad-supreme
+./PrimeEdit
 ```
 
 ## Installing
@@ -59,7 +59,7 @@ sudo make install
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr
 make -j$(nproc)
 make install DESTDIR=AppDir
-linuxdeployqt AppDir/usr/share/applications/notepad-supreme.desktop -appimage
+linuxdeployqt AppDir/usr/share/applications/prime-edit.desktop -appimage
 ```
 
 ### Debian Package
@@ -70,22 +70,22 @@ mkdir -p deb/usr/bin
 mkdir -p deb/usr/share/applications
 mkdir -p deb/usr/share/icons/hicolor/256x256/apps
 
-cp notepad-supreme deb/usr/bin/
-cp ../resources/notepad-supreme.desktop deb/usr/share/applications/
-cp ../resources/icons/notepad_supreme_icon.png deb/usr/share/icons/hicolor/256x256/apps/notepad-supreme.png
+cp PrimeEdit deb/usr/bin/
+cp ../resources/prime-edit.desktop deb/usr/share/applications/
+cp ../resources/icons/prime_edit_icon.png deb/usr/share/icons/hicolor/256x256/apps/prime-edit.png
 
 cat > deb/DEBIAN/control << EOF
-Package: notepad-supreme
+Package: prime-edit
 Version: 1.0.0
 Section: editors
 Priority: optional
 Architecture: amd64
 Depends: libqt6core6, libqt6gui6, libqt6widgets6
 Maintainer: Your Name <your@email.com>
-Description: Native Linux text editor
- A native Linux text editor designed to match and exceed
- Notepad++ functionality with modern features.
+Description: The editor for structured knowledge work
+ A native editor for structured documents, where content is
+ validated, enforced, and executable.
 EOF
 
-dpkg-deb --build deb notepad-supreme_1.0.0_amd64.deb
+dpkg-deb --build deb prime-edit_1.0.0_amd64.deb
 ```

@@ -1,0 +1,17 @@
+{
+  "name": "XML",
+  "keywords": ["xml", "version", "encoding", "standalone", "xmlns", "CDATA"],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "",
+  "multiLineCommentStart": "<!--",
+  "multiLineCommentEnd": "-->",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b",
+  "functionPattern": "",
+  "tagPattern": "</?[A-Za-z][A-Za-z0-9:._-]*",
+  "attributePattern": "\\b[A-Za-z:_][A-Za-z0-9:._-]*(?=\\s*=)",
+  "processingInstruction": "<\\?[^?]*\\?>",
+  "cdataPattern": "<!\\[CDATA\\[.*?\\]\\]>",
+  "foldBased": "tag"
+}

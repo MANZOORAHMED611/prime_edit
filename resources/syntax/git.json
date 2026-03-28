@@ -1,0 +1,13 @@
+{
+  "name": "Git",
+  "keywords": ["pick", "reword", "edit", "squash", "fixup", "exec", "break", "drop", "label", "reset", "merge", "update-ref"],
+  "types": [],
+  "builtins": [],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\""],
+  "numberPattern": "\\b[0-9a-fA-F]{7,40}\\b",
+  "functionPattern": "",
+  "foldBased": ""
+}

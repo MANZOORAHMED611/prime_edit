@@ -1,0 +1,15 @@
+{
+  "name": "WGSL",
+  "keywords": ["fn", "let", "var", "const", "override", "struct", "if", "else", "for", "while", "loop", "break", "continue", "return", "discard", "switch", "case", "default", "continuing", "enable", "alias", "diagnostic", "const_assert", "true", "false"],
+  "types": ["bool", "i32", "u32", "f16", "f32", "vec2", "vec3", "vec4", "mat2x2", "mat2x3", "mat2x4", "mat3x2", "mat3x3", "mat3x4", "mat4x2", "mat4x3", "mat4x4", "array", "atomic", "ptr", "sampler", "sampler_comparison", "texture_1d", "texture_2d", "texture_2d_array", "texture_3d", "texture_cube", "texture_cube_array", "texture_multisampled_2d", "texture_storage_1d", "texture_storage_2d", "texture_storage_2d_array", "texture_storage_3d", "texture_depth_2d", "texture_depth_2d_array", "texture_depth_cube", "texture_depth_cube_array", "texture_depth_multisampled_2d"],
+  "builtins": ["abs", "acos", "acosh", "asin", "asinh", "atan", "atan2", "atanh", "ceil", "clamp", "cos", "cosh", "cross", "degrees", "distance", "dot", "exp", "exp2", "floor", "fma", "fract", "length", "log", "log2", "max", "min", "mix", "normalize", "pow", "radians", "reflect", "refract", "round", "saturate", "sign", "sin", "sinh", "smoothstep", "sqrt", "step", "tan", "tanh", "trunc", "textureSample", "textureLoad", "textureStore", "textureDimensions", "arrayLength", "select", "all", "any", "countLeadingZeros", "countOneBits", "countTrailingZeros", "firstLeadingBit", "firstTrailingBit", "reverseBits"],
+  "singleLineComment": "//",
+  "multiLineCommentStart": "/*",
+  "multiLineCommentEnd": "*/",
+  "stringDelimiters": [],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?[fhiu]?\\b|\\b0[xX][0-9a-fA-F]+[iu]?\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "functionRegex": "^\\s*fn\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+  "attributePattern": "@[a-zA-Z_][a-zA-Z0-9_]*",
+  "foldBased": "brace"
+}

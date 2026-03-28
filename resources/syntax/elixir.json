@@ -1,0 +1,14 @@
+{
+  "name": "Elixir",
+  "keywords": ["after", "alias", "and", "case", "catch", "cond", "def", "defcallback", "defdelegate", "defexception", "defguard", "defguardp", "defimpl", "defmacro", "defmacrop", "defmodule", "defoverridable", "defp", "defprotocol", "defstruct", "do", "else", "end", "false", "fn", "for", "if", "import", "in", "nil", "not", "or", "quote", "raise", "receive", "require", "rescue", "return", "true", "try", "unless", "unquote", "unquote_splicing", "use", "when", "with"],
+  "types": ["Atom", "BitString", "Float", "Function", "Integer", "List", "Map", "PID", "Port", "Reference", "Tuple", "String", "Regex", "Range", "MapSet", "Keyword", "DateTime", "Date", "Time", "NaiveDateTime", "URI", "Version"],
+  "builtins": ["IO.puts", "IO.inspect", "IO.write", "Enum.map", "Enum.filter", "Enum.reduce", "Enum.each", "Enum.sort", "Enum.find", "Enum.any?", "Enum.all?", "Enum.count", "Enum.zip", "Enum.chunk_every", "Enum.flat_map", "Enum.group_by", "Enum.into", "Enum.join", "Enum.reverse", "Enum.take", "Enum.drop", "String.split", "String.trim", "String.replace", "String.contains?", "String.starts_with?", "String.ends_with?", "String.upcase", "String.downcase", "String.length", "Map.get", "Map.put", "Map.delete", "Map.merge", "Map.keys", "Map.values", "List.first", "List.last", "List.flatten", "Kernel.inspect", "Kernel.length", "Kernel.hd", "Kernel.tl", "Kernel.elem", "Kernel.put_elem", "Kernel.tuple_size", "Kernel.is_atom", "Kernel.is_binary", "Kernel.is_boolean", "Kernel.is_float", "Kernel.is_function", "Kernel.is_integer", "Kernel.is_list", "Kernel.is_map", "Kernel.is_nil", "Kernel.is_number", "Kernel.is_pid", "Kernel.is_tuple"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "preprocessorPrefix": "@",
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-z_][a-zA-Z0-9_!?]*)\\s*\\(",
+  "foldBased": "keyword"
+}

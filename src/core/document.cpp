@@ -1,4 +1,7 @@
 #include "document.h"
+#include "charsetdetector.h"
+#include "largefile.h"
+#include <QApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -9,16 +12,109 @@
 
 Document::Document(QObject *parent)
     : QObject(parent)
+    , m_uuid(QUuid::createUuid().toString(QUuid::Id128))
 {
 }
 
 Document::~Document()
 {
-    clearRecovery();
 }
 
 bool Document::load(const QString &filePath)
 {
+    QFileInfo fi(filePath);
+    qint64 fileSize = fi.size();
+
+    // Determine file mode
+    if (fileSize > LARGE_FILE_THRESHOLD) {
+        m_fileMode = LargeFile;
+    } else if (fileSize > MEDIUM_FILE_THRESHOLD) {
+        // Check if file is minified (very few newlines) — treat as Large
+        QFile probe(filePath);
+        if (probe.open(QIODevice::ReadOnly)) {
+            QByteArray sample = probe.read(100000); // check first 100KB
+            probe.close();
+            int newlines = sample.count('\n');
+            // If less than 10 newlines in 100KB, it's minified → Large mode
+            if (newlines < 10 && fileSize > 5 * 1024 * 1024) {
+                m_isMinified = true;
+                m_fileMode = LargeFile;
+            } else {
+                m_fileMode = MediumFile;
+            }
+        } else {
+            m_fileMode = MediumFile;
+        }
+    } else {
+        m_fileMode = SmallFile;
+    }
+
+    // ================================================================
+    // MODE 3: Large files (>100MB) — read-only, word wrap, no highlighting
+    // Load the FULL file. QPlainTextEdit handles it IF word wrap is ON.
+    // The hang was from QPlainTextEdit calculating the width of a
+    // 93-million-character single line with word wrap OFF.
+    // With word wrap ON, it only lays out the visible wrapped portion.
+    // ================================================================
+    if (m_fileMode == LargeFile) {
+        // Don't load into PieceTable at all — Editor will load directly
+        // into QTextDocument to avoid the double/triple copy that causes OOM
+        m_filePath = filePath;
+        m_modified = false;
+        setReadOnly(true);
+
+        // Detect encoding from first 8KB only
+        QFile probe(filePath);
+        if (!probe.open(QIODevice::ReadOnly)) return false;
+        m_encoding = CharsetDetector::detect(probe.read(8192));
+        probe.close();
+
+        emit filePathChanged(m_filePath);
+        emit encodingChanged(m_encoding);
+        return true;
+    }
+
+    // ================================================================
+    // MODE 2: Medium files (20-100MB) — direct load, no PieceTable dup
+    // ================================================================
+    if (m_fileMode == MediumFile) {
+        QFile file(filePath);
+        if (!file.open(QIODevice::ReadOnly)) return false;
+
+        QByteArray data = file.readAll();
+        file.close();
+
+        m_encoding = CharsetDetector::detect(data);
+        QString text = QString::fromUtf8(data);
+        data.clear(); // free byte array
+
+        m_lineEnding = detectLineEnding(text);
+        text = normalizeLineEndings(text, Unix);
+
+        // Check for long lines — break them
+        const int MAX_LINE = 8000;
+        bool hasLongLine = false;
+        int lineLen = 0;
+        for (qsizetype i = 0; i < qMin(text.length(), qsizetype(100000)); ++i) {
+            if (text.at(i) == '\n') { lineLen = 0; }
+            else { lineLen++; if (lineLen > MAX_LINE) { hasLongLine = true; break; } }
+        }
+        if (hasLongLine) {
+            setReadOnly(true);
+        }
+
+        m_content.setText(text);
+        m_filePath = filePath;
+        m_modified = false;
+        emit filePathChanged(m_filePath);
+        emit encodingChanged(m_encoding);
+        return true;
+    }
+
+    // ================================================================
+    // MODE 1: Small files (<20MB) — full features
+    // ================================================================
+
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
         return false;
@@ -27,8 +123,8 @@ bool Document::load(const QString &filePath)
     QByteArray data = file.readAll();
     file.close();
 
-    // Detect encoding
-    m_encoding = detectEncoding(data);
+    // Detect encoding using charset detector
+    m_encoding = CharsetDetector::detect(data);
 
     // Convert to QString
     QString text;
@@ -278,35 +374,11 @@ void Document::clearRecovery()
     }
 }
 
-QString Document::detectEncoding(const QByteArray &data)
-{
-    // Check for BOM
-    if (data.startsWith("\xEF\xBB\xBF")) {
-        return "UTF-8-BOM";
-    }
-    if (data.startsWith("\xFF\xFE")) {
-        return "UTF-16LE";
-    }
-    if (data.startsWith("\xFE\xFF")) {
-        return "UTF-16BE";
-    }
-
-    // Check if valid UTF-8
-    auto decoder = QStringDecoder(QStringDecoder::Utf8);
-    decoder(data);
-    if (!decoder.hasError()) {
-        return "UTF-8";
-    }
-
-    // Default to ISO-8859-1
-    return "ISO-8859-1";
-}
-
 Document::LineEnding Document::detectLineEnding(const QString &text)
 {
-    int crlf = 0, lf = 0, cr = 0;
+    qint64 crlf = 0, lf = 0, cr = 0;
 
-    for (int i = 0; i < text.length(); ++i) {
+    for (qint64 i = 0; i < text.length(); ++i) {
         if (text[i] == '\r') {
             if (i + 1 < text.length() && text[i + 1] == '\n') {
                 ++crlf;
@@ -336,7 +408,7 @@ QString Document::normalizeLineEndings(const QString &text, LineEnding target)
     case ClassicMac: ending = "\r"; break;
     }
 
-    for (int i = 0; i < text.length(); ++i) {
+    for (qint64 i = 0; i < text.length(); ++i) {
         if (text[i] == '\r') {
             result.append(ending);
             if (i + 1 < text.length() && text[i + 1] == '\n') {
@@ -358,7 +430,7 @@ QString Document::recoveryFilePath() const
     QString hash;
 
     if (m_filePath.isEmpty()) {
-        hash = QString::number(reinterpret_cast<quintptr>(this), 16);
+        hash = m_uuid;
     } else {
         hash = QString::fromLatin1(
             QCryptographicHash::hash(m_filePath.toUtf8(), QCryptographicHash::Md5).toHex());

@@ -46,9 +46,13 @@ void LanguageManager::initMappings()
     m_extensionToLanguage["scss"] = "SCSS";
     m_extensionToLanguage["sass"] = "SASS";
     m_extensionToLanguage["less"] = "LESS";
+    m_extensionToLanguage["vue"] = "Vue";
+    m_extensionToLanguage["svelte"] = "Svelte";
 
     // Data formats
     m_extensionToLanguage["json"] = "JSON";
+    m_extensionToLanguage["jsonnet"] = "Jsonnet";
+    m_extensionToLanguage["libsonnet"] = "Jsonnet";
     m_extensionToLanguage["yaml"] = "YAML";
     m_extensionToLanguage["yml"] = "YAML";
     m_extensionToLanguage["xml"] = "XML";
@@ -62,13 +66,16 @@ void LanguageManager::initMappings()
     m_extensionToLanguage["markdown"] = "Markdown";
     m_extensionToLanguage["mdown"] = "Markdown";
 
-    // Shell
+    // Shell / Scripting
     m_extensionToLanguage["sh"] = "Bash";
     m_extensionToLanguage["bash"] = "Bash";
     m_extensionToLanguage["zsh"] = "Bash";
     m_extensionToLanguage["fish"] = "Fish";
     m_extensionToLanguage["ps1"] = "PowerShell";
     m_extensionToLanguage["psm1"] = "PowerShell";
+    m_extensionToLanguage["bat"] = "Batch";
+    m_extensionToLanguage["cmd"] = "Batch";
+    m_extensionToLanguage["awk"] = "Awk";
 
     // Systems languages
     m_extensionToLanguage["rs"] = "Rust";
@@ -131,6 +138,105 @@ void LanguageManager::initMappings()
 
     // Config files
     m_extensionToLanguage["dockerfile"] = "Dockerfile";
+    m_extensionToLanguage["nginx"] = "Nginx";
+    m_extensionToLanguage["csv"] = "CSV";
+
+    // Systems languages (additional)
+    m_extensionToLanguage["d"] = "D";
+    m_extensionToLanguage["di"] = "D";
+    m_extensionToLanguage["zig"] = "Zig";
+    m_extensionToLanguage["nim"] = "Nim";
+    m_extensionToLanguage["nims"] = "Nim";
+    m_extensionToLanguage["nimble"] = "Nim";
+    m_extensionToLanguage["f90"] = "Fortran";
+    m_extensionToLanguage["f95"] = "Fortran";
+    m_extensionToLanguage["f03"] = "Fortran";
+    m_extensionToLanguage["f08"] = "Fortran";
+    m_extensionToLanguage["f"] = "Fortran";
+    m_extensionToLanguage["for"] = "Fortran";
+
+    // Scientific
+    m_extensionToLanguage["r"] = "R";
+    m_extensionToLanguage["R"] = "R";
+    m_extensionToLanguage["rmd"] = "R";
+    m_extensionToLanguage["jl"] = "Julia";
+
+    // Legacy
+    m_extensionToLanguage["cob"] = "COBOL";
+    m_extensionToLanguage["cbl"] = "COBOL";
+    m_extensionToLanguage["cpy"] = "COBOL";
+    m_extensionToLanguage["pas"] = "Pascal";
+    m_extensionToLanguage["pp"] = "Pascal";
+    m_extensionToLanguage["lpr"] = "Pascal";
+    m_extensionToLanguage["dpr"] = "Pascal";
+    m_extensionToLanguage["adb"] = "Ada";
+    m_extensionToLanguage["ads"] = "Ada";
+
+    // Hardware description
+    m_extensionToLanguage["vhd"] = "VHDL";
+    m_extensionToLanguage["vhdl"] = "VHDL";
+
+    // Scripting (additional)
+    m_extensionToLanguage["tcl"] = "Tcl";
+    m_extensionToLanguage["tk"] = "Tcl";
+
+    // Functional (additional)
+    m_extensionToLanguage["scm"] = "Scheme";
+    m_extensionToLanguage["ss"] = "Scheme";
+    m_extensionToLanguage["rkt"] = "Scheme";
+    m_extensionToLanguage["cl"] = "Lisp";
+    m_extensionToLanguage["lisp"] = "Lisp";
+    m_extensionToLanguage["lsp"] = "Lisp";
+    m_extensionToLanguage["asd"] = "Lisp";
+    m_extensionToLanguage["clj"] = "Clojure";
+    m_extensionToLanguage["cljs"] = "Clojure";
+    m_extensionToLanguage["cljc"] = "Clojure";
+    m_extensionToLanguage["edn"] = "Clojure";
+    m_extensionToLanguage["fsx"] = "F#";
+    m_extensionToLanguage["fsi"] = "F#";
+
+    // Other
+    m_extensionToLanguage["pro"] = "Prolog";
+    m_extensionToLanguage["vim"] = "Vim";
+    m_extensionToLanguage["vimrc"] = "Vim";
+    m_extensionToLanguage["pgsql"] = "PostgreSQL";
+    m_extensionToLanguage["rst"] = "reStructuredText";
+    m_extensionToLanguage["rest"] = "reStructuredText";
+    m_extensionToLanguage["graphql"] = "GraphQL";
+    m_extensionToLanguage["gql"] = "GraphQL";
+    m_extensionToLanguage["proto"] = "Protocol Buffers";
+    m_extensionToLanguage["tf"] = "Terraform";
+    m_extensionToLanguage["tfvars"] = "Terraform";
+    m_extensionToLanguage["hcl"] = "HCL";
+    m_extensionToLanguage["sol"] = "Solidity";
+    m_extensionToLanguage["wat"] = "WebAssembly";
+    m_extensionToLanguage["wast"] = "WebAssembly";
+    m_extensionToLanguage["vert"] = "GLSL";
+    m_extensionToLanguage["frag"] = "GLSL";
+    m_extensionToLanguage["geom"] = "GLSL";
+    m_extensionToLanguage["comp"] = "GLSL";
+    m_extensionToLanguage["glsl"] = "GLSL";
+    m_extensionToLanguage["cu"] = "CUDA";
+    m_extensionToLanguage["cuh"] = "CUDA";
+    m_extensionToLanguage["coffee"] = "CoffeeScript";
+    m_extensionToLanguage["cr"] = "Crystal";
+    m_extensionToLanguage["v"] = "Verilog";
+    m_extensionToLanguage["sv"] = "Verilog";
+    m_extensionToLanguage["wgsl"] = "WGSL";
+    m_extensionToLanguage["nix"] = "Nix";
+    m_extensionToLanguage["pkl"] = "Pkl";
+    m_extensionToLanguage["diff"] = "Diff";
+    m_extensionToLanguage["patch"] = "Diff";
+    m_extensionToLanguage["env"] = "Dotenv";
+    m_extensionToLanguage["service"] = "Systemd";
+    m_extensionToLanguage["timer"] = "Systemd";
+    m_extensionToLanguage["socket"] = "Systemd";
+    m_extensionToLanguage["mount"] = "Systemd";
+    m_extensionToLanguage["target"] = "Systemd";
+    m_extensionToLanguage["path"] = "Systemd";
+    m_extensionToLanguage["slice"] = "Systemd";
+    m_extensionToLanguage["star"] = "Starlark";
+    m_extensionToLanguage["bzl"] = "Starlark";
 
     // Plain text
     m_extensionToLanguage["txt"] = "Plain Text";
@@ -160,6 +266,23 @@ void LanguageManager::initMappings()
     m_filenameToLanguage["Cargo.toml"] = "TOML";
     m_filenameToLanguage["go.mod"] = "Go";
     m_filenameToLanguage["go.sum"] = "Go";
+    m_filenameToLanguage[".editorconfig"] = "EditorConfig";
+    m_filenameToLanguage[".env"] = "Dotenv";
+    m_filenameToLanguage[".env.local"] = "Dotenv";
+    m_filenameToLanguage[".env.development"] = "Dotenv";
+    m_filenameToLanguage[".env.production"] = "Dotenv";
+    m_filenameToLanguage[".env.test"] = "Dotenv";
+    m_filenameToLanguage[".env.example"] = "Dotenv";
+    m_filenameToLanguage["meson.build"] = "Meson";
+    m_filenameToLanguage["meson_options.txt"] = "Meson";
+    m_filenameToLanguage["BUILD"] = "Starlark";
+    m_filenameToLanguage["BUILD.bazel"] = "Starlark";
+    m_filenameToLanguage["WORKSPACE"] = "Starlark";
+    m_filenameToLanguage["WORKSPACE.bazel"] = "Starlark";
+    m_filenameToLanguage["BUCK"] = "Starlark";
+    m_filenameToLanguage["flake.nix"] = "Nix";
+    m_filenameToLanguage["default.nix"] = "Nix";
+    m_filenameToLanguage["shell.nix"] = "Nix";
 
     // Shebang mappings
     m_shebangToLanguage["python"] = "Python";
@@ -273,4 +396,9 @@ QString LanguageManager::detectLanguage(const QString &filename, const QString &
     }
 
     return "Plain Text";
+}
+
+QString LanguageManager::definitionPath(const QString &language) const
+{
+    return ":/syntax/" + language.toLower() + ".json";
 }

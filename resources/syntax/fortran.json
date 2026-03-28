@@ -1,0 +1,14 @@
+{
+  "name": "Fortran",
+  "keywords": ["allocatable", "allocate", "assign", "assignment", "associate", "asynchronous", "backspace", "bind", "block", "call", "case", "character", "class", "close", "codimension", "common", "complex", "concurrent", "contains", "contiguous", "continue", "critical", "cycle", "data", "deallocate", "default", "deferred", "dimension", "do", "double", "elemental", "else", "elseif", "elsewhere", "end", "enddo", "endif", "endfile", "endforall", "endfunction", "endprogram", "endselect", "endsubroutine", "endtype", "endwhere", "entry", "enum", "enumerator", "equivalence", "error", "exit", "extends", "external", "final", "flush", "forall", "format", "function", "generic", "go", "goto", "if", "implicit", "import", "in", "include", "inout", "inquire", "integer", "intent", "interface", "intrinsic", "kind", "len", "lock", "logical", "module", "namelist", "non_overridable", "nopass", "nullify", "only", "open", "operator", "optional", "out", "parameter", "pass", "pause", "pointer", "precision", "print", "private", "procedure", "program", "protected", "public", "pure", "read", "real", "recursive", "result", "return", "rewind", "save", "select", "sequence", "stop", "subroutine", "submodule", "sync", "target", "then", "type", "unlock", "use", "value", "volatile", "wait", "where", "while", "write", "abstract", "all", "images", "memory", "none"],
+  "types": ["integer", "real", "double", "precision", "complex", "character", "logical"],
+  "builtins": ["abs", "achar", "acos", "adjustl", "adjustr", "aimag", "aint", "all", "allocated", "anint", "any", "asin", "associated", "atan", "atan2", "ceiling", "char", "cmplx", "conjg", "cos", "cosh", "count", "cshift", "dble", "digits", "dim", "dot_product", "dprod", "eoshift", "epsilon", "exp", "exponent", "floor", "fraction", "huge", "iachar", "iand", "ibclr", "ibits", "ibset", "ichar", "ieor", "index", "int", "ior", "ishft", "ishftc", "kind", "lbound", "len", "len_trim", "log", "log10", "logical", "matmul", "max", "maxloc", "maxval", "merge", "min", "minloc", "minval", "mod", "modulo", "mvbits", "nearest", "nint", "not", "pack", "present", "product", "radix", "range", "real", "repeat", "reshape", "rrspacing", "scale", "scan", "selected_int_kind", "selected_real_kind", "set_exponent", "shape", "sign", "sin", "sinh", "size", "spacing", "spread", "sqrt", "sum", "tan", "tanh", "tiny", "transfer", "transpose", "trim", "ubound", "unpack", "verify"],
+  "singleLineComment": "!",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eEdD][+-]?[0-9]+)?(_[a-zA-Z0-9_]+)?\\b",
+  "functionPattern": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+  "foldBased": "keyword",
+  "caseInsensitiveKeywords": true
+}

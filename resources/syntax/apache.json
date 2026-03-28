@@ -1,0 +1,14 @@
+{
+  "name": "Apache",
+  "keywords": ["ServerRoot", "Listen", "ServerName", "ServerAdmin", "DocumentRoot", "DirectoryIndex", "ErrorLog", "CustomLog", "LogLevel", "Include", "IncludeOptional", "LoadModule", "AddType", "AddHandler", "Options", "AllowOverride", "Require", "Order", "Allow", "Deny", "Redirect", "RewriteEngine", "RewriteRule", "RewriteCond", "RewriteBase", "ProxyPass", "ProxyPassReverse", "SSLEngine", "SSLCertificateFile", "SSLCertificateKeyFile", "Alias", "ScriptAlias", "SetEnv", "SetHandler", "Header", "ExpiresActive", "ExpiresByType", "FileETag", "KeepAlive", "MaxKeepAliveRequests", "Timeout"],
+  "types": [],
+  "builtins": ["on", "off", "all", "none", "any", "All", "None"],
+  "singleLineComment": "#",
+  "multiLineCommentStart": "",
+  "multiLineCommentEnd": "",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?\\b",
+  "functionPattern": "",
+  "tagPattern": "</?[A-Za-z][A-Za-z0-9]*",
+  "foldBased": "tag"
+}

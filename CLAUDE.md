@@ -1,11 +1,11 @@
-# Notepad Supreme
+# PrimeEdit
 
 ## What Is This
-Native Linux text editor matching Notepad++ feature set with modern VS Code and Sublime Text capabilities. Built for performance and extensibility on Linux.
+A fast, native text editor for Linux. Built for performance, extensibility, and developer productivity.
 
 ## Status
 - **Specification:** Complete
-- **Implementation:** Early stage — build system and project structure exist, no core editor code yet
+- **Implementation:** Active development — core editor, 96 syntax languages, LSP, multi-cursor, split-screen, Git integration, plugin system, remote editing all implemented
 
 ## Key Spec Documents
 - `notepad-supreme-requirements.md` — Full feature requirements

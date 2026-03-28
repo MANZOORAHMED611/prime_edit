@@ -1,0 +1,13 @@
+{
+  "name": "OCaml",
+  "keywords": ["and", "as", "assert", "asr", "begin", "class", "constraint", "do", "done", "downto", "else", "end", "exception", "external", "false", "for", "fun", "function", "functor", "if", "in", "include", "inherit", "initializer", "land", "lazy", "let", "lor", "lsl", "lsr", "lxor", "match", "method", "mod", "module", "mutable", "new", "nonrec", "object", "of", "open", "or", "private", "rec", "sig", "struct", "then", "to", "true", "try", "type", "val", "virtual", "when", "while", "with"],
+  "types": ["int", "float", "bool", "char", "string", "bytes", "unit", "list", "array", "option", "result", "ref", "exn", "format", "in_channel", "out_channel", "nativeint", "int32", "int64"],
+  "builtins": ["print_string", "print_endline", "print_int", "print_float", "print_char", "print_newline", "read_line", "read_int", "read_float", "input_line", "output_string", "open_in", "open_out", "close_in", "close_out", "flush", "stdin", "stdout", "stderr", "incr", "decr", "ref", "ignore", "failwith", "invalid_arg", "fst", "snd", "not", "succ", "pred", "abs", "max_int", "min_int", "max_float", "min_float", "infinity", "neg_infinity", "nan", "epsilon_float"],
+  "singleLineComment": "",
+  "multiLineCommentStart": "(*",
+  "multiLineCommentEnd": "*)",
+  "stringDelimiters": ["\"", "'"],
+  "numberPattern": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b|\\b0[xX][0-9a-fA-F]+\\b|\\b0[oO][0-7]+\\b|\\b0[bB][01]+\\b",
+  "functionPattern": "\\b([a-z_][a-zA-Z0-9_']*)\\s+",
+  "foldBased": "keyword"
+}
