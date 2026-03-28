@@ -86,7 +86,23 @@
             text-transform: uppercase;
             letter-spacing: 1.2px;
             color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.15s;
         }
+        .sidebar-nav .section-label:hover { color: var(--primary); }
+        .sidebar-nav .section-label::after {
+            content: '\25BE'; font-size: 12px; transition: transform 0.2s;
+        }
+        .sidebar-nav .section-label.collapsed::after { transform: rotate(-90deg); }
+        .sidebar-nav .nav-group {
+            overflow: hidden; max-height: 600px;
+            transition: max-height 0.3s ease;
+        }
+        .sidebar-nav .nav-group.collapsed { max-height: 0; }
 
         .sidebar-nav a {
             display: block;
@@ -119,11 +135,12 @@
 
         /* Hero */
         .hero {
-            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #E0F2FE 100%);
             color: var(--text);
             padding: 80px 60px 60px;
             position: relative;
             overflow: hidden;
+            border-bottom: 3px solid var(--primary-light);
         }
 
         .hero::after {
@@ -272,6 +289,7 @@
         .feature-card:hover {
             box-shadow: 0 4px 12px var(--shadow-lg);
             border-color: var(--primary-light);
+            border-left: 3px solid var(--primary);
             transform: translateY(-1px);
         }
 
@@ -585,61 +603,76 @@
         <div class="tagline">Technical Documentation</div>
     </div>
     <div class="sidebar-nav">
-        <div class="section-label">Overview</div>
-        <a href="#overview">Product Overview</a>
-        <a href="#who">Who This Is For</a>
-        <a href="#why">Why PrimeEdit</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#building">Building from Source</a>
+        <div class="section-label" onclick="toggleNav(this)">The Platform</div>
+        <div class="nav-group">
+            <a href="#overview">What PrimeEdit Is</a>
+            <a href="#who">Who This Is For</a>
+            <a href="#why">Why PrimeEdit</a>
+        </div>
 
-        <div class="section-label">Editor Core</div>
-        <a href="#editing">Editing &amp; Navigation</a>
-        <a href="#gutter">Gutter &amp; Margins</a>
-        <a href="#folding">Code Folding</a>
-        <a href="#column">Column Selection</a>
-        <a href="#largefile">Large File Handling</a>
+        <div class="section-label" onclick="toggleNav(this)">Intelligence Layer</div>
+        <div class="nav-group">
+            <a href="#schema">Schema Validation</a>
+            <a href="#blockeval">Block Execution</a>
+            <a href="#islamic">Domain Integration</a>
+            <a href="#casestudy">Case Study</a>
+        </div>
 
-        <div class="section-label">Search &amp; Replace</div>
-        <a href="#search">Search System</a>
-        <a href="#findinfiles">Find in Files</a>
-        <a href="#marks">Mark &amp; Highlight</a>
+        <div class="section-label" onclick="toggleNav(this)">Architecture</div>
+        <div class="nav-group">
+            <a href="#architecture">System Architecture</a>
+            <a href="#largefile">Large File Engine</a>
+            <a href="#benchmarks">Performance Benchmarks</a>
+        </div>
 
-        <div class="section-label">Language Support</div>
-        <a href="#syntax">Syntax Highlighting</a>
-        <a href="#languages">81 Languages</a>
-        <a href="#lsp">LSP Integration</a>
-        <a href="#completion">Auto-Completion</a>
+        <div class="section-label collapsed" onclick="toggleNav(this)">Engine Capabilities</div>
+        <div class="nav-group collapsed">
+            <a href="#editing">Editing &amp; Navigation</a>
+            <a href="#gutter">Gutter &amp; Margins</a>
+            <a href="#folding">Code Folding</a>
+            <a href="#column">Column Selection</a>
+            <a href="#search">Search System</a>
+            <a href="#findinfiles">Find in Files</a>
+            <a href="#marks">Mark &amp; Highlight</a>
+        </div>
 
-        <div class="section-label">File Handling</div>
-        <a href="#encoding">Encoding &amp; Detection</a>
-        <a href="#persistence">Persistent Documents</a>
-        <a href="#monitoring">File Monitoring</a>
+        <div class="section-label collapsed" onclick="toggleNav(this)">Language &amp; File Support</div>
+        <div class="nav-group collapsed">
+            <a href="#syntax">Syntax Highlighting</a>
+            <a href="#languages">81 Languages</a>
+            <a href="#lsp">LSP Integration</a>
+            <a href="#completion">Auto-Completion</a>
+            <a href="#encoding">Encoding &amp; Detection</a>
+            <a href="#persistence">Persistent Documents</a>
+            <a href="#monitoring">File Monitoring</a>
+        </div>
 
-        <div class="section-label">What Makes It Different</div>
-        <a href="#schema">Schema Validation</a>
-        <a href="#blockeval">Block Evaluation</a>
-        <a href="#islamic">Islamic Knowledge</a>
-        <a href="#casestudy">Case Study: Scholarly Authoring</a>
+        <div class="section-label collapsed" onclick="toggleNav(this)">UI &amp; Customization</div>
+        <div class="nav-group collapsed">
+            <a href="#themes">Themes</a>
+            <a href="#panels">Panels &amp; Docks</a>
+            <a href="#macros">Macros &amp; Plugins</a>
+            <a href="#shortcuts">Keyboard Shortcuts</a>
+        </div>
 
-        <div class="section-label">UI &amp; Customization</div>
-        <a href="#themes">Themes</a>
-        <a href="#panels">Panels &amp; Docks</a>
-        <a href="#macros">Macros &amp; Plugins</a>
-        <a href="#shortcuts">Keyboard Shortcuts</a>
+        <div class="section-label collapsed" onclick="toggleNav(this)">Quality Assurance</div>
+        <div class="nav-group collapsed">
+            <a href="#qa">Audit Report</a>
+            <a href="#validation">148 Validation Tests</a>
+            <a href="#crashtest">70 Crash Tests</a>
+        </div>
 
-        <div class="section-label">Quality &amp; Performance</div>
-        <a href="#benchmarks">Performance Benchmarks</a>
-        <a href="#qa">Quality Assurance</a>
-        <a href="#validation">Validation Test Suite</a>
-        <a href="#crashtest">Crash Stress Test</a>
+        <div class="section-label collapsed" onclick="toggleNav(this)">Reference</div>
+        <div class="nav-group collapsed">
+            <a href="#config">Configuration Files</a>
+            <a href="#cli">Command Line</a>
+            <a href="#building">Building from Source</a>
+        </div>
 
-        <div class="section-label">Reference</div>
-        <a href="#config">Configuration Files</a>
-        <a href="#cli">Command Line</a>
-
-        <div class="section-label">Other Pages</div>
-        <a href="guide.html" style="color: #2563EB; font-weight: 600; margin-top: 4px;">User Guide</a>
-        <a href="faq.html" style="color: #2563EB; font-weight: 600;">FAQ</a>
+        <div style="padding: 16px 24px 0; border-top: 1px solid var(--border-light); margin-top: 12px;">
+            <a href="guide.html" style="display: block; padding: 8px 12px; color: var(--primary); font-weight: 600; text-decoration: none; background: #EFF6FF; border-radius: 6px; margin-bottom: 6px; text-align: center;">User Guide</a>
+            <a href="faq.html" style="display: block; padding: 8px 12px; color: var(--primary); font-weight: 600; text-decoration: none; background: #EFF6FF; border-radius: 6px; text-align: center;">FAQ</a>
+        </div>
     </div>
 </nav>
 
@@ -655,23 +688,23 @@
                     <h1>PrimeEdit</h1>
                 </div>
             </div>
-            <p>The editor for documents that are executed, validated, or consumed by systems &mdash; not just read. Built for performance and extensibility on Linux.</p>
+            <p>A structured document execution engine for rule-bound workflows. If your document has rules, PrimeEdit enforces them.</p>
             <div class="hero-stats">
                 <div class="hero-stat">
-                    <div class="number">20K+</div>
-                    <div class="label">Lines of C++</div>
+                    <div class="number">Schema</div>
+                    <div class="label">Document Validation</div>
                 </div>
                 <div class="hero-stat">
-                    <div class="number">81</div>
-                    <div class="label">Languages</div>
+                    <div class="number">Execute</div>
+                    <div class="label">Block Transformation</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">Domain</div>
+                    <div class="label">Knowledge Integration</div>
                 </div>
                 <div class="hero-stat">
                     <div class="number">1GB+</div>
-                    <div class="label">File Support</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="number">5</div>
-                    <div class="label">LSP Servers</div>
+                    <div class="label">Native Performance</div>
                 </div>
             </div>
         </div>
@@ -681,19 +714,20 @@
 
         <!-- Product Overview -->
         <section>
-            <p class="lead">PrimeEdit is for people writing documents that are executed, validated, or consumed by systems &mdash; not just read. It combines native performance with structured document validation, executable block evaluation, and domain-specific knowledge integration.</p>
+            <p class="lead">PrimeEdit is a structured document execution engine. It validates documents against rules, transforms content via LLM endpoints, and integrates domain-specific intelligence &mdash; all inside a native, high-performance editing surface.</p>
 
             <div class="info-box note">
-                <strong>Not an IDE. Not an AI assistant.</strong> PrimeEdit is a structured knowledge editor &mdash; an execution-aware document system for rule-bound, high-stakes text work.
+                <strong>If your document has rules, PrimeEdit enforces them.</strong> Instruction files, scholarly manuscripts, compliance documents, prompt libraries &mdash; any document with structure that must be validated, transformed, or verified.
             </div>
 
-            <h3>Core Principles</h3>
+            <h3>Three Layers</h3>
             <ul>
-                <li><strong>Performance first</strong> &mdash; sub-second startup, 1GB+ file handling, 60fps scrolling</li>
-                <li><strong>Documents have rules</strong> &mdash; schema validation enforces them in real-time</li>
-                <li><strong>Any block is a transformation</strong> &mdash; select text, evaluate against any LLM endpoint, accept or reject the diff</li>
-                <li><strong>Domain-aware</strong> &mdash; Islamic scholarly workflows prove the system; your domain is next</li>
+                <li><strong>Validation</strong> &mdash; JSON schema rules check your document in real-time. Inline violations. Health score. No other editor does this.</li>
+                <li><strong>Execution</strong> &mdash; select text, send to any LLM endpoint, see the diff, accept or reject. The document is the interface.</li>
+                <li><strong>Domain Intelligence</strong> &mdash; connect to knowledge bases for domain-specific verification. Islamic scholarship is the reference implementation. Your domain is next.</li>
             </ul>
+
+            <p style="color: var(--text-muted); margin-top: 16px;">Built on a native C++ engine with 1GB+ file handling, 81 syntax languages, LSP integration, and 9 themes. The editing surface is production-grade. But it's not the point &mdash; the intelligence layer is.</p>
         </section>
 
         <div class="divider"></div>
@@ -1283,8 +1317,8 @@ make -j$(nproc)
 
         <!-- Schema Validation -->
         <section id="schema">
-            <h2><span class="section-number">18</span> Document Schema Validation <span class="badge badge-new">Unique</span></h2>
-            <p class="lead">The feature no other editor has. Linting for structured documents with enforced rules.</p>
+            <h2><span class="section-number">18</span> Schema Validation <span class="badge badge-new">Core</span></h2>
+            <p class="lead">The validation layer that makes PrimeEdit a platform, not an editor. Linting exists for code. Nothing equivalent exists for documents that have rules &mdash; until now.</p>
 
             <h3>How It Works</h3>
             <ol>
@@ -1332,8 +1366,8 @@ make -j$(nproc)
 
         <!-- Block Evaluation -->
         <section id="blockeval">
-            <h2><span class="section-number">19</span> Block Evaluation <span class="badge badge-new">Unique</span></h2>
-            <p class="lead">Turn any block of text into an executable transformation. Select, evaluate, see the diff, accept or reject. The document is the interface. The result lives in the document.</p>
+            <h2><span class="section-number">19</span> Block Execution <span class="badge badge-new">Core</span></h2>
+            <p class="lead">The execution layer. Any block of text becomes a transformation pipeline. Select, execute against any endpoint, see the diff, accept or reject. The document is the interface. The result lives in the document.</p>
 
             <div class="info-box tip">
                 <strong>This is not Copilot.</strong> Other editors add AI as an assistant layer &mdash; a sidebar, a chat window, a suggestion ghost. PrimeEdit adds AI as an <em>execution primitive</em>. You select text. You press a key. The text is transformed. You see exactly what changed. You decide. That's it.
@@ -1366,8 +1400,8 @@ make -j$(nproc)
 
         <!-- Islamic Knowledge -->
         <section id="islamic">
-            <h2><span class="section-number">20</span> Islamic Knowledge Integration <span class="badge badge-new">Moat</span></h2>
-            <p class="lead">The reference implementation of everything PrimeEdit can do. Schema validation, block evaluation, RAG-powered verification, and domain-aware rendering &mdash; all integrated into a single scholarly authoring workflow. This is the proof that the system works. Your domain is next.</p>
+            <h2><span class="section-number">20</span> Domain Integration: Islamic Scholarship <span class="badge badge-core">Reference</span></h2>
+            <p class="lead">This is not a feature. This is the product. Schema validation + block execution + RAG-powered verification + domain-aware rendering &mdash; all three platform layers working as one, applied to a real domain with real stakes. This is the proof that the system works. Legal compliance, medical protocols, AI prompt systems &mdash; your domain is next.</p>
 
             <div class="feature-grid">
                 <div class="feature-card">
@@ -1406,8 +1440,8 @@ make -j$(nproc)
 
         <!-- Case Study -->
         <section id="casestudy">
-            <h2><span class="section-number">21</span> Case Study: Islamic Scholarly Authoring</h2>
-            <p class="lead">This is not just a feature list. This is a complete workflow that demonstrates every differentiating capability of PrimeEdit working together.</p>
+            <h2><span class="section-number">21</span> Case Study: All Three Layers in Action</h2>
+            <p class="lead">Schema validation + block execution + domain intelligence &mdash; the complete platform operating on a real document with real rules and real consequences.</p>
 
             <h3>The Workflow</h3>
 
@@ -1834,5 +1868,14 @@ QT_QPA_PLATFORM=offscreen ./crash_test</code></pre>
     </div>
 </div>
 
+<script>
+function toggleNav(label) {
+    label.classList.toggle('collapsed');
+    var group = label.nextElementSibling;
+    if (group && group.classList.contains('nav-group')) {
+        group.classList.toggle('collapsed');
+    }
+}
+</script>
 </body>
 </html>
