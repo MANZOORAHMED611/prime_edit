@@ -237,7 +237,7 @@ add_custom_command(TARGET prime-edit POST_BUILD
 file(GENERATE OUTPUT ${CMAKE_BINARY_DIR}/prime-edit.desktop CONTENT
 "[Desktop Entry]
 Name=PrimeEdit
-Comment=The editor for structured knowledge work
+Comment=A fast native text editor for Linux
 GenericName=Text Editor
 Exec=$<TARGET_FILE:prime-edit> %F
 Icon=$ENV{HOME}/.local/share/icons/hicolor/256x256/apps/prime-edit.png
@@ -245,6 +245,7 @@ Terminal=false
 Type=Application
 Categories=Utility;TextEditor;Development;
 StartupWMClass=PrimeEdit
+MimeType=text/plain;text/x-csrc;text/x-c++src;text/x-chdr;text/x-c++hdr;text/x-java;text/x-python;text/x-shellscript;text/x-script.python;text/x-ruby;text/x-perl;text/x-lua;text/x-go;text/x-rustsrc;text/javascript;application/javascript;application/x-javascript;text/typescript;text/x-typescript;text/html;text/css;text/xml;application/xml;application/json;application/x-yaml;text/x-yaml;text/markdown;text/x-markdown;text/x-cmake;text/x-makefile;text/x-sql;text/x-diff;text/x-patch;text/x-log;text/x-ini;text/x-toml;application/toml;text/x-dockerfile;text/csv;text/tab-separated-values;
 "
 )
 

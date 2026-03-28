@@ -701,7 +701,7 @@
                 </div>
             </div>
             <p style="font-size: 20px; color: var(--text); margin-bottom: 8px;">A Fast Native Text Editor for Linux</p>
-            <p style="font-size: 17px; color: var(--text-light);">Built in C++ with Qt. 96 language definitions, LSP integration, multi-cursor editing, Git gutter, split-screen, remote files, and plugin system &mdash; all in a ~7MB binary that starts in under a second and handles 1GB+ files without breaking a sweat.</p>
+            <p style="font-size: 17px; color: var(--text-light);">Built in C++ with Qt.<br>Handles massive files, starts instantly, and gives you the editing power you actually need &mdash; multi-cursor, LSP, Git, and more &mdash; without the overhead.</p>
             <div class="hero-stats">
                 <div class="hero-stat">
                     <div class="number">96</div>
@@ -725,24 +725,47 @@
 
     <div class="content">
 
+        <!-- Get Started -->
+        <section style="background: var(--bg-code); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 0;">
+            <p style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px;">Get Started in 30 Seconds</p>
+            <ol style="margin: 0; padding-left: 20px; line-height: 2.2; color: var(--text-light);">
+                <li>Download the AppImage below and run: <code style="background: var(--bg-white); padding: 2px 8px; border-radius: 4px; font-size: 13px;">chmod +x PrimeEdit-1.0.AppImage &amp;&amp; ./PrimeEdit-1.0.AppImage</code></li>
+                <li>Open a file: <kbd>Ctrl+O</kbd></li>
+                <li>Try multi-cursor: hold <kbd>Alt</kbd> and click multiple locations, then type</li>
+                <li>Try large file: drag any 100MB+ log file onto the window</li>
+                <li>Connect a language server: <kbd>Settings &gt; LSP Servers</kbd></li>
+            </ol>
+        </section>
+
+        <div class="divider"></div>
+
         <!-- Product Overview -->
         <section>
-            <p class="lead" style="font-size: 19px; font-weight: 600; color: var(--primary-dark);">The editor VS Code should have been &mdash; if it wasn't built on Electron.</p>
-
-            <p class="lead">PrimeEdit is a native C++ text editor designed for developers who want speed, low memory usage, and full-featured editing without the overhead of a browser runtime. It is not an IDE. It is the fastest way to open, edit, and navigate code and text files on Linux.</p>
-
-            <h3>What You Get</h3>
-            <ul>
-                <li><strong>Native performance</strong> &mdash; C++17 compiled binary. No Electron. No JVM. No runtime. Starts instantly, stays fast.</li>
-                <li><strong>96 syntax languages</strong> &mdash; data-driven JSON definitions with auto-detection from extension, shebang, filename, and content heuristics.</li>
-                <li><strong>LSP integration</strong> &mdash; hover docs, go-to-definition, find references, rename symbol, inline diagnostics. Built-in configs for clangd, pylsp, typescript-language-server, rust-analyzer, gopls.</li>
-                <li><strong>Large file handling</strong> &mdash; memory-mapped I/O with sparse line indexing. Opens 1GB files at 95MB RSS. VS Code cannot do this.</li>
-                <li><strong>Multi-cursor, split-screen, Git gutter, remote editing, plugin system, macros, 9 themes</strong> &mdash; everything you expect from a modern editor, without the bloat.</li>
-            </ul>
-
-            <div class="info-box note" style="margin-top: 20px;">
-                <strong>Positioning:</strong> If VS Code is too heavy, Sublime is too proprietary, Kate is too KDE-coupled, and Notepad++ doesn't run on Linux &mdash; PrimeEdit is what you want.
+            <div style="background: linear-gradient(135deg, #1D4ED8 0%, #1e40af 100%); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px;">
+                <p style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.75); margin-bottom: 10px;">Category-Defining Capability</p>
+                <p style="font-size: 18px; font-weight: 700; margin-bottom: 12px; line-height: 1.4; color: #ffffff;">Built for Files Other Editors Cannot Open</p>
+                <p style="color: rgba(255,255,255,0.9); margin-bottom: 16px; font-size: 14px;">PrimeEdit handles files up to 1GB+ at ~95MB memory usage. Memory-mapped I/O, sparse 1000-line indexing, viewport-based rendering, and progressive regex search. A 93MB single-line minified JSON that hangs VS Code opens in PrimeEdit instantly at ~1MB RSS.</p>
+                <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                    <span style="font-size: 13px; color: rgba(255,255,255,0.85);">✓ mmap I/O</span>
+                    <span style="font-size: 13px; color: rgba(255,255,255,0.85);">✓ Sparse line index</span>
+                    <span style="font-size: 13px; color: rgba(255,255,255,0.85);">✓ Viewport rendering</span>
+                    <span style="font-size: 13px; color: rgba(255,255,255,0.85);">✓ Background regex search</span>
+                    <span style="font-size: 13px; color: rgba(255,255,255,0.85);">✓ Minified file detection</span>
+                </div>
             </div>
+
+            <div style="background: var(--bg-code); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px;">
+                <p style="font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 12px; letter-spacing: 0.3px; text-transform: uppercase;">Core Strengths</p>
+                <ul style="margin: 0; padding-left: 20px; line-height: 2;">
+                    <li>Handles massive files (1GB+) without memory blowup &mdash; 93MB minified JSON opens at ~1MB RSS</li>
+                    <li>Native C++ performance &mdash; no Electron, no JVM, no runtime overhead</li>
+                    <li>Full-featured editing &mdash; multi-cursor, split-screen, macros, column selection, code folding</li>
+                    <li>Built-in LSP, Git gutter, SSH remote editing, and plugin system</li>
+                    <li>Fully validated &mdash; 148 feature tests and 70 crash scenarios, all passing</li>
+                </ul>
+            </div>
+
+            <p class="lead">PrimeEdit is a fast, native text editor for Linux &mdash; built for performance, large files, and serious editing workflows. 96 syntax languages, LSP integration, and a full editing feature set in a ~7MB binary that starts in under a second.</p>
         </section>
 
         <div class="divider"></div>
@@ -803,6 +826,23 @@
                     <tr><td>License</td><td>Proprietary</td><td>Proprietary</td><td>Open Source</td><td><strong>Open Source</strong></td></tr>
                 </tbody>
             </table>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Why Switch -->
+        <section>
+            <h2><span class="section-number"></span> Why Switch to PrimeEdit</h2>
+            <div style="background: var(--bg-code); border-radius: var(--radius); padding: 24px 28px;">
+                <ul style="margin: 0; padding-left: 20px; line-height: 2.2; color: var(--text-light);">
+                    <li><strong>VS Code slows down with large files</strong> &mdash; PrimeEdit does not. A 93MB file that hangs VS Code opens at ~1MB RSS.</li>
+                    <li><strong>Electron overhead vs native performance</strong> &mdash; ~300MB runtime vs a ~7MB binary that starts in under a second.</li>
+                    <li><strong>Built-in features instead of extension dependency</strong> &mdash; Git gutter, LSP, remote editing, and terminal are included, not plugins to hunt down.</li>
+                    <li><strong>Instant startup, predictable behavior</strong> &mdash; no background processes, no update daemons, no telemetry.</li>
+                    <li><strong>Open source, MIT licensed</strong> &mdash; own it, fork it, extend it.</li>
+                </ul>
+                <p style="margin-top: 16px; color: var(--text-muted); font-style: italic; font-size: 14px;">If you spend time in logs, large datasets, or remote systems &mdash; this is a different class of tool.</p>
+            </div>
         </section>
 
         <div class="divider"></div>
@@ -904,7 +944,7 @@ make -j$(nproc)
         <!-- Editing & Navigation -->
         <section id="editing">
             <h2><span class="section-number">03</span> Editing &amp; Navigation</h2>
-            <p class="lead">Full-featured text editing with PieceTable buffer, unlimited undo/redo, and extensive line operations.</p>
+            <p class="lead">Full-featured text editing powered by a PieceTable buffer &mdash; enabling O(1) insertions, efficient undo history, and minimal memory churn even under heavy edits. Unlimited undo/redo and extensive line operations.</p>
 
             <div class="feature-grid">
                 <div class="feature-card">

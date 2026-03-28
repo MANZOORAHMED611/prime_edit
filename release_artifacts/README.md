@@ -2,7 +2,9 @@
 
 **A fast, native text editor for Linux — built to rival and exceed Notepad++.**
 
-PrimeEdit is a production-grade C++ editor built on Qt 6. It handles everything from quick edits to 1GB+ log files, supports 96 syntax languages, integrates with language servers, and ships features that no lightweight Linux editor has offered together in one binary.
+PrimeEdit is a production-grade C++ editor built on Qt 6, designed for fast, reliable text editing on Linux.
+
+It handles everything from quick edits to large log files, while providing modern capabilities like multi-cursor editing, split views, and optional language server integration — all in a lightweight native application.
 
 ---
 
