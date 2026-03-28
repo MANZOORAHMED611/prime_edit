@@ -63,14 +63,10 @@ Editor::Editor(Document *document, QWidget *parent)
         // A 93-million-character single line causes an infinite hang.
         // With wrap ON, it only lays out the visible wrapped portion.
         setLineWrapMode(QPlainTextEdit::WidgetWidth);
+        setWordWrapMode(QTextOption::WrapAnywhere);
         QPlainTextEdit::document()->setUndoRedoEnabled(false);
         m_foldMarginVisible = false;
         m_bookmarkMarginVisible = false;
-        // Only hide line numbers for minified files (artificial line breaks)
-        // Normal large files with real lines keep line numbers
-        if (m_document->isMinified()) {
-            m_lineNumbersVisible = false;
-        }
     } else if (m_document->fileMode() == Document::MediumFile) {
         QPlainTextEdit::document()->setUndoRedoEnabled(true);
     }
@@ -82,93 +78,40 @@ Editor::Editor(Document *document, QWidget *parent)
     // Load content
     m_syncing = true;
     if (m_document->fileMode() == Document::LargeFile) {
-        // Large file mode: read first 2MB, force line breaks every 1000 chars.
-        // QTextDocument CANNOT handle long lines — even with word wrap,
-        // it computes layout for the entire line which is O(n²).
-        // The ONLY solution: insert actual newlines so every block is short.
+        // Large file: QTextDocument CANNOT handle a single block with millions
+        // of characters — WrapAnywhere doesn't help, the internal data structures
+        // still explode to 2.5GB. The ONLY working solution: insert real newlines
+        // so every QTextBlock is short. Load full file in chunks.
         setUpdatesEnabled(false);
         QFile file(m_document->filePath());
         if (file.open(QIODevice::ReadOnly)) {
-            constexpr qint64 MAX_LOAD = 2 * 1024 * 1024;
             constexpr int LINE_LEN = 1000;
-            QByteArray raw = file.read(MAX_LOAD);
-            bool truncated = !file.atEnd();
-            file.close();
+            QTextCursor cursor(QPlainTextEdit::document());
 
-            // Insert newlines every LINE_LEN chars
-            QString text = QString::fromUtf8(raw);
-            raw.clear();
-            QString broken;
-            broken.reserve(text.length() + text.length() / LINE_LEN + 10);
-            for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
-                broken.append(text.mid(i, LINE_LEN));
-                if (i + LINE_LEN < text.length()) broken.append('\n');
-            }
-            text.clear();
+            while (!file.atEnd()) {
+                QByteArray chunk = file.read(2 * 1024 * 1024); // 2MB
+                QString text = QString::fromUtf8(chunk);
+                chunk.clear();
 
-            if (truncated) {
-                broken.append(QString("\n\n--- Preview: first %1 of %2 (read-only) ---")
-                    .arg(QLocale().formattedDataSize(MAX_LOAD))
-                    .arg(QLocale().formattedDataSize(QFileInfo(m_document->filePath()).size())));
-            }
-
-            setPlainText(broken);
-        }
-        setUpdatesEnabled(true);
-        // Reset modified — the line-broken preview is not a user edit
-        QPlainTextEdit::document()->setModified(false);
-        m_document->setModified(false);
-
-        // Lazy load: when user scrolls near the end, load more chunks
-        m_largeFileOffset = 2 * 1024 * 1024; // matches MAX_LOAD above
-        connect(verticalScrollBar(), &QScrollBar::valueChanged, this, [this]() {
-            if (!m_document || m_document->fileMode() != Document::LargeFile) return;
-            // If scrollbar is near the bottom (within 90%), load more
-            int maxScroll = verticalScrollBar()->maximum();
-            int current = verticalScrollBar()->value();
-            if (maxScroll > 0 && current > maxScroll * 9 / 10 && m_largeFileOffset > 0) {
-                QFile file(m_document->filePath());
-                if (file.open(QIODevice::ReadOnly)) {
-                    file.seek(m_largeFileOffset);
-                    constexpr qint64 CHUNK = 2 * 1024 * 1024;
-                    constexpr int LINE_LEN = 1000;
-                    QByteArray raw = file.read(CHUNK);
-                    if (raw.isEmpty()) {
-                        m_largeFileOffset = 0; // no more data
-                        file.close();
-                        return;
-                    }
-                    bool moreData = !file.atEnd();
-                    m_largeFileOffset = moreData ? file.pos() : 0;
-                    file.close();
-
-                    QString text = QString::fromUtf8(raw);
-                    raw.clear();
+                // Only break lines if they're extremely long (minified)
+                if (m_document->isMinified()) {
                     QString broken;
                     broken.reserve(text.length() + text.length() / LINE_LEN);
                     for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
+                        if (i > 0) broken.append('\n');
                         broken.append(text.mid(i, LINE_LEN));
-                        if (i + LINE_LEN < text.length()) broken.append('\n');
                     }
-                    text.clear();
-
-                    // Append to document
-                    m_syncing = true;
-                    QTextCursor cursor(QPlainTextEdit::document());
-                    cursor.movePosition(QTextCursor::End);
-                    cursor.insertText("\n" + broken);
-                    QPlainTextEdit::document()->setModified(false);
-                    m_document->setModified(false);
-                    m_syncing = false;
-
-                    if (!moreData) {
-                        // Append end notice
-                        cursor.movePosition(QTextCursor::End);
-                        cursor.insertText("\n\n--- End of file ---");
-                    }
+                    cursor.insertText(broken);
+                } else {
+                    // Normal multi-line file — insert as-is
+                    cursor.insertText(text);
                 }
             }
-        });
+            file.close();
+        }
+        setUpdatesEnabled(true);
+        QPlainTextEdit::document()->setModified(false);
+        m_document->setModified(false);
     } else if (!m_document->text().isEmpty()) {
         setPlainText(m_document->text());
     }
