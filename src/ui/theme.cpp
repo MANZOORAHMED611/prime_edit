@@ -134,8 +134,12 @@ QString Theme::toStyleSheet() const
     qss += QString("QMainWindow { background-color: %1; }\n").arg(background.name());
     qss += QString("QMenuBar { background-color: %1; color: %2; }\n")
         .arg(menuBackground.name(), menuForeground.name());
+    qss += QString("QMenuBar::item:selected { background-color: %1; color: %2; }\n")
+        .arg(accentPrimary.name(), menuForeground.name());
     qss += QString("QMenu { background-color: %1; color: %2; }\n")
         .arg(menuBackground.name(), menuForeground.name());
+    qss += QString("QMenu::item:selected { background-color: %1; color: %2; }\n")
+        .arg(accentPrimary.name(), menuForeground.name());
     qss += QString("QToolBar { background-color: %1; border: none; }\n")
         .arg(toolbarBackground.name());
     qss += QString("QStatusBar { background-color: %1; color: %2; }\n")

@@ -17,6 +17,7 @@ public:
     explicit StatusBarWidget(MainWindow *parent = nullptr);
 
     void updateFromEditor(Editor *editor);
+    void clear();
 
     void setDocType(const QString &type);
     void setLength(qint64 length, int lines);

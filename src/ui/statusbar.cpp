@@ -115,6 +115,16 @@ void StatusBarWidget::setupEncodingMenu()
     m_encodingButton->setMenu(m_encodingMenu);
 }
 
+void StatusBarWidget::clear()
+{
+    m_docTypeLabel->setText(QString());
+    m_lengthLabel->setText(QString());
+    m_positionLabel->setText(QString());
+    m_eolButton->setText(QString());
+    m_encodingButton->setText(QString());
+    m_insertModeLabel->setText(QString());
+}
+
 void StatusBarWidget::updateFromEditor(Editor *editor)
 {
     if (!editor) {

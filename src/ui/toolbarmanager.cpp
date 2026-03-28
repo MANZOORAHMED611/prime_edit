@@ -26,15 +26,15 @@ void ToolbarManager::createToolbars()
                                       "Ctrl+O", SLOT(openFile()), ":/icons/toolbar/folder-open.svg");
     m_toolbar->addAction(openAction);
 
-    QAction *saveAction = createAction("save", tr("Save"), tr("Save File (Ctrl+S)"),
+    QAction *saveAction = createAction("save", tr("Save"), tr("Save (Ctrl+S)"),
                                       "Ctrl+S", SLOT(saveFile()), ":/icons/toolbar/content-save.svg");
     m_toolbar->addAction(saveAction);
 
-    QAction *saveAllAction = createAction("saveAll", tr("Save All"), tr("Save All Files (Ctrl+Shift+S)"),
+    QAction *saveAllAction = createAction("saveAll", tr("Save All"), tr("Save All (Ctrl+Shift+S)"),
                                          "Ctrl+Shift+S", SLOT(saveAllFiles()), ":/icons/toolbar/content-save-all.svg");
     m_toolbar->addAction(saveAllAction);
 
-    QAction *closeAction = createAction("close", tr("Close"), tr("Close File (Ctrl+W)"),
+    QAction *closeAction = createAction("close", tr("Close"), tr("Close (Ctrl+W)"),
                                        "Ctrl+W", SLOT(closeFile()), ":/icons/toolbar/close.svg");
     m_toolbar->addAction(closeAction);
 
@@ -93,7 +93,7 @@ void ToolbarManager::createToolbars()
     m_toolbar->addAction(wordWrapAction);
 
     QAction *whitespaceAction = createAction("showWhitespace", tr("Whitespace"),
-                                            tr("Show Whitespace and TAB"),
+                                            tr("Show Whitespace Characters"),
                                             "", SLOT(toggleWhitespace()), ":/icons/toolbar/keyboard-space.svg");
     whitespaceAction->setCheckable(true);
     m_toolbar->addAction(whitespaceAction);
@@ -104,7 +104,7 @@ void ToolbarManager::createToolbars()
     m_toolbar->addAction(eolAction);
 
     QAction *indentGuideAction = createAction("showIndent", tr("Indent Guide"),
-                                             tr("Show Indent Guide"),
+                                             tr("Show Indent Guides"),
                                              "", SLOT(toggleIndentGuide()), ":/icons/toolbar/format-line-weight.svg");
     indentGuideAction->setCheckable(true);
     m_toolbar->addAction(indentGuideAction);
@@ -113,7 +113,7 @@ void ToolbarManager::createToolbars()
 
     // Group 5 — Macro
     QAction *startRecAction = createAction("startRecording", tr("Record"),
-                                          tr("Start Recording Macro (F9)"),
+                                          tr("Start Recording Macro (Ctrl+Shift+R)"),
                                           "", SLOT(startRecordingMacro()), ":/icons/toolbar/record-circle.svg");
     m_toolbar->addAction(startRecAction);
 
@@ -124,7 +124,7 @@ void ToolbarManager::createToolbars()
     m_toolbar->addAction(stopRecAction);
 
     QAction *playbackAction = createAction("playback", tr("Play"),
-                                          tr("Playback Macro (F10)"),
+                                          tr("Play Macro (Ctrl+Shift+P)"),
                                           "", SLOT(playbackMacro()), ":/icons/toolbar/play-circle.svg");
     m_toolbar->addAction(playbackAction);
 
@@ -137,12 +137,12 @@ void ToolbarManager::createToolbars()
     m_toolbar->addAction(commentAction);
 
     QAction *indentAction = createAction("increaseIndent", tr("Indent"),
-                                        tr("Increase Indent"),
+                                        tr("Increase Indent (Tab)"),
                                         "", SLOT(increaseIndent()), ":/icons/toolbar/format-indent-increase.svg");
     m_toolbar->addAction(indentAction);
 
     QAction *outdentAction = createAction("decreaseIndent", tr("Outdent"),
-                                         tr("Decrease Indent"),
+                                         tr("Decrease Indent (Shift+Tab)"),
                                          "", SLOT(decreaseIndent()), ":/icons/toolbar/format-indent-decrease.svg");
     m_toolbar->addAction(outdentAction);
 }

@@ -62,6 +62,7 @@
 #include <QTextBlock>
 #include <QLocale>
 #include <QSettings>
+#include <QClipboard>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -71,6 +72,11 @@ MainWindow::MainWindow(QWidget *parent)
     setupToolBar();
     setupStatusBar();
     setupShortcuts();
+
+    // Clipboard tracking for Paste action
+    connect(QApplication::clipboard(), &QClipboard::dataChanged, this, [this]() {
+        if (m_pasteAction) m_pasteAction->setEnabled(!QApplication::clipboard()->text().isEmpty());
+    });
 
     // Start recovery timer
     DocumentManager::instance().startRecoveryTimer();
@@ -285,11 +291,11 @@ void MainWindow::setupMenus()
     // ============================================================
     m_fileMenu = menuBar()->addMenu(tr("&File"));
 
-    QAction *newAction = m_fileMenu->addAction(tr("&New"), this, &MainWindow::newFile);
-    newAction->setShortcut(QKeySequence::New);
+    m_newAction = m_fileMenu->addAction(tr("&New"), this, &MainWindow::newFile);
+    m_newAction->setShortcut(QKeySequence::New);
 
-    QAction *openAction = m_fileMenu->addAction(tr("&Open..."), this, [this]() { openFile(); });
-    openAction->setShortcut(QKeySequence::Open);
+    m_openAction = m_fileMenu->addAction(tr("&Open..."), this, [this]() { openFile(); });
+    m_openAction->setShortcut(QKeySequence::Open);
 
     m_recentFilesMenu = m_fileMenu->addMenu(tr("Open &Recent"));
     updateRecentFilesMenu();
@@ -300,29 +306,29 @@ void MainWindow::setupMenus()
 
     m_fileMenu->addSeparator();
 
-    QAction *saveAction = m_fileMenu->addAction(tr("&Save"), this, &MainWindow::saveFile);
-    saveAction->setShortcut(QKeySequence::Save);
+    m_saveAction = m_fileMenu->addAction(tr("&Save"), this, &MainWindow::saveFile);
+    m_saveAction->setShortcut(QKeySequence::Save);
 
     QAction *saveAsAction = m_fileMenu->addAction(tr("Save &As..."), this, &MainWindow::saveFileAs);
     saveAsAction->setShortcut(QKeySequence::SaveAs);
 
-    QAction *saveAllAction = m_fileMenu->addAction(tr("Save A&ll"), this, &MainWindow::saveAllFiles);
-    saveAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+    m_saveAllAction = m_fileMenu->addAction(tr("Save A&ll"), this, &MainWindow::saveAllFiles);
+    m_saveAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
 
     QAction *reloadAction = m_fileMenu->addAction(tr("Reload from Disk"), this, &MainWindow::reloadFromDisk);
     reloadAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
 
     m_fileMenu->addSeparator();
 
-    QAction *closeAction = m_fileMenu->addAction(tr("&Close"), this, [this]() { closeFile(); });
-    closeAction->setShortcut(QKeySequence::Close);
+    m_closeAction = m_fileMenu->addAction(tr("&Close"), this, [this]() { closeFile(); });
+    m_closeAction->setShortcut(QKeySequence::Close);
 
     QAction *closeAllAction = m_fileMenu->addAction(tr("Close All"), this, &MainWindow::closeAllFiles);
 
     m_fileMenu->addSeparator();
 
-    QAction *printAction = m_fileMenu->addAction(tr("&Print..."), this, &MainWindow::printFile);
-    printAction->setShortcut(QKeySequence::Print);
+    m_printAction = m_fileMenu->addAction(tr("&Print..."), this, &MainWindow::printFile);
+    m_printAction->setShortcut(QKeySequence::Print);
 
     m_fileMenu->addSeparator();
 
@@ -334,22 +340,22 @@ void MainWindow::setupMenus()
     // ============================================================
     m_editMenu = menuBar()->addMenu(tr("&Edit"));
 
-    QAction *undoAction = m_editMenu->addAction(tr("&Undo"), this, &MainWindow::undo);
-    undoAction->setShortcut(QKeySequence::Undo);
+    m_undoAction = m_editMenu->addAction(tr("&Undo"), this, &MainWindow::undo);
+    m_undoAction->setShortcut(QKeySequence::Undo);
 
-    QAction *redoAction = m_editMenu->addAction(tr("&Redo"), this, &MainWindow::redo);
-    redoAction->setShortcut(QKeySequence::Redo);
+    m_redoAction = m_editMenu->addAction(tr("&Redo"), this, &MainWindow::redo);
+    m_redoAction->setShortcut(QKeySequence::Redo);
 
     m_editMenu->addSeparator();
 
-    QAction *cutAction = m_editMenu->addAction(tr("Cu&t"), this, &MainWindow::cut);
-    cutAction->setShortcut(QKeySequence::Cut);
+    m_cutAction = m_editMenu->addAction(tr("Cu&t"), this, &MainWindow::cut);
+    m_cutAction->setShortcut(QKeySequence::Cut);
 
-    QAction *copyAction = m_editMenu->addAction(tr("&Copy"), this, &MainWindow::copy);
-    copyAction->setShortcut(QKeySequence::Copy);
+    m_copyAction = m_editMenu->addAction(tr("&Copy"), this, &MainWindow::copy);
+    m_copyAction->setShortcut(QKeySequence::Copy);
 
-    QAction *pasteAction = m_editMenu->addAction(tr("&Paste"), this, &MainWindow::paste);
-    pasteAction->setShortcut(QKeySequence::Paste);
+    m_pasteAction = m_editMenu->addAction(tr("&Paste"), this, &MainWindow::paste);
+    m_pasteAction->setShortcut(QKeySequence::Paste);
 
     m_editMenu->addSeparator();
 
@@ -364,11 +370,11 @@ void MainWindow::setupMenus()
     // Line operations submenu
     QMenu *lineOpsMenu = m_editMenu->addMenu(tr("&Line Operations"));
 
-    QAction *duplicateLineAction = lineOpsMenu->addAction(tr("&Duplicate Line"), this, &MainWindow::duplicateLine);
-    duplicateLineAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
+    m_duplicateLineAction = lineOpsMenu->addAction(tr("&Duplicate Line"), this, &MainWindow::duplicateLine);
+    m_duplicateLineAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
 
-    QAction *deleteLineAction = lineOpsMenu->addAction(tr("De&lete Line"), this, &MainWindow::deleteLine);
-    deleteLineAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_K));
+    m_deleteLineAction = lineOpsMenu->addAction(tr("De&lete Line"), this, &MainWindow::deleteLine);
+    m_deleteLineAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_K));
 
     QAction *moveLineUpAction = lineOpsMenu->addAction(tr("Move Line &Up"), this, &MainWindow::moveLineUp);
     moveLineUpAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Up));
@@ -392,8 +398,8 @@ void MainWindow::setupMenus()
 
     m_editMenu->addSeparator();
 
-    QAction *toggleCommentAction = m_editMenu->addAction(tr("Toggle &Comment"), this, &MainWindow::toggleComment);
-    toggleCommentAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Slash));
+    m_toggleCommentAction = m_editMenu->addAction(tr("Toggle &Comment"), this, &MainWindow::toggleComment);
+    m_toggleCommentAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Slash));
 
     m_editMenu->addSeparator();
 
@@ -405,17 +411,17 @@ void MainWindow::setupMenus()
     // ============================================================
     m_searchMenu = menuBar()->addMenu(tr("&Search"));
 
-    QAction *findAction = m_searchMenu->addAction(tr("&Find..."), this, &MainWindow::find);
-    findAction->setShortcut(QKeySequence::Find);
+    m_findAction = m_searchMenu->addAction(tr("&Find..."), this, &MainWindow::find);
+    m_findAction->setShortcut(QKeySequence::Find);
 
-    QAction *findNextAction = m_searchMenu->addAction(tr("Find &Next"), this, &MainWindow::findNext);
-    findNextAction->setShortcut(QKeySequence::FindNext);
+    m_findNextAction = m_searchMenu->addAction(tr("Find &Next"), this, &MainWindow::findNext);
+    m_findNextAction->setShortcut(QKeySequence::FindNext);
 
-    QAction *findPrevAction = m_searchMenu->addAction(tr("Find &Previous"), this, &MainWindow::findPrevious);
-    findPrevAction->setShortcut(QKeySequence::FindPrevious);
+    m_findPrevAction = m_searchMenu->addAction(tr("Find &Previous"), this, &MainWindow::findPrevious);
+    m_findPrevAction->setShortcut(QKeySequence::FindPrevious);
 
-    QAction *replaceAction = m_searchMenu->addAction(tr("&Replace..."), this, &MainWindow::replace);
-    replaceAction->setShortcut(QKeySequence::Replace);
+    m_replaceAction = m_searchMenu->addAction(tr("&Replace..."), this, &MainWindow::replace);
+    m_replaceAction->setShortcut(QKeySequence::Replace);
 
     QAction *findInFilesAction = m_searchMenu->addAction(tr("Find in &Files..."));
     findInFilesAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F));
@@ -438,10 +444,10 @@ void MainWindow::setupMenus()
     // ============================================================
     m_viewMenu = menuBar()->addMenu(tr("&View"));
 
-    QAction *wordWrapAction = m_viewMenu->addAction(tr("&Word Wrap"));
-    wordWrapAction->setCheckable(true);
-    wordWrapAction->setChecked(Settings::instance().wordWrap());
-    connect(wordWrapAction, &QAction::toggled, this, &MainWindow::toggleWordWrap);
+    m_wordWrapAction = m_viewMenu->addAction(tr("&Word Wrap"));
+    m_wordWrapAction->setCheckable(true);
+    m_wordWrapAction->setChecked(Settings::instance().wordWrap());
+    connect(m_wordWrapAction, &QAction::toggled, this, &MainWindow::toggleWordWrap);
 
     QAction *lineNumbersAction = m_viewMenu->addAction(tr("&Line Numbers"));
     lineNumbersAction->setCheckable(true);
@@ -455,11 +461,11 @@ void MainWindow::setupMenus()
 
     m_viewMenu->addSeparator();
 
-    QAction *zoomInAction = m_viewMenu->addAction(tr("Zoom &In"), this, &MainWindow::zoomIn);
-    zoomInAction->setShortcut(QKeySequence::ZoomIn);
+    m_zoomInAction = m_viewMenu->addAction(tr("Zoom &In"), this, &MainWindow::zoomIn);
+    m_zoomInAction->setShortcut(QKeySequence::ZoomIn);
 
-    QAction *zoomOutAction = m_viewMenu->addAction(tr("Zoom &Out"), this, &MainWindow::zoomOut);
-    zoomOutAction->setShortcut(QKeySequence::ZoomOut);
+    m_zoomOutAction = m_viewMenu->addAction(tr("Zoom &Out"), this, &MainWindow::zoomOut);
+    m_zoomOutAction->setShortcut(QKeySequence::ZoomOut);
 
     QAction *resetZoomAction = m_viewMenu->addAction(tr("&Reset Zoom"), this, &MainWindow::resetZoom);
     resetZoomAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_0));
@@ -470,22 +476,22 @@ void MainWindow::setupMenus()
     alwaysOnTopAction->setCheckable(true);
     connect(alwaysOnTopAction, &QAction::toggled, this, &MainWindow::toggleAlwaysOnTop);
 
-    QAction *showWhitespaceAction = m_viewMenu->addAction(tr("Show &Whitespace"));
-    showWhitespaceAction->setCheckable(true);
-    connect(showWhitespaceAction, &QAction::toggled, this, &MainWindow::toggleWhitespace);
+    m_showWhitespaceAction = m_viewMenu->addAction(tr("Show &Whitespace"));
+    m_showWhitespaceAction->setCheckable(true);
+    connect(m_showWhitespaceAction, &QAction::toggled, this, &MainWindow::toggleWhitespace);
 
-    QAction *showEolAction = m_viewMenu->addAction(tr("Show &End of Line"));
-    showEolAction->setCheckable(true);
-    connect(showEolAction, &QAction::toggled, this, &MainWindow::toggleEndOfLine);
+    m_showEOLAction = m_viewMenu->addAction(tr("Show &End of Line"));
+    m_showEOLAction->setCheckable(true);
+    connect(m_showEOLAction, &QAction::toggled, this, &MainWindow::toggleEndOfLine);
 
-    QAction *showIndentGuideAction = m_viewMenu->addAction(tr("Show Indent &Guide"));
-    showIndentGuideAction->setCheckable(true);
-    connect(showIndentGuideAction, &QAction::toggled, this, &MainWindow::toggleIndentGuide);
+    m_showIndentGuideAction = m_viewMenu->addAction(tr("Show Indent &Guide"));
+    m_showIndentGuideAction->setCheckable(true);
+    connect(m_showIndentGuideAction, &QAction::toggled, this, &MainWindow::toggleIndentGuide);
 
     m_viewMenu->addSeparator();
 
-    m_viewMenu->addAction(tr("Fold All"), this, &MainWindow::foldAll);
-    m_viewMenu->addAction(tr("Unfold All"), this, &MainWindow::unfoldAll);
+    m_foldAllAction = m_viewMenu->addAction(tr("Fold All"), this, &MainWindow::foldAll);
+    m_unfoldAllAction = m_viewMenu->addAction(tr("Unfold All"), this, &MainWindow::unfoldAll);
 
     m_viewMenu->addSeparator();
 
@@ -612,9 +618,9 @@ void MainWindow::setupMenus()
     // Macro menu
     // ============================================================
     m_macroMenu = menuBar()->addMenu(tr("&Macro"));
-    m_macroMenu->addAction(tr("Start &Recording"), this, &MainWindow::startRecordingMacro, QKeySequence(Qt::Key_F9));
-    m_macroMenu->addAction(tr("&Stop Recording"), this, &MainWindow::stopRecordingMacro, QKeySequence(Qt::SHIFT | Qt::Key_F9));
-    m_macroMenu->addAction(tr("&Playback"), this, &MainWindow::playbackMacro, QKeySequence(Qt::Key_F10));
+    m_startRecordingAction = m_macroMenu->addAction(tr("Start &Recording"), this, &MainWindow::startRecordingMacro, QKeySequence(Qt::Key_F9));
+    m_stopRecordingAction = m_macroMenu->addAction(tr("&Stop Recording"), this, &MainWindow::stopRecordingMacro, QKeySequence(Qt::SHIFT | Qt::Key_F9));
+    m_playbackAction = m_macroMenu->addAction(tr("&Playback"), this, &MainWindow::playbackMacro, QKeySequence(Qt::Key_F10));
     m_macroMenu->addAction(tr("Run &Multiple Times..."), this, &MainWindow::runMacroMultipleTimes);
     m_macroMenu->addSeparator();
     m_macroMenu->addAction(tr("Save Macro..."), this, &MainWindow::saveMacro);
@@ -1110,6 +1116,7 @@ void MainWindow::onDocumentModified(bool modified)
 
     updateTabTextForDocument(doc);
     updateWindowTitle();
+    updateMenuState();
 }
 
 void MainWindow::onCursorPositionChanged()
@@ -2024,12 +2031,94 @@ void MainWindow::updateStatusBar()
     Editor *editor = currentEditor();
     if (editor) {
         m_statusBar->updateFromEditor(editor);
+    } else {
+        m_statusBar->clear();
     }
 }
 
 void MainWindow::updateMenuState()
 {
-    // Enable/disable menu items based on current state
+    Editor *editor = currentEditor();
+    bool hasEditor = (editor != nullptr);
+    bool hasSelection = hasEditor && editor->textCursor().hasSelection();
+    bool isModified = hasEditor && editor->document() && editor->document()->isModified();
+
+    // Undo/redo state from QTextDocument
+    bool canUndo = false;
+    bool canRedo = false;
+    if (hasEditor) {
+        QTextDocument *textDoc = static_cast<QPlainTextEdit*>(editor)->document();
+        if (textDoc) {
+            canUndo = textDoc->isUndoAvailable();
+            canRedo = textDoc->isRedoAvailable();
+        }
+    }
+
+    // File operations
+    if (m_saveAction) m_saveAction->setEnabled(isModified);
+    if (m_saveAllAction) {
+        bool anyModified = false;
+        auto checkModified = [&](TabWidget *tw) {
+            if (!tw) return;
+            for (int i = 0; i < tw->count(); ++i) {
+                Editor *e = qobject_cast<Editor*>(tw->widget(i));
+                if (e && e->document() && e->document()->isModified()) {
+                    anyModified = true;
+                    return;
+                }
+            }
+        };
+        checkModified(m_tabWidget);
+        checkModified(m_tabWidget2);
+        m_saveAllAction->setEnabled(anyModified);
+    }
+    if (m_closeAction) m_closeAction->setEnabled(hasEditor);
+    if (m_printAction) m_printAction->setEnabled(hasEditor);
+
+    // Edit operations
+    if (m_undoAction) m_undoAction->setEnabled(canUndo);
+    if (m_redoAction) m_redoAction->setEnabled(canRedo);
+    if (m_cutAction) m_cutAction->setEnabled(hasSelection);
+    if (m_copyAction) m_copyAction->setEnabled(hasSelection);
+    if (m_pasteAction) m_pasteAction->setEnabled(hasEditor && !QApplication::clipboard()->text().isEmpty());
+
+    // Search
+    if (m_findAction) m_findAction->setEnabled(hasEditor);
+    if (m_replaceAction) m_replaceAction->setEnabled(hasEditor);
+
+    // View
+    if (m_zoomInAction) m_zoomInAction->setEnabled(hasEditor);
+    if (m_zoomOutAction) m_zoomOutAction->setEnabled(hasEditor);
+
+    // Toggle state sync on tab change
+    if (m_wordWrapAction && hasEditor)
+        m_wordWrapAction->setChecked(editor->wordWrapEnabled());
+    if (m_showWhitespaceAction && hasEditor)
+        m_showWhitespaceAction->setChecked(editor->showWhitespace());
+    if (m_showEOLAction && hasEditor)
+        m_showEOLAction->setChecked(editor->showEOL());
+    if (m_showIndentGuideAction && hasEditor)
+        m_showIndentGuideAction->setChecked(editor->showIndentGuide());
+
+    // Bookmarks
+    if (m_toggleBookmarkAction) m_toggleBookmarkAction->setEnabled(hasEditor);
+    if (m_nextBookmarkAction) m_nextBookmarkAction->setEnabled(hasEditor);
+    if (m_prevBookmarkAction) m_prevBookmarkAction->setEnabled(hasEditor);
+    if (m_clearBookmarksAction) m_clearBookmarksAction->setEnabled(hasEditor);
+
+    // Folding
+    bool canFold = hasEditor && editor->foldingEnabled();
+    if (m_foldAllAction) m_foldAllAction->setEnabled(canFold);
+    if (m_unfoldAllAction) m_unfoldAllAction->setEnabled(canFold);
+
+    // Line operations
+    if (m_toggleCommentAction) m_toggleCommentAction->setEnabled(hasEditor);
+    if (m_duplicateLineAction) m_duplicateLineAction->setEnabled(hasEditor);
+    if (m_deleteLineAction) m_deleteLineAction->setEnabled(hasEditor);
+
+    // Menus
+    if (m_encodingMenu) m_encodingMenu->setEnabled(hasEditor);
+    if (m_languageMenu) m_languageMenu->setEnabled(hasEditor);
 }
 
 Editor *MainWindow::createEditor(Document *document)
@@ -2046,6 +2135,23 @@ Editor *MainWindow::createEditor(Document *document)
     connect(editor, &QPlainTextEdit::selectionChanged, this, [editor]() {
         PluginManager::instance().broadcastSelectionChanged(
             editor->textCursor().selectedText());
+    });
+
+    // Undo/redo state tracking
+    QTextDocument *textDoc = static_cast<QPlainTextEdit*>(editor)->document();
+    connect(textDoc, &QTextDocument::undoAvailable, this, [this](bool available) {
+        if (m_undoAction) m_undoAction->setEnabled(available);
+    });
+    connect(textDoc, &QTextDocument::redoAvailable, this, [this](bool available) {
+        if (m_redoAction) m_redoAction->setEnabled(available);
+    });
+
+    // Selection state for Cut/Copy
+    connect(editor, &QPlainTextEdit::selectionChanged, this, [this]() {
+        Editor *e = currentEditor();
+        bool hasSel = e && e->textCursor().hasSelection();
+        if (m_cutAction) m_cutAction->setEnabled(hasSel);
+        if (m_copyAction) m_copyAction->setEnabled(hasSel);
     });
 
     return editor;
