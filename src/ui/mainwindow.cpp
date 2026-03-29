@@ -436,8 +436,7 @@ void MainWindow::setupMenus()
 
     m_searchMenu->addSeparator();
 
-    QAction *goToLineAction = m_searchMenu->addAction(tr("&Go to Line..."), this, &MainWindow::goToLineDialog);
-    goToLineAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_G));
+    m_searchMenu->addAction(tr("&Go to Line..."), this, &MainWindow::goToLineDialog);
 
     m_searchMenu->addSeparator();
 
@@ -746,6 +745,10 @@ void MainWindow::setupShortcuts()
     QShortcut *renameShortcut = new QShortcut(QKeySequence(Qt::Key_F2), this);
     connect(renameShortcut, &QShortcut::activated,
             this, &MainWindow::renameSymbol);
+
+    // Go to Line (Ctrl+G)
+    QShortcut *goToLineShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_G), this);
+    connect(goToLineShortcut, &QShortcut::activated, this, &MainWindow::goToLineDialog);
 
     // Tab navigation
     QShortcut *nextTabShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_PageDown), this);
