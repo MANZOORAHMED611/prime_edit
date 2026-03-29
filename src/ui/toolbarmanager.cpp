@@ -113,7 +113,7 @@ void ToolbarManager::createToolbars()
 
     // Group 5 — Macro
     QAction *startRecAction = createAction("startRecording", tr("Record"),
-                                          tr("Start Recording Macro (Ctrl+Shift+R)"),
+                                          tr("Start Recording Macro (F9)"),
                                           "", SLOT(startRecordingMacro()), ":/icons/toolbar/record-circle.svg");
     m_toolbar->addAction(startRecAction);
 
@@ -124,7 +124,7 @@ void ToolbarManager::createToolbars()
     m_toolbar->addAction(stopRecAction);
 
     QAction *playbackAction = createAction("playback", tr("Play"),
-                                          tr("Play Macro (Ctrl+Shift+P)"),
+                                          tr("Play Macro (F10)"),
                                           "", SLOT(playbackMacro()), ":/icons/toolbar/play-circle.svg");
     m_toolbar->addAction(playbackAction);
 

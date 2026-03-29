@@ -310,7 +310,7 @@ void MainWindow::setupMenus()
     m_saveAction->setShortcut(QKeySequence::Save);
 
     QAction *saveAsAction = m_fileMenu->addAction(tr("Save &As..."), this, &MainWindow::saveFileAs);
-    saveAsAction->setShortcut(QKeySequence::SaveAs);
+    saveAsAction->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_S));
 
     m_saveAllAction = m_fileMenu->addAction(tr("Save A&ll"), this, &MainWindow::saveAllFiles);
     m_saveAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
@@ -438,6 +438,20 @@ void MainWindow::setupMenus()
 
     QAction *goToLineAction = m_searchMenu->addAction(tr("&Go to Line..."), this, &MainWindow::goToLineDialog);
     goToLineAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_G));
+
+    m_searchMenu->addSeparator();
+
+    // Bookmarks
+    m_toggleBookmarkAction = m_searchMenu->addAction(tr("Toggle &Bookmark"), this, &MainWindow::toggleBookmark);
+    m_toggleBookmarkAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F2));
+
+    m_nextBookmarkAction = m_searchMenu->addAction(tr("&Next Bookmark"), this, &MainWindow::nextBookmark);
+    m_nextBookmarkAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F2));
+
+    m_prevBookmarkAction = m_searchMenu->addAction(tr("&Previous Bookmark"), this, &MainWindow::previousBookmark);
+    m_prevBookmarkAction->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_F2));
+
+    m_clearBookmarksAction = m_searchMenu->addAction(tr("Clear All Book&marks"), this, &MainWindow::clearAllBookmarks);
 
     // ============================================================
     // View menu
@@ -733,11 +747,16 @@ void MainWindow::setupShortcuts()
     connect(renameShortcut, &QShortcut::activated,
             this, &MainWindow::renameSymbol);
 
-    // Hadith validation (Ctrl+Shift+H)
-    QShortcut *hadithShortcut = new QShortcut(
-        QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_H), this);
-    connect(hadithShortcut, &QShortcut::activated,
-            this, &MainWindow::validateHadith);
+    // Tab navigation
+    QShortcut *nextTabShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_PageDown), this);
+    connect(nextTabShortcut, &QShortcut::activated, this, &MainWindow::nextTab);
+
+    QShortcut *prevTabShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_PageUp), this);
+    connect(prevTabShortcut, &QShortcut::activated, this, &MainWindow::previousTab);
+
+    // Distraction-free mode
+    QShortcut *distractionFreeShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F11), this);
+    connect(distractionFreeShortcut, &QShortcut::activated, this, &MainWindow::toggleDistractionFree);
 }
 
 void MainWindow::newFile()
@@ -1890,7 +1909,7 @@ void MainWindow::populateCommandPalette()
 void MainWindow::startRecordingMacro()
 {
     MacroRecorder::instance().startRecording();
-    statusBar()->showMessage(tr("Recording macro... (F9 to stop)"), 0);
+    statusBar()->showMessage(tr("Recording macro... (Shift+F9 to stop)"), 0);
 }
 
 void MainWindow::stopRecordingMacro()
