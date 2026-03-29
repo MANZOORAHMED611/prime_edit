@@ -4,6 +4,7 @@ build-debug/
 
 # Internal / dev-only files
 CLAUDE.md
+release_artifacts/
 html-docs-old/
 notepad-supreme-requirements.md
 colorize_icons.py
