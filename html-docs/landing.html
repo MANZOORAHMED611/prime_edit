@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrimeEdit — A Fast Native Text Editor for Linux</title>
+    <link rel="icon" type="image/png" href="prime_edit_icon.png">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-light: #3B82F6;
+            --primary-dark: #1D4ED8;
+            --accent: #60A5FA;
+            --bg: #F8FAFC;
+            --bg-white: #FFFFFF;
+            --text: #0F172A;
+            --text-light: #475569;
+            --text-muted: #94A3B8;
+            --border: #CBD5E1;
+            --border-light: #E2E8F0;
+            --success: #16A34A;
+            --shadow: rgba(37, 99, 235, 0.06);
+            --shadow-lg: rgba(37, 99, 235, 0.10);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font);
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 40px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 32px;
+            border-radius: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links .btn-nav {
+            background: var(--primary);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.15s;
+        }
+
+        .nav-links .btn-nav:hover {
+            background: var(--primary-dark);
+            color: #fff;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 140px 40px 100px;
+            text-align: center;
+            background: linear-gradient(180deg, #EFF6FF 0%, var(--bg) 100%);
+        }
+
+        .hero-icon {
+            height: 80px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px var(--shadow-lg);
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero .tagline {
+            font-size: 20px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-white);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-light);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 56px;
+        }
+
+        .hero-stat .number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .hero-stat .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Sections */
+        section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* What It Is */
+        .what-it-is {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 1px 3px var(--shadow);
+        }
+
+        .what-it-is p {
+            font-size: 18px;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 0;
+        }
+
+        /* Capability Cards */
+        .capabilities {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+        }
+
+        .cap-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px var(--shadow);
+        }
+
+        .cap-card:hover {
+            box-shadow: 0 8px 24px var(--shadow-lg);
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .cap-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cap-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .cap-card p {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .cap-card ul {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .cap-card ul li {
+            font-size: 14px;
+            color: var(--text-light);
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .cap-card ul li::before {
+            content: '\2713';
+            color: var(--success);
+            font-weight: 700;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+            box-shadow: 0 1px 3px var(--shadow);
+        }
+
+        .comparison table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison th {
+            background: #F1F5F9;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .comparison th:last-child {
+            color: var(--primary);
+        }
+
+        .comparison td {
+            padding: 12px 20px;
+            font-size: 14px;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .comparison tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison td:first-child {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .comparison td:last-child {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .check { color: var(--success); font-weight: 700; }
+        .cross { color: #DC2626; }
+        .partial { color: #D97706; }
+
+        /* Download Section */
+        .download-section {
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-radius: var(--radius-lg);
+            padding: 56px 48px;
+            text-align: center;
+        }
+
+        .download-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .download-section > p {
+            color: var(--text-light);
+            margin-bottom: 36px;
+        }
+
+        .download-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto 32px;
+        }
+
+        .dl-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            text-align: left;
+        }
+
+        .dl-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .dl-card .dl-size {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .dl-card pre {
+            background: #F1F5F9;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: #334155;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .dl-card pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .build-source {
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .build-source a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .build-source a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-brand img {
+            height: 28px;
+            border-radius: 6px;
+            opacity: 0.7;
+        }
+
+        .footer-brand .footer-text {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-brand .footer-text strong {
+            display: block;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 48px;
+        }
+
+        .footer-col h4 {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: 14px;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 3px 0;
+            transition: color 0.15s;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav { padding: 0 20px; }
+            .nav-links { gap: 16px; }
+            .hero { padding: 120px 20px 60px; }
+            .hero h1 { font-size: 32px; }
+            .hero .tagline { font-size: 17px; }
+            .hero-stats { gap: 24px; }
+            .hero-stat .number { font-size: 28px; }
+            section { padding: 48px 20px; }
+            .capabilities { grid-template-columns: 1fr; }
+            .download-cards { grid-template-columns: 1fr; }
+            .footer { flex-direction: column; gap: 32px; }
+            .footer-links { gap: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+    <a href="#" class="nav-logo">
+        <img src="prime_edit_icon.png" alt="PrimeEdit">
+        PrimeEdit
+    </a>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#compare">Compare</a>
+        <a href="#download">Download</a>
+        <a href="index.html">Docs</a>
+        <a href="https://github.com/MANZOORAHMED611/prime_edit" class="btn-nav">GitHub</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+    <img src="prime_edit_icon.png" alt="PrimeEdit" class="hero-icon">
+    <h1>A fast native text editor<br>for <span>Linux</span></h1>
+    <p class="tagline">Native C++ performance. 96 syntax languages. Multi-cursor editing, Git integration, LSP support, and split-screen views — in a ~7MB binary.</p>
+
+    <div class="hero-buttons">
+        <a href="#download" class="btn btn-primary">Download v1.0</a>
+        <a href="https://github.com/MANZOORAHMED611/prime_edit" class="btn btn-secondary">View on GitHub</a>
+    </div>
+
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="number">96</div>
+            <div class="label">Languages</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">~7MB</div>
+            <div class="label">Binary</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">&lt;1s</div>
+            <div class="label">Startup</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">1GB+</div>
+            <div class="label">File Support</div>
+        </div>
+    </div>
+</header>
+
+<!-- What It Is -->
+<section>
+    <div class="what-it-is">
+        <p>PrimeEdit is a production-grade text editor built in C++17 on Qt 6, designed for fast, reliable editing on Linux. It handles everything from quick config edits to multi-gigabyte log files, with the editing power of VS Code and the speed of a native application.</p>
+    </div>
+</section>
+
+<!-- Capabilities -->
+<section id="features">
+    <div class="section-header">
+        <h2>Built for real work</h2>
+        <p>Three things that set PrimeEdit apart from every other Linux editor.</p>
+    </div>
+
+    <div class="capabilities">
+        <div class="cap-card">
+            <div class="cap-icon">1GB</div>
+            <h3>Large files, no compromise</h3>
+            <p>Memory-mapped I/O with viewport loading. Only visible lines stay in memory. A 93MB minified JSON opens instantly at ~1MB RSS.</p>
+            <ul>
+                <li>Files over 1GB at &lt;200MB RAM</li>
+                <li>Minified file detection</li>
+                <li>Chunked lazy loading</li>
+                <li>Background search with progressive results</li>
+            </ul>
+        </div>
+
+        <div class="cap-card">
+            <div class="cap-icon">II</div>
+            <h3>Full editing power</h3>
+            <p>Everything you expect from a modern editor, without the Electron overhead.</p>
+            <ul>
+                <li>Multi-cursor editing (Ctrl+D, Ctrl+Shift+L)</li>
+                <li>Split-screen views</li>
+                <li>96 syntax languages</li>
+                <li>LSP integration (go-to-def, rename, diagnostics)</li>
+                <li>Git gutter indicators and commit dialog</li>
+                <li>Plugin system with C++ API</li>
+                <li>Remote file editing via SSH</li>
+            </ul>
+        </div>
+
+        <div class="cap-card">
+            <div class="cap-icon">C++</div>
+            <h3>Native performance</h3>
+            <p>Not Electron. Not a wrapper. A ground-up C++ application that starts in under a second and stays fast.</p>
+            <ul>
+                <li>~7MB binary</li>
+                <li>&lt;1 second startup</li>
+                <li>PieceTable buffer with unlimited undo</li>
+                <li>9 built-in themes</li>
+                <li>Session restore and crash recovery</li>
+                <li>Desktop integration (file associations, icons)</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison -->
+<section id="compare">
+    <div class="section-header">
+        <h2>How it compares</h2>
+    </div>
+
+    <div class="comparison">
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Notepad++</th>
+                    <th>VS Code</th>
+                    <th>PrimeEdit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Linux native</td>
+                    <td><span class="cross">Wine only</span></td>
+                    <td><span class="partial">Electron</span></td>
+                    <td><span class="check">Native C++</span></td>
+                </tr>
+                <tr>
+                    <td>Binary size</td>
+                    <td>~5MB</td>
+                    <td>~300MB</td>
+                    <td><span class="check">~7MB</span></td>
+                </tr>
+                <tr>
+                    <td>Startup time</td>
+                    <td>&lt;1s</td>
+                    <td>~3s</td>
+                    <td><span class="check">&lt;1s</span></td>
+                </tr>
+                <tr>
+                    <td>1GB+ files</td>
+                    <td><span class="partial">Partial</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Multi-cursor editing</td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Split-screen</td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>LSP integration</td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Git gutter</td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="partial">Extension</span></td>
+                    <td><span class="check">Built-in</span></td>
+                </tr>
+                <tr>
+                    <td>Remote editing</td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes (SSH)</span></td>
+                </tr>
+                <tr>
+                    <td>Plugin system</td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes (C++ API)</span></td>
+                </tr>
+                <tr>
+                    <td>Syntax languages</td>
+                    <td>80+</td>
+                    <td>100+</td>
+                    <td>96</td>
+                </tr>
+                <tr>
+                    <td>License</td>
+                    <td>GPL</td>
+                    <td>MIT (proprietary build)</td>
+                    <td><span class="check">MIT</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Download -->
+<section id="download">
+    <div class="download-section">
+        <h2>Download PrimeEdit</h2>
+        <p>v1.0.0 &mdash; Linux x86_64</p>
+
+        <div class="download-cards">
+            <div class="dl-card">
+                <h3>AppImage</h3>
+                <div class="dl-size">Self-contained &mdash; no dependencies</div>
+                <pre><code>chmod +x PrimeEdit-1.0-x86_64.AppImage
+./PrimeEdit-1.0-x86_64.AppImage</code></pre>
+            </div>
+            <div class="dl-card">
+                <h3>.deb (Debian/Ubuntu)</h3>
+                <div class="dl-size">Requires Qt 6.2+</div>
+                <pre><code>sudo dpkg -i prime-edit_1.0.0_amd64.deb</code></pre>
+            </div>
+        </div>
+
+        <div class="build-source">
+            Or <a href="https://github.com/MANZOORAHMED611/prime_edit">build from source</a> &mdash;
+            <code style="font-size: 13px; background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px;">git clone https://github.com/MANZOORAHMED611/prime_edit.git && cd prime_edit && mkdir build && cd build && cmake .. && make -j$(nproc)</code>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-brand">
+        <img src="prime_edit_icon.png" alt="PrimeEdit">
+        <div class="footer-text">
+            <strong>PrimeEdit</strong>
+            A fast native text editor for Linux<br>
+            &copy; 2026 Green Olive Tech LLC
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <div class="footer-col">
+            <h4>Documentation</h4>
+            <a href="index.html">Technical Docs</a>
+            <a href="guide.html">User Guide</a>
+            <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-col">
+            <h4>Project</h4>
+            <a href="https://github.com/MANZOORAHMED611/prime_edit">GitHub</a>
+            <a href="https://github.com/MANZOORAHMED611/prime_edit/issues">Issues</a>
+            <a href="https://github.com/MANZOORAHMED611/prime_edit/releases">Releases</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
