@@ -17,25 +17,25 @@ void ToolbarManager::createToolbars()
     m_toolbar->setIconSize(QSize(20, 20));
     m_toolbar->setMovable(false);
 
-    // Group 1 — File
+    // Group 1 — File (shortcuts on menu actions, not toolbar — avoids Qt ambiguous shortcut)
     QAction *newAction = createAction("new", tr("New"), tr("New File (Ctrl+N)"),
-                                     "Ctrl+N", SLOT(newFile()), ":/icons/toolbar/file-new.svg");
+                                     "", SLOT(newFile()), ":/icons/toolbar/file-new.svg");
     m_toolbar->addAction(newAction);
 
     QAction *openAction = createAction("open", tr("Open"), tr("Open File (Ctrl+O)"),
-                                      "Ctrl+O", SLOT(openFile()), ":/icons/toolbar/folder-open.svg");
+                                      "", SLOT(openFile()), ":/icons/toolbar/folder-open.svg");
     m_toolbar->addAction(openAction);
 
     QAction *saveAction = createAction("save", tr("Save"), tr("Save (Ctrl+S)"),
-                                      "Ctrl+S", SLOT(saveFile()), ":/icons/toolbar/content-save.svg");
+                                      "", SLOT(saveFile()), ":/icons/toolbar/content-save.svg");
     m_toolbar->addAction(saveAction);
 
     QAction *saveAllAction = createAction("saveAll", tr("Save All"), tr("Save All (Ctrl+Shift+S)"),
-                                         "Ctrl+Shift+S", SLOT(saveAllFiles()), ":/icons/toolbar/content-save-all.svg");
+                                         "", SLOT(saveAllFiles()), ":/icons/toolbar/content-save-all.svg");
     m_toolbar->addAction(saveAllAction);
 
     QAction *closeAction = createAction("close", tr("Close"), tr("Close (Ctrl+W)"),
-                                       "Ctrl+W", SLOT(closeFile()), ":/icons/toolbar/close.svg");
+                                       "", SLOT(closeFile()), ":/icons/toolbar/close.svg");
     m_toolbar->addAction(closeAction);
 
     QAction *closeAllAction = createAction("closeAll", tr("Close All"), tr("Close All Files"),
@@ -46,45 +46,45 @@ void ToolbarManager::createToolbars()
 
     // Group 2 — Edit
     QAction *cutAction = createAction("cut", tr("Cut"), tr("Cut (Ctrl+X)"),
-                                     "Ctrl+X", SLOT(cut()), ":/icons/toolbar/content-cut.svg");
+                                     "", SLOT(cut()), ":/icons/toolbar/content-cut.svg");
     m_toolbar->addAction(cutAction);
 
     QAction *copyAction = createAction("copy", tr("Copy"), tr("Copy (Ctrl+C)"),
-                                      "Ctrl+C", SLOT(copy()), ":/icons/toolbar/content-copy.svg");
+                                      "", SLOT(copy()), ":/icons/toolbar/content-copy.svg");
     m_toolbar->addAction(copyAction);
 
     QAction *pasteAction = createAction("paste", tr("Paste"), tr("Paste (Ctrl+V)"),
-                                       "Ctrl+V", SLOT(paste()), ":/icons/toolbar/content-paste.svg");
+                                       "", SLOT(paste()), ":/icons/toolbar/content-paste.svg");
     m_toolbar->addAction(pasteAction);
 
     QAction *undoAction = createAction("undo", tr("Undo"), tr("Undo (Ctrl+Z)"),
-                                      "Ctrl+Z", SLOT(undo()), ":/icons/toolbar/undo.svg");
+                                      "", SLOT(undo()), ":/icons/toolbar/undo.svg");
     m_toolbar->addAction(undoAction);
 
     QAction *redoAction = createAction("redo", tr("Redo"), tr("Redo (Ctrl+Y)"),
-                                      "Ctrl+Y", SLOT(redo()), ":/icons/toolbar/redo.svg");
+                                      "", SLOT(redo()), ":/icons/toolbar/redo.svg");
     m_toolbar->addAction(redoAction);
 
     m_toolbar->addSeparator();
 
     // Group 3 — Search
     QAction *findAction = createAction("find", tr("Find"), tr("Find (Ctrl+F)"),
-                                      "Ctrl+F", SLOT(find()), ":/icons/toolbar/magnify.svg");
+                                      "", SLOT(find()), ":/icons/toolbar/magnify.svg");
     m_toolbar->addAction(findAction);
 
     QAction *replaceAction = createAction("replace", tr("Replace"), tr("Replace (Ctrl+H)"),
-                                         "Ctrl+H", SLOT(replace()), ":/icons/toolbar/find-replace.svg");
+                                         "", SLOT(replace()), ":/icons/toolbar/find-replace.svg");
     m_toolbar->addAction(replaceAction);
 
     m_toolbar->addSeparator();
 
     // Group 4 — View
     QAction *zoomInAction = createAction("zoomIn", tr("Zoom In"), tr("Zoom In (Ctrl++)"),
-                                        "Ctrl++", SLOT(zoomIn()), ":/icons/toolbar/magnify-plus.svg");
+                                        "", SLOT(zoomIn()), ":/icons/toolbar/magnify-plus.svg");
     m_toolbar->addAction(zoomInAction);
 
     QAction *zoomOutAction = createAction("zoomOut", tr("Zoom Out"), tr("Zoom Out (Ctrl+-)"),
-                                         "Ctrl+-", SLOT(zoomOut()), ":/icons/toolbar/magnify-minus.svg");
+                                         "", SLOT(zoomOut()), ":/icons/toolbar/magnify-minus.svg");
     m_toolbar->addAction(zoomOutAction);
 
     QAction *wordWrapAction = createAction("wordWrap", tr("Wrap"), tr("Toggle Word Wrap"),
