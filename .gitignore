@@ -1,0 +1,16 @@
+# Build
+build/
+build-debug/
+
+# Internal / dev-only files
+CLAUDE.md
+html-docs-old/
+notepad-supreme-requirements.md
+colorize_icons.py
+download_icons.py
+fix_svg_icons.py
+update_icons.py
+update-docs.sh
+TOOLBAR_FEATURES.md
+TOOLBAR_ICONS.md
+TOOLBAR_LAYOUT.md
