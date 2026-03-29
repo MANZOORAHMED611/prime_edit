@@ -52,11 +52,8 @@ Full session restore across restarts. Crash recovery with configurable auto-save
 ### Themes
 9 built-in themes including Notepad++ Classic, Monokai, Dracula, Nord, and Solarized variants. Theme editor with JSON import/export.
 
-### Block Evaluation
+### AI-Assisted Editing
 Select any text, press Ctrl+Shift+E, and send it to any LLM endpoint — local Ollama or any OpenAI-compatible API. Inline diff shows exactly what changed. Accept with A, discard with Escape. Full undo support.
-
-### Document Schema Validation
-Define JSON validation rules for structured documents. Violations appear as inline underlines with a dockable validation panel. The document health score is visible in the status bar at all times.
 
 ---
 
@@ -64,7 +61,7 @@ Define JSON validation rules for structured documents. Violations appear as inli
 
 PrimeEdit 1.0 shipped after three rounds of validation:
 
-**Feature validation:** 148 tests covering every documented capability — PieceTable operations, encoding, search, schema validation, syntax highlighting, large file handling, settings, themes, macros, and resource integrity. All 148 passed.
+**Feature validation:** 148 tests covering every documented capability — PieceTable operations, encoding, search, syntax highlighting, large file handling, settings, themes, macros, and resource integrity. All 148 passed.
 
 **Stress testing:** 70 crash and stress tests including 1,000 undo/redo cycles, 50 rapid tab open/close operations, all 9 themes switched 50 times with multiple editors open, 1MB single-line content, mixed Unicode (Arabic, Chinese, Japanese, Korean, emoji), invalid regex patterns, concurrent edit during search, and theme switching during text modification. Zero crashes.
 
@@ -103,8 +100,7 @@ PrimeEdit 1.0 shipped after three rounds of validation:
 | LSP integration | ❌ | ✅ |
 | Git gutter | ❌ | ✅ |
 | Remote file editing | ❌ | ✅ |
-| Block LLM evaluation | ❌ | ✅ |
-| Document schema validation | ❌ | ✅ |
+| AI-assisted editing | ❌ | ✅ |
 | Large file handling | Partial | ✅ |
 | Syntax languages | 80+ | 96 |
 | Plugin system | ✅ | ✅ |
@@ -128,8 +124,8 @@ sudo dpkg -i primeedit_1.0_amd64.deb
 
 **Build from source:**
 ```bash
-git clone https://github.com/greenolivetech/primeedit
-cd primeedit
+git clone https://github.com/MANZOORAHMED611/prime_edit.git
+cd prime_edit
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j$(nproc)

@@ -25,7 +25,7 @@ PrimeEdit fills that gap — and goes further.
 - Code folding — brace-based (C/C++/Java/JS) and indent-based (Python/YAML)
 - Column/block selection (Alt+drag) and Column Editor
 - Whitespace visualization, EOL markers, indent guides
-- Bookmark system (click margin, F2/Shift+F2 navigate)
+- Bookmark system (Ctrl+F2 toggle, Ctrl+Shift+F2 navigate)
 - Word wrap, zoom in/out, distraction-free mode
 
 ### Multi-Cursor Editing
@@ -126,11 +126,11 @@ sudo dpkg -i primeedit_1.0_amd64.deb
 ```
 
 ### Build from Source
-**Requirements:** Qt 6.2+, CMake 3.16+, C++17 compiler, libssh2 (for remote editing)
+**Requirements:** Qt 6.2+, CMake 3.16+, C++17 compiler
 
 ```bash
-git clone https://github.com/greenolivetech/primeedit
-cd primeedit
+git clone https://github.com/MANZOORAHMED611/prime_edit.git
+cd prime_edit
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j$(nproc)
@@ -162,70 +162,99 @@ Create `~/.config/PrimeEdit/lsp-servers.json`:
 
 ---
 
-## Document Schema Validation
+## AI-Assisted Editing (Optional)
 
-PrimeEdit supports JSON schema validation for structured documents. Create `.olive-schema.json` in your project root:
-
-```json
-{
-  "type": "document",
-  "rules": [
-    "must_include_section:introduction",
-    "no_placeholder_text"
-  ]
-}
-```
-
-Violations appear as inline underlines with a validation panel showing all issues.
-
----
-
-## Block Evaluation
-
-Select any text and press **Ctrl+Shift+E** to send it to a configured LLM endpoint. An inline diff shows what changed — press **A** to accept or **Escape** to discard.
-
-Configure via `~/.config/PrimeEdit/eval-endpoint.json`:
-
-```json
-{
-  "url": "http://localhost:11434/api/generate",
-  "model": "qwen2.5:32b",
-  "system_prompt": "Improve the following text."
-}
-```
-
-Works with Ollama (local) or any OpenAI-compatible endpoint.
+Select any text and press **Ctrl+Shift+E** to send it to a configured LLM endpoint. An inline diff shows what changed — press **A** to accept or **Escape** to discard. Works with Ollama (local) or any OpenAI-compatible endpoint.
 
 ---
 
 ## Keyboard Shortcuts
 
+### File
+
 | Action | Shortcut |
 |--------|----------|
-| Command Palette | Ctrl+Shift+P |
+| New File | Ctrl+N |
+| Open File | Ctrl+O |
+| Open Remote | Ctrl+Shift+O |
+| Save | Ctrl+S |
+| Save As | Ctrl+Alt+S |
+| Save All | Ctrl+Shift+S |
+| Reload from Disk | Ctrl+Shift+R |
+| Close | Ctrl+W |
+| Print | Ctrl+P |
+
+### Edit
+
+| Action | Shortcut |
+|--------|----------|
+| Undo | Ctrl+Z |
+| Redo | Ctrl+Y |
+| Cut / Copy / Paste | Ctrl+X / C / V |
+| Select All | Ctrl+A |
+| Duplicate Line | Ctrl+Shift+D |
+| Delete Line | Ctrl+Shift+K |
+| Move Line Up/Down | Alt+Up/Down |
+| Toggle Comment | Ctrl+/ |
+| Column Editor | Alt+C |
+
+### Multi-Cursor
+
+| Action | Shortcut |
+|--------|----------|
+| Add Cursor | Alt+Click |
+| Select Next Occurrence | Ctrl+D |
+| Select All Occurrences | Ctrl+Shift+L |
+| Cancel Multi-Cursor | Escape |
+
+### Search & Navigation
+
+| Action | Shortcut |
+|--------|----------|
+| Find | Ctrl+F |
+| Replace | Ctrl+H |
+| Find Next / Previous | F3 / Shift+F3 |
+| Find in Files | Ctrl+Shift+F |
+| Incremental Search | Ctrl+I |
+| Go to Line | Ctrl+G |
+| Jump to Bracket | Ctrl+B |
 | Go to Definition | F12 |
 | Find References | Shift+F12 |
 | Rename Symbol | F2 |
-| Evaluate Selection | Ctrl+Shift+E |
-| Multi-cursor next match | Ctrl+D |
-| Select all occurrences | Ctrl+Shift+L |
-| Split screen | View menu |
-| Switch split focus | F6 |
+
+### Bookmarks
+
+| Action | Shortcut |
+|--------|----------|
+| Toggle Bookmark | Ctrl+F2 |
+| Next Bookmark | Ctrl+Shift+F2 |
+| Previous Bookmark | Ctrl+Alt+F2 |
+
+### View
+
+| Action | Shortcut |
+|--------|----------|
+| Split Vertical | Ctrl+\\ |
+| Split Horizontal | Ctrl+Shift+\\ |
+| Close Split | Ctrl+Alt+\\ |
+| Focus Other Split | F6 |
+| Next Tab | Ctrl+PageDown |
+| Previous Tab | Ctrl+PageUp |
 | Terminal | Ctrl+' |
-| Function List | Ctrl+Shift+L |
-| Incremental Search | Ctrl+I |
-| Find in Files | Ctrl+Shift+F |
-| Macro Record | F9 |
-| Macro Stop | Shift+F9 |
-| Macro Playback | F10 |
+| Command Palette | Ctrl+Shift+P |
 | Full Screen | F11 |
-| Bookmark toggle | Click gutter |
-| Next bookmark | F2 |
-| Jump to bracket | Ctrl+B |
-| Duplicate line | Ctrl+Shift+D |
-| Delete line | Ctrl+Shift+K |
-| Move line up/down | Alt+Up/Down |
-| Toggle comment | Ctrl+/ |
+| Distraction-Free | Ctrl+Shift+F11 |
+| Zoom In / Out / Reset | Ctrl++ / Ctrl+- / Ctrl+0 |
+
+### Macros & Git
+
+| Action | Shortcut |
+|--------|----------|
+| Record Macro | F9 |
+| Stop Recording | Shift+F9 |
+| Play Macro | F10 |
+| Git Commit | Ctrl+Shift+G |
+| AI Evaluate Selection | Ctrl+Shift+E |
 
 ---
 
@@ -234,8 +263,7 @@ Works with Ollama (local) or any OpenAI-compatible endpoint.
 | File | Location | Purpose |
 |------|----------|---------|
 | LSP servers | `~/.config/PrimeEdit/lsp-servers.json` | Language server commands |
-| Eval endpoint | `~/.config/PrimeEdit/eval-endpoint.json` | LLM endpoint for block evaluation |
-| Document schema | `.olive-schema.json` (project root) | Validation rules |
+| Eval endpoint | `~/.config/PrimeEdit/eval-endpoint.json` | LLM endpoint for AI editing |
 | Session data | `~/.local/share/PrimeEdit/sessions/` | Open tabs, cursor positions |
 | Custom themes | `~/.local/share/PrimeEdit/themes/` | JSON theme files |
 | Plugins | `~/.config/PrimeEdit/plugins/` | Plugin shared libraries |
