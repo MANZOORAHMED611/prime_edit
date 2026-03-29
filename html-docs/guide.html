@@ -189,7 +189,7 @@ sudo dnf install qt6-qtbase-devel qt6-qtsvg-devel cmake gcc-c++
 sudo pacman -S qt6-base qt6-svg cmake base-devel</code></pre>
 
             <h3>Build &amp; Run</h3>
-            <pre><code>git clone &lt;repository-url&gt; prime-edit
+            <pre><code>git clone https://github.com/MANZOORAHMED611/prime_edit.git prime-edit
 cd prime-edit
 mkdir build && cd build
 cmake ..
@@ -250,7 +250,7 @@ make -j$(nproc)
                     <tr><td>Open file</td><td><kbd>Ctrl</kbd>+<kbd>O</kbd></td></tr>
                     <tr><td>Open remote file</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd></td></tr>
                     <tr><td>Save</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td></tr>
-                    <tr><td>Save As</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td></tr>
+                    <tr><td>Save As</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd></td></tr>
                     <tr><td>Reload from Disk</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd></td></tr>
                     <tr><td>Close tab</td><td><kbd>Ctrl</kbd>+<kbd>W</kbd></td></tr>
                     <tr><td>Print Preview</td><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td></tr>
@@ -293,6 +293,7 @@ make -j$(nproc)
                     <tr><td>Split vertical</td><td><kbd>Ctrl</kbd>+<kbd>\</kbd></td></tr>
                     <tr><td>Split horizontal</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd></td></tr>
                     <tr><td>Switch focus between panes</td><td><kbd>F6</kbd></td></tr>
+                    <tr><td>Close split</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>\</kbd></td></tr>
                 </tbody>
             </table>
 
@@ -336,10 +337,15 @@ make -j$(nproc)
                     <tr><td>Start recording macro</td><td><kbd>F9</kbd></td></tr>
                     <tr><td>Stop recording macro</td><td><kbd>Shift</kbd>+<kbd>F9</kbd></td></tr>
                     <tr><td>Play macro</td><td><kbd>F10</kbd></td></tr>
-                    <tr><td>Toggle bookmark</td><td>Click bookmark margin</td></tr>
-                    <tr><td>Next / Previous bookmark</td><td><kbd>F2</kbd> / <kbd>Shift</kbd>+<kbd>F2</kbd></td></tr>
+                    <tr><td>Toggle bookmark</td><td><kbd>Ctrl</kbd>+<kbd>F2</kbd> or click bookmark margin</td></tr>
+                    <tr><td>Next bookmark</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F2</kbd></td></tr>
+                    <tr><td>Previous bookmark</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd></td></tr>
                     <tr><td>Toggle terminal</td><td><kbd>Ctrl</kbd>+<kbd>'</kbd></td></tr>
                     <tr><td>Block evaluation (AI)</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></td></tr>
+                    <tr><td>Command Palette</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td></tr>
+                    <tr><td>Distraction-Free Mode</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F11</kbd></td></tr>
+                    <tr><td>Next Tab</td><td><kbd>Ctrl</kbd>+<kbd>PageDown</kbd></td></tr>
+                    <tr><td>Previous Tab</td><td><kbd>Ctrl</kbd>+<kbd>PageUp</kbd></td></tr>
                 </tbody>
             </table>
         </section>
@@ -387,6 +393,7 @@ make -j$(nproc)
                 <li><kbd>Ctrl</kbd>+<kbd>\</kbd> splits the editor <strong>vertically</strong> (side by side)</li>
                 <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> splits <strong>horizontally</strong> (top and bottom)</li>
                 <li><kbd>F6</kbd> switches focus between panes</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>\</kbd> closes the current split</li>
             </ul>
 
             <h3>Cloning a Document</h3>

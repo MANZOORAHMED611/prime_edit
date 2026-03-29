@@ -924,7 +924,7 @@ sudo dnf install qt6-qtbase-devel qt6-qtsvg-devel cmake gcc-c++
 sudo pacman -S qt6-base qt6-svg cmake base-devel</code></pre>
 
             <h3>Build &amp; Run</h3>
-            <pre><code>git clone &lt;repository-url&gt; prime-edit
+            <pre><code>git clone https://github.com/MANZOORAHMED611/prime_edit.git prime-edit
 cd prime-edit
 mkdir build && cd build
 cmake ..
@@ -1198,7 +1198,7 @@ make -j$(nproc)
             <table>
                 <thead><tr><th>Column</th><th>Width</th><th>Function</th></tr></thead>
                 <tbody>
-                    <tr><td>Bookmark Margin</td><td>16px</td><td>Click to toggle bookmarks (blue circle). <kbd>F2</kbd>/<kbd>Shift</kbd>+<kbd>F2</kbd> navigates between bookmarks.</td></tr>
+                    <tr><td>Bookmark Margin</td><td>16px</td><td>Click to toggle bookmarks (blue circle). <kbd>Ctrl</kbd>+<kbd>F2</kbd> toggles bookmark, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F2</kbd> / <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F2</kbd> navigates between bookmarks.</td></tr>
                     <tr><td>Line Numbers</td><td>Variable</td><td>Current line highlighted. Correct absolute numbers for large-file viewport loading.</td></tr>
                     <tr><td>Fold Margin</td><td>16px</td><td>Click <code>[-]</code>/<code>[+]</code> indicators to fold/unfold code blocks.</td></tr>
                 </tbody>
@@ -1649,7 +1649,7 @@ make -j$(nproc)
                 <thead><tr><th>Panel</th><th>Position</th><th>Toggle</th><th>Purpose</th></tr></thead>
                 <tbody>
                     <tr><td>Document Map</td><td>Right</td><td>View menu</td><td>Minimap with viewport highlight and click-to-navigate</td></tr>
-                    <tr><td>Function List</td><td>Left</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td><td>Regex-based function extraction, double-click to jump</td></tr>
+                    <tr><td>Function List</td><td>Left</td><td>View menu</td><td>Regex-based function extraction, double-click to jump</td></tr>
                     <tr><td>Search Results</td><td>Bottom</td><td>Auto (on search)</td><td>Find All results grouped by file</td></tr>
                     <tr><td>Terminal</td><td>Bottom</td><td><kbd>Ctrl</kbd>+<kbd>'</kbd></td><td>Integrated terminal emulator</td></tr>
                     <tr><td>File Explorer</td><td>Left</td><td>View menu</td><td>Directory tree browser (local and remote)</td></tr>
@@ -1682,6 +1682,7 @@ make -j$(nproc)
                 <div class="shortcut-item"><span class="action">New File</span><kbd>Ctrl+N</kbd></div>
                 <div class="shortcut-item"><span class="action">Open File</span><kbd>Ctrl+O</kbd></div>
                 <div class="shortcut-item"><span class="action">Save</span><kbd>Ctrl+S</kbd></div>
+                <div class="shortcut-item"><span class="action">Save As</span><kbd>Ctrl+Alt+S</kbd></div>
                 <div class="shortcut-item"><span class="action">Save All</span><kbd>Ctrl+Shift+S</kbd></div>
                 <div class="shortcut-item"><span class="action">Close Tab</span><kbd>Ctrl+W</kbd></div>
                 <div class="shortcut-item"><span class="action">Reload from Disk</span><kbd>Ctrl+Shift+R</kbd></div>
@@ -1711,6 +1712,7 @@ make -j$(nproc)
             <div class="shortcut-grid">
                 <div class="shortcut-item"><span class="action">Vertical Split</span><kbd>Ctrl+\</kbd></div>
                 <div class="shortcut-item"><span class="action">Horizontal Split</span><kbd>Ctrl+Shift+\</kbd></div>
+                <div class="shortcut-item"><span class="action">Close Split</span><kbd>Ctrl+Alt+\</kbd></div>
                 <div class="shortcut-item"><span class="action">Switch Focus</span><kbd>F6</kbd></div>
             </div>
 
@@ -1742,7 +1744,33 @@ make -j$(nproc)
                 <div class="shortcut-item"><span class="action">Reset Zoom</span><kbd>Ctrl+0</kbd></div>
                 <div class="shortcut-item"><span class="action">Full Screen</span><kbd>F11</kbd></div>
                 <div class="shortcut-item"><span class="action">Terminal</span><kbd>Ctrl+'</kbd></div>
-                <div class="shortcut-item"><span class="action">Function List</span><kbd>Ctrl+Shift+L</kbd></div>
+                <div class="shortcut-item"><span class="action">Distraction-Free</span><kbd>Ctrl+Shift+F11</kbd></div>
+            </div>
+
+            <h4>Tabs</h4>
+            <div class="shortcut-grid">
+                <div class="shortcut-item"><span class="action">Next Tab</span><kbd>Ctrl+PageDown</kbd></div>
+                <div class="shortcut-item"><span class="action">Previous Tab</span><kbd>Ctrl+PageUp</kbd></div>
+            </div>
+
+            <h4>Bookmarks</h4>
+            <div class="shortcut-grid">
+                <div class="shortcut-item"><span class="action">Toggle Bookmark</span><kbd>Ctrl+F2</kbd></div>
+                <div class="shortcut-item"><span class="action">Next Bookmark</span><kbd>Ctrl+Shift+F2</kbd></div>
+                <div class="shortcut-item"><span class="action">Previous Bookmark</span><kbd>Ctrl+Alt+F2</kbd></div>
+            </div>
+
+            <h4>Macros</h4>
+            <div class="shortcut-grid">
+                <div class="shortcut-item"><span class="action">Start/Stop Recording</span><kbd>F9</kbd></div>
+                <div class="shortcut-item"><span class="action">Save Macro</span><kbd>Shift+F9</kbd></div>
+                <div class="shortcut-item"><span class="action">Playback Macro</span><kbd>F10</kbd></div>
+            </div>
+
+            <h4>Git</h4>
+            <div class="shortcut-grid">
+                <div class="shortcut-item"><span class="action">Git Commit</span><kbd>Ctrl+Shift+G</kbd></div>
+                <div class="shortcut-item"><span class="action">Open Remote</span><kbd>Ctrl+Shift+O</kbd></div>
             </div>
 
             <h4>AI &amp; Tools</h4>
