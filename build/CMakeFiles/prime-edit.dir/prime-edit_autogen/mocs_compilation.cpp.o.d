@@ -341,6 +341,10 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QFileSystemWatcher \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qfilesystemwatcher.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/document.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/moc_gitgutter.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/gitgutter.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/moc_islamicbridge.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/islamicbridge.h \
  /usr/include/x86_64-linux-gnu/qt6/QtNetwork/QNetworkAccessManager \
@@ -392,8 +396,6 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/llmevaluator.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/moc_lspclient.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/lspclient.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QProcess \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocess.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QJsonObject \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonvalue.h \
@@ -448,14 +450,11 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qplugin.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qjsonobject.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/plugininterface.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/moc_remoteconnection.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/remoteconnection.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QByteArray \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearray.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QTemporaryFile \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qtemporaryfile.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QDateTime \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qdatetime.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QSettings \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qsettings.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/moc_schemavalidator.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/../../../src/core/schemavalidator.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/PRMOGMWJPH/moc_searchengine.cpp \
@@ -565,6 +564,7 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.h \
+ /home/abusulaiman/dev/repository/olive_notepad/src/core/gitgutter.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_endpointconfigdialog.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/endpointconfigdialog.h \
@@ -592,14 +592,16 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/functionlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QStandardItemModel \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qstandarditemmodel.h \
- /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_gitdiffviewer.cpp \
- /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/gitdiffviewer.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_gitcommitdialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/gitcommitdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTreeWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtreewidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtreeview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtreewidgetitemiterator.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSplitter \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsplitter.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_gitdiffviewer.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/gitdiffviewer.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_gitstatusdelegate.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/gitstatusdelegate.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QStyledItemDelegate \
@@ -608,6 +610,8 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/hexviewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QScrollArea \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qscrollarea.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QByteArray \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearray.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QPaintEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QMouseEvent \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QWheelEvent \
@@ -639,12 +643,15 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstatusbar.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QDockWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qdockwidget.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/../core/remoteconnection.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_markdownpreview.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/markdownpreview.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTextBrowser \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtextbrowser.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_notificationbar.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/notificationbar.h \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_plugindialog.cpp \
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/plugindialog.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_preferencesdialog.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/preferencesdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QFontComboBox \
@@ -654,7 +661,6 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/recoverydialog.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_remoteconnectiondialog.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/remoteconnectiondialog.h \
- /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/../core/remoteconnection.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_searchdialog.cpp \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/searchdialog.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QButtonGroup \
@@ -698,5 +704,4 @@ CMakeFiles/prime-edit.dir/prime-edit_autogen/mocs_compilation.cpp.o: \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/../../../src/ui/validationpanel.h \
  /home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.h \
  /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/VSCBVMNR7M/moc_settings.cpp \
- /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/VSCBVMNR7M/../../../src/utils/settings.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant
+ /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/VSCBVMNR7M/../../../src/utils/settings.h

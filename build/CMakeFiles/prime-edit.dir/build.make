@@ -75,6 +75,7 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/themes/notepadpp.j
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/themes/dark.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/themes/olive.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/themes/light.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/jsonnet.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/scala.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/yaml.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/toml.json
@@ -86,9 +87,14 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/cuda.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/csv.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/javascript.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/ruby.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/systemd.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/java.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/wgsl.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/c.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/xml.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/awk.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/meson.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/svelte.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/clojure.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/coffeescript.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/r.json
@@ -105,6 +111,7 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/markdown.js
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/fsharp.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/git.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/vhdl.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/vue.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/sql.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/cmake.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/julia.json
@@ -112,8 +119,10 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/graphql.jso
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/apache.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/d.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/swift.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/sass.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/mysql.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/terraform.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/diff.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/css.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/assembly.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/ada.json
@@ -125,6 +134,8 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/nim.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/tcl.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/visualbasic.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/nginx.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/pkl.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/dotenv.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/protobuf.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/go.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/objectivec.json
@@ -136,12 +147,16 @@ prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/fortran.jso
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/scheme.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/verilog.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/prolog.json
-prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/v.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/nix.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/batch.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/latex.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/starlark.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/v.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/bash.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/html.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/kotlin.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/matlab.json
+prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/editorconfig.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/json.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/cobol.json
 prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp: ../resources/syntax/lisp.json
@@ -435,10 +450,24 @@ CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/core/charsetdetector.cpp -o CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.s
 
+CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o: CMakeFiles/prime-edit.dir/flags.make
+CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o: ../src/core/gitgutter.cpp
+CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o -MF CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o.d -o CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/core/gitgutter.cpp
+
+CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/abusulaiman/dev/repository/olive_notepad/src/core/gitgutter.cpp > CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.i
+
+CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/core/gitgutter.cpp -o CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.s
+
 CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o: ../src/core/llmevaluator.cpp
 CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o -MF CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o.d -o CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/core/llmevaluator.cpp
 
 CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.i: cmake_force
@@ -452,7 +481,7 @@ CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o: ../src/core/islamicbridge.cpp
 CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o -MF CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o.d -o CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp
 
 CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.i: cmake_force
@@ -466,7 +495,7 @@ CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o: ../src/core/schemavalidator.cpp
 CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o -MF CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o.d -o CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/core/schemavalidator.cpp
 
 CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.i: cmake_force
@@ -480,7 +509,7 @@ CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o: ../src/ui/mainwindow.cpp
 CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.i: cmake_force
@@ -494,7 +523,7 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: ../src/ui/mainwindow_extended.cpp
 CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/mainwindow_extended.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.i: cmake_force
@@ -508,7 +537,7 @@ CMakeFiles/prime-edit.dir/src/ui/mainwindow_extended.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o: ../src/ui/tabwidget.cpp
 CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/tabwidget.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.i: cmake_force
@@ -522,7 +551,7 @@ CMakeFiles/prime-edit.dir/src/ui/tabwidget.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o: ../src/ui/editor.cpp
 CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/editor.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/editor.cpp.i: cmake_force
@@ -536,7 +565,7 @@ CMakeFiles/prime-edit.dir/src/ui/editor.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o: ../src/ui/statusbar.cpp
 CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/statusbar.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.i: cmake_force
@@ -550,7 +579,7 @@ CMakeFiles/prime-edit.dir/src/ui/statusbar.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o: ../src/ui/searchdialog.cpp
 CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/searchdialog.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.i: cmake_force
@@ -564,7 +593,7 @@ CMakeFiles/prime-edit.dir/src/ui/searchdialog.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o: ../src/ui/searchresultspanel.cpp
 CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/searchresultspanel.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.i: cmake_force
@@ -578,7 +607,7 @@ CMakeFiles/prime-edit.dir/src/ui/searchresultspanel.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o: ../src/ui/incrementalsearchbar.cpp
 CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/incrementalsearchbar.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.i: cmake_force
@@ -592,7 +621,7 @@ CMakeFiles/prime-edit.dir/src/ui/incrementalsearchbar.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o: ../src/ui/preferencesdialog.cpp
 CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/preferencesdialog.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.i: cmake_force
@@ -606,7 +635,7 @@ CMakeFiles/prime-edit.dir/src/ui/preferencesdialog.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o: ../src/ui/linenumberarea.cpp
 CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/linenumberarea.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.i: cmake_force
@@ -620,7 +649,7 @@ CMakeFiles/prime-edit.dir/src/ui/linenumberarea.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o: ../src/ui/fileexplorer.cpp
 CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/fileexplorer.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.i: cmake_force
@@ -634,7 +663,7 @@ CMakeFiles/prime-edit.dir/src/ui/fileexplorer.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o: ../src/ui/commandpalette.cpp
 CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/commandpalette.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.i: cmake_force
@@ -648,7 +677,7 @@ CMakeFiles/prime-edit.dir/src/ui/commandpalette.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o: ../src/ui/gitstatusdelegate.cpp
 CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitstatusdelegate.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.i: cmake_force
@@ -662,7 +691,7 @@ CMakeFiles/prime-edit.dir/src/ui/gitstatusdelegate.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o: ../src/ui/terminalwidget.cpp
 CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/terminalwidget.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.i: cmake_force
@@ -676,7 +705,7 @@ CMakeFiles/prime-edit.dir/src/ui/terminalwidget.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o: ../src/ui/completionpopup.cpp
 CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/completionpopup.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.i: cmake_force
@@ -690,7 +719,7 @@ CMakeFiles/prime-edit.dir/src/ui/completionpopup.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o: ../src/ui/theme.cpp
 CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/theme.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/theme.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/theme.cpp.i: cmake_force
@@ -704,7 +733,7 @@ CMakeFiles/prime-edit.dir/src/ui/theme.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o: ../src/ui/themeeditor.cpp
 CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/themeeditor.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.i: cmake_force
@@ -718,7 +747,7 @@ CMakeFiles/prime-edit.dir/src/ui/themeeditor.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o: ../src/ui/markdownpreview.cpp
 CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/markdownpreview.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.i: cmake_force
@@ -732,7 +761,7 @@ CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o: ../src/ui/hexviewer.cpp
 CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/hexviewer.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.i: cmake_force
@@ -746,7 +775,7 @@ CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o: ../src/ui/remoteconnectiondialog.cpp
 CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/remoteconnectiondialog.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.i: cmake_force
@@ -760,7 +789,7 @@ CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o: ../src/ui/gitdiffviewer.cpp
 CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.i: cmake_force
@@ -771,10 +800,24 @@ CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp -o CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.s
 
+CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
+CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o: ../src/ui/gitcommitdialog.cpp
+CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitcommitdialog.cpp
+
+CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitcommitdialog.cpp > CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.i
+
+CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/ui/gitcommitdialog.cpp -o CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.s
+
 CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o: ../src/ui/toolbarmanager.cpp
 CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/toolbarmanager.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.i: cmake_force
@@ -788,7 +831,7 @@ CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o: ../src/ui/columneditor.cpp
 CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/columneditor.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.i: cmake_force
@@ -802,7 +845,7 @@ CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o: ../src/ui/notificationbar.cpp
 CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.i: cmake_force
@@ -816,7 +859,7 @@ CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o: ../src/ui/recoverydialog.cpp
 CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/recoverydialog.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.i: cmake_force
@@ -830,7 +873,7 @@ CMakeFiles/prime-edit.dir/src/ui/recoverydialog.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o: ../src/ui/functionlist.cpp
 CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/functionlist.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.i: cmake_force
@@ -844,7 +887,7 @@ CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o: ../src/ui/macrodialog.cpp
 CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/macrodialog.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.i: cmake_force
@@ -858,7 +901,7 @@ CMakeFiles/prime-edit.dir/src/ui/macrodialog.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o: ../src/ui/documentmap.cpp
 CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/documentmap.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.i: cmake_force
@@ -872,7 +915,7 @@ CMakeFiles/prime-edit.dir/src/ui/documentmap.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o: ../src/ui/lspbridge.cpp
 CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/lspbridge.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.i: cmake_force
@@ -886,7 +929,7 @@ CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o: ../src/ui/evalresultwidget.cpp
 CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/evalresultwidget.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.i: cmake_force
@@ -900,7 +943,7 @@ CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o: ../src/ui/endpointconfigdialog.cpp
 CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/endpointconfigdialog.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.i: cmake_force
@@ -914,7 +957,7 @@ CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o: ../src/ui/validationpanel.cpp
 CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp
 
 CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.i: cmake_force
@@ -925,10 +968,24 @@ CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/ui/validationpanel.cpp -o CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.s
 
+CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o: CMakeFiles/prime-edit.dir/flags.make
+CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o: ../src/ui/plugindialog.cpp
+CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o -MF CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o.d -o CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/ui/plugindialog.cpp
+
+CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/abusulaiman/dev/repository/olive_notepad/src/ui/plugindialog.cpp > CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.i
+
+CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/abusulaiman/dev/repository/olive_notepad/src/ui/plugindialog.cpp -o CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.s
+
 CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o: ../src/syntax/highlighter.cpp
 CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o -MF CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o.d -o CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/syntax/highlighter.cpp
 
 CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.i: cmake_force
@@ -942,7 +999,7 @@ CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o: ../src/syntax/languagemanager.cpp
 CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o -MF CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o.d -o CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/syntax/languagemanager.cpp
 
 CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.i: cmake_force
@@ -956,7 +1013,7 @@ CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o: ../src/utils/fileutils.cpp
 CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o -MF CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o.d -o CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/utils/fileutils.cpp
 
 CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.i: cmake_force
@@ -970,7 +1027,7 @@ CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: ../src/utils/settings.cpp
 CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o -MF CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o.d -o CMakeFiles/prime-edit.dir/src/utils/settings.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/src/utils/settings.cpp
 
 CMakeFiles/prime-edit.dir/src/utils/settings.cpp.i: cmake_force
@@ -984,7 +1041,7 @@ CMakeFiles/prime-edit.dir/src/utils/settings.cpp.s: cmake_force
 CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/prime-edit.dir/flags.make
 CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o: prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp
 CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o: CMakeFiles/prime-edit.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o -MF CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o.d -o CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.o -c /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp
 
 CMakeFiles/prime-edit.dir/prime-edit_autogen/3YJK5W5UP7/qrc_resources.cpp.i: cmake_force
@@ -1012,6 +1069,7 @@ prime__edit_OBJECTS = \
 "CMakeFiles/prime-edit.dir/src/core/largefile.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/core/searchengine.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.o" \
+"CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o" \
@@ -1036,6 +1094,7 @@ prime__edit_OBJECTS = \
 "CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o" \
+"CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o" \
@@ -1047,6 +1106,7 @@ prime__edit_OBJECTS = \
 "CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o" \
+"CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o" \
 "CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o" \
@@ -1071,6 +1131,7 @@ PrimeEdit: CMakeFiles/prime-edit.dir/src/core/remoteconnection.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/core/largefile.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/core/searchengine.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/core/charsetdetector.cpp.o
+PrimeEdit: CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/core/llmevaluator.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/core/islamicbridge.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/core/schemavalidator.cpp.o
@@ -1095,6 +1156,7 @@ PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/markdownpreview.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/hexviewer.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/remoteconnectiondialog.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/gitdiffviewer.cpp.o
+PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/toolbarmanager.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/columneditor.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.o
@@ -1106,6 +1168,7 @@ PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/lspbridge.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/evalresultwidget.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/endpointconfigdialog.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/validationpanel.cpp.o
+PrimeEdit: CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/syntax/highlighter.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/syntax/languagemanager.cpp.o
 PrimeEdit: CMakeFiles/prime-edit.dir/src/utils/fileutils.cpp.o
@@ -1124,7 +1187,7 @@ PrimeEdit: /usr/lib/x86_64-linux-gnu/libGLX.so
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 PrimeEdit: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.2.4
 PrimeEdit: CMakeFiles/prime-edit.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Linking CXX executable PrimeEdit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/abusulaiman/dev/repository/olive_notepad/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Linking CXX executable PrimeEdit"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/prime-edit.dir/link.txt --verbose=$(VERBOSE)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Installing PrimeEdit icon and launcher"
 	/usr/bin/cmake -E copy_if_different /home/abusulaiman/dev/repository/olive_notepad/resources/icons/prime_edit_icon.png /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit.png

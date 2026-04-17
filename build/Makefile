@@ -331,6 +331,30 @@ src/core/encoding.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/encoding.cpp.s
 .PHONY : src/core/encoding.cpp.s
 
+src/core/gitgutter.o: src/core/gitgutter.cpp.o
+.PHONY : src/core/gitgutter.o
+
+# target to build an object file
+src/core/gitgutter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.o
+.PHONY : src/core/gitgutter.cpp.o
+
+src/core/gitgutter.i: src/core/gitgutter.cpp.i
+.PHONY : src/core/gitgutter.i
+
+# target to preprocess a source file
+src/core/gitgutter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.i
+.PHONY : src/core/gitgutter.cpp.i
+
+src/core/gitgutter.s: src/core/gitgutter.cpp.s
+.PHONY : src/core/gitgutter.s
+
+# target to generate assembly for a file
+src/core/gitgutter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/core/gitgutter.cpp.s
+.PHONY : src/core/gitgutter.cpp.s
+
 src/core/islamicbridge.o: src/core/islamicbridge.cpp.o
 .PHONY : src/core/islamicbridge.o
 
@@ -907,6 +931,30 @@ src/ui/functionlist.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/functionlist.cpp.s
 .PHONY : src/ui/functionlist.cpp.s
 
+src/ui/gitcommitdialog.o: src/ui/gitcommitdialog.cpp.o
+.PHONY : src/ui/gitcommitdialog.o
+
+# target to build an object file
+src/ui/gitcommitdialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.o
+.PHONY : src/ui/gitcommitdialog.cpp.o
+
+src/ui/gitcommitdialog.i: src/ui/gitcommitdialog.cpp.i
+.PHONY : src/ui/gitcommitdialog.i
+
+# target to preprocess a source file
+src/ui/gitcommitdialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.i
+.PHONY : src/ui/gitcommitdialog.cpp.i
+
+src/ui/gitcommitdialog.s: src/ui/gitcommitdialog.cpp.s
+.PHONY : src/ui/gitcommitdialog.s
+
+# target to generate assembly for a file
+src/ui/gitcommitdialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/gitcommitdialog.cpp.s
+.PHONY : src/ui/gitcommitdialog.cpp.s
+
 src/ui/gitdiffviewer.o: src/ui/gitdiffviewer.cpp.o
 .PHONY : src/ui/gitdiffviewer.o
 
@@ -1170,6 +1218,30 @@ src/ui/notificationbar.s: src/ui/notificationbar.cpp.s
 src/ui/notificationbar.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/notificationbar.cpp.s
 .PHONY : src/ui/notificationbar.cpp.s
+
+src/ui/plugindialog.o: src/ui/plugindialog.cpp.o
+.PHONY : src/ui/plugindialog.o
+
+# target to build an object file
+src/ui/plugindialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.o
+.PHONY : src/ui/plugindialog.cpp.o
+
+src/ui/plugindialog.i: src/ui/plugindialog.cpp.i
+.PHONY : src/ui/plugindialog.i
+
+# target to preprocess a source file
+src/ui/plugindialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.i
+.PHONY : src/ui/plugindialog.cpp.i
+
+src/ui/plugindialog.s: src/ui/plugindialog.cpp.s
+.PHONY : src/ui/plugindialog.s
+
+# target to generate assembly for a file
+src/ui/plugindialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/prime-edit.dir/build.make CMakeFiles/prime-edit.dir/src/ui/plugindialog.cpp.s
+.PHONY : src/ui/plugindialog.cpp.s
 
 src/ui/preferencesdialog.o: src/ui/preferencesdialog.cpp.o
 .PHONY : src/ui/preferencesdialog.o
@@ -1539,6 +1611,9 @@ help:
 	@echo "... src/core/encoding.o"
 	@echo "... src/core/encoding.i"
 	@echo "... src/core/encoding.s"
+	@echo "... src/core/gitgutter.o"
+	@echo "... src/core/gitgutter.i"
+	@echo "... src/core/gitgutter.s"
 	@echo "... src/core/islamicbridge.o"
 	@echo "... src/core/islamicbridge.i"
 	@echo "... src/core/islamicbridge.s"
@@ -1611,6 +1686,9 @@ help:
 	@echo "... src/ui/functionlist.o"
 	@echo "... src/ui/functionlist.i"
 	@echo "... src/ui/functionlist.s"
+	@echo "... src/ui/gitcommitdialog.o"
+	@echo "... src/ui/gitcommitdialog.i"
+	@echo "... src/ui/gitcommitdialog.s"
 	@echo "... src/ui/gitdiffviewer.o"
 	@echo "... src/ui/gitdiffviewer.i"
 	@echo "... src/ui/gitdiffviewer.s"
@@ -1644,6 +1722,9 @@ help:
 	@echo "... src/ui/notificationbar.o"
 	@echo "... src/ui/notificationbar.i"
 	@echo "... src/ui/notificationbar.s"
+	@echo "... src/ui/plugindialog.o"
+	@echo "... src/ui/plugindialog.i"
+	@echo "... src/ui/plugindialog.s"
 	@echo "... src/ui/preferencesdialog.o"
 	@echo "... src/ui/preferencesdialog.i"
 	@echo "... src/ui/preferencesdialog.s"

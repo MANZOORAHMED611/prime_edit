@@ -1,5 +1,6 @@
 /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/YPKJ5OE7LN/moc_editor.cpp: /home/abusulaiman/dev/repository/olive_notepad/src/ui/editor.h \
   /home/abusulaiman/dev/repository/olive_notepad/build/prime-edit_autogen/moc_predefs.h \
+  /home/abusulaiman/dev/repository/olive_notepad/src/core/gitgutter.h \
   /home/abusulaiman/dev/repository/olive_notepad/src/core/largefile.h \
   /home/abusulaiman/dev/repository/olive_notepad/src/core/lspclient.h \
   /home/abusulaiman/dev/repository/olive_notepad/src/core/searchengine.h \

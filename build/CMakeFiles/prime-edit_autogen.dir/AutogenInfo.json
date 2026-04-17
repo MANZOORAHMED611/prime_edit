@@ -429,6 +429,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/gitgutter.h",
+			"MU",
+			"PRMOGMWJPH/moc_gitgutter.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.h",
 			"MU",
 			"PRMOGMWJPH/moc_islamicbridge.cpp",
@@ -573,6 +579,12 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitcommitdialog.h",
+			"MU",
+			"YPKJ5OE7LN/moc_gitcommitdialog.cpp",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.h",
 			"MU",
 			"YPKJ5OE7LN/moc_gitdiffviewer.cpp",
@@ -630,6 +642,12 @@
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.h",
 			"MU",
 			"YPKJ5OE7LN/moc_notificationbar.cpp",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/plugindialog.h",
+			"MU",
+			"YPKJ5OE7LN/moc_plugindialog.cpp",
 			null
 		],
 		[
@@ -804,6 +822,11 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/core/gitgutter.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/core/islamicbridge.cpp",
 			"MU",
 			null
@@ -924,6 +947,11 @@
 			null
 		],
 		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitcommitdialog.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/gitdiffviewer.cpp",
 			"MU",
 			null
@@ -975,6 +1003,11 @@
 		],
 		[
 			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/notificationbar.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/abusulaiman/dev/repository/olive_notepad/src/ui/plugindialog.cpp",
 			"MU",
 			null
 		],
