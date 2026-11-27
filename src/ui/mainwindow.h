@@ -314,6 +314,7 @@ private:
     QDockWidget *m_documentMapDock = nullptr;
     FunctionListPanel *m_functionList = nullptr;
     QDockWidget *m_functionListDock = nullptr;
+    class MarkdownModeController *m_markdownMode = nullptr;
 
     // Menus
     QMenu *m_fileMenu = nullptr;

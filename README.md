@@ -104,6 +104,11 @@ PrimeEdit fills that gap — and goes further.
 - Full printing with line numbers, headers/footers, syntax-highlighted output
 - Command palette (Ctrl+Shift+P)
 
+### Markdown
+- Markdown Preview (Ctrl+Shift+M) cycles each `.md` tab: source with symbols, side by side with a live preview, rendered only (Esc returns to source)
+- GitHub dialect: tables, task lists, fenced code, strikethrough; links open in the browser, links to local files open in PrimeEdit; no network access from documents
+- Outline panel (left dock, Ctrl+Shift+H): heading tree that jumps to each section in the source and the preview
+
 ### Encoding & File Handling
 - UTF-8, UTF-8-BOM, UTF-16 LE/BE, Latin-1, Windows-1252, ISO-8859
 - Heuristic charset detection (BOM, UTF-8 validation, byte-frequency)

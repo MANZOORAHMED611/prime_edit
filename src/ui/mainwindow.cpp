@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "markdownmode.h"
 #include "tabwidget.h"
 #include "editor.h"
 #include "theme.h"
@@ -176,6 +177,10 @@ void MainWindow::setupUi()
     m_functionListDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, m_functionListDock);
     m_functionListDock->hide();
+
+    m_markdownMode = new MarkdownModeController(this);
+    connect(m_markdownMode, &MarkdownModeController::openFileRequested,
+            this, [this](const QString &path) { openFile(path); });
 
     connect(m_functionList, &FunctionListPanel::functionActivated, this, [this](int line) {
         Editor *e = currentEditor();
@@ -517,6 +522,13 @@ void MainWindow::setupMenus()
     documentMapAction->setChecked(false);
     connect(documentMapAction, &QAction::toggled, m_documentMapDock, &QDockWidget::setVisible);
     connect(m_documentMapDock, &QDockWidget::visibilityChanged, documentMapAction, &QAction::setChecked);
+
+    QAction *markdownPreviewAction = m_viewMenu->addAction(tr("Mar&kdown Preview"), this, [this]() {
+        m_markdownMode->cycle(currentEditor()); // Source -> Side by side -> Rendered
+    });
+    markdownPreviewAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M));
+    markdownPreviewAction->setToolTip(tr("Cycle Markdown view: source, side by side, rendered"));
+    m_viewMenu->addAction(m_markdownMode->outlineAction());
 
     QAction *fullScreenAction = m_viewMenu->addAction(tr("&Full Screen"), this, &MainWindow::toggleFullScreen);
     fullScreenAction->setShortcut(QKeySequence::FullScreen);
@@ -1118,6 +1130,10 @@ void MainWindow::onTabChanged(int index)
 
     if (m_lspBridge) {
         m_lspBridge->onEditorChanged(currentEditor());
+    }
+
+    if (m_markdownMode) {
+        m_markdownMode->setActiveEditor(currentEditor());
     }
 
     updateGitBranch();

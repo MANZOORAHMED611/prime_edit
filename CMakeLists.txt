@@ -77,6 +77,8 @@ set(UI_SOURCES
     src/ui/theme.cpp
     src/ui/themeeditor.cpp
     src/ui/markdownpreview.cpp
+    src/ui/markdownmode.cpp
+    src/ui/markdownoutline.cpp
     src/ui/hexviewer.cpp
     src/ui/remoteconnectiondialog.cpp
     src/ui/gitdiffviewer.cpp
@@ -141,6 +143,8 @@ set(HEADERS
     src/ui/theme.h
     src/ui/themeeditor.h
     src/ui/markdownpreview.h
+    src/ui/markdownmode.h
+    src/ui/markdownoutline.h
     src/ui/hexviewer.h
     src/ui/remoteconnectiondialog.h
     src/ui/gitdiffviewer.h
