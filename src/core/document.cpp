@@ -8,12 +8,23 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QCryptographicHash>
-#include <QStringEncoder>
-#include <QStringDecoder>
 #include <QSaveFile>
+#include "textcodec.h"
 
 #include <sys/stat.h>
 #include <unistd.h>
+
+namespace {
+
+// The detector reports BOM presence separately; the encoding name carries it
+// as a "-BOM" suffix so a save writes the BOM back.
+QString detectedEncoding(const QByteArray &data)
+{
+    const CharsetGuess guess = CharsetDetector::detectCharset(data);
+    return guess.hasBom ? guess.name + QStringLiteral("-BOM") : guess.name;
+}
+
+} // namespace
 
 Document::Document(QObject *parent)
     : QObject(parent)
@@ -31,9 +42,9 @@ bool Document::load(const QString &filePath)
     qint64 fileSize = fi.size();
 
     // Determine file mode
-    if (fileSize > LARGE_FILE_THRESHOLD) {
+    if (fileSize > s_largeThreshold) {
         m_fileMode = LargeFile;
-    } else if (fileSize > MEDIUM_FILE_THRESHOLD) {
+    } else if (fileSize > s_mediumThreshold) {
         // Check if file is minified (very few newlines) — treat as Large
         QFile probe(filePath);
         if (probe.open(QIODevice::ReadOnly)) {
@@ -71,7 +82,7 @@ bool Document::load(const QString &filePath)
         // Detect encoding from first 8KB only
         QFile probe(filePath);
         if (!probe.open(QIODevice::ReadOnly)) return false;
-        m_encoding = CharsetDetector::detect(probe.read(8192));
+        m_encoding = detectedEncoding(probe.read(8192));
         probe.close();
 
         emit filePathChanged(m_filePath);
@@ -89,8 +100,7 @@ bool Document::load(const QString &filePath)
         QByteArray data = file.readAll();
         file.close();
 
-        m_encoding = CharsetDetector::detect(data);
-        QString text = QString::fromUtf8(data);
+        QString text = decodeLoaded(data);
         data.clear(); // free byte array
 
         m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
@@ -128,29 +138,8 @@ bool Document::load(const QString &filePath)
     QByteArray data = file.readAll();
     file.close();
 
-    // Detect encoding using charset detector
-    m_encoding = CharsetDetector::detect(data);
-
-    // Convert to QString
-    QString text;
-    if (m_encoding == "UTF-8" || m_encoding == "UTF-8-BOM") {
-        QByteArray actualData = data;
-        if (data.startsWith("\xEF\xBB\xBF")) {
-            actualData = data.mid(3);
-        }
-        text = QString::fromUtf8(actualData);
-    } else if (m_encoding == "UTF-16LE") {
-        auto decoder = QStringDecoder(QStringDecoder::Utf16LE);
-        text = decoder(data);
-    } else if (m_encoding == "UTF-16BE") {
-        auto decoder = QStringDecoder(QStringDecoder::Utf16BE);
-        text = decoder(data);
-    } else if (m_encoding == "ISO-8859-1") {
-        text = QString::fromLatin1(data);
-    } else {
-        // Default to UTF-8
-        text = QString::fromUtf8(data);
-    }
+    // Detect the charset on the whole file and decode through TextCodec
+    QString text = decodeLoaded(data);
 
     // Detect and normalize line endings
     m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
@@ -170,27 +159,6 @@ bool Document::load(const QString &filePath)
 }
 
 namespace {
-
-// The 1.0.0 save-path encoder, moved out of saveAs unchanged so saveAs stays
-// under 50 lines. T1.3 replaces it with TextCodec::encode.
-QByteArray encodeForSave(const QString &text, const QString &encoding)
-{
-    if (encoding == "UTF-8-BOM") {
-        return QByteArray("\xEF\xBB\xBF") + text.toUtf8();
-    }
-    if (encoding == "UTF-16LE") {
-        auto encoder = QStringEncoder(QStringEncoder::Utf16LE);
-        return encoder(text);
-    }
-    if (encoding == "UTF-16BE") {
-        auto encoder = QStringEncoder(QStringEncoder::Utf16BE);
-        return encoder(text);
-    }
-    if (encoding == "ISO-8859-1") {
-        return text.toLatin1();
-    }
-    return text.toUtf8(); // UTF-8 and every unrecognised name, as in 1.0.0
-}
 
 // stat() follows symlinks, so these describe the file a save actually replaces.
 bool targetExists(const QString &path, struct stat *st)
@@ -238,7 +206,13 @@ SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
     }
 
     const QString text = normalizeLineEndings(m_content.text(), m_lineEnding);
-    const QByteArray data = encodeForSave(text, m_encoding);
+    const EncodeResult encoded = TextCodec::encode(text, m_encoding);
+    if (!encoded.unmappable.isEmpty()) {
+        m_lastError = tr("%n character(s) cannot be encoded in %1.", nullptr,
+                         int(encoded.unmappable.size())).arg(m_encoding);
+        return SaveResult::EncodeLossy;
+    }
+    const QByteArray &data = encoded.bytes;
 
     struct stat st {};
     const bool exists = targetExists(filePath, &st);
@@ -331,25 +305,45 @@ bool Document::hadMixedLineEndings() const
     return m_mixedLineEndings;
 }
 
-// Placeholders (spec R2-1). These contracts are declared at the W0 base so later
-// suites compile against it; each returns the 1.0.0 behaviour until the named
-// task defines it.
-
 bool Document::wasDecodedLossily() const
 {
-    return false; // T1.3
+    return m_decodedLossily;
 }
 
+// Decodes the loaded bytes with the detected charset, or the one forced by
+// reloadWithEncoding. A decode that cannot reproduce the bytes opens the
+// document read-only: saving it would rewrite the file with different bytes.
+QString Document::decodeLoaded(const QByteArray &data)
+{
+    m_encoding = m_forcedEncoding.isEmpty() ? detectedEncoding(data) : m_forcedEncoding;
+    DecodeResult decoded = TextCodec::decode(data, m_encoding);
+    m_decodedLossily = !decoded.lossless;
+    setReadOnly(m_decodedLossily);
+    return decoded.text;
+}
+
+// Re-reads the file's original bytes with the chosen codec. It is a reload,
+// not a conversion: unsaved edits are discarded (the UI asks first).
 bool Document::reloadWithEncoding(const QString &name)
 {
-    Q_UNUSED(name);
-    return false; // T1.3
+    const QString canonical = TextCodec::canonicalName(name);
+    if (canonical.isEmpty() || m_filePath.isEmpty() || isPartialView())
+        return false;
+    m_forcedEncoding = canonical;
+    const bool loaded = load(m_filePath);
+    m_forcedEncoding.clear();
+    return loaded;
 }
 
+qint64 Document::s_mediumThreshold = Document::MEDIUM_FILE_THRESHOLD;
+qint64 Document::s_largeThreshold = Document::LARGE_FILE_THRESHOLD;
+
+// Tests force Medium mode on small fixtures. Pass MEDIUM_FILE_THRESHOLD and
+// LARGE_FILE_THRESHOLD to restore the production values.
 void Document::setSizeThresholdsForTest(qint64 medium, qint64 large)
 {
-    Q_UNUSED(medium);
-    Q_UNUSED(large); // T1.3
+    s_mediumThreshold = medium;
+    s_largeThreshold = large;
 }
 
 QString Document::fileName() const

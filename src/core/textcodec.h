@@ -24,6 +24,9 @@ struct EncodeResult {
 namespace TextCodec {
 DecodeResult decode(const QByteArray &bytes, const QString &name);
 EncodeResult encode(const QString &text, const QString &name);
+// The table spelling of an encoding name or alias (e.g. "cp1256" ->
+// "windows-1256", "utf-16le-bom" -> "UTF-16LE-BOM"); empty when unsupported.
+QString canonicalName(const QString &name);
 }
 
 #endif // TEXTCODEC_H

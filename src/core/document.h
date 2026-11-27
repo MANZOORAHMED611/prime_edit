@@ -145,7 +145,12 @@ private:
     bool m_lastSaveWasDirect = false;
     bool m_formatDirty = false;
     bool m_mixedLineEndings = false;
+    bool m_decodedLossily = false;
+    QString m_forcedEncoding;  // set only while reloadWithEncoding runs load()
+    static qint64 s_mediumThreshold;
+    static qint64 s_largeThreshold;
 
+    QString decodeLoaded(const QByteArray &data);
     void setFormatDirty(bool dirty);
     SaveResult refusalFor() const;
     SaveResult writeAtomic(const QString &path, const QByteArray &data, WriteMode mode);
