@@ -1,6 +1,6 @@
 #!/bin/bash
 # Olive Notepad Large File Benchmark Suite
-# Usage: ./bench_largefile.sh [path-to-olive-notepad-binary]
+# Usage: ./bench_largefile.sh [path-to-prime-edit-binary]
 
 BINARY="${1:-./build/Olive Notepad}"
 TEMP_DIR=$(mktemp -d)
