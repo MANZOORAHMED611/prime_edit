@@ -16,6 +16,11 @@
 #include <QProcess>
 #include <QTemporaryDir>
 
+#include "core/singleinstance.h"
+
+#include <atomic>
+#include <thread>
+
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -131,6 +136,7 @@ private slots:
     void launchWithFileArgumentRestoresDrafts();
     void corruptSessionJsonStillRestoresDrafts();
     void realHolderAcceptsForwardedLaunch();
+    void forwardAckedDuringStartupIsDelivered();
 
 private:
     QString m_bin;
@@ -267,6 +273,42 @@ void TestT16Instance::realHolderAcceptsForwardedLaunch()
     QVERIFY2(finished, "the second launch kept running as a second instance");
     QCOMPARE(second.exitCode(), 0);
     QVERIFY(holderAlive);
+}
+
+// T1.9 m4: main.cpp listens before restore but connects openRequested only
+// after it, and a dialog shown during restore runs the event loop. A forward
+// acked in that window must still reach the receiver once it connects.
+void TestT16Instance::forwardAckedDuringStartupIsDelivered()
+{
+    qputenv("XDG_RUNTIME_DIR", g_runtimeDir.toUtf8());
+    QVERIFY2(SingleInstance::serverName().startsWith(g_runtimeDir + "/"),
+             qPrintable(SingleInstance::serverName()));
+    QVERIFY2(SingleInstance::lockPath().contains(kScratchMarker),
+             qPrintable(SingleInstance::lockPath()));
+    SingleInstance holder;
+    QVERIFY(holder.acquire());
+    QVERIFY(holder.listen());
+
+    const QString file = QStringLiteral("/tmp/forwarded-during-restore.txt");
+    std::atomic<bool> done{false};
+    bool acked = false;
+    std::thread client([&] {
+        acked = SingleInstance::forward({file}, 3);
+        done = true;
+    });
+    QTRY_VERIFY_WITH_TIMEOUT(done.load(), 10000);
+    client.join();
+    QVERIFY(acked);
+
+    QStringList received;
+    int line = 0;
+    QObject::connect(&holder, &SingleInstance::openRequested, &holder,
+                     [&](const QStringList &files, int gotoLine) {
+                         received = files;
+                         line = gotoLine;
+                     });
+    QTRY_COMPARE_WITH_TIMEOUT(received, QStringList{file}, 3000);
+    QCOMPARE(line, 3);
 }
 
 PRIMEEDIT_REGRESSION_MAIN(TestT16Instance)

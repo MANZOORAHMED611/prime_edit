@@ -41,6 +41,7 @@ private slots:
     void emptyFileTypedLinesSaveAsLf();
     void noLineBreakFollowsDefaultSetting();
     void mixedLineEndingsRecordedAndNormalisedToMajority();
+    void preserveAroundSyncFromDocumentLeavesFlagsAlone();
 };
 
 void TestT12Flags::encodingConversionStaysModifiedAfterTypeAndUndo()
@@ -164,6 +165,31 @@ void TestT12Flags::mixedLineEndingsRecordedAndNormalisedToMajority()
     QCOMPARE(doc.lineEnding(), Document::Windows);
     QCOMPARE(doc.save(), SaveResult::Ok);
     QCOMPARE(regression::readBytes(mixed), QByteArray("a\r\nb\r\nc\r\n"));
+}
+
+// T1.9 m1: syncFromDocument() must restore m_syncing rather than clear it, or
+// a later change inside the same synced edit reaches the modified hook and
+// flips the Document flag (seen as a modifiedChanged true/false pair).
+void TestT12Flags::preserveAroundSyncFromDocumentLeavesFlagsAlone()
+{
+    regression::TempDir dir;
+    const QString path = dir.filePath("sync.txt");
+    QVERIFY(regression::writeBytes(path, "line\n"));
+    Document doc;
+    QVERIFY(doc.load(path));
+    Editor editor(&doc);
+    QTextDocument *textDoc = editor.QPlainTextEdit::document();
+    QVERIFY(!doc.isModified());
+    QVERIFY(!textDoc->isModified());
+    QSignalSpy spy(&doc, &Document::modifiedChanged);
+
+    editor.runSyncedEdit(SyncTarget::Preserve, [&editor]() {
+        editor.syncFromDocument();
+        editor.textCursor().insertText("x");
+    });
+    QVERIFY(!doc.isModified());
+    QVERIFY(!textDoc->isModified());
+    QCOMPARE(spy.count(), 0);
 }
 
 PRIMEEDIT_REGRESSION_MAIN(TestT12Flags)

@@ -356,11 +356,29 @@ void Session::restoreDrafts(MainWindow *window)
 {
     recoverCacheDirectories();
     m_unplacedDrafts.clear();
+    QSet<Editor *> placed;
     for (const QJsonObject &draft : readCacheEntries({})) {
-        if (!placeDraft(window, draft)) {
+        if (!placeDraft(window, draft, &placed)) {
             m_unplacedDrafts.append(draft);
         }
     }
+}
+
+// A new untitled tab for a draft whose file cannot take it. It keeps the path
+// as the "originalFilePath" property (Save As default, and re-cached).
+Editor *Session::untitledEditorFor(MainWindow *window, const QString &original,
+                                   const QString &notice)
+{
+    window->newFile();
+    Editor *editor = window->currentEditor();
+    if (!editor || !editor->document()) {
+        return nullptr;
+    }
+    if (!original.isEmpty()) {
+        editor->document()->setProperty("originalFilePath", original);
+        window->showNotification(notice.arg(original));
+    }
+    return editor;
 }
 
 void Session::restoreUnsavedDocuments(MainWindow *window)
@@ -371,29 +389,31 @@ void Session::restoreUnsavedDocuments(MainWindow *window)
 // The cached text goes only into the editor whose document is the original
 // file. If it cannot be opened, a new untitled tab takes the text and keeps the
 // path as the "originalFilePath" property (Save As default, and re-cached).
-bool Session::placeDraft(MainWindow *window, const QJsonObject &draft)
+bool Session::placeDraft(MainWindow *window, const QJsonObject &draft, QSet<Editor *> *placed)
 {
     const QString original = draft["originalFilePath"].toString();
     Editor *editor = nullptr;
+    QString notice =
+        QObject::tr("%1 could not be opened. Its unsaved text was restored in a new tab.");
     if (!original.isEmpty() && QFileInfo(original).isReadable()) {
         Editor *opened = window->openFile(original);
-        if (opened && opened->document() && opened->document()->filePath() == original) {
+        // openFile returns the existing editor for an open path. If that editor
+        // already holds a draft from this restore (two cached drafts of one
+        // file), never overwrite it.
+        if (opened && placed->contains(opened)) {
+            notice = QObject::tr("%1 had more than one unsaved draft. "
+                                 "This one was restored in a new tab.");
+        } else if (opened && opened->document() && opened->document()->filePath() == original) {
             editor = opened;
         }
     }
     if (!editor) {
-        window->newFile();
-        editor = window->currentEditor();
-        if (!editor || !editor->document()) {
+        editor = untitledEditorFor(window, original, notice);
+        if (!editor) {
             return false;
         }
-        if (!original.isEmpty()) {
-            editor->document()->setProperty("originalFilePath", original);
-            window->showNotification(
-                QObject::tr("%1 could not be opened. Its unsaved text was restored in a new tab.")
-                    .arg(original));
-        }
     }
+    placed->insert(editor);
     Document *doc = editor->document();
     if (!draft["encoding"].toString().isEmpty()) {
         doc->setEncoding(draft["encoding"].toString());

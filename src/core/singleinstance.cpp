@@ -9,7 +9,10 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QLockFile>
+#include <QMetaMethod>
 #include <QStandardPaths>
+
+#include <utility>
 
 namespace {
 
@@ -122,10 +125,37 @@ void SingleInstance::handleRequest(QLocalSocket *socket)
     }
     // Receivers connect with Qt::QueuedConnection, so the opens are queued and
     // the ack is not held up by a dialog an open might show.
-    emit openRequested(files, message["goto"].toInt(0));
+    deliver(files, message["goto"].toInt(0));
     socket->write("{\"ack\":true}\n");
     socket->flush();
     socket->disconnectFromServer();
+}
+
+void SingleInstance::deliver(const QStringList &files, int gotoLine)
+{
+    if (isSignalConnected(QMetaMethod::fromSignal(&SingleInstance::openRequested))) {
+        emit openRequested(files, gotoLine);
+        return;
+    }
+    m_pending.append({files, gotoLine});
+}
+
+void SingleInstance::connectNotify(const QMetaMethod &signal)
+{
+    QObject::connectNotify(signal);
+    if (signal == QMetaMethod::fromSignal(&SingleInstance::openRequested)
+        && !m_pending.isEmpty()) {
+        // Deferred: connectNotify runs inside connect().
+        QMetaObject::invokeMethod(this, &SingleInstance::flushPending, Qt::QueuedConnection);
+    }
+}
+
+void SingleInstance::flushPending()
+{
+    const QList<PendingOpen> pending = std::exchange(m_pending, {});
+    for (const PendingOpen &open : pending) {
+        emit openRequested(open.files, open.gotoLine);
+    }
 }
 
 bool SingleInstance::forward(const QStringList &absoluteFiles, int gotoLine,
