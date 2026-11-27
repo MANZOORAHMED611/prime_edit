@@ -192,6 +192,7 @@ private slots:
 
 private:
     void setupEditor();
+    void loadInitialContent();
     void applySettings();
     QString indentString() const;
 
@@ -285,6 +286,7 @@ private:
 
     // Arabic RTL support
     void updateTextDirection();
+    bool applyBlockDirection(const QTextBlock &block);
     QTimer *m_rtlTimer = nullptr;
     bool m_hasArabicContent = false;
 

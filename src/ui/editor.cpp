@@ -92,51 +92,10 @@ Editor::Editor(Document *document, QWidget *parent)
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 
-    // Load content
-    m_syncing = true;
-    if (m_document->fileMode() == Document::LargeFile) {
-        // Large file: load first 2MB only. QTextDocument cannot handle
-        // 93MB in any form — full load, chunked load, WrapAnywhere all
-        // cause 2.5GB RSS and crash. 2MB preview is the only stable approach.
-        setUpdatesEnabled(false);
-        QFile file(m_document->filePath());
-        if (file.open(QIODevice::ReadOnly)) {
-            constexpr qint64 PREVIEW_SIZE = 2 * 1024 * 1024;
-            QByteArray raw = file.read(PREVIEW_SIZE);
-            bool truncated = !file.atEnd();
-            qint64 totalSize = file.size();
-            file.close();
-
-            QString text = QString::fromUtf8(raw);
-            raw.clear();
-
-            // For minified files: break long lines so QTextDocument doesn't choke
-            if (m_document->isMinified()) {
-                constexpr int LINE_LEN = 1000;
-                QString broken;
-                broken.reserve(text.length() + text.length() / LINE_LEN);
-                for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
-                    if (i > 0) broken.append('\n');
-                    broken.append(text.mid(i, LINE_LEN));
-                }
-                text = broken;
-            }
-
-            if (truncated) {
-                text.append(QString("\n\n[ Showing first %1 of %2 — file is read-only ]")
-                    .arg(QLocale().formattedDataSize(PREVIEW_SIZE))
-                    .arg(QLocale().formattedDataSize(totalSize)));
-            }
-
-            setPlainText(text);
-        }
-        setUpdatesEnabled(true);
-        QPlainTextEdit::document()->setModified(false);
-        m_document->setModified(false);
-    } else if (!m_document->text().isEmpty()) {
-        setPlainText(m_document->text());
-    }
-    m_syncing = false;
+    // Load content. A fresh load is Clean; an editor bound to a Document that
+    // already holds unsaved edits must not hide them.
+    runSyncedEdit(m_document->isModified() ? SyncTarget::Modified : SyncTarget::Clean,
+                  [this]() { loadInitialContent(); });
 
     // Set language — skip syntax highlighting if file is over 5MB
     // (regex on thousands of 2000+ char lines causes noticeable lag)
@@ -171,9 +130,8 @@ Editor::Editor(Document *document, QWidget *parent)
     }
 
     // Modification detection: track whether the document has been edited by the user.
-    // Use QTextDocument::modificationChanged which Qt manages correctly —
-    // it only fires for real content changes, not formatting.
-    QPlainTextEdit::document()->setModified(false);
+    // Both flags were set by the runSyncedEdit above, and programmatic edits go
+    // through runSyncedEdit, so this hook only ever sees user edits.
     connect(QPlainTextEdit::document(), &QTextDocument::modificationChanged,
             this, [this](bool changed) {
         if (!m_syncing) {
@@ -193,6 +151,53 @@ Editor::Editor(Document *document, QWidget *parent)
 
 Editor::~Editor()
 {
+}
+
+// Fills the QTextDocument from the Document. Runs inside runSyncedEdit, which
+// sets both modified flags afterwards.
+void Editor::loadInitialContent()
+{
+    if (m_document->fileMode() != Document::LargeFile) {
+        if (!m_document->text().isEmpty())
+            setPlainText(m_document->text());
+        return;
+    }
+    // Large file: load first 2MB only. QTextDocument cannot handle
+    // 93MB in any form — full load, chunked load, WrapAnywhere all
+    // cause 2.5GB RSS and crash. 2MB preview is the only stable approach.
+    setUpdatesEnabled(false);
+    QFile file(m_document->filePath());
+    if (file.open(QIODevice::ReadOnly)) {
+        constexpr qint64 PREVIEW_SIZE = 2 * 1024 * 1024;
+        QByteArray raw = file.read(PREVIEW_SIZE);
+        bool truncated = !file.atEnd();
+        qint64 totalSize = file.size();
+        file.close();
+
+        QString text = QString::fromUtf8(raw);
+        raw.clear();
+
+        // For minified files: break long lines so QTextDocument doesn't choke
+        if (m_document->isMinified()) {
+            constexpr int LINE_LEN = 1000;
+            QString broken;
+            broken.reserve(text.length() + text.length() / LINE_LEN);
+            for (qsizetype i = 0; i < text.length(); i += LINE_LEN) {
+                if (i > 0) broken.append('\n');
+                broken.append(text.mid(i, LINE_LEN));
+            }
+            text = broken;
+        }
+
+        if (truncated) {
+            text.append(QString("\n\n[ Showing first %1 of %2 — file is read-only ]")
+                .arg(QLocale().formattedDataSize(PREVIEW_SIZE))
+                .arg(QLocale().formattedDataSize(totalSize)));
+        }
+
+        setPlainText(text);
+    }
+    setUpdatesEnabled(true);
 }
 
 void Editor::setupEditor()
@@ -269,47 +274,42 @@ void Editor::updateTextDirection()
     // Skip for medium/large files — scanning every block is too expensive
     if (m_document && m_document->fileMode() != Document::SmallFile) return;
 
-    QTextBlock block = QPlainTextEdit::document()->begin();
+    // setBlockFormat sets the QTextDocument flag. Preserve restores both flags,
+    // so the next keystroke still raises modificationChanged (spec D1).
     bool foundArabic = false;
-    bool wasModified = m_document->isModified();
-
-    // Block signals to prevent setBlockFormat from triggering textChanged → setModified
-    bool oldSyncing = m_syncing;
-    m_syncing = true;
-
-    while (block.isValid()) {
-        QString text = block.text().trimmed();
-        if (!text.isEmpty()) {
-            bool hasArabic = false;
-            for (const QChar &ch : text) {
-                ushort code = ch.unicode();
-                if (code >= 0x0600 && code <= 0x06FF) {
-                    hasArabic = true;
-                    foundArabic = true;
-                    break;
-                }
-            }
-
-            QTextBlockFormat fmt = block.blockFormat();
-            Qt::LayoutDirection dir =
-                hasArabic ? Qt::RightToLeft : Qt::LeftToRight;
-            if (fmt.layoutDirection() != dir) {
-                QTextCursor cursor(block);
-                fmt.setLayoutDirection(dir);
-                cursor.setBlockFormat(fmt);
-            }
+    runSyncedEdit(SyncTarget::Preserve, [this, &foundArabic]() {
+        for (QTextBlock block = QPlainTextEdit::document()->begin(); block.isValid();
+             block = block.next()) {
+            foundArabic = applyBlockDirection(block) || foundArabic;
         }
-        block = block.next();
-    }
-
-    m_syncing = oldSyncing;
-
-    // Restore original modified state — RTL detection should not mark file as modified
-    if (!wasModified) {
-        m_document->setModified(false);
-    }
-
+    });
     m_hasArabicContent = foundArabic;
+}
+
+static bool containsArabic(const QString &text)
+{
+    for (const QChar &ch : text) {
+        const ushort code = ch.unicode();
+        if (code >= 0x0600 && code <= 0x06FF)
+            return true;
+    }
+    return false;
+}
+
+// Sets RTL on a block holding Arabic and returns true. A block that was RTL and
+// no longer holds Arabic goes back to LayoutDirectionAuto. Every other block is
+// left untouched, so Latin text gets no format change and no undo entry.
+bool Editor::applyBlockDirection(const QTextBlock &block)
+{
+    const bool hasArabic = containsArabic(block.text());
+    QTextBlockFormat fmt = block.blockFormat();
+    const bool wasRtl = fmt.layoutDirection() == Qt::RightToLeft;
+    if (hasArabic == wasRtl)
+        return hasArabic;
+    fmt.setLayoutDirection(hasArabic ? Qt::RightToLeft : Qt::LayoutDirectionAuto);
+    QTextCursor cursor(block);
+    cursor.setBlockFormat(fmt);
+    return hasArabic;
 }
 
 int Editor::lineNumberAreaWidth() const
