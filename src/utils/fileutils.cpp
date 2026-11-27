@@ -6,6 +6,9 @@
 #include <QDateTime>
 #include <QSaveFile>
 
+#include <fcntl.h>
+#include <unistd.h>
+
 namespace FileUtils {
 
 QString fileName(const QString &path)
@@ -160,6 +163,17 @@ QString preserveCorruptCopy(const QString &path)
         return copy;
     }
     return QString();
+}
+
+bool fsyncDirectory(const QString &path)
+{
+    const int fd = ::open(QFile::encodeName(path).constData(), O_RDONLY | O_DIRECTORY);
+    if (fd < 0) {
+        return false;
+    }
+    const bool synced = ::fsync(fd) == 0;
+    ::close(fd);
+    return synced;
 }
 
 }

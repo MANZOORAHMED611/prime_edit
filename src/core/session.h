@@ -4,8 +4,11 @@
 #include <QString>
 #include <QJsonObject>
 #include <QStringList>
+#include <QList>
+#include <QSet>
 
 class MainWindow;
+class Editor;
 
 class Session
 {
@@ -21,8 +24,19 @@ public:
     void loadSession(const QString &name, MainWindow *window);
     void deleteSession(const QString &name);
 
-    // Unsaved document persistence
+    // Unsaved document persistence (spec 3 D4)
+    // Applies the recovery table to sessions/unsaved{,.new,.old,_tmp}. Runs
+    // under the single-instance lock before any window exists; idempotent.
+    void recoverCacheDirectories();
+    // Every launch: places each cached draft in an editor. Never deletes the
+    // cache; an unparsable entry is moved to sessions/unsaved.corrupt/.
+    void restoreDrafts(MainWindow *window);
+    // Only under the "restore previous session" preference: reopens files.
+    void restoreFiles(MainWindow *window);
+    // Replaces the cached set atomically with every editor's draft (both
+    // panes) plus every draft that restore could not place.
     void saveUnsavedDocuments(MainWindow *window);
+    // 1.0.0 name, kept for the frozen validation suites: restoreDrafts().
     void restoreUnsavedDocuments(MainWindow *window);
     void clearUnsavedCache();
 
@@ -39,6 +53,18 @@ private:
     // Set when restore() found session.json unparsable (spec D10).
     bool m_holdSessionWrites = false;
     QJsonObject m_heldSession;
+
+    // Drafts read from the cache that no editor holds. The writer keeps them.
+    QList<QJsonObject> m_unplacedDrafts;
+    // Cache entry names this process wrote or restore read. An entry on disk
+    // outside this set was never placed, so the writer adopts it.
+    QSet<QString> m_seenEntries;
+
+    QList<QJsonObject> readCacheEntries(const QSet<QString> &skip);
+    void moveToCorruptDir(const QString &path) const;
+    bool placeDraft(MainWindow *window, const QJsonObject &draft);
+    QJsonObject draftEntry(Editor *editor) const;
+    bool replaceCacheSet(const QList<QJsonObject> &entries);
 };
 
 #endif // SESSION_H
