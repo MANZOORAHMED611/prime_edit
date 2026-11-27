@@ -29,6 +29,7 @@ private:
     QWidget *createEditorPage();
     QWidget *createAppearancePage();
     QWidget *createFilesPage();
+    void createHiddenAutoSaveControls(QWidget *parent);
 
     QTabWidget *m_tabWidget;
 

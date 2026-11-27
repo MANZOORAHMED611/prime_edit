@@ -22,7 +22,7 @@ PrimeEdit fills that gap — and goes further.
 - PieceTable text buffer with unlimited undo/redo
 - Line numbers, current line highlight, three-column gutter
 - Bracket matching with jump (Ctrl+B) and rainbow coloring
-- Code folding — brace-based (C/C++/Java/JS) and indent-based (Python/YAML)
+- Code folding — brace-based (C/C++/Java/JS) and indent-based (Python/YAML); folding only hides text and unfolds itself when the cursor, Find or an edit reaches inside
 - Column/block selection (Alt+drag) and Column Editor
 - Whitespace visualization, EOL markers, indent guides
 - Bookmark system (Ctrl+F2 toggle, Ctrl+Shift+F2 navigate)
@@ -34,12 +34,14 @@ PrimeEdit fills that gap — and goes further.
 - Simultaneous typing, deletion, bracket insertion, atomic undo
 
 ### Split-Screen Editing
-- Vertical and horizontal splits (View menu)
-- Clone or move documents between splits
+- Vertical and horizontal splits (View menu); a new split opens an empty pane
+- Move to Other View moves a tab between panes; each document is open in one pane
+- Tab close buttons act on their own pane, whichever pane has focus
 - F6 to switch focus between panes
 
 ### Large File Handling
 - Three-mode architecture: Small (<20MB), Medium (20–50MB), Large (>50MB)
+- Large files (over 50MB) and minified files over 20MB open as a read-only partial view; Save and conversions are disabled so the file cannot be truncated
 - Memory-mapped I/O with viewport loading — only visible lines in memory
 - Minified file detection — 93MB single-line JSON opens instantly at ~1MB RSS
 - Chunked lazy loading for files over 50MB
@@ -69,7 +71,7 @@ PrimeEdit fills that gap — and goes further.
 - Gutter indicators: green (added), yellow (modified), red (deleted)
 - Commit dialog with staging, branch switching
 - Status bar shows current branch
-- File change monitoring with reload prompt
+- File change monitoring: a reload bar with Reload / Keep mine, never a silent reload
 
 ### Auto-Completion
 - 300ms debounced trigger, fuzzy matching
@@ -89,8 +91,9 @@ PrimeEdit fills that gap — and goes further.
 
 ### Session & Macros
 - Session save/restore — open files, cursor positions, fold state, bookmarks
-- Crash recovery with auto-save (configurable interval)
-- Persistent unsaved documents survive app close
+- Unsaved documents (both panes, untitled tabs included) cached every 30 seconds and on close, and restored on every launch
+- One instance per profile: a second launch opens its files in the running window
+- Damaged settings, session or macro files are copied to `.corrupt-<date-time>` and left untouched
 - Macro record/stop/playback (F9/Shift+F9/F10), save/load to file
 
 ### UI & Themes
@@ -110,10 +113,13 @@ PrimeEdit fills that gap — and goes further.
 - Outline panel (left dock, Ctrl+Shift+H): heading tree that jumps to each section in the source and the preview
 
 ### Encoding & File Handling
-- UTF-8, UTF-8-BOM, UTF-16 LE/BE, Latin-1, Windows-1252, ISO-8859
-- Heuristic charset detection (BOM, UTF-8 validation, byte-frequency)
-- Line ending detection and conversion (LF, CRLF, CR)
-- File change monitoring (external modification prompt)
+- UTF-8, UTF-16 and UTF-32 (with or without BOM), windows-1252, ISO-8859-1, ISO-8859-6, windows-1256, Shift_JIS (ICU)
+- Whole-file charset detection (BOM, BOM-less UTF-16, UTF-8 validation, legacy heuristics); BOMs kept on save
+- Files that do not decode exactly open read-only, with Reopen with Encoding to decode them again
+- Conversions and saves that would lose characters ask first, with the count and positions
+- Line ending detection and conversion (LF, CRLF, CR); LF default; mixed endings normalised with a notice
+- Atomic saves: a failed save leaves the file and the tab's modified state intact
+- No-break spaces (U+00A0) and line separators (U+2028) are preserved
 
 ---
 
