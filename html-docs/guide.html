@@ -695,6 +695,7 @@ make -j$(nproc)
             <ul>
                 <li>Every edit marks the tab as modified at once, so the close prompt and the unsaved-document cache always see it.</li>
                 <li>Unsaved documents, in both split panes and including untitled tabs, are written to the cache every 30 seconds and when PrimeEdit closes. A crash loses at most the last 30 seconds of typing.</li>
+                <li>The list of open files, with their bookmarks, folds and the active tab, is recorded within 5 seconds of any change, and nothing is written while nothing changes. After a crash, a kill or a power loss, the files you had open are reopened on the next start when <strong>Restore previous session on startup</strong> is on. Drafts are cached as described above, unchanged.</li>
                 <li>The cache is restored on <strong>every</strong> start, also when you open PrimeEdit with files on the command line. <strong>Restore session on startup</strong> controls only whether the files you had open are reopened.</li>
                 <li>If a draft's original file can no longer be opened, the draft is restored in a new untitled tab and the notification bar names the file. <strong>Save As</strong> suggests the original path.</li>
                 <li>A cache entry that cannot be read is moved to <code>~/.local/share/PrimeEdit/sessions/unsaved.corrupt/</code> and kept, never deleted.</li>
@@ -704,7 +705,7 @@ make -j$(nproc)
             <p>Only one PrimeEdit runs per user profile. Launching it again, for example from a file manager, opens the files in the running window and brings it to the front. If the running window does not answer, the second launch reports <em>PrimeEdit is running but not responding</em> and exits without touching your unsaved work.</p>
 
             <h3>Damaged settings and session files</h3>
-            <p>Settings, sessions and macros are written atomically, so an interrupted write leaves the previous file intact. If <code>settings.json</code>, <code>session.json</code>, a named session or <code>macros.json</code> cannot be read, PrimeEdit copies it to <code>&lt;name&gt;.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, leaves the original as it is, and uses defaults in memory. Nothing is written to that file until you change something.</p>
+            <p>Settings, sessions and macros are written atomically, so an interrupted write leaves the previous file intact. If <code>settings.json</code>, <code>session.json</code>, a named session or <code>macros.json</code> cannot be read, PrimeEdit copies it to <code>&lt;name&gt;.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, leaves the original as it is, and uses defaults in memory. Nothing is written to that file until you change something; for <code>session.json</code>, until you open or close a file, or change a bookmark, a fold or the active tab. Moving or resizing the window alone does not count.</p>
         </section>
 
         <div class="divider"></div>

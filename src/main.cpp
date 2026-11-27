@@ -153,6 +153,9 @@ int main(int argc, char *argv[])
     mainWindow.show();
     PluginManager::instance().loadPlugins();
     restoreAndOpen(mainWindow, request);
+    // Only after restore: a modal dialog there runs a nested event loop, and a
+    // running timer would write a half-restored file list (spec P1.10 3.4).
+    mainWindow.setSessionAutosaveEnabled(true);
 
     // A launch forwarded while restore ran was acked and held by SingleInstance;
     // connecting delivers it now, after the drafts and command-line files.
