@@ -61,6 +61,9 @@ void MarkdownPreview::polishDocument()
             chars.setFont(mono);
             cursor.mergeCharFormat(chars);
         }
+        if (!fmt.hasProperty(QTextFormat::BlockCodeFence)) {
+            shadeInlineCode(block, shade);
+        }
         if (QTextTable *table = QTextCursor(block).currentTable()) {
             QTextTableFormat tf = table->format();
             if (tf.cellPadding() < 4) {
@@ -70,6 +73,24 @@ void MarkdownPreview::polishDocument()
                 table->setFormat(tf);
             }
         }
+    }
+}
+
+// The Markdown importer gives `inline code` the fixed-pitch font only, which
+// beside the body font is easy to miss; shade it like the fenced blocks.
+void MarkdownPreview::shadeInlineCode(const QTextBlock &block, const QColor &shade)
+{
+    for (auto it = block.begin(); !it.atEnd(); ++it) {
+        const QTextFragment frag = it.fragment();
+        if (!frag.charFormat().fontFixedPitch()) {
+            continue;
+        }
+        QTextCursor cursor(document());
+        cursor.setPosition(frag.position());
+        cursor.setPosition(frag.position() + frag.length(), QTextCursor::KeepAnchor);
+        QTextCharFormat chars;
+        chars.setBackground(shade);
+        cursor.mergeCharFormat(chars);
     }
 }
 

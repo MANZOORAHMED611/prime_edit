@@ -9,6 +9,8 @@
 // dialect (tables, task lists, fenced code, strikethrough). QTextBrowser runs
 // no scripts; loadResource() additionally restricts resources to local image
 // files so a document can never trigger network access.
+class QTextBlock;
+
 class MarkdownPreview : public QTextBrowser
 {
     Q_OBJECT
@@ -31,6 +33,7 @@ protected:
 private:
     void onAnchorClicked(const QUrl &url);
     void polishDocument(); // table padding, code-block shading
+    void shadeInlineCode(const QTextBlock &block, const QColor &shade);
 
     QString m_baseDir;
 };

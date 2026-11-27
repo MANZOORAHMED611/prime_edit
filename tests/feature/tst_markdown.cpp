@@ -11,6 +11,7 @@
 
 #include <QApplication>
 #include <QDockWidget>
+#include <QFontDatabase>
 #include <QScrollBar>
 #include <QTemporaryDir>
 #include <QTest>
@@ -38,6 +39,7 @@ private slots:
     void outlineNestsByLevel();
     void previewRendersGithubTables();
     void previewBlocksRemoteImages();
+    void previewStylesInlineCode();
     void previewScrollsToHeading();
     void cycleSourceSideRenderedSource();
     void cycleIsNoOpForNonMarkdown();
@@ -121,6 +123,27 @@ void TestMarkdown::previewBlocksRemoteImages()
     QVERIFY2(!remote.isValid(), "remote images must never be fetched");
     const QString notImage = writeFile("secret.txt", "not an image");
     QVERIFY(!preview.loadResource(QTextDocument::ImageResource, QUrl::fromLocalFile(notImage)).isValid());
+}
+
+void TestMarkdown::previewStylesInlineCode()
+{
+    // Run of 1.0.1 (2026-11-27): `code` rendered in the body font.
+    MarkdownPreview preview;
+    preview.render("plain `mono` plain\n", QString());
+    const QTextBlock block = preview.document()->firstBlock();
+    bool sawCode = false;
+    for (auto it = block.begin(); !it.atEnd(); ++it) {
+        const QTextFragment frag = it.fragment();
+        if (frag.text().contains("mono")) {
+            sawCode = true;
+            const QString mono = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
+            QCOMPARE(frag.charFormat().fontFamilies().toStringList().value(0), mono);
+            QVERIFY(frag.charFormat().background().style() != Qt::NoBrush);
+        } else if (frag.text().contains("plain")) {
+            QVERIFY(frag.charFormat().fontFamilies().toStringList().isEmpty());
+        }
+    }
+    QVERIFY(sawCode);
 }
 
 void TestMarkdown::previewScrollsToHeading()
