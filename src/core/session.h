@@ -62,7 +62,9 @@ private:
 
     QList<QJsonObject> readCacheEntries(const QSet<QString> &skip);
     void moveToCorruptDir(const QString &path) const;
-    bool placeDraft(MainWindow *window, const QJsonObject &draft);
+    bool placeDraft(MainWindow *window, const QJsonObject &draft, QSet<Editor *> *placed);
+    Editor *untitledEditorFor(MainWindow *window, const QString &original,
+                              const QString &notice);
     QJsonObject draftEntry(Editor *editor) const;
     bool replaceCacheSet(const QList<QJsonObject> &entries);
 };

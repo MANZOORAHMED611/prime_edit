@@ -1,6 +1,7 @@
 #ifndef SINGLEINSTANCE_H
 #define SINGLEINSTANCE_H
 
+#include <QList>
 #include <QObject>
 #include <QStringList>
 #include <memory>
@@ -44,7 +45,21 @@ signals:
     // Emitted once per forwarded launch; gotoLine is 0 when none was given.
     void openRequested(const QStringList &files, int gotoLine);
 
+protected:
+    void connectNotify(const QMetaMethod &signal) override;
+
 private:
+    // A forward acked before anything is connected to openRequested (startup
+    // is still restoring, and a dialog may run the event loop) is held here and
+    // delivered once a receiver connects, so an acked open is never dropped.
+    struct PendingOpen {
+        QStringList files;
+        int gotoLine = 0;
+    };
+    QList<PendingOpen> m_pending;
+
+    void deliver(const QStringList &files, int gotoLine);
+    void flushPending();
     void onNewConnection();
     void handleRequest(QLocalSocket *socket);
 

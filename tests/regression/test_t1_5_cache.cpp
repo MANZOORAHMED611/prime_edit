@@ -124,6 +124,7 @@ private slots:
     void pane2UntitledDraftCachedOnQuit();
     void sessionSaveIncludesPane2Files();
     void writerKeepsUnrestoredEntriesWithoutTransientDirs();
+    void twoDraftsForOneFileAreBothKept();
 };
 
 // Each row builds one recovery-table state on disk (spec 3 D4), then restores.
@@ -306,6 +307,30 @@ void TestT15Cache::writerKeepsUnrestoredEntriesWithoutTransientDirs()
     QCOMPARE(cachedTexts(), expected);
     for (const QString &suffix : {".new", ".old", "_tmp"})
         QVERIFY2(!QDir(cacheDir() + suffix).exists(), qPrintable(suffix));
+}
+
+// T1.9 M1 (I5): two entries with the same originalFilePath, as the merge of
+// two v1.0.0 instances' caches produces. openFile returns the editor already
+// holding the first draft; the second must not overwrite it.
+void TestT15Cache::twoDraftsForOneFileAreBothKept()
+{
+    regression::TempDir dir;
+    const QString path = dir.filePath("shared.txt");
+    QVERIFY(regression::writeBytes(path, "on disk\n"));
+    writeEntry(cacheDir(), "first.json", entry("first instance's draft", path));
+    writeEntry(cacheDir(), "second.json", entry("second instance's draft", path));
+    MainWindow window;
+
+    Session::instance().restoreUnsavedDocuments(&window);
+    QCOMPARE(editorTexts(window),
+             (QStringList{"first instance's draft", "second instance's draft"}));
+    Editor *extra = editorWithText(window, "second instance's draft");
+    QVERIFY(extra);
+    if (extra->document()->isUntitled())
+        QCOMPARE(extra->document()->property("originalFilePath").toString(), path);
+
+    Session::instance().saveUnsavedDocuments(&window);
+    QCOMPARE(cachedTexts(), (QStringList{"first instance's draft", "second instance's draft"}));
 }
 
 PRIMEEDIT_REGRESSION_MAIN(TestT15Cache)
