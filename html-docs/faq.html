@@ -301,7 +301,7 @@
             <div class="faq-item">
                 <div class="faq-question">Will my unsaved work be lost if I close PrimeEdit?</div>
                 <div class="faq-answer">
-                    <p><strong>No.</strong> PrimeEdit preserves all unsaved content without a prompt &mdash; including untitled tabs and tabs in either split pane &mdash; and restores it on every start, also when you open files from the command line. The cache is written every 30 seconds and on close, so a crash loses at most the last 30 seconds. If a draft's original file is gone, the draft comes back in a new untitled tab and the notification bar names the file. This is the same idea as Notepad++.</p>
+                    <p><strong>No.</strong> PrimeEdit preserves all unsaved content without a prompt &mdash; including untitled tabs and tabs in either split pane &mdash; and restores it on every start, also when you open files from the command line. The cache is written every 30 seconds and on close, so a crash loses at most the last 30 seconds. The list of open files is recorded within 5 seconds of a change, so after a crash the files you had open reopen too, when <strong>Restore previous session on startup</strong> is on. If a draft's original file is gone, the draft comes back in a new untitled tab and the notification bar names the file. This is the same idea as Notepad++.</p>
                 </div>
             </div>
 
@@ -533,7 +533,7 @@
             <div class="faq-item">
                 <div class="faq-question">Where are settings stored?</div>
                 <div class="faq-answer">
-                    <p><code>~/.config/PrimeEdit/settings.json</code> &mdash; all editor preferences, theme selection, file defaults. It is written atomically. If it cannot be read, PrimeEdit copies it to <code>settings.json.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, keeps the original, uses defaults, and writes nothing until you change a setting. <code>session.json</code>, named sessions and <code>macros.json</code> are handled the same way.</p>
+                    <p><code>~/.config/PrimeEdit/settings.json</code> &mdash; all editor preferences, theme selection, file defaults. It is written atomically. If it cannot be read, PrimeEdit copies it to <code>settings.json.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, keeps the original, uses defaults, and writes nothing until you change a setting. <code>session.json</code>, named sessions and <code>macros.json</code> are handled the same way, except that <code>session.json</code> is written again only once you open or close a file, or change a bookmark, a fold or the active tab; moving or resizing the window alone does not count.</p>
                 </div>
             </div>
 
