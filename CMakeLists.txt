@@ -200,12 +200,10 @@ target_link_libraries(prime-edit-core PUBLIC
     Qt${QT_VERSION_MAJOR}::Concurrent
 )
 
-# Optional ICU support for enhanced charset detection
-find_package(ICU QUIET COMPONENTS uc data)
-if(ICU_FOUND)
-    target_link_libraries(prime-edit-core PUBLIC ICU::uc ICU::data)
-    target_compile_definitions(prime-edit-core PUBLIC HAVE_ICU=1)
-endif()
+# ICU is required: TextCodec converts legacy encodings through ucnv (libicuuc).
+# A silent fallback when ICU is missing is how the encoding corruption shipped.
+find_package(ICU 70 REQUIRED COMPONENTS uc data)
+target_link_libraries(prime-edit-core PUBLIC ICU::uc ICU::data)
 
 add_executable(prime-edit src/main.cpp)
 set_target_properties(prime-edit PROPERTIES OUTPUT_NAME "PrimeEdit")
