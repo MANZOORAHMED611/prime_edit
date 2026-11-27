@@ -1371,11 +1371,14 @@ QString Editor::rawText() const
 
 void Editor::syncFromDocument()
 {
-    // Sync document content to editor (called after load/reload)
+    // Sync document content to editor (called after load/reload). Restores the
+    // previous m_syncing, as syncToDocument does, so a runSyncedEdit wrapping
+    // this call stays protected until it sets both flags itself.
+    const bool oldSyncing = m_syncing;
     m_syncing = true;
     setPlainText(m_document->text());
     QPlainTextEdit::document()->setModified(false);
-    m_syncing = false;
+    m_syncing = oldSyncing;
 }
 
 QString Editor::indentString() const

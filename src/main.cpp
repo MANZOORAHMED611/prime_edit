@@ -154,6 +154,8 @@ int main(int argc, char *argv[])
     PluginManager::instance().loadPlugins();
     restoreAndOpen(mainWindow, request);
 
+    // A launch forwarded while restore ran was acked and held by SingleInstance;
+    // connecting delivers it now, after the drafts and command-line files.
     QObject::connect(&instance, &SingleInstance::openRequested, &mainWindow,
                      [&mainWindow](const QStringList &files, int gotoLine) {
                          openRequested(mainWindow, files, gotoLine);
