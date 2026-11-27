@@ -9,6 +9,10 @@
 #include <QCryptographicHash>
 #include <QStringEncoder>
 #include <QStringDecoder>
+#include <QSaveFile>
+
+#include <sys/stat.h>
+#include <unistd.h>
 
 Document::Document(QObject *parent)
     : QObject(parent)
@@ -187,10 +191,19 @@ QByteArray encodeForSave(const QString &text, const QString &encoding)
     return text.toUtf8(); // UTF-8 and every unrecognised name, as in 1.0.0
 }
 
+// stat() follows symlinks, so these describe the file a save actually replaces.
+bool targetExists(const QString &path, struct stat *st)
+{
+    return ::stat(QFile::encodeName(path).constData(), st) == 0;
+}
+
+bool targetWritable(const QString &path)
+{
+    return ::access(QFile::encodeName(path).constData(), W_OK) == 0;
+}
+
 } // namespace
 
-// W0 maps the 1.0.0 bool onto SaveResult (true -> Ok, false -> IoError) without
-// changing what is written; T1.1 gives the refusals and WriteMode their meaning.
 SaveResult Document::save(WriteMode mode)
 {
     if (m_filePath.isEmpty()) {
@@ -200,56 +213,116 @@ SaveResult Document::save(WriteMode mode)
     return saveAs(m_filePath, mode);
 }
 
+// A partial view holds only part of the file and a read-only document was
+// opened from bytes it cannot reproduce; writing either would destroy data.
+SaveResult Document::refusalFor() const
+{
+    if (isPartialView())
+        return SaveResult::PartialView;
+    if (m_readOnly)
+        return SaveResult::ReadOnly;
+    return SaveResult::Ok;
+}
+
 SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
 {
-    Q_UNUSED(mode);
-    QFile file(filePath);
+    m_directWriteAvailable = false;
+    m_lastSaveWasDirect = false;
+    const SaveResult refusal = refusalFor();
+    if (refusal != SaveResult::Ok) {
+        m_lastError = refusal == SaveResult::PartialView
+            ? tr("Only part of this file is loaded, so it cannot be saved.")
+            : tr("The document is read-only.");
+        return refusal;
+    }
+
+    const QString text = normalizeLineEndings(m_content.text(), m_lineEnding);
+    const QByteArray data = encodeForSave(text, m_encoding);
+
+    struct stat st {};
+    const bool exists = targetExists(filePath, &st);
+    if (exists && !targetWritable(filePath)) {
+        m_lastError = tr("File is read-only.");
+        return SaveResult::IoError;
+    }
+    // An atomic replace would split a hard link or hand the file to us; the
+    // user asked to save this file, so write it in place instead.
+    const bool direct = exists && (st.st_nlink > 1 || st.st_uid != ::geteuid());
+    const SaveResult result = direct ? writeDirect(filePath, data)
+                                     : writeAtomic(filePath, data, mode);
+    if (result != SaveResult::Ok)
+        return result;
+
+    m_lastSaveWasDirect = direct;
+    finishSave(filePath);
+    return SaveResult::Ok;
+}
+
+SaveResult Document::writeAtomic(const QString &path, const QByteArray &data, WriteMode mode)
+{
+    // QSaveFile::commit() fdatasyncs the temp file before the rename (checked
+    // with strace on Qt 6.2.4), so no extra fsync is needed here.
+    QSaveFile file(path);
+    // Only after the user confirmed: QSaveFile then writes in place when it
+    // cannot create its temp file next to the target.
+    file.setDirectWriteFallback(mode == WriteMode::AllowDirect);
     if (!file.open(QIODevice::WriteOnly)) {
         m_lastError = file.errorString();
+        // Offered only when the directory refused the temp file and the target
+        // (already checked writable) exists. Never after ENOSPC or another
+        // error, where a direct write would truncate the original.
+        const QString dir = QFileInfo(path).absolutePath();
+        m_directWriteAvailable = QFileInfo::exists(path) && !targetWritable(dir);
         return SaveResult::IoError;
     }
+    if (file.write(data) != data.size() || !file.commit()) {
+        m_lastError = file.errorString();
+        file.cancelWriting();
+        return SaveResult::IoError;
+    }
+    return SaveResult::Ok;
+}
 
-    // Get text and convert line endings
-    QString text = m_content.text();
-    text = normalizeLineEndings(text, m_lineEnding);
-
-    QByteArray data = encodeForSave(text, m_encoding);
-
-    qint64 written = file.write(data);
-    file.close();
-
-    if (written != data.size()) {
+SaveResult Document::writeDirect(const QString &path, const QByteArray &data)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         m_lastError = file.errorString();
         return SaveResult::IoError;
     }
+    const bool ok = file.write(data) == data.size() && file.flush()
+        && ::fsync(file.handle()) == 0;
+    if (!ok)
+        m_lastError = file.errorString();
+    file.close();
+    return ok ? SaveResult::Ok : SaveResult::IoError;
+}
 
-    QString oldPath = m_filePath;
-    m_filePath = filePath;
+void Document::finishSave(const QString &path)
+{
+    const QString oldPath = m_filePath;
+    m_filePath = path;
     m_modified = false;
-
-    if (oldPath != m_filePath) {
+    if (oldPath != m_filePath)
         emit filePathChanged(m_filePath);
-    }
     emit modifiedChanged(m_modified);
     clearRecovery();
-
     m_lastError.clear();
-    return SaveResult::Ok;
+}
+
+bool Document::directWriteAvailable() const
+{
+    return m_directWriteAvailable;
+}
+
+bool Document::lastSaveWasDirect() const
+{
+    return m_lastSaveWasDirect;
 }
 
 // Placeholders (spec R2-1). These contracts are declared at the W0 base so later
 // suites compile against it; each returns the 1.0.0 behaviour until the named
 // task defines it.
-
-bool Document::directWriteAvailable() const
-{
-    return false; // T1.1
-}
-
-bool Document::lastSaveWasDirect() const
-{
-    return false; // T1.1
-}
 
 bool Document::isFormatDirty() const
 {
@@ -294,8 +367,12 @@ QString Document::displayName() const
     return fileName();
 }
 
+// A partial view cannot be saved, so a conversion would only mark it modified
+// with no way to write it.
 void Document::setEncoding(const QString &encoding)
 {
+    if (isPartialView())
+        return;
     if (m_encoding != encoding) {
         m_encoding = encoding;
         setModified(true);
@@ -305,6 +382,8 @@ void Document::setEncoding(const QString &encoding)
 
 void Document::setLineEnding(LineEnding ending)
 {
+    if (isPartialView())
+        return;
     if (m_lineEnding != ending) {
         m_lineEnding = ending;
         setModified(true);

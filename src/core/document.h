@@ -50,7 +50,11 @@ public:
     SaveResult save(WriteMode mode = WriteMode::Atomic);
     SaveResult saveAs(const QString &filePath, WriteMode mode = WriteMode::Atomic);
     QString lastError() const { return m_lastError; }
+    // True after IoError only when the atomic temp file could not be created
+    // and the target itself is writable: only then is "Save directly" safe.
     bool directWriteAvailable() const;
+    // True when the last successful save wrote in place (hard link or foreign
+    // owner), because an atomic replace would have broken the link or owner.
     bool lastSaveWasDirect() const;
     bool isModified() const { return m_modified; }
     bool isFormatDirty() const;
@@ -135,7 +139,13 @@ private:
     LargeFileReader *m_largeFileReader = nullptr;
     QString m_uuid;
     QString m_lastError;
+    bool m_directWriteAvailable = false;
+    bool m_lastSaveWasDirect = false;
 
+    SaveResult refusalFor() const;
+    SaveResult writeAtomic(const QString &path, const QByteArray &data, WriteMode mode);
+    SaveResult writeDirect(const QString &path, const QByteArray &data);
+    void finishSave(const QString &path);
     static LineEnding detectLineEnding(const QString &text);
     QString normalizeLineEndings(const QString &text, LineEnding target);
     QString recoveryFilePath() const;
