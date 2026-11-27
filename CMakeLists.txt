@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(PrimeEdit VERSION 1.0.0 LANGUAGES CXX)
+project(PrimeEdit VERSION 1.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -210,6 +210,8 @@ target_link_libraries(prime-edit-core PUBLIC ICU::uc ICU::data)
 add_executable(prime-edit src/main.cpp)
 set_target_properties(prime-edit PROPERTIES OUTPUT_NAME "PrimeEdit")
 target_link_libraries(prime-edit PRIVATE prime-edit-core)
+# The version shown by --version comes from project(); dpkg must see an upgrade.
+target_compile_definitions(prime-edit PRIVATE PRIMEEDIT_VERSION="${PROJECT_VERSION}")
 
 option(PRIMEEDIT_BUILD_TESTS "Build the test suites (run with ctest)" ON)
 if(PRIMEEDIT_BUILD_TESTS)
