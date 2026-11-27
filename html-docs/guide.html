@@ -156,6 +156,8 @@
         <a href="#themes">Themes</a>
         <a href="#macros">Macros</a>
         <a href="#largefile">Large Files</a>
+        <a href="#saving">Saving Files</a>
+        <a href="#encodings">Encodings</a>
         <a href="#plugins">Plugins</a>
         <a href="#config">Configuration</a>
 
@@ -386,7 +388,7 @@ make -j$(nproc)
         <!-- Split-Screen -->
         <section id="splitscreen">
             <h2>Split-Screen</h2>
-            <p>View two files side by side, or two different parts of the same file.</p>
+            <p>View two files side by side. Each document is open in one pane at a time.</p>
 
             <h3>Splitting</h3>
             <ul>
@@ -396,11 +398,13 @@ make -j$(nproc)
                 <li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>\</kbd> closes the current split</li>
             </ul>
 
-            <h3>Cloning a Document</h3>
-            <p>Right-click a tab and select <strong>Clone to Other View</strong>. Both views share the same document &mdash; edits in one pane appear instantly in the other. This is useful for editing one part of a file while referencing another part.</p>
+            <p>A new split opens an <strong>empty</strong> second pane. Fill it by moving tabs into it.</p>
 
             <h3>Moving Tabs</h3>
-            <p>Drag a tab from one pane to the other, or right-click and select <strong>Move to Other View</strong>.</p>
+            <p>Select a tab and choose <strong>View &gt; Move to Other View</strong>. If the editor is not split yet, this splits it and moves the tab into the new pane. When the second pane's last tab closes, the split closes.</p>
+
+            <h3>Closing Tabs</h3>
+            <p>A tab's close button closes the tab it belongs to, in whichever pane that is, even while the other pane has focus.</p>
         </section>
 
         <div class="divider"></div>
@@ -577,14 +581,73 @@ make -j$(nproc)
             <h2>Large Files</h2>
             <p>PrimeEdit handles files that other editors cannot open.</p>
             <ul>
-                <li>Files <strong>&gt;10MB</strong> automatically open in <strong>large file mode</strong> &mdash; memory-mapped, viewport-loaded</li>
-                <li>Files <strong>&gt;100MB</strong> open in <strong>read-only mode</strong> by default</li>
+                <li>Files <strong>over 50 MB</strong>, and minified files (almost no line breaks) <strong>over 20 MB</strong>, open as a <strong>partial view</strong>: only part of the file is loaded</li>
+                <li>A partial view is <strong>read-only</strong>. Save, Save As, Save All and the encoding and line-ending changes are disabled for that tab, and the notification bar says so when the file opens</li>
                 <li>A <strong>1GB file uses only 95MB of memory</strong> (verified by stress testing)</li>
                 <li>Scrolling is smooth &mdash; only visible lines plus a buffer are in memory</li>
             </ul>
             <div class="info-box tip">
                 <strong>No special action needed.</strong> Just open the file normally. PrimeEdit detects the file size and switches modes automatically.
             </div>
+            <div class="info-box note">
+                <strong>Why a partial view cannot be saved:</strong> saving it would replace the whole file on disk with the part that is loaded, and the rest would be lost.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Saving Files -->
+        <section id="saving">
+            <h2>Saving Files</h2>
+            <p>A save either writes the whole file or leaves the file on disk unchanged.</p>
+
+            <h3>When a save fails</h3>
+            <ul>
+                <li>An error dialog names the file and the reason, and says the file on disk is unchanged.</li>
+                <li>The tab stays modified. Undo does not make it look saved, so the close prompt still asks about it.</li>
+                <li>A file without write permission (for example mode 0444) cannot be saved. Use <strong>Save As</strong> to write a copy elsewhere.</li>
+            </ul>
+
+            <h3>Save Directly (Not Atomic)</h3>
+            <p>PrimeEdit normally writes to a temporary file and swaps it in, so an interrupted save never leaves a half-written file. When the folder does not allow that temporary file but the file itself is writable, the error dialog offers <strong>Save Directly (Not Atomic)</strong>. It writes over the file in place; if that write is interrupted, the file can be left incomplete. It is never offered after an error such as a full disk, where writing in place would destroy the original.</p>
+            <p>A hard-linked file, or a file owned by another user, is always written in place so the link and the owner are kept. The notification bar says when that happened.</p>
+
+            <h3>Closing a tab with unsaved changes</h3>
+            <ul>
+                <li>Every modified tab asks before it closes. <strong>Save</strong> saves that tab's file, whichever pane it is in and whichever pane has focus.</li>
+                <li>A read-only document, such as a partial view, cannot be saved, so its prompt offers only <strong>Discard</strong> or <strong>Cancel</strong>.</li>
+                <li><strong>Save All</strong> saves every modified tab in both panes and skips read-only ones.</li>
+            </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Encodings -->
+        <section id="encodings">
+            <h2>Encodings</h2>
+            <p>The status bar shows each file's encoding by its standard name: <code>UTF-8</code>, <code>UTF-8-BOM</code>, <code>UTF-16LE-BOM</code>, <code>windows-1252</code>, <code>Shift_JIS</code>, <code>ISO-8859-1</code> and so on. The Encoding menu checks the matching <strong>Encode in</strong> item; an encoding with no item, such as <code>windows-1252</code>, leaves none checked.</p>
+
+            <h3>Reopen with Encoding</h3>
+            <p>Detection reads the byte order mark, then checks for valid UTF-8, then guesses <code>windows-1252</code>, <code>Shift_JIS</code> or <code>ISO-8859-1</code>. It cannot recognise BOM-less UTF-16, <code>ISO-8859-6</code> or <code>windows-1256</code>, so such a file opens as something else and its text looks wrong. To correct it, choose <strong>Encoding &gt; Reopen with Encoding...</strong> (the first item in the menu, and also in the status-bar encoding menu) and pick the right encoding. This decodes the file's bytes again; it does not convert or save anything. If the tab has unsaved changes, you are asked before they are discarded.</p>
+            <div class="info-box note">
+                <strong>Opened read-only?</strong> If a file's bytes do not decode exactly in the detected encoding, PrimeEdit opens it read-only so a save cannot change bytes you did not edit. The notification bar says so and has a <strong>Reopen with Encoding...</strong> button.
+            </div>
+
+            <h3>Converting (Encode in ...)</h3>
+            <ul>
+                <li>Before converting, PrimeEdit checks that every character can be written in the new encoding. If some cannot (for example Arabic text and <strong>Encode in ANSI</strong>), a dialog gives the count and the first five positions as line:column, and offers <strong>Cancel</strong> or <strong>Replace N characters with ?</strong>.</li>
+                <li><strong>Replace</strong> is one edit, so a single <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes it. Nothing is written until you save.</li>
+                <li><strong>Encode in UCS-2 BE BOM</strong> and <strong>UCS-2 LE BOM</strong> save as UTF-16 with a byte order mark (<code>UTF-16BE-BOM</code>, <code>UTF-16LE-BOM</code>).</li>
+            </ul>
+
+            <h3>Characters the encoding cannot hold</h3>
+            <p>If you type text the file's encoding cannot hold, Save does not write the file. A dialog names the count and positions and offers <strong>Save as UTF-8</strong>, <strong>Replace N characters with ?</strong>, or <strong>Cancel</strong>.</p>
+
+            <h3>Mixed line endings</h3>
+            <p>A file whose lines end in a mix of CRLF and LF is saved with the ending most of its lines use. The notification bar says so at the first save of that document, for example <em>Mixed line endings in 'notes.txt' will be saved as CRLF.</em></p>
+
+            <h3>Special spaces</h3>
+            <p>No-break spaces (U+00A0) and line separators (U+2028) are kept as they are when you save and when you use <strong>Replace All</strong>.</p>
         </section>
 
         <div class="divider"></div>

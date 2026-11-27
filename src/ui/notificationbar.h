@@ -14,18 +14,24 @@ public:
 
     void showMessage(const QString &message);
     void showInfo(const QString &message);
+    // A message with one action button. Clicking it emits actionTriggered(),
+    // never accepted(), so it cannot answer a pending reload question.
+    void showAction(const QString &message, const QString &actionLabel);
 
 signals:
     void accepted();
     void rejected();
+    void actionTriggered();
 
 private:
     void setQuestionMode(bool question);
+    void setActionMode();
 
     QLabel *m_messageLabel;
     QPushButton *m_yesButton;
     QPushButton *m_noButton;
     QPushButton *m_dismissButton;
+    QPushButton *m_actionButton;
 };
 
 #endif // NOTIFICATIONBAR_H

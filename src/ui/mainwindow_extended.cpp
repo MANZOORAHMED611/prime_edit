@@ -12,6 +12,7 @@
 #include "notificationbar.h"
 #include "core/remoteconnection.h"
 #include "core/document.h"
+#include "core/textcodec.h"
 #include "core/llmevaluator.h"
 #include "core/islamicbridge.h"
 #include "core/schemavalidator.h"
@@ -27,6 +28,8 @@
 #include <QUrl>
 #include <QDir>
 #include <QFileInfo>
+#include <QActionGroup>
+#include <QPushButton>
 #include <QInputDialog>
 #include <QStandardPaths>
 #include <QLineEdit>
@@ -410,57 +413,317 @@ void MainWindow::syncHorizontalScroll()
     statusBar()->showMessage(tr("Sync horizontal scroll not yet implemented"), 3000);
 }
 
+// The editor a conversion applies to, or null. A partial view holds only part
+// of the file, so its encoding and line endings cannot change (D3).
+Editor *MainWindow::convertibleEditor()
+{
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return nullptr;
+    if (e->document()->isPartialView()) {
+        showNotification(tr("Only part of '%1' is loaded, so its encoding and line endings "
+                            "cannot be changed.").arg(e->document()->displayName()));
+        return nullptr;
+    }
+    return e;
+}
+
+bool MainWindow::anySaveableModified() const
+{
+    for (const Editor *e : allEditors()) {
+        const Document *doc = e->document();
+        if (doc && doc->isModified() && !doc->isPartialView()) return true;
+    }
+    return false;
+}
+
+QString MainWindow::partialViewNotice(const Document *doc) const
+{
+    const qint64 mib = QFileInfo(doc->filePath()).size() / (1024 * 1024);
+    return tr("'%1' is large (%2 MB), so only part of it is loaded. It is read-only: "
+              "saving and encoding or line-ending changes are disabled.")
+        .arg(doc->displayName()).arg(mib);
+}
+
 // Encoding operations
 void MainWindow::convertToANSI()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
-    e->document()->setEncoding("ISO-8859-1");
-    m_statusBar->updateFromEditor(e);
-    statusBar()->showMessage(tr("Encoding changed to ANSI (ISO-8859-1)"), 3000);
+    convertEncoding(QStringLiteral("ISO-8859-1"), tr("ANSI (ISO-8859-1)"));
 }
 
 void MainWindow::convertToUTF8()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
-    e->document()->setEncoding("UTF-8");
-    m_statusBar->updateFromEditor(e);
-    statusBar()->showMessage(tr("Encoding changed to UTF-8"), 3000);
+    convertEncoding(QStringLiteral("UTF-8"), QStringLiteral("UTF-8"));
 }
 
 void MainWindow::convertToUTF8BOM()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
-    e->document()->setEncoding("UTF-8-BOM");
-    m_statusBar->updateFromEditor(e);
-    statusBar()->showMessage(tr("Encoding changed to UTF-8-BOM"), 3000);
+    convertEncoding(QStringLiteral("UTF-8-BOM"), QStringLiteral("UTF-8-BOM"));
 }
 
 void MainWindow::convertToUCS2BE()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
-    e->document()->setEncoding("UTF-16BE");
-    m_statusBar->updateFromEditor(e);
-    statusBar()->showMessage(tr("Encoding changed to UCS-2 Big Endian"), 3000);
+    convertEncoding(QStringLiteral("UTF-16BE-BOM"), tr("UCS-2 Big Endian with BOM (UTF-16BE-BOM)"));
 }
 
 void MainWindow::convertToUCS2LE()
 {
+    convertEncoding(QStringLiteral("UTF-16LE-BOM"), tr("UCS-2 Little Endian with BOM (UTF-16LE-BOM)"));
+}
+
+// ============================================================
+// Encoding tools (spec D6, D11): Reopen with Encoding, the convert preflight,
+// the save-time EncodeLossy dialog and the mixed-line-ending notice.
+// ============================================================
+
+namespace {
+
+// The encodings Reopen with Encoding offers. Each goes through
+// TextCodec::canonicalName, so the list uses the table spelling of spec 9.1.
+const char *const kReopenEncodings[] = {
+    "UTF-8", "UTF-8-BOM", "UTF-16LE", "UTF-16BE", "UTF-16LE-BOM", "UTF-16BE-BOM",
+    "UTF-32LE", "UTF-32BE", "windows-1252", "ISO-8859-1", "ISO-8859-6",
+    "windows-1256", "Shift_JIS",
+};
+
+QString characterCount(int n)
+{
+    return n == 1 ? QObject::tr("1 character") : QObject::tr("%1 characters").arg(n);
+}
+
+QString lineEndingName(Document::LineEnding ending)
+{
+    switch (ending) {
+    case Document::Windows: return QStringLiteral("CRLF");
+    case Document::ClassicMac: return QStringLiteral("CR");
+    case Document::Unix: break;
+    }
+    return QStringLiteral("LF");
+}
+
+} // namespace
+
+// Adds Reopen with Encoding as the first Encoding-menu item and makes the
+// "Encode in ..." items track the current document (setupMenus gave each its
+// encoding name as data).
+void MainWindow::setupEncodingTools()
+{
+    QAction *first = m_encodingMenu->actions().value(0);
+    m_reopenEncodingAction = new QAction(tr("Reopen with Encoding..."), this);
+    m_reopenEncodingAction->setToolTip(tr("Decode the file's bytes again with an encoding you choose"));
+    connect(m_reopenEncodingAction, &QAction::triggered, this, &MainWindow::reopenWithEncoding);
+    m_encodingMenu->insertAction(first, m_reopenEncodingAction);
+    m_encodingMenu->insertSeparator(first);
+    for (QAction *action : m_encodingMenu->actions()) {
+        if (action->data().isNull()) continue;
+        action->setData(TextCodec::canonicalName(action->data().toString()));
+        action->setCheckable(true);
+        // Optional: a windows-1252 or Shift_JIS file has no matching item
+        if (action->actionGroup())
+            action->actionGroup()->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
+    }
+    // The lossy-load notification's button reopens the document it named
+    connect(m_notificationBar, &NotificationBar::actionTriggered, this, [this]() {
+        const QString path = m_notificationBar->property("reopenPath").toString();
+        if (!path.isEmpty() && activateOpenEditor(path)) reopenWithEncoding();
+    });
+}
+
+// Checks the item whose encoding name equals the current document's, and
+// enables the conversions only when the document can be converted.
+void MainWindow::syncEncodingMenu(bool convertible)
+{
+    if (!m_encodingMenu) return;
     Editor *e = currentEditor();
-    if (!e || !e->document()) return;
-    e->document()->setEncoding("UTF-16LE");
+    const Document *doc = e ? e->document() : nullptr;
+    const QString current = doc ? doc->encoding() : QString();
+    for (QAction *action : m_encodingMenu->actions()) {
+        if (!action->isCheckable()) continue;
+        action->setEnabled(convertible);
+        action->setChecked(action->data().toString() == current);
+    }
+    if (m_reopenEncodingAction)
+        m_reopenEncodingAction->setEnabled(doc && !doc->isUntitled() && !doc->isPartialView());
+}
+
+QStringList MainWindow::reopenEncodingNames() const
+{
+    QStringList names;
+    for (const char *name : kReopenEncodings) {
+        const QString canonical = TextCodec::canonicalName(QString::fromLatin1(name));
+        if (!canonical.isEmpty() && !names.contains(canonical)) names << canonical;
+    }
+    return names;
+}
+
+void MainWindow::reopenWithEncoding()
+{
+    Editor *e = currentEditor();
+    Document *doc = e ? e->document() : nullptr;
+    if (!doc || doc->isUntitled() || doc->isPartialView()) {
+        showNotification(tr("Reopen with Encoding needs a saved file that is fully loaded."));
+        return;
+    }
+    if (doc->isModified()
+        && QMessageBox::question(this, tr("Reopen with Encoding"),
+                                 tr("Reopening '%1' discards your unsaved changes. Continue?")
+                                     .arg(doc->displayName()),
+                                 QMessageBox::Discard | QMessageBox::Cancel) != QMessageBox::Discard) {
+        return;
+    }
+    const QStringList names = reopenEncodingNames();
+    bool ok = false;
+    const QString name = QInputDialog::getItem(
+        this, tr("Reopen with Encoding"), tr("Decode '%1' as:").arg(doc->displayName()),
+        names, qMax(0, names.indexOf(doc->encoding())), false, &ok);
+    if (ok) reopenEditorWithEncoding(e, name);
+}
+
+// A reload, not a conversion: the file's bytes are decoded again and the
+// editor is refilled clean (D8 reload contract: runSyncedEdit(Clean)).
+void MainWindow::reopenEditorWithEncoding(Editor *editor, const QString &name)
+{
+    Document *doc = editor->document();
+    if (!doc->reloadWithEncoding(name)) {
+        QMessageBox::warning(this, tr("Reopen with Encoding"),
+                             tr("Could not reopen '%1' as %2.").arg(doc->displayName(), name));
+        return;
+    }
+    editor->runSyncedEdit(SyncTarget::Clean, [editor]() { editor->syncFromDocument(); });
+    m_statusBar->updateFromEditor(editor);
+    updateMenuState();
+    updateWindowTitle();
+    if (doc->wasDecodedLossily()) {
+        showReopenNotice(doc);
+    } else {
+        showNotification(tr("Reopened '%1' as %2.").arg(doc->displayName(), doc->encoding()));
+    }
+}
+
+void MainWindow::showOpenNotices(Document *doc)
+{
+    if (doc->isPartialView()) {
+        showNotification(partialViewNotice(doc));
+    } else if (doc->wasDecodedLossily()) {
+        showReopenNotice(doc);
+    }
+}
+
+void MainWindow::showReopenNotice(Document *doc)
+{
+    m_notificationBar->setProperty("reopenPath", doc->filePath());
+    m_notificationBar->showAction(
+        tr("'%1' does not decode exactly as %2, so it is read-only to protect the file. "
+           "If the text looks wrong, reopen it with the right encoding.")
+            .arg(doc->displayName(), doc->encoding()),
+        tr("Reopen with Encoding..."));
+}
+
+// Asks what to do with characters the target encoding cannot hold. Names the
+// count and the first 5 positions as line:column (spec D6).
+MainWindow::UnmappableChoice MainWindow::askUnmappable(Editor *editor, const QString &encoding,
+                                                       const QList<int> &positions, bool offerUtf8)
+{
+    const QTextDocument *text = static_cast<QPlainTextEdit*>(editor)->document();
+    QStringList where;
+    for (int i = 0; i < qMin(5, int(positions.size())); ++i) {
+        const QTextBlock block = text->findBlock(positions[i]);
+        where << QStringLiteral("%1:%2").arg(block.blockNumber() + 1).arg(positions[i] - block.position() + 1);
+    }
+    QMessageBox box(QMessageBox::Warning, tr("Characters Cannot Be Encoded"),
+                    tr("%1 cannot be written in %2. First positions (line:column): %3.")
+                        .arg(characterCount(int(positions.size())), encoding, where.join(QStringLiteral(", "))),
+                    QMessageBox::Cancel, this);
+    QPushButton *replace = box.addButton(
+        tr("Replace %1 with ?").arg(characterCount(int(positions.size()))), QMessageBox::DestructiveRole);
+    QPushButton *utf8 = offerUtf8 ? box.addButton(tr("Save as UTF-8"), QMessageBox::AcceptRole) : nullptr;
+    box.setDefaultButton(QMessageBox::Cancel);
+    box.exec();
+    if (box.clickedButton() == replace) return UnmappableChoice::Replace;
+    if (utf8 && box.clickedButton() == utf8) return UnmappableChoice::SaveUtf8;
+    return UnmappableChoice::Cancel;
+}
+
+// One undoable edit that puts ? at each unmappable position, so the user sees
+// exactly what will be written. A surrogate pair becomes a single ?.
+void MainWindow::replaceUnmappable(Editor *editor, const QList<int> &positions)
+{
+    QTextDocument *text = static_cast<QPlainTextEdit*>(editor)->document();
+    QTextCursor cursor(text);
+    cursor.beginEditBlock();
+    for (auto it = positions.crbegin(); it != positions.crend(); ++it) {
+        const int pos = *it;
+        const QChar ch = text->characterAt(pos);
+        if (ch.isLowSurrogate() && text->characterAt(pos - 1).isHighSurrogate()) continue;
+        const int length = (ch.isHighSurrogate() && text->characterAt(pos + 1).isLowSurrogate()) ? 2 : 1;
+        cursor.setPosition(pos);
+        cursor.setPosition(pos + length, QTextCursor::KeepAnchor);
+        cursor.insertText(QStringLiteral("?"));
+    }
+    cursor.endEditBlock();
+}
+
+// Convert preflight: encode first, and change the encoding only when nothing
+// would be lost or the user chose to replace the unmappable characters.
+void MainWindow::convertEncoding(const QString &name, const QString &label)
+{
+    Editor *e = convertibleEditor();
+    if (!e) return;
+    const QString encoding = TextCodec::canonicalName(name);
+    const EncodeResult encoded = TextCodec::encode(e->rawText(), encoding);
+    if (!encoded.unmappable.isEmpty()) {
+        if (askUnmappable(e, encoding, encoded.unmappable, false) != UnmappableChoice::Replace) {
+            updateMenuState();  // the click checked the item; put the check back
+            return;
+        }
+        replaceUnmappable(e, encoded.unmappable);
+    }
+    e->document()->setEncoding(encoding);
     m_statusBar->updateFromEditor(e);
-    statusBar()->showMessage(tr("Encoding changed to UCS-2 Little Endian"), 3000);
+    updateMenuState();
+    statusBar()->showMessage(tr("Encoding changed to %1").arg(label), 3000);
+}
+
+// Save-time EncodeLossy (spec D6): Save as UTF-8, Replace N characters, or
+// Cancel. The file is untouched until one of the first two succeeds.
+bool MainWindow::resolveEncodeLossy(Editor *editor, const QString &path)
+{
+    Document *doc = editor->document();
+    const EncodeResult encoded = TextCodec::encode(editor->rawText(), doc->encoding());
+    if (encoded.unmappable.isEmpty()) {
+        reportSaveFailure(doc, SaveResult::EncodeLossy);
+        return false;
+    }
+    const UnmappableChoice choice = askUnmappable(editor, doc->encoding(), encoded.unmappable, true);
+    if (choice == UnmappableChoice::Cancel) return false;
+    if (choice == UnmappableChoice::SaveUtf8) {
+        doc->setEncoding(TextCodec::canonicalName(QStringLiteral("UTF-8")));
+    } else {
+        replaceUnmappable(editor, encoded.unmappable);
+    }
+    editor->syncToDocument();
+    const SaveResult retry = doc->saveAs(path);
+    if (retry != SaveResult::Ok) {
+        reportSaveFailure(doc, retry);
+        return false;
+    }
+    return true;
+}
+
+// D11: a file loaded with mixed line endings is saved with its majority
+// ending. Say so once per document, at its first save.
+void MainWindow::noteMixedLineEndings(Document *doc)
+{
+    if (!doc->hadMixedLineEndings() || doc->property("mixedEndingNoticeShown").toBool()) return;
+    doc->setProperty("mixedEndingNoticeShown", true);
+    showNotification(tr("Mixed line endings in '%1' will be saved as %2.")
+                         .arg(doc->displayName(), lineEndingName(doc->lineEnding())));
 }
 
 // Line ending operations
 void MainWindow::convertToWindows()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setLineEnding(Document::Windows);
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Line ending changed to Windows (CRLF)"), 3000);
@@ -468,8 +731,8 @@ void MainWindow::convertToWindows()
 
 void MainWindow::convertToUnix()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setLineEnding(Document::Unix);
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Line ending changed to Unix (LF)"), 3000);
@@ -477,8 +740,8 @@ void MainWindow::convertToUnix()
 
 void MainWindow::convertToMac()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setLineEnding(Document::ClassicMac);
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Line ending changed to Mac (CR)"), 3000);
@@ -604,29 +867,6 @@ void MainWindow::moveToOtherView()
     editor->setFocus();
 
     checkUnsplitNeeded();
-}
-
-void MainWindow::cloneToOtherView()
-{
-    Editor *editor = currentEditor();
-    if (!editor || !editor->document()) return;
-
-    // Ensure split exists
-    if (!isSplit()) {
-        splitView(Qt::Horizontal);
-        return; // splitView already clones the current doc
-    }
-
-    TabWidget *target = inactiveTabWidget();
-    if (!target) return;
-
-    Document *doc = editor->document();
-    Editor *cloned = createEditor(doc);
-    QString title = doc->displayName();
-    int idx = target->addTab(cloned, title);
-    target->setTabIcon(idx, TabBar::iconForFile(doc->filePath()));
-    target->setCurrentIndex(idx);
-    cloned->setFocus();
 }
 
 void MainWindow::previousTab()

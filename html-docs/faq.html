@@ -265,7 +265,7 @@
             <div class="faq-item">
                 <div class="faq-question">How do I split the screen?</div>
                 <div class="faq-answer">
-                    <p><kbd>Ctrl</kbd>+<kbd>\</kbd> for a vertical split. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> for a horizontal split. <kbd>F6</kbd> switches focus between panes. You can also clone a document to the other view &mdash; both views share the same content and edits sync in real time.</p>
+                    <p><kbd>Ctrl</kbd>+<kbd>\</kbd> for a vertical split. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> for a horizontal split. <kbd>F6</kbd> switches focus between panes. A new split opens an empty second pane; use <strong>View &gt; Move to Other View</strong> to move the current tab into it. Each document is open in one pane at a time.</p>
                 </div>
             </div>
 
@@ -298,14 +298,14 @@
             <div class="faq-item">
                 <div class="faq-question">How does encoding detection work?</div>
                 <div class="faq-answer">
-                    <p>PrimeEdit uses a multi-stage approach: (1) BOM detection for UTF-8-BOM, UTF-16, UTF-32. (2) UTF-8 validation. (3) Byte-frequency heuristics for Windows-1252, ISO-8859-1, Shift-JIS. If ICU libraries are installed, additional encodings are supported (KOI8-R, GB2312, Big5, etc.).</p>
+                    <p>PrimeEdit checks, in order: (1) a byte order mark for UTF-8, UTF-16 or UTF-32; (2) valid UTF-8; (3) a guess between windows-1252, Shift_JIS and ISO-8859-1. BOM-less UTF-16, ISO-8859-6 and windows-1256 are not recognised, so such a file opens as something else. Use <strong>Encoding &gt; Reopen with Encoding...</strong> to decode it again with the right encoding. If the bytes do not decode exactly in the detected encoding, the file opens read-only and the notification bar offers the same command.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How do I change a file's encoding or line endings?</div>
                 <div class="faq-answer">
-                    <p>Click the <strong>encoding indicator</strong> in the status bar (e.g., "UTF-8") to see conversion options. Similarly, click the <strong>EOL indicator</strong> (e.g., "LF") to convert between Unix (LF), Windows (CRLF), and Mac (CR). You can also use the <strong>Encoding</strong> menu.</p>
+                    <p>Click the <strong>encoding indicator</strong> in the status bar (e.g., "UTF-8") to see conversion options. Similarly, click the <strong>EOL indicator</strong> (e.g., "LF") to convert between Unix (LF), Windows (CRLF), and Mac (CR). You can also use the <strong>Encoding</strong> menu. If some characters cannot be written in the new encoding, you are shown how many and where, and can cancel or replace them with <code>?</code>. To read a file in a different encoding without converting it, use <strong>Reopen with Encoding...</strong>.</p>
                 </div>
             </div>
 
@@ -451,7 +451,7 @@
 
             <div class="faq-item">
                 <div class="faq-question">Why does a large file open in read-only mode?</div>
-                <div class="faq-answer"><p>Files over 100MB open read-only by default to prevent accidental edits to very large files (which could be slow). This is a safety feature, not a limitation.</p></div>
+                <div class="faq-answer"><p>Files over 50 MB, and minified files over 20 MB, open as a partial view: only part of the file is loaded. Saving it would replace the whole file with that part, so a partial view is read-only. Save, Save As, Save All and the encoding and line-ending changes are disabled for that tab, and the notification bar says so when the file opens.</p></div>
             </div>
 
             <div class="faq-item">
