@@ -311,7 +311,7 @@
 
             <div class="faq-item">
                 <div class="faq-question">What happens when a file is modified externally?</div>
-                <div class="faq-answer"><p>PrimeEdit monitors open files using <code>QFileSystemWatcher</code>. When a change is detected, a yellow notification bar appears: "This file has been modified by another program. Reload?" Click Yes to reload or No to keep your version.</p></div>
+                <div class="faq-answer"><p>PrimeEdit watches open files. When another program changes one, the notification bar offers <strong>Reload</strong> or <strong>Keep mine</strong>; with unsaved changes the button reads <strong>Reload (discard my changes)</strong>. It never reloads on its own, your own saves never raise it, and a background tab shows the bar when you switch to it.</p></div>
             </div>
 
             <div class="faq-item">
@@ -402,7 +402,7 @@
             <div class="faq-item">
                 <div class="faq-question">How do I switch branches?</div>
                 <div class="faq-answer">
-                    <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select the branch you want to switch to. PrimeEdit will reload any open files that changed between branches.</p>
+                    <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select the branch you want to switch to. Open files that changed between branches show the notification bar, so you choose whether to reload each one.</p>
                 </div>
             </div>
 

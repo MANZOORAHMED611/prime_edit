@@ -145,8 +145,10 @@ void StatusBarWidget::updateFromEditor(Editor *editor)
         setEncoding(doc->encoding());
         // A partial view cannot be converted (D3): its encoding and line-ending
         // menus are disabled, the same rule as the Encoding menu.
+        // The encoding button stays enabled for read-only documents: its menu
+        // holds Reopen with Encoding, and MainWindow refuses the conversions.
         m_encodingButton->setEnabled(!doc->isPartialView());
-        m_eolButton->setEnabled(!doc->isPartialView());
+        m_eolButton->setEnabled(!doc->isPartialView() && !doc->isReadOnly());
 
         QString eolStr;
         switch (doc->lineEnding()) {

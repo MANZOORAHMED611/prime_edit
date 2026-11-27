@@ -11,6 +11,7 @@
 #include <QSplitter>
 #include <QDockWidget>
 #include <QMap>
+#include <QSet>
 #include "../core/remoteconnection.h"
 
 class QPrinter;
@@ -332,6 +333,17 @@ private:
     bool resolveEncodeLossy(Editor *editor, const QString &path);
     void noteMixedLineEndings(Document *doc);
     QAction *m_reopenEncodingAction = nullptr;
+    bool isConvertible(const Document *doc) const;
+
+    // Reload bar (spec D8). Paths changed on disk whose bar is still owed;
+    // a background tab's bar is shown when the tab is activated.
+    void onFileExternallyModified(const QString &path);
+    void showPendingReloadBar();
+    void showReloadBar(Document *doc);
+    void onReloadAccepted();
+    void onReloadRejected();
+    bool reloadEditor(Editor *editor);
+    QSet<QString> m_pendingReloads;
 
     // Split view
     QSplitter *m_splitter = nullptr;

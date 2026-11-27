@@ -190,31 +190,11 @@ void MainWindow::setupUi()
     });
 
     // File change monitoring
-    connect(&DocumentManager::instance(),
-            &DocumentManager::fileExternallyModified,
-            this, [this](const QString &path) {
-        m_notificationBar->setProperty("reloadPath", path);
-        m_notificationBar->showMessage(
-            tr("The file \"%1\" has been modified by another "
-               "program. Reload?")
-                .arg(QFileInfo(path).fileName()));
-    });
-    connect(m_notificationBar, &NotificationBar::accepted,
-            this, [this]() {
-        QString path = m_notificationBar->property("reloadPath")
-                           .toString();
-        if (path.isEmpty()) return;
-        Document *doc =
-            DocumentManager::instance().findDocument(path);
-        if (doc) {
-            doc->load(path);
-            // Sync editor if this doc is currently displayed
-            Editor *e = currentEditor();
-            if (e && e->document() == doc) {
-                e->syncFromDocument();
-            }
-        }
-    });
+    // File change monitoring (D8): the reload bar never reloads silently
+    connect(&DocumentManager::instance(), &DocumentManager::fileExternallyModified,
+            this, &MainWindow::onFileExternallyModified);
+    connect(m_notificationBar, &NotificationBar::accepted, this, &MainWindow::onReloadAccepted);
+    connect(m_notificationBar, &NotificationBar::rejected, this, &MainWindow::onReloadRejected);
 
     // LSP Bridge
     m_lspBridge = new LSPBridge(this, this);
@@ -913,7 +893,10 @@ bool MainWindow::saveEditorAs(Editor *editor)
         reportSaveFailure(doc, SaveResult::PartialView);
         return false;
     }
-    const QString path = QFileDialog::getSaveFileName(this, tr("Save File As"), QString(),
+    // A restored draft whose original could not be reopened keeps that path
+    const QString suggested = doc->isUntitled() ? doc->property("originalFilePath").toString()
+                                                : doc->filePath();
+    const QString path = QFileDialog::getSaveFileName(this, tr("Save File As"), suggested,
                                                       FileUtils::combinedFilter());
     if (path.isEmpty()) {
         return false;
@@ -1014,21 +997,14 @@ void MainWindow::reloadFromDisk()
     if (!editor || !editor->document() || editor->document()->isUntitled()) {
         return;
     }
-
-    if (editor->document()->isModified()) {
-        int ret = QMessageBox::question(
-            this, tr("Reload"),
-            tr("Are you sure? Unsaved changes will be lost."),
-            QMessageBox::Yes | QMessageBox::No);
-        if (ret != QMessageBox::Yes) {
-            return;
-        }
+    if (editor->document()->isModified()
+        && QMessageBox::question(this, tr("Reload"),
+                                 tr("Reload '%1' from disk? Your unsaved changes will be lost.")
+                                     .arg(editor->document()->displayName()),
+                                 QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes) {
+        return;
     }
-
-    QString filePath = editor->document()->filePath();
-    editor->document()->load(filePath);
-    editor->syncFromDocument();
-    updateWindowTitle();
+    reloadEditor(editor);
 }
 
 bool MainWindow::closeFile(int index)
@@ -1103,6 +1079,7 @@ bool MainWindow::closeTab(TabWidget *tw, int index)
         DocumentManager::instance().closeDocument(doc, true);
     }
     if (!closedPath.isEmpty()) {
+        m_pendingReloads.remove(closedPath);
         PluginManager::instance().broadcastFileClosed(closedPath);
     }
 
@@ -1239,6 +1216,7 @@ void MainWindow::onTabChanged(int index)
     }
 
     updateGitBranch();
+    showPendingReloadBar();
 }
 
 void MainWindow::onTabCloseRequested(int index)
@@ -2202,7 +2180,7 @@ void MainWindow::updateMenuState()
     if (m_saveAction) m_saveAction->setEnabled(isModified && saveable);
     if (m_saveAsAction) m_saveAsAction->setEnabled(saveable);
     if (m_saveAllAction) m_saveAllAction->setEnabled(anySaveableModified());
-    syncEncodingMenu(saveable);
+    syncEncodingMenu(saveable && isConvertible(editor->document()));
     if (m_closeAction) m_closeAction->setEnabled(hasEditor);
     if (m_printAction) m_printAction->setEnabled(hasEditor);
 
@@ -2487,6 +2465,7 @@ void MainWindow::onTab2Changed(int index)
         if (m_lspBridge) {
             m_lspBridge->onEditorChanged(currentEditor());
         }
+        showPendingReloadBar();
     }
 }
 

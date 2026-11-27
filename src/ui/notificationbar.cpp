@@ -46,7 +46,15 @@ NotificationBar::NotificationBar(QWidget *parent)
 
 void NotificationBar::showMessage(const QString &message)
 {
+    showChoice(message, tr("Yes"), tr("No"));
+}
+
+void NotificationBar::showChoice(const QString &message, const QString &acceptLabel,
+                                 const QString &rejectLabel)
+{
     setQuestionMode(true);
+    m_yesButton->setText(acceptLabel);
+    m_noButton->setText(rejectLabel);
     m_messageLabel->setText(message);
     show();
 }

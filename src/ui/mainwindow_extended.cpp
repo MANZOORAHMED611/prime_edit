@@ -13,6 +13,7 @@
 #include "core/remoteconnection.h"
 #include "core/document.h"
 #include "core/textcodec.h"
+#include "core/documentmanager.h"
 #include "core/llmevaluator.h"
 #include "core/islamicbridge.h"
 #include "core/schemavalidator.h"
@@ -71,7 +72,7 @@ void MainWindow::removeEmptyLines()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     QStringList lines = text.split('\n');
     QStringList nonEmptyLines;
 
@@ -94,7 +95,7 @@ void MainWindow::removeEmptyLinesWithBlanks()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     QStringList lines = text.split('\n');
     QStringList filteredLines;
 
@@ -124,7 +125,7 @@ void MainWindow::removeConsecutiveDuplicateLines()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     QStringList lines = text.split('\n');
     QStringList uniqueLines;
 
@@ -158,7 +159,7 @@ void MainWindow::trimLeadingWhitespace()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     QStringList lines = text.split('\n');
 
     for (QString &line : lines) {
@@ -182,7 +183,7 @@ void MainWindow::trimLeadingAndTrailing()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     QStringList lines = text.split('\n');
 
     for (QString &line : lines) {
@@ -202,7 +203,7 @@ void MainWindow::eolToSpace()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     text.replace('\n', ' ');
     QTextCursor cursor = editor->textCursor();
     cursor.beginEditBlock();
@@ -216,7 +217,7 @@ void MainWindow::removeUnnecessaryBlanks()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
 
     // Remove multiple consecutive blank lines
     text.replace(QRegularExpression("\n\\s*\n\\s*\n"), "\n\n");
@@ -233,7 +234,7 @@ void MainWindow::tabToSpace()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     text.replace('\t', "    "); // 4 spaces per tab
     QTextCursor cursor = editor->textCursor();
     cursor.beginEditBlock();
@@ -247,7 +248,7 @@ void MainWindow::spaceToTabAll()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     text.replace("    ", "\t"); // 4 spaces to tab
     QTextCursor cursor = editor->textCursor();
     cursor.beginEditBlock();
@@ -261,7 +262,7 @@ void MainWindow::spaceToTabLeading()
     Editor *editor = currentEditor();
     if (!editor) return;
 
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     QStringList lines = text.split('\n');
 
     for (QString &line : lines) {
@@ -424,7 +425,92 @@ Editor *MainWindow::convertibleEditor()
                             "cannot be changed.").arg(e->document()->displayName()));
         return nullptr;
     }
+    if (!isConvertible(e->document())) {
+        showNotification(tr("'%1' is read-only, so its encoding and line endings cannot be "
+                            "changed. Use Reopen with Encoding to read it differently.")
+                             .arg(e->document()->displayName()));
+        return nullptr;
+    }
     return e;
+}
+
+// A conversion only marks the document for a rewrite, so it is offered only
+// when that rewrite can happen: not for a read-only document (lossy decode,
+// partial view) nor for a file without write permission.
+bool MainWindow::isConvertible(const Document *doc) const
+{
+    if (!doc || doc->isPartialView() || doc->isReadOnly()) return false;
+    return doc->isUntitled() || QFileInfo(doc->filePath()).isWritable();
+}
+
+// ---- Reload bar (spec D8) ----
+
+void MainWindow::onFileExternallyModified(const QString &path)
+{
+    Document *doc = DocumentManager::instance().findDocument(path);
+    if (!doc) return;
+    m_pendingReloads.insert(path);
+    Editor *e = currentEditor();
+    if (e && e->document() == doc) {
+        showReloadBar(doc);  // a background tab gets the bar when activated
+    }
+}
+
+void MainWindow::showPendingReloadBar()
+{
+    Editor *e = currentEditor();
+    if (e && e->document() && m_pendingReloads.contains(e->document()->filePath())) {
+        showReloadBar(e->document());
+    }
+}
+
+void MainWindow::showReloadBar(Document *doc)
+{
+    const bool edited = doc->isModified();
+    m_notificationBar->setProperty("reloadPath", doc->filePath());
+    m_notificationBar->showChoice(
+        edited ? tr("'%1' was changed by another program, and you have unsaved changes here.")
+                     .arg(doc->displayName())
+               : tr("'%1' was changed by another program.").arg(doc->displayName()),
+        edited ? tr("Reload (discard my changes)") : tr("Reload"), tr("Keep mine"));
+}
+
+void MainWindow::onReloadAccepted()
+{
+    const QString path = m_notificationBar->property("reloadPath").toString();
+    m_pendingReloads.remove(path);
+    Document *doc = DocumentManager::instance().findDocument(path);
+    if (!doc) return;
+    for (Editor *e : allEditors()) {
+        if (e->document() == doc) {
+            reloadEditor(e);
+            return;
+        }
+    }
+}
+
+void MainWindow::onReloadRejected()
+{
+    // "Keep mine": the edits stay, and the next external change asks again
+    m_pendingReloads.remove(m_notificationBar->property("reloadPath").toString());
+}
+
+// Reloads the document from disk and refills its editor clean, so undo cannot
+// make the reloaded text look modified (D1 reload through runSyncedEdit).
+bool MainWindow::reloadEditor(Editor *editor)
+{
+    Document *doc = editor->document();
+    if (!doc->load(doc->filePath())) {
+        QMessageBox::warning(this, tr("Reload"), tr("Could not reload '%1'.").arg(doc->displayName()));
+        return false;
+    }
+    editor->runSyncedEdit(SyncTarget::Clean, [editor]() { editor->syncFromDocument(); });
+    m_pendingReloads.remove(doc->filePath());
+    updateTabTextForDocument(doc);
+    updateWindowTitle();
+    updateStatusBar();
+    updateMenuState();
+    return true;
 }
 
 bool MainWindow::anySaveableModified() const
@@ -985,7 +1071,7 @@ void MainWindow::showSummary()
 {
     Editor *editor = currentEditor();
     if (!editor) return;
-    QString text = editor->toPlainText();
+    QString text = editor->rawText();
     int lines = text.count('\n') + 1;
     int words = text.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts).count();
     int chars = text.length();
@@ -1229,7 +1315,7 @@ void MainWindow::validateCurrentDocument()
     Editor *e = currentEditor();
     if (!e) return;
 
-    QString text = e->toPlainText();
+    QString text = e->rawText();
     QVector<SchemaViolation> violations = m_schemaValidator->validate(text);
 
     // Update status bar with validation results

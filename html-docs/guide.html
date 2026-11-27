@@ -516,7 +516,7 @@ make -j$(nproc)
             </ul>
 
             <h3>Branch Switching</h3>
-            <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select one to switch. PrimeEdit reloads any open files that changed between branches.</p>
+            <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select one to switch. Open files that changed between branches show the notification bar, so you choose whether to reload each one.</p>
         </section>
 
         <div class="divider"></div>
@@ -618,6 +618,17 @@ make -j$(nproc)
                 <li>A read-only document, such as a partial view, cannot be saved, so its prompt offers only <strong>Discard</strong> or <strong>Cancel</strong>.</li>
                 <li><strong>Save All</strong> saves every modified tab in both panes and skips read-only ones.</li>
             </ul>
+
+            <h3>Save As for a recovered draft</h3>
+            <p>If a draft's original file could not be reopened at startup, the draft opens as an untitled tab. <strong>Save As</strong> then suggests the original file's path.</p>
+
+            <h3>Files changed by another program</h3>
+            <ul>
+                <li>When another program changes an open file, the notification bar says so and offers <strong>Reload</strong> and <strong>Keep mine</strong>. Your own saves never raise it.</li>
+                <li>If the tab has unsaved changes, the button reads <strong>Reload (discard my changes)</strong>. Nothing reloads until you choose.</li>
+                <li>If the changed file is in a background tab, the bar appears when you switch to that tab.</li>
+                <li><strong>Keep mine</strong> keeps your text; the next change on disk asks again. <strong>Reload</strong> replaces the tab's text with the file on disk, and the tab is no longer modified.</li>
+            </ul>
         </section>
 
         <div class="divider"></div>
@@ -635,6 +646,7 @@ make -j$(nproc)
 
             <h3>Converting (Encode in ...)</h3>
             <ul>
+                <li>Conversions are disabled for read-only documents (a lossy decode, a partial view, or a file without write permission), because the converted file could not be saved. Use <strong>Reopen with Encoding...</strong> to read such a file differently.</li>
                 <li>Before converting, PrimeEdit checks that every character can be written in the new encoding. If some cannot (for example Arabic text and <strong>Encode in ANSI</strong>), a dialog gives the count and the first five positions as line:column, and offers <strong>Cancel</strong> or <strong>Replace N characters with ?</strong>.</li>
                 <li><strong>Replace</strong> is one edit, so a single <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes it. Nothing is written until you save.</li>
                 <li><strong>Encode in UCS-2 BE BOM</strong> and <strong>UCS-2 LE BOM</strong> save as UTF-16 with a byte order mark (<code>UTF-16BE-BOM</code>, <code>UTF-16LE-BOM</code>).</li>
@@ -647,7 +659,7 @@ make -j$(nproc)
             <p>A file whose lines end in a mix of CRLF and LF is saved with the ending most of its lines use. The notification bar says so at the first save of that document, for example <em>Mixed line endings in 'notes.txt' will be saved as CRLF.</em></p>
 
             <h3>Special spaces</h3>
-            <p>No-break spaces (U+00A0) and line separators (U+2028) are kept as they are when you save and when you use <strong>Replace All</strong>.</p>
+            <p>No-break spaces (U+00A0) and line separators (U+2028) are kept as they are when you save, when you use <strong>Replace All</strong>, and when you use the line commands (remove empty or duplicate lines, trim whitespace, EOL to space, tab and space conversion).</p>
         </section>
 
         <div class="divider"></div>

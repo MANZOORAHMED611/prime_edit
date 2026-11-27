@@ -17,6 +17,9 @@ public:
     // A message with one action button. Clicking it emits actionTriggered(),
     // never accepted(), so it cannot answer a pending reload question.
     void showAction(const QString &message, const QString &actionLabel);
+    // A question with custom labels: acceptLabel emits accepted(),
+    // rejectLabel emits rejected().
+    void showChoice(const QString &message, const QString &acceptLabel, const QString &rejectLabel);
 
 signals:
     void accepted();
