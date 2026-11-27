@@ -10,6 +10,26 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
+#include "utils/fileutils.h"
+
+namespace {
+
+// MacroRecorder is a process-wide singleton, so the corrupt-file hold lives
+// here instead of in macrorecorder.h, which Phase 1 does not assign. While it
+// is set, saves are skipped until the macros differ from what load() held.
+bool g_holdMacroWrites = false;
+QJsonObject g_heldMacros;
+
+// macros.json did not parse: copy it aside, keep it, and hold the (empty)
+// in-memory set so the destructor's save cannot replace it.
+void holdCorruptMacros(const QString &filePath)
+{
+    FileUtils::preserveCorruptCopy(filePath);
+    g_heldMacros = QJsonObject();
+    g_holdMacroWrites = true;
+}
+
+} // namespace
 
 MacroRecorder::MacroRecorder()
     : m_recording(false)
@@ -183,7 +203,7 @@ void MacroRecorder::loadMacrosFromSettings()
     if (!file.open(QIODevice::ReadOnly)) return;
 
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-    if (!doc.isObject()) return;
+    if (!doc.isObject()) return holdCorruptMacros(filePath);
 
     QJsonObject root = doc.object();
     for (auto it = root.begin(); it != root.end(); ++it) {
@@ -222,11 +242,9 @@ void MacroRecorder::saveMacrosToSettings()
         root[it.key()] = arr;
     }
 
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) return;
-
-    QJsonDocument doc(root);
-    file.write(doc.toJson(QJsonDocument::Compact));
+    if (g_holdMacroWrites && root == g_heldMacros) return;
+    g_holdMacroWrites = false;
+    FileUtils::writeFileAtomic(filePath, QJsonDocument(root).toJson(QJsonDocument::Compact));
 }
 
 QString MacroRecorder::eventToString(const MacroEvent &event) const

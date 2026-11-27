@@ -3,6 +3,7 @@
 #include "ui/editor.h"
 #include "ui/tabwidget.h"
 #include "core/document.h"
+#include "utils/fileutils.h"
 #include <QFile>
 #include <QDir>
 #include <QJsonDocument>
@@ -24,30 +25,47 @@ Session::Session()
 
 void Session::save(MainWindow *window)
 {
-    QJsonObject json = windowToJson(window);
-
-    QFile file(sessionFilePath());
-    if (!file.open(QIODevice::WriteOnly)) {
+    const QJsonObject json = windowToJson(window);
+    // After a corrupt session.json, write only once the window state differs
+    // from what it was when the corrupt file was found.
+    if (m_holdSessionWrites && json == m_heldSession) {
         return;
     }
+    m_holdSessionWrites = false;
+    FileUtils::writeFileAtomic(sessionFilePath(), QJsonDocument(json).toJson());
+}
 
-    QJsonDocument doc(json);
-    file.write(doc.toJson());
+// Returns the parsed object, or an empty one after copying an unparsable file
+// to "<file>.corrupt-<timestamp>". The original is never modified.
+QJsonObject Session::readSessionFile(const QString &path, bool *corrupt) const
+{
+    *corrupt = false;
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return QJsonObject();
+    }
+    const QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    if (doc.isObject()) {
+        return doc.object();
+    }
+    FileUtils::preserveCorruptCopy(path);
+    *corrupt = true;
+    return QJsonObject();
 }
 
 void Session::restore(MainWindow *window)
 {
-    QFile file(sessionFilePath());
-    if (!file.open(QIODevice::ReadOnly)) {
+    bool corrupt = false;
+    const QJsonObject json = readSessionFile(sessionFilePath(), &corrupt);
+    if (corrupt) {
+        m_heldSession = windowToJson(window);
+        m_holdSessionWrites = true;
+    }
+    if (corrupt || !QFile::exists(sessionFilePath())) {
         return;
     }
 
-    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-    if (doc.isNull()) {
-        return;
-    }
-
-    jsonToWindow(doc.object(), window);
+    jsonToWindow(json, window);
 
     // Restore any unsaved documents from the cache
     restoreUnsavedDocuments(window);
@@ -70,30 +88,19 @@ QStringList Session::savedSessions() const
 
 void Session::saveSession(const QString &name, MainWindow *window)
 {
-    QJsonObject json = windowToJson(window);
-
-    QFile file(namedSessionPath(name));
-    if (!file.open(QIODevice::WriteOnly)) {
-        return;
-    }
-
-    QJsonDocument doc(json);
-    file.write(doc.toJson());
+    // An explicit save by name is the user's change, so it always writes.
+    FileUtils::writeFileAtomic(namedSessionPath(name),
+                               QJsonDocument(windowToJson(window)).toJson());
 }
 
 void Session::loadSession(const QString &name, MainWindow *window)
 {
-    QFile file(namedSessionPath(name));
-    if (!file.open(QIODevice::ReadOnly)) {
+    bool corrupt = false;
+    const QJsonObject json = readSessionFile(namedSessionPath(name), &corrupt);
+    if (corrupt || !QFile::exists(namedSessionPath(name))) {
         return;
     }
-
-    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-    if (doc.isNull()) {
-        return;
-    }
-
-    jsonToWindow(doc.object(), window);
+    jsonToWindow(json, window);
 }
 
 void Session::deleteSession(const QString &name)

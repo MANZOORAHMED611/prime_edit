@@ -34,6 +34,11 @@ private:
     QString unsavedCacheDir() const;
     QJsonObject windowToJson(MainWindow *window) const;
     void jsonToWindow(const QJsonObject &json, MainWindow *window);
+    QJsonObject readSessionFile(const QString &path, bool *corrupt) const;
+
+    // Set when restore() found session.json unparsable (spec D10).
+    bool m_holdSessionWrites = false;
+    QJsonObject m_heldSession;
 };
 
 #endif // SESSION_H

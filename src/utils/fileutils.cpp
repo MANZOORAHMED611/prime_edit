@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QMimeDatabase>
 #include <QDateTime>
+#include <QSaveFile>
 
 namespace FileUtils {
 
@@ -135,6 +136,30 @@ bool restoreBackup(const QString &backupPath, const QString &originalPath)
     }
 
     return QFile::copy(backupPath, originalPath);
+}
+
+bool writeFileAtomic(const QString &path, const QByteArray &bytes)
+{
+    QSaveFile file(path);
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+    if (file.write(bytes) != bytes.size()) {
+        file.cancelWriting();
+        return false;
+    }
+    return file.commit();
+}
+
+QString preserveCorruptCopy(const QString &path)
+{
+    const QString copy = path + QStringLiteral(".corrupt-")
+        + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss"));
+    // A copy made earlier in the same second is kept, never overwritten.
+    if (QFile::exists(copy) || QFile::copy(path, copy)) {
+        return copy;
+    }
+    return QString();
 }
 
 }
