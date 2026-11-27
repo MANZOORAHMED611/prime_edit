@@ -53,9 +53,15 @@ private:
     void jsonToWindow(const QJsonObject &json, MainWindow *window);
     QJsonObject readSessionFile(const QString &path, bool *corrupt) const;
 
-    // Set when restore() found session.json unparsable (spec D10).
+    // Set when restore() found session.json unparsable (spec D10). The held
+    // baseline is the geometry-free projection (P1.10 3.2): window placement
+    // alone is not a user change.
     bool m_holdSessionWrites = false;
     QJsonObject m_heldSession;
+    // JSON of the last successful session.json write; a tick that would
+    // write the same bytes again is skipped (P1.10 3.1).
+    QJsonObject m_lastWritten;
+    static QJsonObject holdProjection(QJsonObject json);
 
     // Drafts read from the cache that no editor holds. The writer keeps them.
     QList<QJsonObject> m_unplacedDrafts;

@@ -15,6 +15,7 @@
 #include "../core/remoteconnection.h"
 
 class QPrinter;
+class QTimer;
 class Editor;
 class Document;
 enum class SaveResult;
@@ -464,8 +465,10 @@ private:
     bool m_closingAll = false;
     bool m_distractionFree = false;
 
-    // Session autosave (spec P1.10)
-    bool m_sessionAutosaveEnabled = false;
+    // Session autosave (spec P1.10): created in the constructor, started only
+    // by setSessionAutosaveEnabled(true).
+    void setupSessionAutosave();
+    QTimer *m_sessionAutosaveTimer = nullptr;
     static int s_sessionAutosaveIntervalMs;
 };
 

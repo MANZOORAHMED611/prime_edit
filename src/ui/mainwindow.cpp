@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupToolBar();
     setupStatusBar();
     setupShortcuts();
+    setupSessionAutosave();
 
     // Clipboard tracking for Paste action
     connect(QApplication::clipboard(), &QClipboard::dataChanged, this, [this]() {
@@ -1162,15 +1163,30 @@ QStringList MainWindow::openFilePaths() const
 
 int MainWindow::s_sessionAutosaveIntervalMs = 5000;
 
-// 1.0.1-behaviour placeholder: the flag is stored, nothing is started.
+void MainWindow::setupSessionAutosave()
+{
+    m_sessionAutosaveTimer = new QTimer(this);
+    m_sessionAutosaveTimer->setInterval(s_sessionAutosaveIntervalMs);
+    connect(m_sessionAutosaveTimer, &QTimer::timeout, this, [this]() {
+        Session::instance().save(this);
+    });
+}
+
+// Enabling rebases the corrupt-file hold on the window as restore left it, so
+// startup itself is never read as a user change.
 void MainWindow::setSessionAutosaveEnabled(bool enabled)
 {
-    m_sessionAutosaveEnabled = enabled;
+    if (!enabled) {
+        m_sessionAutosaveTimer->stop();
+        return;
+    }
+    Session::instance().rebaseHold(this);
+    m_sessionAutosaveTimer->start();
 }
 
 bool MainWindow::sessionAutosaveActive() const
 {
-    return false;
+    return m_sessionAutosaveTimer->isActive();
 }
 
 void MainWindow::setSessionAutosaveIntervalForTest(int ms)
@@ -1180,6 +1196,7 @@ void MainWindow::setSessionAutosaveIntervalForTest(int ms)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    m_sessionAutosaveTimer->stop();  // no tick while editors are torn down
     // Notepad++ behavior: silently persist ALL unsaved documents.
     // No save prompts on application quit. Everything is restored on next launch.
 

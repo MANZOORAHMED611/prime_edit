@@ -5,6 +5,7 @@
 
 #include "core/macrorecorder.h"
 #include "core/session.h"
+#include "ui/editor.h"
 #include "ui/mainwindow.h"
 #include "utils/settings.h"
 
@@ -157,8 +158,13 @@ void TestT14Persistence::truncatedSessionKeptAndNotOverwritten()
     const QString path = dataDir() + "/session.json";
     removeCorruptCopies(path);
     QVERIFY(regression::writeBytes(path, kTruncated));
+    // A saved file whose bookmark can release the hold (P1.10 3.2).
+    regression::TempDir dir;
+    QVERIFY(regression::writeBytes(dir.filePath("held.txt"), "a\nb\n"));
     MainWindow window;
     window.resize(800, 600);
+    Editor *editor = window.openFile(dir.filePath("held.txt"));
+    QVERIFY(editor);
 
     Session::instance().restore(&window);
     const QStringList copies = corruptCopies(path);
@@ -169,7 +175,12 @@ void TestT14Persistence::truncatedSessionKeptAndNotOverwritten()
     Session::instance().save(&window);
     QVERIFY2(regression::readBytes(path) == kTruncated, "unchanged session written over the file");
 
+    // P1.10 3.2: window placement alone is not a user change.
     window.resize(900, 640);
+    Session::instance().save(&window);
+    QVERIFY2(regression::readBytes(path) == kTruncated, "a resize alone released the hold");
+
+    editor->toggleBookmark(1);
     Session::instance().save(&window);
     QVERIFY(parsesAsObject(path));
     QCOMPARE(QJsonDocument::fromJson(regression::readBytes(path)).object()["geometry"]

@@ -28,19 +28,33 @@ Session::Session()
 void Session::save(MainWindow *window)
 {
     const QJsonObject json = windowToJson(window);
-    // After a corrupt session.json, write only once the window state differs
-    // from what it was when the corrupt file was found.
-    if (m_holdSessionWrites && json == m_heldSession) {
+    // After a corrupt session.json, write only once the user state (files,
+    // bookmarks, folds, active tab) differs from the held baseline.
+    if (m_holdSessionWrites && holdProjection(json) == m_heldSession) {
         return;
     }
     m_holdSessionWrites = false;
-    FileUtils::writeFileAtomic(sessionFilePath(), QJsonDocument(json).toJson());
+    if (json == m_lastWritten) {
+        return;
+    }
+    // Only a successful write is remembered, so a failed one is retried.
+    if (FileUtils::writeFileAtomic(sessionFilePath(), QJsonDocument(json).toJson())) {
+        m_lastWritten = json;
+    }
 }
 
-// 1.0.1-behaviour placeholder.
 void Session::rebaseHold(MainWindow *window)
 {
-    Q_UNUSED(window);
+    if (m_holdSessionWrites) {
+        m_heldSession = holdProjection(windowToJson(window));
+    }
+}
+
+// Geometry changes with window-manager placement, not user action.
+QJsonObject Session::holdProjection(QJsonObject json)
+{
+    json.remove("geometry");
+    return json;
 }
 
 // Returns the parsed object, or an empty one after copying an unparsable file
@@ -74,7 +88,7 @@ void Session::restoreFiles(MainWindow *window)
     bool corrupt = false;
     const QJsonObject json = readSessionFile(sessionFilePath(), &corrupt);
     if (corrupt) {
-        m_heldSession = windowToJson(window);
+        m_heldSession = holdProjection(windowToJson(window));
         m_holdSessionWrites = true;
     }
     if (corrupt || !QFile::exists(sessionFilePath())) {
