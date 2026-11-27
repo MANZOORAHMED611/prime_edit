@@ -133,6 +133,22 @@ QWidget *PreferencesDialog::createAppearancePage()
     return page;
 }
 
+// The Auto-save preference is hidden in Phase 1 (spec section 2): it wrote
+// stale text that was never read back, and the unsaved-document cache (written
+// every 30 s) replaces it. The controls still exist, unshown and outside any
+// layout, so loadSettings/applySettings keep the stored value unchanged. The
+// dead code goes in Phase 3.
+void PreferencesDialog::createHiddenAutoSaveControls(QWidget *parent)
+{
+    m_autoSaveCheck = new QCheckBox(tr("Auto-save every"), parent);
+    m_autoSaveIntervalSpin = new QSpinBox(parent);
+    m_autoSaveIntervalSpin->setRange(1, 60);
+    m_autoSaveIntervalSpin->setSuffix(" seconds");
+    connect(m_autoSaveCheck, &QCheckBox::toggled, m_autoSaveIntervalSpin, &QWidget::setEnabled);
+    m_autoSaveCheck->setVisible(false);
+    m_autoSaveIntervalSpin->setVisible(false);
+}
+
 QWidget *PreferencesDialog::createFilesPage()
 {
     QWidget *page = new QWidget(this);
@@ -162,20 +178,10 @@ QWidget *PreferencesDialog::createFilesPage()
     m_trimWhitespaceCheck = new QCheckBox(tr("Trim trailing whitespace on save"), saveGroup);
     m_finalNewlineCheck = new QCheckBox(tr("Insert final newline on save"), saveGroup);
 
-    QHBoxLayout *autoSaveLayout = new QHBoxLayout();
-    m_autoSaveCheck = new QCheckBox(tr("Auto-save every"), saveGroup);
-    m_autoSaveIntervalSpin = new QSpinBox(saveGroup);
-    m_autoSaveIntervalSpin->setRange(1, 60);
-    m_autoSaveIntervalSpin->setSuffix(" seconds");
-    autoSaveLayout->addWidget(m_autoSaveCheck);
-    autoSaveLayout->addWidget(m_autoSaveIntervalSpin);
-    autoSaveLayout->addStretch();
-
-    connect(m_autoSaveCheck, &QCheckBox::toggled, m_autoSaveIntervalSpin, &QWidget::setEnabled);
+    createHiddenAutoSaveControls(saveGroup);
 
     saveLayout->addWidget(m_trimWhitespaceCheck);
     saveLayout->addWidget(m_finalNewlineCheck);
-    saveLayout->addLayout(autoSaveLayout);
 
     layout->addWidget(saveGroup);
 

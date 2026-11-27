@@ -11,11 +11,13 @@
 #include <QSplitter>
 #include <QDockWidget>
 #include <QMap>
+#include <QSet>
 #include "../core/remoteconnection.h"
 
 class QPrinter;
 class Editor;
 class Document;
+enum class SaveResult;
 class TabWidget;
 class LSPBridge;
 class StatusBarWidget;
@@ -95,6 +97,9 @@ public slots:
 
     // Navigation
     void goToLine(int line);
+
+    // Encoding: decode the current file's bytes again with a chosen encoding
+    void reopenWithEncoding();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -216,7 +221,6 @@ private slots:
     void closeTabsToRight();
     void closeTabsToLeft();
     void moveToOtherView();
-    void cloneToOtherView();
     void previousTab();
     void nextTab();
 
@@ -297,9 +301,49 @@ private:
     void splitView(Qt::Orientation orientation);
     void unsplit();
     void connectTabWidget(TabWidget *tw);
-    void onTab2CloseRequested(int index);
+    bool closeTab(TabWidget *tw, int index);
+    bool confirmCloseEditor(Editor *editor);
+    bool isDocumentShownElsewhere(const Editor *editor) const;
     void onTab2Changed(int index);
     void checkUnsplitNeeded();
+
+    // Save path: every function takes the editor, never the focused one
+    bool saveEditor(Editor *editor);
+    bool saveEditorAs(Editor *editor);
+    bool writeDocument(Editor *editor, const QString &path);
+    void finishEditorSave(Editor *editor);
+    bool confirmDirectWrite(Document *doc);
+    void reportSaveFailure(Document *doc, SaveResult result);
+    bool anySaveableModified() const;
+    void syncEncodingMenu(bool convertible);
+    Editor *convertibleEditor();
+    QString partialViewNotice(const Document *doc) const;
+
+    // Encoding tools (spec D6, D11)
+    enum class UnmappableChoice { Cancel, Replace, SaveUtf8 };
+    void setupEncodingTools();
+    QStringList reopenEncodingNames() const;
+    void reopenEditorWithEncoding(Editor *editor, const QString &name);
+    void showOpenNotices(Document *doc);
+    void showReopenNotice(Document *doc);
+    UnmappableChoice askUnmappable(Editor *editor, const QString &encoding,
+                                   const QList<int> &positions, bool offerUtf8);
+    void replaceUnmappable(Editor *editor, const QList<int> &positions);
+    void convertEncoding(const QString &name, const QString &label);
+    bool resolveEncodeLossy(Editor *editor, const QString &path);
+    void noteMixedLineEndings(Document *doc);
+    QAction *m_reopenEncodingAction = nullptr;
+    bool isConvertible(const Document *doc) const;
+
+    // Reload bar (spec D8). Paths changed on disk whose bar is still owed;
+    // a background tab's bar is shown when the tab is activated.
+    void onFileExternallyModified(const QString &path);
+    void showPendingReloadBar();
+    void showReloadBar(Document *doc);
+    void onReloadAccepted();
+    void onReloadRejected();
+    bool reloadEditor(Editor *editor);
+    QSet<QString> m_pendingReloads;
 
     // Split view
     QSplitter *m_splitter = nullptr;
@@ -347,6 +391,7 @@ private:
     QAction *m_newAction = nullptr;
     QAction *m_openAction = nullptr;
     QAction *m_saveAction = nullptr;
+    QAction *m_saveAsAction = nullptr;
     QAction *m_saveAllAction = nullptr;
     QAction *m_closeAction = nullptr;
     QAction *m_printAction = nullptr;

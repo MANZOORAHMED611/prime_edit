@@ -57,6 +57,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QFileInfo>
+#include <QPushButton>
 #include <QDesktopServices>
 #include <QStandardPaths>
 #include <QDir>
@@ -70,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setupUi();
     setupMenus();
+    setupEncodingTools();
     setupToolBar();
     setupStatusBar();
     setupShortcuts();
@@ -188,31 +190,11 @@ void MainWindow::setupUi()
     });
 
     // File change monitoring
-    connect(&DocumentManager::instance(),
-            &DocumentManager::fileExternallyModified,
-            this, [this](const QString &path) {
-        m_notificationBar->setProperty("reloadPath", path);
-        m_notificationBar->showMessage(
-            tr("The file \"%1\" has been modified by another "
-               "program. Reload?")
-                .arg(QFileInfo(path).fileName()));
-    });
-    connect(m_notificationBar, &NotificationBar::accepted,
-            this, [this]() {
-        QString path = m_notificationBar->property("reloadPath")
-                           .toString();
-        if (path.isEmpty()) return;
-        Document *doc =
-            DocumentManager::instance().findDocument(path);
-        if (doc) {
-            doc->load(path);
-            // Sync editor if this doc is currently displayed
-            Editor *e = currentEditor();
-            if (e && e->document() == doc) {
-                e->syncFromDocument();
-            }
-        }
-    });
+    // File change monitoring (D8): the reload bar never reloads silently
+    connect(&DocumentManager::instance(), &DocumentManager::fileExternallyModified,
+            this, &MainWindow::onFileExternallyModified);
+    connect(m_notificationBar, &NotificationBar::accepted, this, &MainWindow::onReloadAccepted);
+    connect(m_notificationBar, &NotificationBar::rejected, this, &MainWindow::onReloadRejected);
 
     // LSP Bridge
     m_lspBridge = new LSPBridge(this, this);
@@ -248,29 +230,20 @@ void MainWindow::setupUi()
         ThemeManager::instance().applyTheme(ThemeManager::instance().currentTheme());
     });
 
+    // Settings reach the editors of both panes (allEditors), not only pane 1.
     connect(&Settings::instance(), &Settings::wordWrapChanged, this, [this](bool enabled) {
-        for (int i = 0; i < m_tabWidget->count(); ++i) {
-            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-            if (e) e->setWordWrapEnabled(enabled);
-        }
+        for (Editor *e : allEditors()) e->setWordWrapEnabled(enabled);
     });
 
     connect(&Settings::instance(), &Settings::lineNumbersChanged, this, [this](bool enabled) {
-        for (int i = 0; i < m_tabWidget->count(); ++i) {
-            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-            if (e) e->setLineNumbersVisible(enabled);
-        }
+        for (Editor *e : allEditors()) e->setLineNumbersVisible(enabled);
     });
 
     connect(&Settings::instance(), &Settings::highlightCurrentLineChanged, this, [this](bool) {
-        // Trigger re-highlight on all open editors by moving cursor
-        for (int i = 0; i < m_tabWidget->count(); ++i) {
-            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-            if (e) {
-                // Force rehighlight by toggling extra selections
-                QTextCursor cursor = e->textCursor();
-                e->setTextCursor(cursor);
-            }
+        // Force a re-highlight of every open editor by re-setting its cursor
+        for (Editor *e : allEditors()) {
+            QTextCursor cursor = e->textCursor();
+            e->setTextCursor(cursor);
         }
     });
 
@@ -314,8 +287,8 @@ void MainWindow::setupMenus()
     m_saveAction = m_fileMenu->addAction(tr("&Save"), this, &MainWindow::saveFile);
     m_saveAction->setShortcut(QKeySequence::Save);
 
-    QAction *saveAsAction = m_fileMenu->addAction(tr("Save &As..."), this, &MainWindow::saveFileAs);
-    saveAsAction->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_S));
+    m_saveAsAction = m_fileMenu->addAction(tr("Save &As..."), this, &MainWindow::saveFileAs);
+    m_saveAsAction->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_S));
 
     m_saveAllAction = m_fileMenu->addAction(tr("Save A&ll"), this, &MainWindow::saveAllFiles);
     m_saveAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
@@ -541,7 +514,6 @@ void MainWindow::setupMenus()
     QAction *splitHorizAction = m_viewMenu->addAction(tr("Split &Horizontal"), this, &MainWindow::splitHorizontal);
     splitHorizAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Backslash));
 
-    m_viewMenu->addAction(tr("&Clone to Other View"), this, &MainWindow::cloneToOtherView);
     m_viewMenu->addAction(tr("&Move to Other View"), this, &MainWindow::moveToOtherView);
 
     QAction *closeSplitAction = m_viewMenu->addAction(tr("Close S&plit"), this, &MainWindow::closeSplit);
@@ -557,24 +529,23 @@ void MainWindow::setupMenus()
     QActionGroup *encGroup = new QActionGroup(this);
 
     QAction *encUtf8 = m_encodingMenu->addAction(tr("Encode in UTF-8"), this, &MainWindow::convertToUTF8);
-    encUtf8->setCheckable(true);
-    encUtf8->setChecked(true);
+    encUtf8->setData(QStringLiteral("UTF-8"));
     encGroup->addAction(encUtf8);
 
     QAction *encUtf8Bom = m_encodingMenu->addAction(tr("Encode in UTF-8-BOM"), this, &MainWindow::convertToUTF8BOM);
-    encUtf8Bom->setCheckable(true);
+    encUtf8Bom->setData(QStringLiteral("UTF-8-BOM"));
     encGroup->addAction(encUtf8Bom);
 
     QAction *encAnsi = m_encodingMenu->addAction(tr("Encode in ANSI"), this, &MainWindow::convertToANSI);
-    encAnsi->setCheckable(true);
+    encAnsi->setData(QStringLiteral("ISO-8859-1"));
     encGroup->addAction(encAnsi);
 
     QAction *encUcs2Be = m_encodingMenu->addAction(tr("Encode in UCS-2 BE BOM"), this, &MainWindow::convertToUCS2BE);
-    encUcs2Be->setCheckable(true);
+    encUcs2Be->setData(QStringLiteral("UTF-16BE-BOM"));
     encGroup->addAction(encUcs2Be);
 
     QAction *encUcs2Le = m_encodingMenu->addAction(tr("Encode in UCS-2 LE BOM"), this, &MainWindow::convertToUCS2LE);
-    encUcs2Le->setCheckable(true);
+    encUcs2Le->setData(QStringLiteral("UTF-16LE-BOM"));
     encGroup->addAction(encUcs2Le);
 
     // ============================================================
@@ -857,6 +828,7 @@ Editor *MainWindow::openFile(const QString &filePath)
     int index = m_tabWidget->addTab(editor, doc->displayName());
     m_tabWidget->setTabIcon(index, TabBar::iconForFile(path));
     m_tabWidget->setCurrentIndex(index);
+    showOpenNotices(doc);
 
     if (m_lspBridge) m_lspBridge->onEditorOpened(editor);
 
@@ -868,86 +840,155 @@ Editor *MainWindow::openFile(const QString &filePath)
 
 void MainWindow::saveFile()
 {
-    Editor *editor = currentEditor();
-    if (!editor || !editor->document()) {
-        return;
-    }
-
-    // Sync editor content to document before saving
-    editor->syncToDocument();
-
-    Document *doc = editor->document();
-    if (doc->isUntitled()) {
-        saveFileAs();
-        return;
-    }
-
-    if (doc->save() == SaveResult::Ok) {
-        // Clears both modified flags only once the write succeeded. A no-op while
-        // syncToDocument still clears the editor flag; it is what keeps the
-        // editor clean once T2.2 stops doing that before the save.
-        editor->runSyncedEdit(SyncTarget::Clean, {});
-        PluginManager::instance().broadcastFileSaved(doc->filePath());
-        updateWindowTitle();
-        updateTabTextForDocument(doc);
-
-        // Auto-upload if this is a remote file
-        QString localPath = doc->filePath();
-        if (m_remoteFiles.contains(localPath)) {
-            uploadRemoteFile(localPath);
-        }
-    } else {
-        QMessageBox::warning(this, tr("Error"), tr("Could not save file."));
-    }
+    saveEditor(currentEditor());
 }
 
 void MainWindow::saveFileAs()
 {
-    Editor *editor = currentEditor();
-    if (!editor || !editor->document()) {
-        return;
-    }
-
-    QString path = QFileDialog::getSaveFileName(this, tr("Save File As"), QString(),
-                                                 FileUtils::combinedFilter());
-    if (path.isEmpty()) {
-        return;
-    }
-
-    // Sync editor content to document before saving
-    editor->syncToDocument();
-
-    Document *doc = editor->document();
-    if (doc->saveAs(path) == SaveResult::Ok) {
-        // Same reasoning as saveFile: clear both flags only after a good write.
-        editor->runSyncedEdit(SyncTarget::Clean, {});
-        // Update language based on new extension
-        QString ext = FileUtils::fileExtension(path);
-        QString language = LanguageManager::instance().languageForExtension(ext);
-        doc->setLanguage(language);
-
-        updateWindowTitle();
-        updateTabTextForDocument(doc);
-    } else {
-        QMessageBox::warning(this, tr("Error"), tr("Could not save file."));
-    }
+    saveEditorAs(currentEditor());
 }
 
 void MainWindow::saveAllFiles()
 {
-    auto saveInWidget = [this](TabWidget *tw) {
-        if (!tw) return;
-        for (int i = 0; i < tw->count(); ++i) {
-            Editor *editor = qobject_cast<Editor*>(tw->widget(i));
-            if (editor && editor->document() && editor->document()->isModified()) {
-                tw->setCurrentIndex(i);
-                editor->setFocus();
-                saveFile();
-            }
+    // Each save names its editor, so no tab is activated or focused on the way.
+    // Read-only and partial-view documents cannot be saved and are skipped.
+    for (Editor *editor : allEditors()) {
+        Document *doc = editor->document();
+        if (doc && doc->isModified() && !doc->isReadOnly() && !doc->isPartialView()) {
+            saveEditor(editor);
         }
-    };
-    saveInWidget(m_tabWidget);
-    saveInWidget(m_tabWidget2);
+    }
+}
+
+// Saves this editor's document, whichever pane holds it and whatever has focus.
+// Returns true only when the file was written (SaveResult::Ok).
+bool MainWindow::saveEditor(Editor *editor)
+{
+    if (!editor || !editor->document()) {
+        return false;
+    }
+    Document *doc = editor->document();
+    if (doc->isUntitled()) {
+        return saveEditorAs(editor);
+    }
+    editor->syncToDocument();
+    if (!writeDocument(editor, doc->filePath())) {
+        return false;
+    }
+    finishEditorSave(editor);
+    const QString localPath = doc->filePath();
+    if (m_remoteFiles.contains(localPath)) {
+        uploadRemoteFile(localPath);  // auto-upload a remote file's local copy
+    }
+    return true;
+}
+
+bool MainWindow::saveEditorAs(Editor *editor)
+{
+    if (!editor || !editor->document()) {
+        return false;
+    }
+    Document *doc = editor->document();
+    if (doc->isPartialView()) {
+        reportSaveFailure(doc, SaveResult::PartialView);
+        return false;
+    }
+    // A restored draft whose original could not be reopened keeps that path
+    const QString suggested = doc->isUntitled() ? doc->property("originalFilePath").toString()
+                                                : doc->filePath();
+    const QString path = QFileDialog::getSaveFileName(this, tr("Save File As"), suggested,
+                                                      FileUtils::combinedFilter());
+    if (path.isEmpty()) {
+        return false;
+    }
+    editor->syncToDocument();
+    if (!writeDocument(editor, path)) {
+        return false;
+    }
+    // The extension may have changed, so detect the language again
+    const QString ext = FileUtils::fileExtension(path);
+    doc->setLanguage(LanguageManager::instance().languageForExtension(ext));
+    finishEditorSave(editor);
+    return true;
+}
+
+// Writes doc to path and reports any failure. "Save directly" is offered only
+// when the Document says a direct write is safe (the folder refused the temp
+// file); after ENOSPC or another error it would truncate the original.
+bool MainWindow::writeDocument(Editor *editor, const QString &path)
+{
+    Document *doc = editor->document();
+    noteMixedLineEndings(doc);
+    SaveResult result = doc->saveAs(path);
+    if (result == SaveResult::IoError && doc->directWriteAvailable()) {
+        if (!confirmDirectWrite(doc)) {
+            return false;  // the user cancelled; the file is untouched
+        }
+        result = doc->saveAs(path, WriteMode::AllowDirect);
+    }
+    if (result == SaveResult::EncodeLossy) {
+        return resolveEncodeLossy(editor, path);
+    }
+    if (result != SaveResult::Ok) {
+        reportSaveFailure(doc, result);
+        return false;
+    }
+    return true;
+}
+
+// Both modified flags are cleared here, and only after SaveResult::Ok.
+void MainWindow::finishEditorSave(Editor *editor)
+{
+    Document *doc = editor->document();
+    editor->runSyncedEdit(SyncTarget::Clean, {});
+    if (doc->lastSaveWasDirect()) {
+        showNotification(tr("'%1' was written in place to keep its hard link or owner, "
+                            "not atomically.").arg(doc->displayName()));
+    }
+    PluginManager::instance().broadcastFileSaved(doc->filePath());
+    updateWindowTitle();
+    updateTabTextForDocument(doc);
+    updateMenuState();
+}
+
+bool MainWindow::confirmDirectWrite(Document *doc)
+{
+    QMessageBox box(QMessageBox::Warning, tr("Save Failed"),
+                    tr("'%1' could not be saved safely: %2\n\n"
+                       "The folder does not allow a temporary file, so the file cannot be "
+                       "replaced atomically. Saving directly writes over the file in place; "
+                       "if the write is interrupted, the file can be left incomplete.")
+                        .arg(doc->displayName(), doc->lastError()),
+                    QMessageBox::Cancel, this);
+    QPushButton *direct = box.addButton(tr("Save Directly (Not Atomic)"), QMessageBox::AcceptRole);
+    box.setDefaultButton(QMessageBox::Cancel);
+    box.exec();
+    return box.clickedButton() == direct;
+}
+
+// Tells the user why nothing was written. Every result but Ok leaves both
+// modified flags set, so the close prompt and the cache still see the edits.
+void MainWindow::reportSaveFailure(Document *doc, SaveResult result)
+{
+    const QString name = doc->displayName();
+    switch (result) {
+    case SaveResult::PartialView:
+        showNotification(tr("Only part of '%1' is loaded, so it cannot be saved. "
+                            "The file on disk is unchanged.").arg(name));
+        break;
+    case SaveResult::ReadOnly:
+        showNotification(tr("'%1' is read-only, so it cannot be saved. "
+                            "The file on disk is unchanged.").arg(name));
+        break;
+    case SaveResult::EncodeLossy:
+    case SaveResult::IoError:
+        QMessageBox::warning(this, tr("Save Failed"),
+                             tr("Could not save '%1': %2\nThe file on disk is unchanged.")
+                                 .arg(name, doc->lastError()));
+        break;
+    case SaveResult::Ok:
+        break;
+    }
 }
 
 void MainWindow::reloadFromDisk()
@@ -956,60 +997,80 @@ void MainWindow::reloadFromDisk()
     if (!editor || !editor->document() || editor->document()->isUntitled()) {
         return;
     }
-
-    if (editor->document()->isModified()) {
-        int ret = QMessageBox::question(
-            this, tr("Reload"),
-            tr("Are you sure? Unsaved changes will be lost."),
-            QMessageBox::Yes | QMessageBox::No);
-        if (ret != QMessageBox::Yes) {
-            return;
-        }
+    if (editor->document()->isModified()
+        && QMessageBox::question(this, tr("Reload"),
+                                 tr("Reload '%1' from disk? Your unsaved changes will be lost.")
+                                     .arg(editor->document()->displayName()),
+                                 QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes) {
+        return;
     }
-
-    QString filePath = editor->document()->filePath();
-    editor->document()->load(filePath);
-    editor->syncFromDocument();
-    updateWindowTitle();
+    reloadEditor(editor);
 }
 
 bool MainWindow::closeFile(int index)
 {
     TabWidget *tw = activeTabWidget();
+    return closeTab(tw, index < 0 ? tw->currentIndex() : index);
+}
 
-    if (index < 0) {
-        index = tw->currentIndex();
+// True when an editor other than this one, in either pane, shows its Document.
+bool MainWindow::isDocumentShownElsewhere(const Editor *editor) const
+{
+    const Document *doc = editor->document();
+    if (!doc) return false;
+    for (const Editor *other : allEditors()) {
+        if (other != editor && other->document() == doc) return true;
     }
+    return false;
+}
 
-    if (index < 0 || index >= tw->count()) {
+// Asks what to do with a modified document before its last editor closes. The
+// prompt keys on isModified() alone, so read-only documents are asked too.
+// Returns false when the user cancels or the save does not complete.
+bool MainWindow::confirmCloseEditor(Editor *editor)
+{
+    Document *doc = editor->document();
+    if (!doc || !doc->isModified()) {
+        return true;
+    }
+    if (doc->isReadOnly() || doc->isPartialView()) {
+        // Save would be refused, so offer only Discard or Cancel.
+        return QMessageBox::question(
+                   this, tr("Unsaved Changes"),
+                   tr("'%1' is read-only, so its changes cannot be saved. Discard them?")
+                       .arg(doc->displayName()),
+                   QMessageBox::Discard | QMessageBox::Cancel) == QMessageBox::Discard;
+    }
+    const QMessageBox::StandardButton result = QMessageBox::question(
+        this, tr("Save Changes"),
+        tr("Do you want to save changes to '%1'?").arg(doc->displayName()),
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    if (result == QMessageBox::Cancel) {
         return false;
     }
+    // Save this editor, not whichever one has focus
+    return result == QMessageBox::Discard || saveEditor(editor);
+}
 
+// Closes the tab at index in the given pane. The pane is passed explicitly so a
+// close request acts on the tab bar that sent it, never on the focused pane.
+bool MainWindow::closeTab(TabWidget *tw, int index)
+{
+    if (!tw || index < 0 || index >= tw->count()) {
+        return false;
+    }
     Editor *editor = qobject_cast<Editor*>(tw->widget(index));
     if (!editor) {
         return false;
     }
 
-    Document *doc = editor->document();
-    if (doc && doc->isModified() && !doc->isReadOnly()) {
-        QMessageBox::StandardButton result = QMessageBox::question(
-            this, tr("Save Changes"),
-            tr("Do you want to save changes to '%1'?").arg(doc->displayName()),
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-
-        if (result == QMessageBox::Cancel) {
-            return false;
-        }
-        if (result == QMessageBox::Save) {
-            tw->setCurrentIndex(index);
-            editor->setFocus();
-            saveFile();
-            if (doc->isModified()) {
-                return false;  // Save failed or canceled
-            }
-        }
+    // Lifetime guard: while another editor shows this Document it stays open,
+    // so closing one view never frees a Document the other pane still uses.
+    const bool shared = isDocumentShownElsewhere(editor);
+    if (!shared && !confirmCloseEditor(editor)) {
+        return false;
     }
-
+    Document *doc = shared ? nullptr : editor->document();
     const QString closedPath = doc ? doc->filePath() : QString();
 
     tw->removeTab(index);
@@ -1017,21 +1078,18 @@ bool MainWindow::closeFile(int index)
     if (doc) {
         DocumentManager::instance().closeDocument(doc, true);
     }
-
     if (!closedPath.isEmpty()) {
+        m_pendingReloads.remove(closedPath);
         PluginManager::instance().broadcastFileClosed(closedPath);
     }
 
-    // Auto-unsplit if split 2 is now empty
     if (tw == m_tabWidget2) {
-        checkUnsplitNeeded();
+        checkUnsplitNeeded();  // auto-unsplit when pane 2 is now empty
     }
-
-    // Create new empty tab if all closed (but not if we're closing all to exit)
+    // Keep one empty tab, unless every tab is being closed to exit
     if (m_tabWidget->count() == 0 && !m_closingAll) {
         newFile();
     }
-
     updateWindowTitle();
     return true;
 }
@@ -1041,24 +1099,17 @@ bool MainWindow::closeAllFiles()
     // Prevent closeFile from creating new tabs while we're closing all
     m_closingAll = true;
 
-    // Close split 2 tabs first (unsplits automatically when empty)
-    if (m_tabWidget2 && m_tabWidget2->count() > 0) {
-        // Focus split 2 so closeFile operates on it
-        if (m_tabWidget2->currentWidget())
-            m_tabWidget2->currentWidget()->setFocus();
-        while (m_tabWidget2 && m_tabWidget2->count() > 0) {
-            if (!closeFile(0)) {
-                m_closingAll = false;
-                return false;
-            }
+    // Close pane 2 first (it unsplits when empty), then pane 1. Each close names
+    // its pane, so the result never depends on which pane has focus.
+    while (m_tabWidget2 && m_tabWidget2->count() > 0) {
+        if (!closeTab(m_tabWidget2, 0)) {
+            m_closingAll = false;
+            return false;
         }
     }
 
-    // Close split 1 tabs
-    if (m_tabWidget->currentWidget())
-        m_tabWidget->currentWidget()->setFocus();
     while (m_tabWidget->count() > 0) {
-        if (!closeFile(0)) {
+        if (!closeTab(m_tabWidget, 0)) {
             m_closingAll = false;
             return false;
         }
@@ -1165,11 +1216,15 @@ void MainWindow::onTabChanged(int index)
     }
 
     updateGitBranch();
+    showPendingReloadBar();
 }
 
 void MainWindow::onTabCloseRequested(int index)
 {
-    closeFile(index);
+    // Both panes' tab bars connect here. Route by the sender, not by focus:
+    // a close on tab bar 1 must close pane 1's tab even when pane 2 has focus.
+    TabWidget *tw = qobject_cast<TabWidget*>(sender());
+    closeTab(tw ? tw : activeTabWidget(), index);
 }
 
 void MainWindow::onDocumentModified(bool modified)
@@ -1599,8 +1654,8 @@ void MainWindow::find()
             Editor *e = currentEditor();
             if (!e || !m_searchDialog) return;
             SearchEngine engine;
-            QString result = engine.replaceInText(
-                e->toPlainText(), m_searchDialog->searchText(),
+            QString result = engine.replaceInText(  // rawText keeps U+00A0 and U+2028 (D11)
+                e->rawText(), m_searchDialog->searchText(),
                 m_searchDialog->replaceText(), m_searchDialog->searchOptions());
             e->selectAll();
             e->insertPlainText(result);
@@ -2120,24 +2175,12 @@ void MainWindow::updateMenuState()
         }
     }
 
-    // File operations
-    if (m_saveAction) m_saveAction->setEnabled(isModified);
-    if (m_saveAllAction) {
-        bool anyModified = false;
-        auto checkModified = [&](TabWidget *tw) {
-            if (!tw) return;
-            for (int i = 0; i < tw->count(); ++i) {
-                Editor *e = qobject_cast<Editor*>(tw->widget(i));
-                if (e && e->document() && e->document()->isModified()) {
-                    anyModified = true;
-                    return;
-                }
-            }
-        };
-        checkModified(m_tabWidget);
-        checkModified(m_tabWidget2);
-        m_saveAllAction->setEnabled(anyModified);
-    }
+    // File operations. A partial view cannot be saved or converted (D3).
+    const bool saveable = hasEditor && editor->document() && !editor->document()->isPartialView();
+    if (m_saveAction) m_saveAction->setEnabled(isModified && saveable);
+    if (m_saveAsAction) m_saveAsAction->setEnabled(saveable);
+    if (m_saveAllAction) m_saveAllAction->setEnabled(anySaveableModified());
+    syncEncodingMenu(saveable && isConvertible(editor->document()));
     if (m_closeAction) m_closeAction->setEnabled(hasEditor);
     if (m_printAction) m_printAction->setEnabled(hasEditor);
 
@@ -2336,7 +2379,7 @@ void MainWindow::connectTabWidget(TabWidget *tw)
         connect(tw, &QTabWidget::currentChanged,
                 this, &MainWindow::onTab2Changed);
         connect(tw, &QTabWidget::tabCloseRequested,
-                this, &MainWindow::onTab2CloseRequested);
+                this, &MainWindow::onTabCloseRequested);
     }
 }
 
@@ -2353,17 +2396,8 @@ void MainWindow::splitView(Qt::Orientation orientation)
     m_tabWidget2 = new TabWidget(this);
     m_splitter->addWidget(m_tabWidget2);
     connectTabWidget(m_tabWidget2);
-
-    // Clone current document into the new split
-    Editor *current = qobject_cast<Editor*>(m_tabWidget->currentWidget());
-    if (current && current->document()) {
-        Editor *cloned = createEditor(current->document());
-        QString title = current->document()->displayName();
-        int idx = m_tabWidget2->addTab(cloned, title);
-        m_tabWidget2->setTabIcon(idx,
-            TabBar::iconForFile(current->document()->filePath()));
-        m_tabWidget2->setCurrentIndex(idx);
-    }
+    // The new pane starts empty. Splitting never clones the current document:
+    // a Document is shown by at most one editor (spec D5).
 }
 
 void MainWindow::unsplit()
@@ -2431,58 +2465,8 @@ void MainWindow::onTab2Changed(int index)
         if (m_lspBridge) {
             m_lspBridge->onEditorChanged(currentEditor());
         }
+        showPendingReloadBar();
     }
-}
-
-void MainWindow::onTab2CloseRequested(int index)
-{
-    if (!m_tabWidget2 || index < 0
-        || index >= m_tabWidget2->count()) {
-        return;
-    }
-
-    Editor *editor = qobject_cast<Editor*>(
-        m_tabWidget2->widget(index));
-    if (!editor) return;
-
-    Document *doc = editor->document();
-
-    // Check if this document has another editor in m_tabWidget
-    bool hasOtherEditor = false;
-    for (int i = 0; i < m_tabWidget->count(); ++i) {
-        Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-        if (e && e->document() == doc) {
-            hasOtherEditor = true;
-            break;
-        }
-    }
-
-    // If no other editor has this doc, prompt to save
-    if (!hasOtherEditor && doc && doc->isModified()
-        && !doc->isReadOnly()) {
-        QMessageBox::StandardButton result = QMessageBox::question(
-            this, tr("Save Changes"),
-            tr("Do you want to save changes to '%1'?")
-                .arg(doc->displayName()),
-            QMessageBox::Save | QMessageBox::Discard
-                | QMessageBox::Cancel);
-        if (result == QMessageBox::Cancel) return;
-        if (result == QMessageBox::Save) {
-            m_tabWidget2->setCurrentIndex(index);
-            saveFile();
-            if (doc->isModified()) return;
-        }
-    }
-
-    m_tabWidget2->removeTab(index);
-    if (editor) editor->deleteLater();
-
-    // If the document has no other editors, close it
-    if (!hasOtherEditor) {
-        DocumentManager::instance().closeDocument(doc, true);
-    }
-
-    checkUnsplitNeeded();
 }
 
 void MainWindow::checkUnsplitNeeded()

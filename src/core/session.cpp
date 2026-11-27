@@ -3,6 +3,7 @@
 #include "ui/editor.h"
 #include "ui/tabwidget.h"
 #include "core/document.h"
+#include "utils/fileutils.h"
 #include <QFile>
 #include <QDir>
 #include <QJsonDocument>
@@ -11,6 +12,8 @@
 #include <QStandardPaths>
 #include <QUuid>
 #include <QScrollBar>
+#include <QFileInfo>
+#include <QTabWidget>
 
 Session &Session::instance()
 {
@@ -24,33 +27,54 @@ Session::Session()
 
 void Session::save(MainWindow *window)
 {
-    QJsonObject json = windowToJson(window);
-
-    QFile file(sessionFilePath());
-    if (!file.open(QIODevice::WriteOnly)) {
+    const QJsonObject json = windowToJson(window);
+    // After a corrupt session.json, write only once the window state differs
+    // from what it was when the corrupt file was found.
+    if (m_holdSessionWrites && json == m_heldSession) {
         return;
     }
-
-    QJsonDocument doc(json);
-    file.write(doc.toJson());
+    m_holdSessionWrites = false;
+    FileUtils::writeFileAtomic(sessionFilePath(), QJsonDocument(json).toJson());
 }
 
+// Returns the parsed object, or an empty one after copying an unparsable file
+// to "<file>.corrupt-<timestamp>". The original is never modified.
+QJsonObject Session::readSessionFile(const QString &path, bool *corrupt) const
+{
+    *corrupt = false;
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return QJsonObject();
+    }
+    const QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    if (doc.isObject()) {
+        return doc.object();
+    }
+    FileUtils::preserveCorruptCopy(path);
+    *corrupt = true;
+    return QJsonObject();
+}
+
+// Drafts first, so a file reopened from the session finds its draft already
+// placed; a corrupt session.json no longer stops draft restore.
 void Session::restore(MainWindow *window)
 {
-    QFile file(sessionFilePath());
-    if (!file.open(QIODevice::ReadOnly)) {
+    restoreDrafts(window);
+    restoreFiles(window);
+}
+
+void Session::restoreFiles(MainWindow *window)
+{
+    bool corrupt = false;
+    const QJsonObject json = readSessionFile(sessionFilePath(), &corrupt);
+    if (corrupt) {
+        m_heldSession = windowToJson(window);
+        m_holdSessionWrites = true;
+    }
+    if (corrupt || !QFile::exists(sessionFilePath())) {
         return;
     }
-
-    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-    if (doc.isNull()) {
-        return;
-    }
-
-    jsonToWindow(doc.object(), window);
-
-    // Restore any unsaved documents from the cache
-    restoreUnsavedDocuments(window);
+    jsonToWindow(json, window);
 }
 
 QStringList Session::savedSessions() const
@@ -70,30 +94,19 @@ QStringList Session::savedSessions() const
 
 void Session::saveSession(const QString &name, MainWindow *window)
 {
-    QJsonObject json = windowToJson(window);
-
-    QFile file(namedSessionPath(name));
-    if (!file.open(QIODevice::WriteOnly)) {
-        return;
-    }
-
-    QJsonDocument doc(json);
-    file.write(doc.toJson());
+    // An explicit save by name is the user's change, so it always writes.
+    FileUtils::writeFileAtomic(namedSessionPath(name),
+                               QJsonDocument(windowToJson(window)).toJson());
 }
 
 void Session::loadSession(const QString &name, MainWindow *window)
 {
-    QFile file(namedSessionPath(name));
-    if (!file.open(QIODevice::ReadOnly)) {
+    bool corrupt = false;
+    const QJsonObject json = readSessionFile(namedSessionPath(name), &corrupt);
+    if (corrupt || !QFile::exists(namedSessionPath(name))) {
         return;
     }
-
-    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-    if (doc.isNull()) {
-        return;
-    }
-
-    jsonToWindow(doc.object(), window);
+    jsonToWindow(json, window);
 }
 
 void Session::deleteSession(const QString &name)
@@ -128,10 +141,9 @@ QJsonObject Session::windowToJson(MainWindow *window) const
 
     // Open files
     QJsonArray files;
-    TabWidget *tabWidget = window->tabWidget();
-    for (int i = 0; i < tabWidget->count(); ++i) {
-        Editor *editor = qobject_cast<Editor*>(tabWidget->widget(i));
-        if (!editor || !editor->document() || editor->document()->isUntitled()) {
+    // Both panes: a file moved to the second view is still part of the session.
+    for (Editor *editor : window->allEditors()) {
+        if (!editor->document() || editor->document()->isUntitled()) {
             continue;
         }
 
@@ -209,121 +221,261 @@ void Session::jsonToWindow(const QJsonObject &json, MainWindow *window)
     }
 }
 
+namespace {
+
+QString lineEndingName(Document::LineEnding ending)
+{
+    switch (ending) {
+    case Document::Windows: return QStringLiteral("CRLF");
+    case Document::ClassicMac: return QStringLiteral("CR");
+    case Document::Unix: break;
+    }
+    return QStringLiteral("LF");
+}
+
+Document::LineEnding lineEndingFromName(const QString &name)
+{
+    if (name == QLatin1String("CRLF")) return Document::Windows;
+    if (name == QLatin1String("CR")) return Document::ClassicMac;
+    return Document::Unix;
+}
+
+// The title the tab shows, from whichever pane holds the editor.
+QString tabTitle(Editor *editor)
+{
+    for (QWidget *w = editor->parentWidget(); w; w = w->parentWidget()) {
+        if (auto *tabs = qobject_cast<QTabWidget *>(w)) {
+            const int index = tabs->indexOf(editor);
+            if (index >= 0) {
+                return tabs->tabText(index);
+            }
+        }
+    }
+    return editor->document()->displayName();
+}
+
+// The editor's QTextDocument, not the PieceTable, holds what the user typed:
+// the PieceTable is only synced on save. Reading it lost untitled drafts.
+bool needsCaching(Editor *editor)
+{
+    Document *doc = editor->document();
+    if (!doc) {
+        return false;
+    }
+    const bool hasContent = !editor->QPlainTextEdit::document()->isEmpty();
+    return doc->isModified() || (doc->isUntitled() && hasContent);
+}
+
+bool moveTree(const QString &from, const QString &to)
+{
+    return QDir().rename(from, to);
+}
+
+} // namespace
+
 QString Session::unsavedCacheDir() const
 {
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
            + "/sessions/unsaved";
 }
 
-void Session::saveUnsavedDocuments(MainWindow *window)
+// Spec 3 D4 recovery table. Each state is a point where a cache write or a
+// v1.0.0 swap was interrupted; every branch keeps the most complete set.
+void Session::recoverCacheDirectories()
 {
-    QString tempDir = unsavedCacheDir() + "_tmp";
-    QDir tmpDirObj(tempDir);
-    if (tmpDirObj.exists()) {
-        tmpDirObj.removeRecursively();
-    }
-    tmpDirObj.mkpath(".");
+    const QString base = unsavedCacheDir();
+    const QString fresh = base + ".new";
+    const QString old = base + ".old";
+    const QString legacy = base + "_tmp";
+    QDir().mkpath(QFileInfo(base).absolutePath());
 
-    TabWidget *tabs = window->tabWidget();
-    for (int i = 0; i < tabs->count(); ++i) {
-        Editor *editor = qobject_cast<Editor *>(tabs->widget(i));
-        if (!editor || !editor->document()) {
+    QDir(fresh).removeRecursively();  // incomplete write: the old set is whole
+    if (QDir(old).exists()) {
+        if (QDir(base).exists()) {
+            QDir(old).removeRecursively();  // the final delete did not finish
+        } else {
+            moveTree(old, base);  // crash between the two renames
+        }
+    }
+    if (QDir(legacy).exists()) {
+        if (!QDir(base).exists()) {
+            moveTree(legacy, base);
+        } else {
+            bool copied = true;
+            for (const QString &name : QDir(legacy).entryList(QDir::Files)) {
+                if (!QFile::exists(base + "/" + name)) {
+                    copied = QFile::copy(legacy + "/" + name, base + "/" + name) && copied;
+                }
+            }
+            if (copied) {
+                QDir(legacy).removeRecursively();
+            }
+        }
+    }
+    FileUtils::fsyncDirectory(QFileInfo(base).absolutePath());
+}
+
+void Session::moveToCorruptDir(const QString &path) const
+{
+    const QString dir = unsavedCacheDir() + ".corrupt";
+    QDir().mkpath(dir);
+    QString target = dir + "/" + QFileInfo(path).fileName();
+    if (QFile::exists(target)) {
+        target += "." + QUuid::createUuid().toString(QUuid::Id128);
+    }
+    if (!QFile::rename(path, target) && QFile::copy(path, target)) {
+        QFile::remove(path);
+    }
+}
+
+// Parsed entries of the cached set, skipping names in `skip`. An entry that
+// does not parse is moved aside and kept, never dropped.
+QList<QJsonObject> Session::readCacheEntries(const QSet<QString> &skip)
+{
+    QList<QJsonObject> entries;
+    QDir dir(unsavedCacheDir());
+    for (const QString &name : dir.entryList({"*.json"}, QDir::Files, QDir::Name)) {
+        if (skip.contains(name)) {
             continue;
         }
-
-        Document *doc = editor->document();
-        bool hasContent = !doc->text().isEmpty();
-        bool isModifiedOrUntitledWithContent =
-            doc->isModified() || (doc->isUntitled() && hasContent);
-
-        if (!isModifiedOrUntitledWithContent) {
+        m_seenEntries.insert(name);
+        QFile file(dir.absoluteFilePath(name));
+        const QJsonDocument doc = file.open(QIODevice::ReadOnly)
+            ? QJsonDocument::fromJson(file.readAll()) : QJsonDocument();
+        file.close();
+        if (!doc.isObject()) {
+            moveToCorruptDir(dir.absoluteFilePath(name));
             continue;
         }
-
-        // Use editor->toPlainText() NOT doc->text() — the PieceTable may
-        // not be in sync with the editor's QTextDocument content
-        QJsonObject obj;
-        obj["text"] = editor->toPlainText();
-        obj["cursorPosition"] = editor->textCursor().position();
-        obj["scrollPosition"] = editor->verticalScrollBar()->value();
-        obj["title"] = tabs->tabText(i);
-        obj["originalFilePath"] = doc->filePath();
-        obj["encoding"] = doc->encoding();
-        obj["language"] = doc->language();
-
-        QString fileName = QUuid::createUuid().toString(QUuid::Id128)
-                           + ".json";
-        QFile file(tempDir + "/" + fileName);
-        if (file.open(QIODevice::WriteOnly)) {
-            file.write(QJsonDocument(obj).toJson());
-        }
+        entries.append(doc.object());
     }
+    return entries;
+}
 
-    // Atomically swap: remove old cache, rename temp to actual
-    QDir oldDir(unsavedCacheDir());
-    if (oldDir.exists()) {
-        oldDir.removeRecursively();
-    }
-    QString actualDir = unsavedCacheDir();
-    if (!QDir().rename(tempDir, actualDir)) {
-        // Fallback: copy files individually
-        QDir temp(tempDir);
-        QDir().mkpath(actualDir);
-        for (const QString &f : temp.entryList(QDir::Files)) {
-            QFile::copy(tempDir + "/" + f, actualDir + "/" + f);
+void Session::restoreDrafts(MainWindow *window)
+{
+    recoverCacheDirectories();
+    m_unplacedDrafts.clear();
+    for (const QJsonObject &draft : readCacheEntries({})) {
+        if (!placeDraft(window, draft)) {
+            m_unplacedDrafts.append(draft);
         }
-        QDir(tempDir).removeRecursively();
     }
 }
 
 void Session::restoreUnsavedDocuments(MainWindow *window)
 {
-    QDir dir(unsavedCacheDir());
-    if (!dir.exists()) {
-        return;
+    restoreDrafts(window);
+}
+
+// The cached text goes only into the editor whose document is the original
+// file. If it cannot be opened, a new untitled tab takes the text and keeps the
+// path as the "originalFilePath" property (Save As default, and re-cached).
+bool Session::placeDraft(MainWindow *window, const QJsonObject &draft)
+{
+    const QString original = draft["originalFilePath"].toString();
+    Editor *editor = nullptr;
+    if (!original.isEmpty() && QFileInfo(original).isReadable()) {
+        Editor *opened = window->openFile(original);
+        if (opened && opened->document() && opened->document()->filePath() == original) {
+            editor = opened;
+        }
     }
-
-    QStringList cacheFiles =
-        dir.entryList(QStringList() << "*.json", QDir::Files);
-    if (cacheFiles.isEmpty()) {
-        return;
-    }
-
-    for (const QString &fileName : cacheFiles) {
-        QFile file(dir.absoluteFilePath(fileName));
-        if (!file.open(QIODevice::ReadOnly)) {
-            continue;
-        }
-
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(file.readAll());
-        file.close();
-
-        if (jsonDoc.isNull()) {
-            continue;
-        }
-
-        QJsonObject obj = jsonDoc.object();
-        QString originalPath = obj["originalFilePath"].toString();
-        QString cachedText = obj["text"].toString();
-
-        if (!originalPath.isEmpty() && QFile::exists(originalPath)) {
-            window->openFile(originalPath);
-        } else {
-            window->newFile();
-        }
-
-        Editor *editor = window->currentEditor();
+    if (!editor) {
+        window->newFile();
+        editor = window->currentEditor();
         if (!editor || !editor->document()) {
-            continue;
+            return false;
         }
-
-        editor->document()->setText(cachedText);
-        editor->syncFromDocument();
-        editor->document()->setModified(true);
-
-        // Remove the cache file after restoring
-        QFile::remove(dir.absoluteFilePath(fileName));
+        if (!original.isEmpty()) {
+            editor->document()->setProperty("originalFilePath", original);
+            window->showNotification(
+                QObject::tr("%1 could not be opened. Its unsaved text was restored in a new tab.")
+                    .arg(original));
+        }
     }
+    Document *doc = editor->document();
+    if (!draft["encoding"].toString().isEmpty()) {
+        doc->setEncoding(draft["encoding"].toString());
+    }
+    if (draft.contains("lineEnding")) {
+        doc->setLineEnding(lineEndingFromName(draft["lineEnding"].toString()));
+    }
+    const QString text = draft["text"].toString();
+    // Modified clears the clean index, so undo cannot make the draft look saved.
+    editor->runSyncedEdit(SyncTarget::Modified, [editor, &text]() {
+        editor->document()->setText(text);
+        editor->syncFromDocument();
+    });
+    return true;
+}
+
+QJsonObject Session::draftEntry(Editor *editor) const
+{
+    Document *doc = editor->document();
+    QJsonObject obj;
+    obj["text"] = editor->rawText();  // keeps U+00A0 and U+2028 (spec D11)
+    obj["cursorPosition"] = editor->textCursor().position();
+    obj["scrollPosition"] = editor->verticalScrollBar()->value();
+    obj["title"] = tabTitle(editor);
+    obj["originalFilePath"] = doc->isUntitled()
+        ? doc->property("originalFilePath").toString() : doc->filePath();
+    obj["encoding"] = doc->encoding();
+    obj["language"] = doc->language();
+    obj["lineEnding"] = lineEndingName(doc->lineEnding());
+    return obj;
+}
+
+void Session::saveUnsavedDocuments(MainWindow *window)
+{
+    // Entries on disk this process never wrote or restored were never placed
+    // (restore has not run): keep them rather than replace them.
+    m_unplacedDrafts += readCacheEntries(m_seenEntries);
+
+    QList<QJsonObject> entries;
+    for (Editor *editor : window->allEditors()) {
+        if (needsCaching(editor)) {
+            entries.append(draftEntry(editor));
+        }
+    }
+    entries += m_unplacedDrafts;
+    replaceCacheSet(entries);
+}
+
+// Write unsaved.new/, then swap it in by two renames. Any failure before the
+// second rename leaves the previous set as unsaved/ (see the recovery table).
+bool Session::replaceCacheSet(const QList<QJsonObject> &entries)
+{
+    const QString base = unsavedCacheDir();
+    const QString fresh = base + ".new";
+    const QString old = base + ".old";
+    QDir(fresh).removeRecursively();
+    if (!QDir().mkpath(fresh)) {
+        return false;
+    }
+    QSet<QString> written;
+    for (const QJsonObject &obj : entries) {
+        const QString name = QUuid::createUuid().toString(QUuid::Id128) + ".json";
+        if (!FileUtils::writeFileAtomic(fresh + "/" + name, QJsonDocument(obj).toJson())) {
+            QDir(fresh).removeRecursively();
+            return false;
+        }
+        written.insert(name);
+    }
+    FileUtils::fsyncDirectory(fresh);
+    QDir(old).removeRecursively();
+    if (QDir(base).exists() && !moveTree(base, old)) {
+        QDir(fresh).removeRecursively();
+        return false;
+    }
+    if (!moveTree(fresh, base)) {
+        moveTree(old, base);
+        return false;
+    }
+    FileUtils::fsyncDirectory(QFileInfo(base).absolutePath());
+    QDir(old).removeRecursively();
+    m_seenEntries = written;
+    return true;
 }
 
 void Session::clearUnsavedCache()

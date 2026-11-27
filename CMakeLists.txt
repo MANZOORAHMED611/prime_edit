@@ -57,6 +57,7 @@ set(CORE_SOURCES
     src/core/islamicbridge.cpp
     src/core/schemavalidator.cpp
     src/core/textcodec.cpp
+    src/core/singleinstance.cpp
 )
 
 set(UI_SOURCES
@@ -127,6 +128,7 @@ set(HEADERS
     src/core/llmevaluator.h
     src/core/islamicbridge.h
     src/core/schemavalidator.h
+    src/core/singleinstance.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h

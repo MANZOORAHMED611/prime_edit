@@ -35,6 +35,15 @@ QString combinedFilter();
 QString createBackup(const QString &path);
 bool restoreBackup(const QString &backupPath, const QString &originalPath);
 
+// Persistence files (spec D10)
+// Writes through QSaveFile: the previous content survives any failed write.
+bool writeFileAtomic(const QString &path, const QByteArray &bytes);
+// Copies an unparsable file to "<path>.corrupt-<yyyyMMdd-hhmmss>" and leaves
+// the original in place. Returns the copy's path, or empty if it failed.
+QString preserveCorruptCopy(const QString &path);
+// fsync on the directory itself, so renames inside it reach the disk.
+bool fsyncDirectory(const QString &path);
+
 }
 
 #endif // FILEUTILS_H
