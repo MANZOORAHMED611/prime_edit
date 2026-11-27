@@ -4,8 +4,9 @@
 
 ### Ubuntu/Debian
 ```bash
-# Qt6 (recommended)
-sudo apt install qt6-base-dev qt6-tools-dev cmake build-essential
+# Qt6 (recommended). libgl-dev is required: without GL/gl.h, Qt6Gui's
+# CMake config fails and the build falls back to (and errors on) Qt5.
+sudo apt install qt6-base-dev libqt6svg6-dev libgl-dev cmake build-essential
 
 # Or Qt5
 sudo apt install qtbase5-dev qt5-qmake qttools5-dev cmake build-essential
@@ -43,6 +44,16 @@ make -j$(nproc)
 
 # Run
 ./PrimeEdit
+```
+
+## Testing
+
+Both suites are built by default (`-DPRIMEEDIT_BUILD_TESTS=OFF` to skip) and
+run headless with an isolated HOME, so they never touch your real PrimeEdit
+settings, session or unsaved-document cache:
+
+```bash
+ctest --output-on-failure
 ```
 
 ## Installing

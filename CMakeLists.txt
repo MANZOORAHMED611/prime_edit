@@ -19,7 +19,10 @@ find_package(Qt6 QUIET COMPONENTS
 )
 
 if(NOT Qt6_FOUND)
-    message(STATUS "Qt6 not found, trying Qt5...")
+    # QUIET hides why Qt6 failed (e.g. missing libgl-dev), and the Qt5 error
+    # that follows is misleading, so surface the real reason first.
+    message(STATUS "Qt6 not usable: ${Qt6_NOT_FOUND_MESSAGE}")
+    message(STATUS "Trying Qt5...")
     find_package(Qt5 REQUIRED COMPONENTS
         Core
         Gui
@@ -165,9 +168,11 @@ set(RESOURCES
     resources/resources.qrc
 )
 
-# Create executable
-add_executable(prime-edit
-    src/main.cpp
+# Everything except main.cpp lives in an object library so the app and the
+# test executables compile from one source list (they had drifted apart).
+# OBJECT, not STATIC: the compiled-in resources.qrc registers itself via a
+# static initializer that a static archive would drop at link time.
+add_library(prime-edit-core OBJECT
     ${CORE_SOURCES}
     ${UI_SOURCES}
     ${SYNTAX_SOURCES}
@@ -176,13 +181,11 @@ add_executable(prime-edit
     ${RESOURCES}
 )
 
-set_target_properties(prime-edit PROPERTIES OUTPUT_NAME "PrimeEdit")
-
-target_include_directories(prime-edit PRIVATE
+target_include_directories(prime-edit-core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(prime-edit PRIVATE
+target_link_libraries(prime-edit-core PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
@@ -195,8 +198,18 @@ target_link_libraries(prime-edit PRIVATE
 # Optional ICU support for enhanced charset detection
 find_package(ICU QUIET COMPONENTS uc data)
 if(ICU_FOUND)
-    target_link_libraries(prime-edit PRIVATE ICU::uc ICU::data)
-    target_compile_definitions(prime-edit PRIVATE HAVE_ICU=1)
+    target_link_libraries(prime-edit-core PUBLIC ICU::uc ICU::data)
+    target_compile_definitions(prime-edit-core PUBLIC HAVE_ICU=1)
+endif()
+
+add_executable(prime-edit src/main.cpp)
+set_target_properties(prime-edit PROPERTIES OUTPUT_NAME "PrimeEdit")
+target_link_libraries(prime-edit PRIVATE prime-edit-core)
+
+option(PRIMEEDIT_BUILD_TESTS "Build the test suites (run with ctest)" ON)
+if(PRIMEEDIT_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
 # Install rules

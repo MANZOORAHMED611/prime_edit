@@ -15,6 +15,7 @@
 #include <QCloseEvent>
 #include <QSignalSpy>
 #include <QStandardPaths>
+#include "test_isolation.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -84,8 +85,7 @@ Editor* getEditor(MainWindow &mw) {
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName("PrimeEdit");
-    app.setOrganizationName("PrimeEdit");
+    isolateFromUserData();
 
     // Load themes
     ThemeManager::instance().loadThemes();

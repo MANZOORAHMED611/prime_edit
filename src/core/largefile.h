@@ -6,6 +6,9 @@
 #include <QVector>
 #include <QString>
 #include <QStringList>
+#include <QFuture>
+
+#include <atomic>
 
 class LargeFileReader : public QObject
 {
@@ -30,14 +33,25 @@ public:
     static constexpr qint64 SPARSE_INDEX_THRESHOLD = 0; // Always sparse for large files
     static constexpr int SPARSE_INTERVAL = 1000; // index every 1000th line
 
-    bool isIndexReady() const { return m_indexReady; }
+    bool isIndexReady() const { return m_indexReady.load(); }
+    // Blocks until the background index build has finished and been
+    // published (indexBuildComplete emitted). Returns false if no build ran.
+    bool waitForIndex();
 
 signals:
     void indexBuildComplete();
 
 private:
-    void buildLineIndex();
+    struct LineIndex {
+        QVector<qint64> offsets;
+        qint64 totalLines = 0;
+    };
+    // Pure function of the mapped bytes: runs on a worker thread and never
+    // touches members, so it cannot race with readers on the owning thread.
+    static LineIndex computeLineIndex(const uchar *data, qint64 size,
+                                      const std::atomic<bool> &cancel);
     void buildLineIndexAsync();
+    void publishIndex(const LineIndex &index);
     qint64 resolveLineOffset(qint64 lineNumber) const;
     QString decodeLine(qint64 offset, qint64 length) const;
 
@@ -47,7 +61,9 @@ private:
     QVector<qint64> m_lineOffsets;
     qint64 m_totalLines = 0;
     bool m_sparseIndex = false;
-    bool m_indexReady = false;
+    std::atomic<bool> m_indexReady{false};
+    std::atomic<bool> m_cancelIndex{false};
+    QFuture<void> m_indexFuture;
     QString m_encoding = "UTF-8";
 };
 
