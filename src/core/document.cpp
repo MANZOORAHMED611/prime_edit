@@ -1,14 +1,30 @@
 #include "document.h"
 #include "charsetdetector.h"
 #include "largefile.h"
+#include "utils/settings.h"
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>
 #include <QCryptographicHash>
-#include <QStringEncoder>
-#include <QStringDecoder>
+#include <QSaveFile>
+#include "textcodec.h"
+
+#include <sys/stat.h>
+#include <unistd.h>
+
+namespace {
+
+// The detector reports BOM presence separately; the encoding name carries it
+// as a "-BOM" suffix so a save writes the BOM back.
+QString detectedEncoding(const QByteArray &data)
+{
+    const CharsetGuess guess = CharsetDetector::detectCharset(data);
+    return guess.hasBom ? guess.name + QStringLiteral("-BOM") : guess.name;
+}
+
+} // namespace
 
 Document::Document(QObject *parent)
     : QObject(parent)
@@ -26,9 +42,9 @@ bool Document::load(const QString &filePath)
     qint64 fileSize = fi.size();
 
     // Determine file mode
-    if (fileSize > LARGE_FILE_THRESHOLD) {
+    if (fileSize > s_largeThreshold) {
         m_fileMode = LargeFile;
-    } else if (fileSize > MEDIUM_FILE_THRESHOLD) {
+    } else if (fileSize > s_mediumThreshold) {
         // Check if file is minified (very few newlines) — treat as Large
         QFile probe(filePath);
         if (probe.open(QIODevice::ReadOnly)) {
@@ -60,13 +76,13 @@ bool Document::load(const QString &filePath)
         // Don't load into PieceTable at all — Editor will load directly
         // into QTextDocument to avoid the double/triple copy that causes OOM
         m_filePath = filePath;
-        m_modified = false;
+        m_modified = m_formatDirty = false;
         setReadOnly(true);
 
         // Detect encoding from first 8KB only
         QFile probe(filePath);
         if (!probe.open(QIODevice::ReadOnly)) return false;
-        m_encoding = CharsetDetector::detect(probe.read(8192));
+        m_encoding = detectedEncoding(probe.read(8192));
         probe.close();
 
         emit filePathChanged(m_filePath);
@@ -84,11 +100,10 @@ bool Document::load(const QString &filePath)
         QByteArray data = file.readAll();
         file.close();
 
-        m_encoding = CharsetDetector::detect(data);
-        QString text = QString::fromUtf8(data);
+        QString text = decodeLoaded(data);
         data.clear(); // free byte array
 
-        m_lineEnding = detectLineEnding(text);
+        m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
         text = normalizeLineEndings(text, Unix);
 
         // Check for long lines — break them
@@ -105,7 +120,7 @@ bool Document::load(const QString &filePath)
 
         m_content.setText(text);
         m_filePath = filePath;
-        m_modified = false;
+        m_modified = m_formatDirty = false;
         emit filePathChanged(m_filePath);
         emit encodingChanged(m_encoding);
         return true;
@@ -123,37 +138,16 @@ bool Document::load(const QString &filePath)
     QByteArray data = file.readAll();
     file.close();
 
-    // Detect encoding using charset detector
-    m_encoding = CharsetDetector::detect(data);
-
-    // Convert to QString
-    QString text;
-    if (m_encoding == "UTF-8" || m_encoding == "UTF-8-BOM") {
-        QByteArray actualData = data;
-        if (data.startsWith("\xEF\xBB\xBF")) {
-            actualData = data.mid(3);
-        }
-        text = QString::fromUtf8(actualData);
-    } else if (m_encoding == "UTF-16LE") {
-        auto decoder = QStringDecoder(QStringDecoder::Utf16LE);
-        text = decoder(data);
-    } else if (m_encoding == "UTF-16BE") {
-        auto decoder = QStringDecoder(QStringDecoder::Utf16BE);
-        text = decoder(data);
-    } else if (m_encoding == "ISO-8859-1") {
-        text = QString::fromLatin1(data);
-    } else {
-        // Default to UTF-8
-        text = QString::fromUtf8(data);
-    }
+    // Detect the charset on the whole file and decode through TextCodec
+    QString text = decodeLoaded(data);
 
     // Detect and normalize line endings
-    m_lineEnding = detectLineEnding(text);
+    m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
     text = normalizeLineEndings(text, Unix);  // Internally use Unix line endings
 
     m_content.setText(text);
     m_filePath = filePath;
-    m_modified = false;
+    m_modified = m_formatDirty = false;
 
     emit filePathChanged(m_filePath);
     emit encodingChanged(m_encoding);
@@ -166,31 +160,19 @@ bool Document::load(const QString &filePath)
 
 namespace {
 
-// The 1.0.0 save-path encoder, moved out of saveAs unchanged so saveAs stays
-// under 50 lines. T1.3 replaces it with TextCodec::encode.
-QByteArray encodeForSave(const QString &text, const QString &encoding)
+// stat() follows symlinks, so these describe the file a save actually replaces.
+bool targetExists(const QString &path, struct stat *st)
 {
-    if (encoding == "UTF-8-BOM") {
-        return QByteArray("\xEF\xBB\xBF") + text.toUtf8();
-    }
-    if (encoding == "UTF-16LE") {
-        auto encoder = QStringEncoder(QStringEncoder::Utf16LE);
-        return encoder(text);
-    }
-    if (encoding == "UTF-16BE") {
-        auto encoder = QStringEncoder(QStringEncoder::Utf16BE);
-        return encoder(text);
-    }
-    if (encoding == "ISO-8859-1") {
-        return text.toLatin1();
-    }
-    return text.toUtf8(); // UTF-8 and every unrecognised name, as in 1.0.0
+    return ::stat(QFile::encodeName(path).constData(), st) == 0;
+}
+
+bool targetWritable(const QString &path)
+{
+    return ::access(QFile::encodeName(path).constData(), W_OK) == 0;
 }
 
 } // namespace
 
-// W0 maps the 1.0.0 bool onto SaveResult (true -> Ok, false -> IoError) without
-// changing what is written; T1.1 gives the refusals and WriteMode their meaning.
 SaveResult Document::save(WriteMode mode)
 {
     if (m_filePath.isEmpty()) {
@@ -200,82 +182,168 @@ SaveResult Document::save(WriteMode mode)
     return saveAs(m_filePath, mode);
 }
 
-SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
+// A partial view holds only part of the file and a read-only document was
+// opened from bytes it cannot reproduce; writing either would destroy data.
+SaveResult Document::refusalFor() const
 {
-    Q_UNUSED(mode);
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        m_lastError = file.errorString();
-        return SaveResult::IoError;
-    }
-
-    // Get text and convert line endings
-    QString text = m_content.text();
-    text = normalizeLineEndings(text, m_lineEnding);
-
-    QByteArray data = encodeForSave(text, m_encoding);
-
-    qint64 written = file.write(data);
-    file.close();
-
-    if (written != data.size()) {
-        m_lastError = file.errorString();
-        return SaveResult::IoError;
-    }
-
-    QString oldPath = m_filePath;
-    m_filePath = filePath;
-    m_modified = false;
-
-    if (oldPath != m_filePath) {
-        emit filePathChanged(m_filePath);
-    }
-    emit modifiedChanged(m_modified);
-    clearRecovery();
-
-    m_lastError.clear();
+    if (isPartialView())
+        return SaveResult::PartialView;
+    if (m_readOnly)
+        return SaveResult::ReadOnly;
     return SaveResult::Ok;
 }
 
-// Placeholders (spec R2-1). These contracts are declared at the W0 base so later
-// suites compile against it; each returns the 1.0.0 behaviour until the named
-// task defines it.
+SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
+{
+    m_directWriteAvailable = false;
+    m_lastSaveWasDirect = false;
+    const SaveResult refusal = refusalFor();
+    if (refusal != SaveResult::Ok) {
+        m_lastError = refusal == SaveResult::PartialView
+            ? tr("Only part of this file is loaded, so it cannot be saved.")
+            : tr("The document is read-only.");
+        return refusal;
+    }
+
+    const QString text = normalizeLineEndings(m_content.text(), m_lineEnding);
+    const EncodeResult encoded = TextCodec::encode(text, m_encoding);
+    if (!encoded.unmappable.isEmpty()) {
+        m_lastError = tr("%n character(s) cannot be encoded in %1.", nullptr,
+                         int(encoded.unmappable.size())).arg(m_encoding);
+        return SaveResult::EncodeLossy;
+    }
+    const QByteArray &data = encoded.bytes;
+
+    struct stat st {};
+    const bool exists = targetExists(filePath, &st);
+    if (exists && !targetWritable(filePath)) {
+        m_lastError = tr("File is read-only.");
+        return SaveResult::IoError;
+    }
+    // An atomic replace would split a hard link or hand the file to us; the
+    // user asked to save this file, so write it in place instead.
+    const bool direct = exists && (st.st_nlink > 1 || st.st_uid != ::geteuid());
+    const SaveResult result = direct ? writeDirect(filePath, data)
+                                     : writeAtomic(filePath, data, mode);
+    if (result != SaveResult::Ok)
+        return result;
+
+    m_lastSaveWasDirect = direct;
+    finishSave(filePath);
+    return SaveResult::Ok;
+}
+
+SaveResult Document::writeAtomic(const QString &path, const QByteArray &data, WriteMode mode)
+{
+    // QSaveFile::commit() fdatasyncs the temp file before the rename (checked
+    // with strace on Qt 6.2.4), so no extra fsync is needed here.
+    QSaveFile file(path);
+    // Only after the user confirmed: QSaveFile then writes in place when it
+    // cannot create its temp file next to the target.
+    file.setDirectWriteFallback(mode == WriteMode::AllowDirect);
+    if (!file.open(QIODevice::WriteOnly)) {
+        m_lastError = file.errorString();
+        // Offered only when the directory refused the temp file and the target
+        // (already checked writable) exists. Never after ENOSPC or another
+        // error, where a direct write would truncate the original.
+        const QString dir = QFileInfo(path).absolutePath();
+        m_directWriteAvailable = QFileInfo::exists(path) && !targetWritable(dir);
+        return SaveResult::IoError;
+    }
+    if (file.write(data) != data.size() || !file.commit()) {
+        m_lastError = file.errorString();
+        file.cancelWriting();
+        return SaveResult::IoError;
+    }
+    return SaveResult::Ok;
+}
+
+SaveResult Document::writeDirect(const QString &path, const QByteArray &data)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        m_lastError = file.errorString();
+        return SaveResult::IoError;
+    }
+    const bool ok = file.write(data) == data.size() && file.flush()
+        && ::fsync(file.handle()) == 0;
+    if (!ok)
+        m_lastError = file.errorString();
+    file.close();
+    return ok ? SaveResult::Ok : SaveResult::IoError;
+}
+
+void Document::finishSave(const QString &path)
+{
+    const QString oldPath = m_filePath;
+    m_filePath = path;
+    m_modified = m_formatDirty = false;
+    if (oldPath != m_filePath)
+        emit filePathChanged(m_filePath);
+    emit modifiedChanged(m_modified);
+    clearRecovery();
+    m_lastError.clear();
+}
 
 bool Document::directWriteAvailable() const
 {
-    return false; // T1.1
+    return m_directWriteAvailable;
 }
 
 bool Document::lastSaveWasDirect() const
 {
-    return false; // T1.1
+    return m_lastSaveWasDirect;
 }
 
 bool Document::isFormatDirty() const
 {
-    return false; // T1.2
+    return m_formatDirty;
 }
 
 bool Document::hadMixedLineEndings() const
 {
-    return false; // T1.2
+    return m_mixedLineEndings;
 }
 
 bool Document::wasDecodedLossily() const
 {
-    return false; // T1.3
+    return m_decodedLossily;
 }
 
+// Decodes the loaded bytes with the detected charset, or the one forced by
+// reloadWithEncoding. A decode that cannot reproduce the bytes opens the
+// document read-only: saving it would rewrite the file with different bytes.
+QString Document::decodeLoaded(const QByteArray &data)
+{
+    m_encoding = m_forcedEncoding.isEmpty() ? detectedEncoding(data) : m_forcedEncoding;
+    DecodeResult decoded = TextCodec::decode(data, m_encoding);
+    m_decodedLossily = !decoded.lossless;
+    setReadOnly(m_decodedLossily);
+    return decoded.text;
+}
+
+// Re-reads the file's original bytes with the chosen codec. It is a reload,
+// not a conversion: unsaved edits are discarded (the UI asks first).
 bool Document::reloadWithEncoding(const QString &name)
 {
-    Q_UNUSED(name);
-    return false; // T1.3
+    const QString canonical = TextCodec::canonicalName(name);
+    if (canonical.isEmpty() || m_filePath.isEmpty() || isPartialView())
+        return false;
+    m_forcedEncoding = canonical;
+    const bool loaded = load(m_filePath);
+    m_forcedEncoding.clear();
+    return loaded;
 }
 
+qint64 Document::s_mediumThreshold = Document::MEDIUM_FILE_THRESHOLD;
+qint64 Document::s_largeThreshold = Document::LARGE_FILE_THRESHOLD;
+
+// Tests force Medium mode on small fixtures. Pass MEDIUM_FILE_THRESHOLD and
+// LARGE_FILE_THRESHOLD to restore the production values.
 void Document::setSizeThresholdsForTest(qint64 medium, qint64 large)
 {
-    Q_UNUSED(medium);
-    Q_UNUSED(large); // T1.3
+    s_mediumThreshold = medium;
+    s_largeThreshold = large;
 }
 
 QString Document::fileName() const
@@ -294,20 +362,26 @@ QString Document::displayName() const
     return fileName();
 }
 
+// A partial view cannot be saved, so a conversion would only mark it modified
+// with no way to write it.
 void Document::setEncoding(const QString &encoding)
 {
+    if (isPartialView())
+        return;
     if (m_encoding != encoding) {
         m_encoding = encoding;
-        setModified(true);
+        setFormatDirty(true);
         emit encodingChanged(m_encoding);
     }
 }
 
 void Document::setLineEnding(LineEnding ending)
 {
+    if (isPartialView())
+        return;
     if (m_lineEnding != ending) {
         m_lineEnding = ending;
-        setModified(true);
+        setFormatDirty(true);
         emit lineEndingChanged(m_lineEnding);
     }
 }
@@ -373,12 +447,22 @@ void Document::setReadOnly(bool readOnly)
     }
 }
 
+// Sets the content flag only. modifiedChanged reports isModified(), so a pending
+// conversion keeps the document modified when the editor's undo reaches clean.
 void Document::setModified(bool modified)
 {
-    if (m_modified != modified) {
-        m_modified = modified;
-        emit modifiedChanged(m_modified);
-    }
+    const bool wasModified = isModified();
+    m_modified = modified;
+    if (isModified() != wasModified)
+        emit modifiedChanged(isModified());
+}
+
+void Document::setFormatDirty(bool dirty)
+{
+    const bool wasModified = isModified();
+    m_formatDirty = dirty;
+    if (isModified() != wasModified)
+        emit modifiedChanged(isModified());
 }
 
 bool Document::hasRecoveryFile() const
@@ -431,7 +515,10 @@ void Document::clearRecovery()
     }
 }
 
-Document::LineEnding Document::detectLineEnding(const QString &text)
+// The majority ending wins and *mixed records that more than one kind occurred,
+// because saving normalises a mixed file to that majority. A file with no line
+// break takes the configured default; 1.0.0 reported CRLF for every such file.
+Document::LineEnding Document::detectLineEnding(const QString &text, bool *mixed)
 {
     qint64 crlf = 0, lf = 0, cr = 0;
 
@@ -448,8 +535,18 @@ Document::LineEnding Document::detectLineEnding(const QString &text)
         }
     }
 
+    *mixed = (crlf > 0) + (lf > 0) + (cr > 0) > 1;
+    if (crlf + lf + cr == 0) return defaultLineEnding();
     if (crlf >= lf && crlf >= cr) return Windows;
     if (cr > lf) return ClassicMac;
+    return Unix;
+}
+
+Document::LineEnding Document::defaultLineEnding()
+{
+    const QString setting = Settings::instance().defaultLineEnding();
+    if (setting == QLatin1String("CRLF")) return Windows;
+    if (setting == QLatin1String("CR")) return ClassicMac;
     return Unix;
 }
 
