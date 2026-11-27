@@ -451,7 +451,7 @@
 
             <div class="faq-item">
                 <div class="faq-question">Why does a large file open in read-only mode?</div>
-                <div class="faq-answer"><p>Files over 100MB open read-only by default to prevent accidental edits to very large files (which could be slow). This is a safety feature, not a limitation.</p></div>
+                <div class="faq-answer"><p>Files over 50 MB, and minified files over 20 MB, open as a partial view: only part of the file is loaded. Saving it would replace the whole file with that part, so a partial view is read-only. Save, Save As, Save All and the encoding and line-ending changes are disabled for that tab, and the notification bar says so when the file opens.</p></div>
             </div>
 
             <div class="faq-item">

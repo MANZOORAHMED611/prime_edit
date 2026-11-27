@@ -410,11 +410,52 @@ void MainWindow::syncHorizontalScroll()
     statusBar()->showMessage(tr("Sync horizontal scroll not yet implemented"), 3000);
 }
 
+// The editor a conversion applies to, or null. A partial view holds only part
+// of the file, so its encoding and line endings cannot change (D3).
+Editor *MainWindow::convertibleEditor()
+{
+    Editor *e = currentEditor();
+    if (!e || !e->document()) return nullptr;
+    if (e->document()->isPartialView()) {
+        showNotification(tr("Only part of '%1' is loaded, so its encoding and line endings "
+                            "cannot be changed.").arg(e->document()->displayName()));
+        return nullptr;
+    }
+    return e;
+}
+
+// The conversion items are the checkable "Encode in ..." entries of the
+// Encoding menu; the status-bar menus follow the same rule (StatusBarWidget).
+void MainWindow::setConversionsEnabled(bool enabled)
+{
+    if (!m_encodingMenu) return;
+    for (QAction *action : m_encodingMenu->actions()) {
+        if (action->isCheckable()) action->setEnabled(enabled);
+    }
+}
+
+bool MainWindow::anySaveableModified() const
+{
+    for (const Editor *e : allEditors()) {
+        const Document *doc = e->document();
+        if (doc && doc->isModified() && !doc->isPartialView()) return true;
+    }
+    return false;
+}
+
+QString MainWindow::partialViewNotice(const Document *doc) const
+{
+    const qint64 mib = QFileInfo(doc->filePath()).size() / (1024 * 1024);
+    return tr("'%1' is large (%2 MB), so only part of it is loaded. It is read-only: "
+              "saving and encoding or line-ending changes are disabled.")
+        .arg(doc->displayName()).arg(mib);
+}
+
 // Encoding operations
 void MainWindow::convertToANSI()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setEncoding("ISO-8859-1");
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Encoding changed to ANSI (ISO-8859-1)"), 3000);
@@ -422,8 +463,8 @@ void MainWindow::convertToANSI()
 
 void MainWindow::convertToUTF8()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setEncoding("UTF-8");
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Encoding changed to UTF-8"), 3000);
@@ -431,8 +472,8 @@ void MainWindow::convertToUTF8()
 
 void MainWindow::convertToUTF8BOM()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setEncoding("UTF-8-BOM");
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Encoding changed to UTF-8-BOM"), 3000);
@@ -440,8 +481,8 @@ void MainWindow::convertToUTF8BOM()
 
 void MainWindow::convertToUCS2BE()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setEncoding("UTF-16BE");
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Encoding changed to UCS-2 Big Endian"), 3000);
@@ -449,8 +490,8 @@ void MainWindow::convertToUCS2BE()
 
 void MainWindow::convertToUCS2LE()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setEncoding("UTF-16LE");
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Encoding changed to UCS-2 Little Endian"), 3000);
@@ -459,8 +500,8 @@ void MainWindow::convertToUCS2LE()
 // Line ending operations
 void MainWindow::convertToWindows()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setLineEnding(Document::Windows);
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Line ending changed to Windows (CRLF)"), 3000);
@@ -468,8 +509,8 @@ void MainWindow::convertToWindows()
 
 void MainWindow::convertToUnix()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setLineEnding(Document::Unix);
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Line ending changed to Unix (LF)"), 3000);
@@ -477,8 +518,8 @@ void MainWindow::convertToUnix()
 
 void MainWindow::convertToMac()
 {
-    Editor *e = currentEditor();
-    if (!e || !e->document()) return;
+    Editor *e = convertibleEditor();
+    if (!e) return;
     e->document()->setLineEnding(Document::ClassicMac);
     m_statusBar->updateFromEditor(e);
     statusBar()->showMessage(tr("Line ending changed to Mac (CR)"), 3000);

@@ -16,6 +16,7 @@
 class QPrinter;
 class Editor;
 class Document;
+enum class SaveResult;
 class TabWidget;
 class LSPBridge;
 class StatusBarWidget;
@@ -297,10 +298,22 @@ private:
     void unsplit();
     void connectTabWidget(TabWidget *tw);
     bool closeTab(TabWidget *tw, int index);
-    bool confirmCloseEditor(TabWidget *tw, int index, Editor *editor);
+    bool confirmCloseEditor(Editor *editor);
     bool isDocumentShownElsewhere(const Editor *editor) const;
     void onTab2Changed(int index);
     void checkUnsplitNeeded();
+
+    // Save path: every function takes the editor, never the focused one
+    bool saveEditor(Editor *editor);
+    bool saveEditorAs(Editor *editor);
+    bool writeDocument(Document *doc, const QString &path);
+    void finishEditorSave(Editor *editor);
+    bool confirmDirectWrite(Document *doc);
+    void reportSaveFailure(Document *doc, SaveResult result);
+    bool anySaveableModified() const;
+    void setConversionsEnabled(bool enabled);
+    Editor *convertibleEditor();
+    QString partialViewNotice(const Document *doc) const;
 
     // Split view
     QSplitter *m_splitter = nullptr;
@@ -348,6 +361,7 @@ private:
     QAction *m_newAction = nullptr;
     QAction *m_openAction = nullptr;
     QAction *m_saveAction = nullptr;
+    QAction *m_saveAsAction = nullptr;
     QAction *m_saveAllAction = nullptr;
     QAction *m_closeAction = nullptr;
     QAction *m_printAction = nullptr;

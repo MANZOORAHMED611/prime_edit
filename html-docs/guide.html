@@ -156,6 +156,7 @@
         <a href="#themes">Themes</a>
         <a href="#macros">Macros</a>
         <a href="#largefile">Large Files</a>
+        <a href="#saving">Saving Files</a>
         <a href="#plugins">Plugins</a>
         <a href="#config">Configuration</a>
 
@@ -579,14 +580,43 @@ make -j$(nproc)
             <h2>Large Files</h2>
             <p>PrimeEdit handles files that other editors cannot open.</p>
             <ul>
-                <li>Files <strong>&gt;10MB</strong> automatically open in <strong>large file mode</strong> &mdash; memory-mapped, viewport-loaded</li>
-                <li>Files <strong>&gt;100MB</strong> open in <strong>read-only mode</strong> by default</li>
+                <li>Files <strong>over 50 MB</strong>, and minified files (almost no line breaks) <strong>over 20 MB</strong>, open as a <strong>partial view</strong>: only part of the file is loaded</li>
+                <li>A partial view is <strong>read-only</strong>. Save, Save As, Save All and the encoding and line-ending changes are disabled for that tab, and the notification bar says so when the file opens</li>
                 <li>A <strong>1GB file uses only 95MB of memory</strong> (verified by stress testing)</li>
                 <li>Scrolling is smooth &mdash; only visible lines plus a buffer are in memory</li>
             </ul>
             <div class="info-box tip">
                 <strong>No special action needed.</strong> Just open the file normally. PrimeEdit detects the file size and switches modes automatically.
             </div>
+            <div class="info-box note">
+                <strong>Why a partial view cannot be saved:</strong> saving it would replace the whole file on disk with the part that is loaded, and the rest would be lost.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Saving Files -->
+        <section id="saving">
+            <h2>Saving Files</h2>
+            <p>A save either writes the whole file or leaves the file on disk unchanged.</p>
+
+            <h3>When a save fails</h3>
+            <ul>
+                <li>An error dialog names the file and the reason, and says the file on disk is unchanged.</li>
+                <li>The tab stays modified. Undo does not make it look saved, so the close prompt still asks about it.</li>
+                <li>A file without write permission (for example mode 0444) cannot be saved. Use <strong>Save As</strong> to write a copy elsewhere.</li>
+            </ul>
+
+            <h3>Save Directly (Not Atomic)</h3>
+            <p>PrimeEdit normally writes to a temporary file and swaps it in, so an interrupted save never leaves a half-written file. When the folder does not allow that temporary file but the file itself is writable, the error dialog offers <strong>Save Directly (Not Atomic)</strong>. It writes over the file in place; if that write is interrupted, the file can be left incomplete. It is never offered after an error such as a full disk, where writing in place would destroy the original.</p>
+            <p>A hard-linked file, or a file owned by another user, is always written in place so the link and the owner are kept. The notification bar says when that happened.</p>
+
+            <h3>Closing a tab with unsaved changes</h3>
+            <ul>
+                <li>Every modified tab asks before it closes. <strong>Save</strong> saves that tab's file, whichever pane it is in and whichever pane has focus.</li>
+                <li>A read-only document, such as a partial view, cannot be saved, so its prompt offers only <strong>Discard</strong> or <strong>Cancel</strong>.</li>
+                <li><strong>Save All</strong> saves every modified tab in both panes and skips read-only ones.</li>
+            </ul>
         </section>
 
         <div class="divider"></div>
