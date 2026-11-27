@@ -218,6 +218,12 @@ install(FILES resources/icons/prime_edit_icon.png
     RENAME prime-edit.png
 )
 
+# Opt-in only. The user-level .desktop shares its ID with the packaged
+# launcher (/usr/share/applications/prime-edit.desktop) and shadows it, so a
+# dev build installed by default hijacks the installed app's dock entry.
+option(PRIMEEDIT_INSTALL_DEV_LAUNCHER "Install icon + .desktop into ~/.local/share after build" OFF)
+
+if(PRIMEEDIT_INSTALL_DEV_LAUNCHER)
 # Post-build: install icon + desktop file for dev use
 add_custom_command(TARGET prime-edit POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -256,3 +262,4 @@ add_custom_command(TARGET prime-edit POST_BUILD
         $ENV{HOME}/.local/share/applications/prime-edit.desktop
     COMMENT "Installing PrimeEdit desktop launcher"
 )
+endif()
