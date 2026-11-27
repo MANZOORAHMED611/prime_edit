@@ -463,6 +463,12 @@ At `0e79f0f` both configurations are already clean of sanitizer reports. The scr
 | T1.5 | D4 cache and restore, D5 core, D6 restore | `recoverCacheDirectories`, `restoreDrafts`/`restoreFiles`, the cache writer (`allEditors`, `QTextDocument` content check, `rawText`, unplaced drafts kept, atomic replacement, `fsyncDirectory`), corrupt entries moved to `unsaved.corrupt/`, the `lineEnding` key, `Session::save` over `allEditors` | T1.3, T1.4 | `test_t1_5_cache`: each recovery-table state built on disk; unreadable original gives a new tab and the active tab unchanged; corrupt entry survives the next write; restored draft stays modified after type plus undo; cached encoding applied on restore; modified untitled doc in pane 2 is cached on quit. Plus the existing `crash_test` going fully green. |
 | T1.6 | D4 single instance and startup | `singleinstance.{h,cpp}` (adds them to `CMakeLists.txt`); `main.cpp` in the order above | T1.5 | `test_t1_6_instance`: runs `$PRIMEEDIT_BIN` only, with HOME, XDG_DATA_HOME, XDG_CONFIG_HOME and XDG_RUNTIME_DIR all in scratch. Covers: forward with an absolute path exits 0 and the holder's drafts remain; a holder that never acks makes the second launch exit 1; a launch with file arguments restores drafts; a corrupt `session.json` still restores drafts. |
 
+**T1.8 (added 2026-11-27, found by the T4.1 matrix).** D6/D11. A BOM-less UTF-16 file with CRLF endings is detected as ISO-8859-1. That decode is lossless, but the NULs between CR and LF make `detectLineEnding` report mixed endings, so D11 normalises every CR to LF and doubles each line break on save. Fix in two layers:
+- `CharsetDetector` recognises BOM-less UTF-16 by its NUL pattern: a high share of NUL bytes concentrated at even or odd offsets.
+- **Safety net:** if the decoded text contains a NUL next to a CR or LF, the document opens read-only (D12) with the lossy-load notification offering Reopen with Encoding, and the D11 normalisation never runs on it.
+
+Agent: uthman. Depends on: T1.6. Suite: the 4 failing `test_i1_roundtrip` cases, `byDetection(UTF-16LE/CRLF)`, `(UTF-16BE/CRLF)` and the two Medium-mode cases, must pass. Add a T1.3-suite case for the safety net, using a NUL pattern the detector does not catch.
+
 #### Phase 1 — W2 editor (agent: **ali**; tasks in this order)
 
 | Task | D | Scope | Depends on | Suite |
