@@ -155,7 +155,7 @@ private:
     SaveResult refusalFor() const;
     SaveResult writeAtomic(const QString &path, const QByteArray &data, WriteMode mode);
     SaveResult writeDirect(const QString &path, const QByteArray &data);
-    void finishSave(const QString &path);
+    void finishSave(const QString &path, const QByteArray &written);
     static LineEnding detectLineEnding(const QString &text, bool *mixed);
     static LineEnding defaultLineEnding();
     QString normalizeLineEndings(const QString &text, LineEnding target);

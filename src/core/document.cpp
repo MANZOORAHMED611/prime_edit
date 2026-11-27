@@ -229,7 +229,7 @@ SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
         return result;
 
     m_lastSaveWasDirect = direct;
-    finishSave(filePath);
+    finishSave(filePath, data);
     return SaveResult::Ok;
 }
 
@@ -273,7 +273,7 @@ SaveResult Document::writeDirect(const QString &path, const QByteArray &data)
     return ok ? SaveResult::Ok : SaveResult::IoError;
 }
 
-void Document::finishSave(const QString &path)
+void Document::finishSave(const QString &path, const QByteArray &written)
 {
     const QString oldPath = m_filePath;
     m_filePath = path;
@@ -283,6 +283,9 @@ void Document::finishSave(const QString &path)
     emit modifiedChanged(m_modified);
     clearRecovery();
     m_lastError.clear();
+    // DocumentManager records this to recognise the watcher event the save causes.
+    emit saved(m_filePath, QCryptographicHash::hash(written, QCryptographicHash::Sha1),
+               written.size());
 }
 
 bool Document::directWriteAvailable() const
