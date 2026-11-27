@@ -3,7 +3,9 @@ name: Claude Code Review
 # Two jobs:
 #   review  - automatic review of every non-draft PR (prompt-driven automation mode)
 #   respond - answers "@claude" mentions on PRs (interactive mode; no fixed prompt,
-#             so Claude acts on what the commenter asked)
+#             so Claude acts on what the commenter asked). Read-only by design
+#             (contents: read): it explains and suggests changes but cannot push.
+#             Switch to contents: write if it should commit fixes to PR branches.
 #
 # Auth: set ONE repo secret.
 #   CLAUDE_CODE_OAUTH_TOKEN - uses your Claude subscription; create with `claude setup-token`
@@ -25,7 +27,11 @@ concurrency:
 
 jobs:
   review:
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    # Fork PRs get no repo secrets, so skip them rather than fail with a credentials error.
+    # Do not switch to pull_request_target: that runs with secrets over untrusted PR content.
+    if: |
+      github.event_name == 'pull_request' && !github.event.pull_request.draft &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
