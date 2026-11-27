@@ -71,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setupUi();
     setupMenus();
+    setupEncodingTools();
     setupToolBar();
     setupStatusBar();
     setupShortcuts();
@@ -548,24 +549,23 @@ void MainWindow::setupMenus()
     QActionGroup *encGroup = new QActionGroup(this);
 
     QAction *encUtf8 = m_encodingMenu->addAction(tr("Encode in UTF-8"), this, &MainWindow::convertToUTF8);
-    encUtf8->setCheckable(true);
-    encUtf8->setChecked(true);
+    encUtf8->setData(QStringLiteral("UTF-8"));
     encGroup->addAction(encUtf8);
 
     QAction *encUtf8Bom = m_encodingMenu->addAction(tr("Encode in UTF-8-BOM"), this, &MainWindow::convertToUTF8BOM);
-    encUtf8Bom->setCheckable(true);
+    encUtf8Bom->setData(QStringLiteral("UTF-8-BOM"));
     encGroup->addAction(encUtf8Bom);
 
     QAction *encAnsi = m_encodingMenu->addAction(tr("Encode in ANSI"), this, &MainWindow::convertToANSI);
-    encAnsi->setCheckable(true);
+    encAnsi->setData(QStringLiteral("ISO-8859-1"));
     encGroup->addAction(encAnsi);
 
     QAction *encUcs2Be = m_encodingMenu->addAction(tr("Encode in UCS-2 BE BOM"), this, &MainWindow::convertToUCS2BE);
-    encUcs2Be->setCheckable(true);
+    encUcs2Be->setData(QStringLiteral("UTF-16BE-BOM"));
     encGroup->addAction(encUcs2Be);
 
     QAction *encUcs2Le = m_encodingMenu->addAction(tr("Encode in UCS-2 LE BOM"), this, &MainWindow::convertToUCS2LE);
-    encUcs2Le->setCheckable(true);
+    encUcs2Le->setData(QStringLiteral("UTF-16LE-BOM"));
     encGroup->addAction(encUcs2Le);
 
     // ============================================================
@@ -848,9 +848,7 @@ Editor *MainWindow::openFile(const QString &filePath)
     int index = m_tabWidget->addTab(editor, doc->displayName());
     m_tabWidget->setTabIcon(index, TabBar::iconForFile(path));
     m_tabWidget->setCurrentIndex(index);
-    if (doc->isPartialView()) {
-        showNotification(partialViewNotice(doc));
-    }
+    showOpenNotices(doc);
 
     if (m_lspBridge) m_lspBridge->onEditorOpened(editor);
 
@@ -894,7 +892,7 @@ bool MainWindow::saveEditor(Editor *editor)
         return saveEditorAs(editor);
     }
     editor->syncToDocument();
-    if (!writeDocument(doc, doc->filePath())) {
+    if (!writeDocument(editor, doc->filePath())) {
         return false;
     }
     finishEditorSave(editor);
@@ -921,7 +919,7 @@ bool MainWindow::saveEditorAs(Editor *editor)
         return false;
     }
     editor->syncToDocument();
-    if (!writeDocument(doc, path)) {
+    if (!writeDocument(editor, path)) {
         return false;
     }
     // The extension may have changed, so detect the language again
@@ -934,14 +932,19 @@ bool MainWindow::saveEditorAs(Editor *editor)
 // Writes doc to path and reports any failure. "Save directly" is offered only
 // when the Document says a direct write is safe (the folder refused the temp
 // file); after ENOSPC or another error it would truncate the original.
-bool MainWindow::writeDocument(Document *doc, const QString &path)
+bool MainWindow::writeDocument(Editor *editor, const QString &path)
 {
+    Document *doc = editor->document();
+    noteMixedLineEndings(doc);
     SaveResult result = doc->saveAs(path);
     if (result == SaveResult::IoError && doc->directWriteAvailable()) {
         if (!confirmDirectWrite(doc)) {
             return false;  // the user cancelled; the file is untouched
         }
         result = doc->saveAs(path, WriteMode::AllowDirect);
+    }
+    if (result == SaveResult::EncodeLossy) {
+        return resolveEncodeLossy(editor, path);
     }
     if (result != SaveResult::Ok) {
         reportSaveFailure(doc, result);
@@ -1673,8 +1676,8 @@ void MainWindow::find()
             Editor *e = currentEditor();
             if (!e || !m_searchDialog) return;
             SearchEngine engine;
-            QString result = engine.replaceInText(
-                e->toPlainText(), m_searchDialog->searchText(),
+            QString result = engine.replaceInText(  // rawText keeps U+00A0 and U+2028 (D11)
+                e->rawText(), m_searchDialog->searchText(),
                 m_searchDialog->replaceText(), m_searchDialog->searchOptions());
             e->selectAll();
             e->insertPlainText(result);
@@ -2199,7 +2202,7 @@ void MainWindow::updateMenuState()
     if (m_saveAction) m_saveAction->setEnabled(isModified && saveable);
     if (m_saveAsAction) m_saveAsAction->setEnabled(saveable);
     if (m_saveAllAction) m_saveAllAction->setEnabled(anySaveableModified());
-    setConversionsEnabled(saveable);
+    syncEncodingMenu(saveable);
     if (m_closeAction) m_closeAction->setEnabled(hasEditor);
     if (m_printAction) m_printAction->setEnabled(hasEditor);
 

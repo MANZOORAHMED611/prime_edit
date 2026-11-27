@@ -298,14 +298,14 @@
             <div class="faq-item">
                 <div class="faq-question">How does encoding detection work?</div>
                 <div class="faq-answer">
-                    <p>PrimeEdit uses a multi-stage approach: (1) BOM detection for UTF-8-BOM, UTF-16, UTF-32. (2) UTF-8 validation. (3) Byte-frequency heuristics for Windows-1252, ISO-8859-1, Shift-JIS. If ICU libraries are installed, additional encodings are supported (KOI8-R, GB2312, Big5, etc.).</p>
+                    <p>PrimeEdit checks, in order: (1) a byte order mark for UTF-8, UTF-16 or UTF-32; (2) valid UTF-8; (3) a guess between windows-1252, Shift_JIS and ISO-8859-1. BOM-less UTF-16, ISO-8859-6 and windows-1256 are not recognised, so such a file opens as something else. Use <strong>Encoding &gt; Reopen with Encoding...</strong> to decode it again with the right encoding. If the bytes do not decode exactly in the detected encoding, the file opens read-only and the notification bar offers the same command.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How do I change a file's encoding or line endings?</div>
                 <div class="faq-answer">
-                    <p>Click the <strong>encoding indicator</strong> in the status bar (e.g., "UTF-8") to see conversion options. Similarly, click the <strong>EOL indicator</strong> (e.g., "LF") to convert between Unix (LF), Windows (CRLF), and Mac (CR). You can also use the <strong>Encoding</strong> menu.</p>
+                    <p>Click the <strong>encoding indicator</strong> in the status bar (e.g., "UTF-8") to see conversion options. Similarly, click the <strong>EOL indicator</strong> (e.g., "LF") to convert between Unix (LF), Windows (CRLF), and Mac (CR). You can also use the <strong>Encoding</strong> menu. If some characters cannot be written in the new encoding, you are shown how many and where, and can cancel or replace them with <code>?</code>. To read a file in a different encoding without converting it, use <strong>Reopen with Encoding...</strong>.</p>
                 </div>
             </div>
 

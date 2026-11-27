@@ -97,6 +97,9 @@ public slots:
     // Navigation
     void goToLine(int line);
 
+    // Encoding: decode the current file's bytes again with a chosen encoding
+    void reopenWithEncoding();
+
 protected:
     void closeEvent(QCloseEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -306,14 +309,29 @@ private:
     // Save path: every function takes the editor, never the focused one
     bool saveEditor(Editor *editor);
     bool saveEditorAs(Editor *editor);
-    bool writeDocument(Document *doc, const QString &path);
+    bool writeDocument(Editor *editor, const QString &path);
     void finishEditorSave(Editor *editor);
     bool confirmDirectWrite(Document *doc);
     void reportSaveFailure(Document *doc, SaveResult result);
     bool anySaveableModified() const;
-    void setConversionsEnabled(bool enabled);
+    void syncEncodingMenu(bool convertible);
     Editor *convertibleEditor();
     QString partialViewNotice(const Document *doc) const;
+
+    // Encoding tools (spec D6, D11)
+    enum class UnmappableChoice { Cancel, Replace, SaveUtf8 };
+    void setupEncodingTools();
+    QStringList reopenEncodingNames() const;
+    void reopenEditorWithEncoding(Editor *editor, const QString &name);
+    void showOpenNotices(Document *doc);
+    void showReopenNotice(Document *doc);
+    UnmappableChoice askUnmappable(Editor *editor, const QString &encoding,
+                                   const QList<int> &positions, bool offerUtf8);
+    void replaceUnmappable(Editor *editor, const QList<int> &positions);
+    void convertEncoding(const QString &name, const QString &label);
+    bool resolveEncodeLossy(Editor *editor, const QString &path);
+    void noteMixedLineEndings(Document *doc);
+    QAction *m_reopenEncodingAction = nullptr;
 
     // Split view
     QSplitter *m_splitter = nullptr;

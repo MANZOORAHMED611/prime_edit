@@ -95,11 +95,16 @@ void StatusBarWidget::setupEncodingMenu()
 {
     m_encodingMenu = new QMenu(this);
 
+    // Reopen first: detection cannot tell some encodings apart (Shift_JIS,
+    // BOM-less UTF-16, ISO-8859-6, windows-1256), and this corrects them.
+    QAction *reopenAction = m_encodingMenu->addAction(tr("Reopen with Encoding..."));
+    connect(reopenAction, &QAction::triggered, m_mainWindow, &MainWindow::reopenWithEncoding);
+    m_encodingMenu->addSeparator();
     QAction *utf8Action = m_encodingMenu->addAction("UTF-8");
     QAction *utf8BomAction = m_encodingMenu->addAction("UTF-8-BOM");
     QAction *ansiAction = m_encodingMenu->addAction("ANSI");
-    QAction *ucs2BeAction = m_encodingMenu->addAction("UCS-2 Big Endian");
-    QAction *ucs2LeAction = m_encodingMenu->addAction("UCS-2 Little Endian");
+    QAction *ucs2BeAction = m_encodingMenu->addAction("UCS-2 Big Endian BOM");
+    QAction *ucs2LeAction = m_encodingMenu->addAction("UCS-2 Little Endian BOM");
 
     connect(utf8Action, &QAction::triggered,
             m_mainWindow, &MainWindow::convertToUTF8);

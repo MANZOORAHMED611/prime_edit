@@ -157,6 +157,7 @@
         <a href="#macros">Macros</a>
         <a href="#largefile">Large Files</a>
         <a href="#saving">Saving Files</a>
+        <a href="#encodings">Encodings</a>
         <a href="#plugins">Plugins</a>
         <a href="#config">Configuration</a>
 
@@ -617,6 +618,36 @@ make -j$(nproc)
                 <li>A read-only document, such as a partial view, cannot be saved, so its prompt offers only <strong>Discard</strong> or <strong>Cancel</strong>.</li>
                 <li><strong>Save All</strong> saves every modified tab in both panes and skips read-only ones.</li>
             </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Encodings -->
+        <section id="encodings">
+            <h2>Encodings</h2>
+            <p>The status bar shows each file's encoding by its standard name: <code>UTF-8</code>, <code>UTF-8-BOM</code>, <code>UTF-16LE-BOM</code>, <code>windows-1252</code>, <code>Shift_JIS</code>, <code>ISO-8859-1</code> and so on. The Encoding menu checks the matching <strong>Encode in</strong> item; an encoding with no item, such as <code>windows-1252</code>, leaves none checked.</p>
+
+            <h3>Reopen with Encoding</h3>
+            <p>Detection reads the byte order mark, then checks for valid UTF-8, then guesses <code>windows-1252</code>, <code>Shift_JIS</code> or <code>ISO-8859-1</code>. It cannot recognise BOM-less UTF-16, <code>ISO-8859-6</code> or <code>windows-1256</code>, so such a file opens as something else and its text looks wrong. To correct it, choose <strong>Encoding &gt; Reopen with Encoding...</strong> (the first item in the menu, and also in the status-bar encoding menu) and pick the right encoding. This decodes the file's bytes again; it does not convert or save anything. If the tab has unsaved changes, you are asked before they are discarded.</p>
+            <div class="info-box note">
+                <strong>Opened read-only?</strong> If a file's bytes do not decode exactly in the detected encoding, PrimeEdit opens it read-only so a save cannot change bytes you did not edit. The notification bar says so and has a <strong>Reopen with Encoding...</strong> button.
+            </div>
+
+            <h3>Converting (Encode in ...)</h3>
+            <ul>
+                <li>Before converting, PrimeEdit checks that every character can be written in the new encoding. If some cannot (for example Arabic text and <strong>Encode in ANSI</strong>), a dialog gives the count and the first five positions as line:column, and offers <strong>Cancel</strong> or <strong>Replace N characters with ?</strong>.</li>
+                <li><strong>Replace</strong> is one edit, so a single <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes it. Nothing is written until you save.</li>
+                <li><strong>Encode in UCS-2 BE BOM</strong> and <strong>UCS-2 LE BOM</strong> save as UTF-16 with a byte order mark (<code>UTF-16BE-BOM</code>, <code>UTF-16LE-BOM</code>).</li>
+            </ul>
+
+            <h3>Characters the encoding cannot hold</h3>
+            <p>If you type text the file's encoding cannot hold, Save does not write the file. A dialog names the count and positions and offers <strong>Save as UTF-8</strong>, <strong>Replace N characters with ?</strong>, or <strong>Cancel</strong>.</p>
+
+            <h3>Mixed line endings</h3>
+            <p>A file whose lines end in a mix of CRLF and LF is saved with the ending most of its lines use. The notification bar says so at the first save of that document, for example <em>Mixed line endings in 'notes.txt' will be saved as CRLF.</em></p>
+
+            <h3>Special spaces</h3>
+            <p>No-break spaces (U+00A0) and line separators (U+2028) are kept as they are when you save and when you use <strong>Replace All</strong>.</p>
         </section>
 
         <div class="divider"></div>
