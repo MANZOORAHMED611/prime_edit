@@ -386,7 +386,7 @@ make -j$(nproc)
         <!-- Split-Screen -->
         <section id="splitscreen">
             <h2>Split-Screen</h2>
-            <p>View two files side by side, or two different parts of the same file.</p>
+            <p>View two files side by side. Each document is open in one pane at a time.</p>
 
             <h3>Splitting</h3>
             <ul>
@@ -396,11 +396,13 @@ make -j$(nproc)
                 <li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>\</kbd> closes the current split</li>
             </ul>
 
-            <h3>Cloning a Document</h3>
-            <p>Right-click a tab and select <strong>Clone to Other View</strong>. Both views share the same document &mdash; edits in one pane appear instantly in the other. This is useful for editing one part of a file while referencing another part.</p>
+            <p>A new split opens an <strong>empty</strong> second pane. Fill it by moving tabs into it.</p>
 
             <h3>Moving Tabs</h3>
-            <p>Drag a tab from one pane to the other, or right-click and select <strong>Move to Other View</strong>.</p>
+            <p>Select a tab and choose <strong>View &gt; Move to Other View</strong>. If the editor is not split yet, this splits it and moves the tab into the new pane. When the second pane's last tab closes, the split closes.</p>
+
+            <h3>Closing Tabs</h3>
+            <p>A tab's close button closes the tab it belongs to, in whichever pane that is, even while the other pane has focus.</p>
         </section>
 
         <div class="divider"></div>

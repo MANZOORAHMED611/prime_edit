@@ -216,7 +216,6 @@ private slots:
     void closeTabsToRight();
     void closeTabsToLeft();
     void moveToOtherView();
-    void cloneToOtherView();
     void previousTab();
     void nextTab();
 
@@ -297,7 +296,9 @@ private:
     void splitView(Qt::Orientation orientation);
     void unsplit();
     void connectTabWidget(TabWidget *tw);
-    void onTab2CloseRequested(int index);
+    bool closeTab(TabWidget *tw, int index);
+    bool confirmCloseEditor(TabWidget *tw, int index, Editor *editor);
+    bool isDocumentShownElsewhere(const Editor *editor) const;
     void onTab2Changed(int index);
     void checkUnsplitNeeded();
 

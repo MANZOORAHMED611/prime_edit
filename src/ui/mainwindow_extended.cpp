@@ -606,29 +606,6 @@ void MainWindow::moveToOtherView()
     checkUnsplitNeeded();
 }
 
-void MainWindow::cloneToOtherView()
-{
-    Editor *editor = currentEditor();
-    if (!editor || !editor->document()) return;
-
-    // Ensure split exists
-    if (!isSplit()) {
-        splitView(Qt::Horizontal);
-        return; // splitView already clones the current doc
-    }
-
-    TabWidget *target = inactiveTabWidget();
-    if (!target) return;
-
-    Document *doc = editor->document();
-    Editor *cloned = createEditor(doc);
-    QString title = doc->displayName();
-    int idx = target->addTab(cloned, title);
-    target->setTabIcon(idx, TabBar::iconForFile(doc->filePath()));
-    target->setCurrentIndex(idx);
-    cloned->setFocus();
-}
-
 void MainWindow::previousTab()
 {
     TabWidget *tw = activeTabWidget();

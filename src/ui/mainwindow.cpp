@@ -248,29 +248,20 @@ void MainWindow::setupUi()
         ThemeManager::instance().applyTheme(ThemeManager::instance().currentTheme());
     });
 
+    // Settings reach the editors of both panes (allEditors), not only pane 1.
     connect(&Settings::instance(), &Settings::wordWrapChanged, this, [this](bool enabled) {
-        for (int i = 0; i < m_tabWidget->count(); ++i) {
-            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-            if (e) e->setWordWrapEnabled(enabled);
-        }
+        for (Editor *e : allEditors()) e->setWordWrapEnabled(enabled);
     });
 
     connect(&Settings::instance(), &Settings::lineNumbersChanged, this, [this](bool enabled) {
-        for (int i = 0; i < m_tabWidget->count(); ++i) {
-            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-            if (e) e->setLineNumbersVisible(enabled);
-        }
+        for (Editor *e : allEditors()) e->setLineNumbersVisible(enabled);
     });
 
     connect(&Settings::instance(), &Settings::highlightCurrentLineChanged, this, [this](bool) {
-        // Trigger re-highlight on all open editors by moving cursor
-        for (int i = 0; i < m_tabWidget->count(); ++i) {
-            Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-            if (e) {
-                // Force rehighlight by toggling extra selections
-                QTextCursor cursor = e->textCursor();
-                e->setTextCursor(cursor);
-            }
+        // Force a re-highlight of every open editor by re-setting its cursor
+        for (Editor *e : allEditors()) {
+            QTextCursor cursor = e->textCursor();
+            e->setTextCursor(cursor);
         }
     });
 
@@ -541,7 +532,6 @@ void MainWindow::setupMenus()
     QAction *splitHorizAction = m_viewMenu->addAction(tr("Split &Horizontal"), this, &MainWindow::splitHorizontal);
     splitHorizAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Backslash));
 
-    m_viewMenu->addAction(tr("&Clone to Other View"), this, &MainWindow::cloneToOtherView);
     m_viewMenu->addAction(tr("&Move to Other View"), this, &MainWindow::moveToOtherView);
 
     QAction *closeSplitAction = m_viewMenu->addAction(tr("Close S&plit"), this, &MainWindow::closeSplit);
@@ -976,40 +966,63 @@ void MainWindow::reloadFromDisk()
 bool MainWindow::closeFile(int index)
 {
     TabWidget *tw = activeTabWidget();
+    return closeTab(tw, index < 0 ? tw->currentIndex() : index);
+}
 
-    if (index < 0) {
-        index = tw->currentIndex();
+// True when an editor other than this one, in either pane, shows its Document.
+bool MainWindow::isDocumentShownElsewhere(const Editor *editor) const
+{
+    const Document *doc = editor->document();
+    if (!doc) return false;
+    for (const Editor *other : allEditors()) {
+        if (other != editor && other->document() == doc) return true;
     }
+    return false;
+}
 
-    if (index < 0 || index >= tw->count()) {
+// Asks whether to save a modified document before its last editor closes.
+// Returns false when the user cancels or the save does not complete.
+bool MainWindow::confirmCloseEditor(TabWidget *tw, int index, Editor *editor)
+{
+    Document *doc = editor->document();
+    if (!doc || !doc->isModified() || doc->isReadOnly()) {
+        return true;
+    }
+    const QMessageBox::StandardButton result = QMessageBox::question(
+        this, tr("Save Changes"),
+        tr("Do you want to save changes to '%1'?").arg(doc->displayName()),
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    if (result == QMessageBox::Cancel) {
         return false;
     }
+    if (result == QMessageBox::Save) {
+        tw->setCurrentIndex(index);
+        editor->setFocus();
+        saveFile();
+        return !doc->isModified();  // false when the save failed or was cancelled
+    }
+    return true;
+}
 
+// Closes the tab at index in the given pane. The pane is passed explicitly so a
+// close request acts on the tab bar that sent it, never on the focused pane.
+bool MainWindow::closeTab(TabWidget *tw, int index)
+{
+    if (!tw || index < 0 || index >= tw->count()) {
+        return false;
+    }
     Editor *editor = qobject_cast<Editor*>(tw->widget(index));
     if (!editor) {
         return false;
     }
 
-    Document *doc = editor->document();
-    if (doc && doc->isModified() && !doc->isReadOnly()) {
-        QMessageBox::StandardButton result = QMessageBox::question(
-            this, tr("Save Changes"),
-            tr("Do you want to save changes to '%1'?").arg(doc->displayName()),
-            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-
-        if (result == QMessageBox::Cancel) {
-            return false;
-        }
-        if (result == QMessageBox::Save) {
-            tw->setCurrentIndex(index);
-            editor->setFocus();
-            saveFile();
-            if (doc->isModified()) {
-                return false;  // Save failed or canceled
-            }
-        }
+    // Lifetime guard: while another editor shows this Document it stays open,
+    // so closing one view never frees a Document the other pane still uses.
+    const bool shared = isDocumentShownElsewhere(editor);
+    if (!shared && !confirmCloseEditor(tw, index, editor)) {
+        return false;
     }
-
+    Document *doc = shared ? nullptr : editor->document();
     const QString closedPath = doc ? doc->filePath() : QString();
 
     tw->removeTab(index);
@@ -1017,21 +1030,17 @@ bool MainWindow::closeFile(int index)
     if (doc) {
         DocumentManager::instance().closeDocument(doc, true);
     }
-
     if (!closedPath.isEmpty()) {
         PluginManager::instance().broadcastFileClosed(closedPath);
     }
 
-    // Auto-unsplit if split 2 is now empty
     if (tw == m_tabWidget2) {
-        checkUnsplitNeeded();
+        checkUnsplitNeeded();  // auto-unsplit when pane 2 is now empty
     }
-
-    // Create new empty tab if all closed (but not if we're closing all to exit)
+    // Keep one empty tab, unless every tab is being closed to exit
     if (m_tabWidget->count() == 0 && !m_closingAll) {
         newFile();
     }
-
     updateWindowTitle();
     return true;
 }
@@ -1041,24 +1050,17 @@ bool MainWindow::closeAllFiles()
     // Prevent closeFile from creating new tabs while we're closing all
     m_closingAll = true;
 
-    // Close split 2 tabs first (unsplits automatically when empty)
-    if (m_tabWidget2 && m_tabWidget2->count() > 0) {
-        // Focus split 2 so closeFile operates on it
-        if (m_tabWidget2->currentWidget())
-            m_tabWidget2->currentWidget()->setFocus();
-        while (m_tabWidget2 && m_tabWidget2->count() > 0) {
-            if (!closeFile(0)) {
-                m_closingAll = false;
-                return false;
-            }
+    // Close pane 2 first (it unsplits when empty), then pane 1. Each close names
+    // its pane, so the result never depends on which pane has focus.
+    while (m_tabWidget2 && m_tabWidget2->count() > 0) {
+        if (!closeTab(m_tabWidget2, 0)) {
+            m_closingAll = false;
+            return false;
         }
     }
 
-    // Close split 1 tabs
-    if (m_tabWidget->currentWidget())
-        m_tabWidget->currentWidget()->setFocus();
     while (m_tabWidget->count() > 0) {
-        if (!closeFile(0)) {
+        if (!closeTab(m_tabWidget, 0)) {
             m_closingAll = false;
             return false;
         }
@@ -1169,7 +1171,10 @@ void MainWindow::onTabChanged(int index)
 
 void MainWindow::onTabCloseRequested(int index)
 {
-    closeFile(index);
+    // Both panes' tab bars connect here. Route by the sender, not by focus:
+    // a close on tab bar 1 must close pane 1's tab even when pane 2 has focus.
+    TabWidget *tw = qobject_cast<TabWidget*>(sender());
+    closeTab(tw ? tw : activeTabWidget(), index);
 }
 
 void MainWindow::onDocumentModified(bool modified)
@@ -2336,7 +2341,7 @@ void MainWindow::connectTabWidget(TabWidget *tw)
         connect(tw, &QTabWidget::currentChanged,
                 this, &MainWindow::onTab2Changed);
         connect(tw, &QTabWidget::tabCloseRequested,
-                this, &MainWindow::onTab2CloseRequested);
+                this, &MainWindow::onTabCloseRequested);
     }
 }
 
@@ -2353,17 +2358,8 @@ void MainWindow::splitView(Qt::Orientation orientation)
     m_tabWidget2 = new TabWidget(this);
     m_splitter->addWidget(m_tabWidget2);
     connectTabWidget(m_tabWidget2);
-
-    // Clone current document into the new split
-    Editor *current = qobject_cast<Editor*>(m_tabWidget->currentWidget());
-    if (current && current->document()) {
-        Editor *cloned = createEditor(current->document());
-        QString title = current->document()->displayName();
-        int idx = m_tabWidget2->addTab(cloned, title);
-        m_tabWidget2->setTabIcon(idx,
-            TabBar::iconForFile(current->document()->filePath()));
-        m_tabWidget2->setCurrentIndex(idx);
-    }
+    // The new pane starts empty. Splitting never clones the current document:
+    // a Document is shown by at most one editor (spec D5).
 }
 
 void MainWindow::unsplit()
@@ -2432,57 +2428,6 @@ void MainWindow::onTab2Changed(int index)
             m_lspBridge->onEditorChanged(currentEditor());
         }
     }
-}
-
-void MainWindow::onTab2CloseRequested(int index)
-{
-    if (!m_tabWidget2 || index < 0
-        || index >= m_tabWidget2->count()) {
-        return;
-    }
-
-    Editor *editor = qobject_cast<Editor*>(
-        m_tabWidget2->widget(index));
-    if (!editor) return;
-
-    Document *doc = editor->document();
-
-    // Check if this document has another editor in m_tabWidget
-    bool hasOtherEditor = false;
-    for (int i = 0; i < m_tabWidget->count(); ++i) {
-        Editor *e = qobject_cast<Editor*>(m_tabWidget->widget(i));
-        if (e && e->document() == doc) {
-            hasOtherEditor = true;
-            break;
-        }
-    }
-
-    // If no other editor has this doc, prompt to save
-    if (!hasOtherEditor && doc && doc->isModified()
-        && !doc->isReadOnly()) {
-        QMessageBox::StandardButton result = QMessageBox::question(
-            this, tr("Save Changes"),
-            tr("Do you want to save changes to '%1'?")
-                .arg(doc->displayName()),
-            QMessageBox::Save | QMessageBox::Discard
-                | QMessageBox::Cancel);
-        if (result == QMessageBox::Cancel) return;
-        if (result == QMessageBox::Save) {
-            m_tabWidget2->setCurrentIndex(index);
-            saveFile();
-            if (doc->isModified()) return;
-        }
-    }
-
-    m_tabWidget2->removeTab(index);
-    if (editor) editor->deleteLater();
-
-    // If the document has no other editors, close it
-    if (!hasOtherEditor) {
-        DocumentManager::instance().closeDocument(doc, true);
-    }
-
-    checkUnsplitNeeded();
 }
 
 void MainWindow::checkUnsplitNeeded()
