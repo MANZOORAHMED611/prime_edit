@@ -311,16 +311,35 @@ def changed_lines(root: Path, base: str) -> dict[str, set[int] | None]:
     return changes
 
 
+def base_lengths(root: Path, base: str, path: str) -> dict[str, int]:
+    """Length of each function in `path` at `base`, by name (empty if the file is new)."""
+    try:
+        source = git(root, "show", f"{base}:{path}")
+    except RuntimeError:
+        return {}
+    lengths: dict[str, int] = {}
+    for fn in find_functions(source):
+        lengths[fn.name] = max(fn.length, lengths.get(fn.name, 0))
+    return lengths
+
+
 def violations(root: Path, base: str) -> list[tuple[str, Function]]:
+    # Grandfather rule (Phase 1 ruling): about 78 functions were already over
+    # the limit at the base. Editing one is allowed if it does not grow;
+    # splitting them is a separate refactor. New functions get no allowance.
     found = []
     for path, lines in sorted(changed_lines(root, base).items()):
         file = root / path
         if not file.is_file():
             continue
+        before = base_lengths(root, base, path)
         for fn in find_functions(file.read_text(encoding="utf-8", errors="replace")):
             touched = lines is None or any(fn.start <= ln <= fn.end for ln in lines)
-            if touched and fn.length > MAX_LINES:
-                found.append((path, fn))
+            if not touched or fn.length <= MAX_LINES:
+                continue
+            if fn.name in before and fn.length <= before[fn.name] and before[fn.name] > MAX_LINES:
+                continue
+            found.append((path, fn))
     return found
 
 
@@ -341,7 +360,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"check_function_length: {err}", file=sys.stderr)
         return 2
     for path, fn in found:
-        print(f"{path}:{fn.start}-{fn.end}: {fn.name} is {fn.length} lines (max {MAX_LINES})")
+        print(f"{path}:{fn.start}-{fn.end}: {fn.name} is {fn.length} lines (max {MAX_LINES}; a function already over the limit at --base may be edited only if it does not grow)")
     if found:
         print(f"{len(found)} function(s) over {MAX_LINES} lines", file=sys.stderr)
         return 1

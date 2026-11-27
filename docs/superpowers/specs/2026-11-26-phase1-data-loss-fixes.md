@@ -526,7 +526,7 @@ T0.1 and T0.2 run 1 to 3 and 5 to 6. T0.1 runs no command 4 (it has no new tests
 - [ ] Its regression tests fail on the W0 base (command 4, output pasted) and pass after (command 1). For T0.1: the existing suites give the same result as at `9f5a683`.
 - [ ] Full ctest is green (command 2). The one exception: until T1.5 merges, `crash_test` may fail on its single known case and on nothing else.
 - [ ] ASan and UBSan clean: command 3 prints `0`, with the same `crash_test` exception.
-- [ ] Every function added or modified is at most 50 lines (command 5).
+- [ ] Every function added or modified is at most 50 lines (command 5). **Ruling (orchestrator, 2026-11-27, T0.2 finding):** about 78 functions were already over 50 lines at the base. Such a function may be edited only if it does not grow, and new logic goes into new helpers of 50 lines or fewer. Splitting the legacy functions is a Phase 3 refactor, because a forced split inside a data-loss fix adds risk to the code being made safe. `tools/check_function_length.py` enforces this.
 - [ ] No new `qDebug`, `printf` or `std::cout`/`cerr` (command 6).
 - [ ] html-docs updated where user-visible behaviour changes. Only W3 owns `html-docs/` in Phase 1. A W1, W2 or W4 task whose change is user-visible writes the user-facing description in its receipt for T3.5. W3 tasks T3.1 to T3.4 update the pages for their own behaviour. T3.5 covers the rest.
 - [ ] Only the files this section assigns to the task are changed. Scope is measured over the task's own non-merge commits: `git log --no-merges --name-only --format= <W0 base>..HEAD | sort -u` lists nothing else. Dependency merges are excluded, and commands 5 and 6 use the same base.

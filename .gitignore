@@ -16,3 +16,6 @@ TOOLBAR_FEATURES.md
 TOOLBAR_ICONS.md
 TOOLBAR_LAYOUT.md
 release/
+
+# Python bytecode from tools/
+__pycache__/
