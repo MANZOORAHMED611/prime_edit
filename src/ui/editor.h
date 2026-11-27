@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QSet>
 #include <QTimer>
+#include <functional>
 
 #include "core/searchengine.h"
 #include "core/lspclient.h"
@@ -18,6 +19,10 @@ struct Theme;
 class Document;
 class SyntaxHighlighter;
 class LineNumberArea;
+
+// The modified state a synced edit leaves behind in both the QTextDocument and
+// the Document. Preserve restores whatever both flags were before the edit.
+enum class SyncTarget { Preserve, Clean, Modified };
 
 class Editor : public QPlainTextEdit
 {
@@ -107,6 +112,8 @@ public:
     // Sync
     void syncToDocument();
     void syncFromDocument();
+    void runSyncedEdit(SyncTarget target, const std::function<void()> &edit);
+    QString rawText() const;
 
     // Line operations
     void duplicateLine();
@@ -134,7 +141,8 @@ public:
     void toggleFoldAt(int blockNumber);
     bool isFoldableLine(int blockNumber) const;
     bool isFoldedLine(int blockNumber) const;
-    QMap<int, QStringList> foldedRegions() const { return m_foldedRegions; }
+    // Header block numbers of the folded regions, the form the session stores.
+    QList<int> foldedRegions() const { return m_foldedRegions.keys(); }
 
     // Whitespace / EOL / indent guide visualization
     void setShowWhitespace(bool show);

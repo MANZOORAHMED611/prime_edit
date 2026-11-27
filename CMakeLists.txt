@@ -56,6 +56,7 @@ set(CORE_SOURCES
     src/core/llmevaluator.cpp
     src/core/islamicbridge.cpp
     src/core/schemavalidator.cpp
+    src/core/textcodec.cpp
 )
 
 set(UI_SOURCES

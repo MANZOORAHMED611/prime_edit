@@ -884,7 +884,7 @@ void test_file_io() {
         TEST("Save to read-only location fails gracefully");
         Document doc;
         doc.setText("test");
-        bool saved = doc.saveAs("/proc/test_file_that_cannot_be_created");
+        bool saved = doc.saveAs("/proc/test_file_that_cannot_be_created") == SaveResult::Ok;
         CHECK(!saved, "should fail to save to /proc");
     }
     {
@@ -916,7 +916,7 @@ void test_file_io() {
         QString unicodePath = tmpDir.path() + "/test_\xC3\xA9\xC3\xA0\xC3\xBC.txt";
         Document doc;
         doc.setText("Unicode filename test");
-        bool saved = doc.saveAs(unicodePath);
+        bool saved = doc.saveAs(unicodePath) == SaveResult::Ok;
         if (saved) {
             Document doc2;
             bool loaded = doc2.load(unicodePath);

@@ -789,7 +789,44 @@ void MainWindow::newFile()
     updateWindowTitle();
 }
 
-void MainWindow::openFile(const QString &filePath)
+QList<Editor*> MainWindow::allEditors() const
+{
+    QList<Editor*> editors;
+    for (TabWidget *tw : {m_tabWidget, m_tabWidget2}) {
+        if (!tw) continue;
+        for (int i = 0; i < tw->count(); ++i) {
+            if (Editor *ed = qobject_cast<Editor*>(tw->widget(i))) {
+                editors.append(ed);
+            }
+        }
+    }
+    return editors;
+}
+
+void MainWindow::showNotification(const QString &message)
+{
+    m_notificationBar->showInfo(message);
+}
+
+// Brings an editor already showing path to the front in whichever pane holds it,
+// so opening a file twice never creates a second editor for it.
+Editor *MainWindow::activateOpenEditor(const QString &path)
+{
+    for (TabWidget *tw : {m_tabWidget, m_tabWidget2}) {
+        if (!tw) continue;
+        for (int i = 0; i < tw->count(); ++i) {
+            Editor *ed = qobject_cast<Editor*>(tw->widget(i));
+            if (ed && ed->document() && ed->document()->filePath() == path) {
+                tw->setCurrentIndex(i);
+                tw->currentWidget()->setFocus();
+                return ed;
+            }
+        }
+    }
+    return nullptr;
+}
+
+Editor *MainWindow::openFile(const QString &filePath)
 {
     QString path = filePath;
     if (path.isEmpty()) {
@@ -798,33 +835,17 @@ void MainWindow::openFile(const QString &filePath)
     }
 
     if (path.isEmpty()) {
-        return;
+        return nullptr;
     }
 
-    // Check if already open in either split
-    for (int i = 0; i < m_tabWidget->count(); ++i) {
-        Editor *ed = qobject_cast<Editor*>(m_tabWidget->widget(i));
-        if (ed && ed->document() && ed->document()->filePath() == path) {
-            m_tabWidget->setCurrentIndex(i);
-            m_tabWidget->currentWidget()->setFocus();
-            return;
-        }
-    }
-    if (m_tabWidget2) {
-        for (int i = 0; i < m_tabWidget2->count(); ++i) {
-            Editor *ed = qobject_cast<Editor*>(m_tabWidget2->widget(i));
-            if (ed && ed->document() && ed->document()->filePath() == path) {
-                m_tabWidget2->setCurrentIndex(i);
-                m_tabWidget2->currentWidget()->setFocus();
-                return;
-            }
-        }
+    if (Editor *existing = activateOpenEditor(path)) {
+        return existing;
     }
 
     Document *doc = DocumentManager::instance().openDocument(path);
     if (!doc) {
         QMessageBox::warning(this, tr("Error"), tr("Could not open file: %1").arg(path));
-        return;
+        return nullptr;
     }
 
     // Detect language
@@ -842,6 +863,7 @@ void MainWindow::openFile(const QString &filePath)
     PluginManager::instance().broadcastFileOpened(path);
 
     updateWindowTitle();
+    return editor;
 }
 
 void MainWindow::saveFile()
@@ -860,7 +882,11 @@ void MainWindow::saveFile()
         return;
     }
 
-    if (doc->save()) {
+    if (doc->save() == SaveResult::Ok) {
+        // Clears both modified flags only once the write succeeded. A no-op while
+        // syncToDocument still clears the editor flag; it is what keeps the
+        // editor clean once T2.2 stops doing that before the save.
+        editor->runSyncedEdit(SyncTarget::Clean, {});
         PluginManager::instance().broadcastFileSaved(doc->filePath());
         updateWindowTitle();
         updateTabTextForDocument(doc);
@@ -892,7 +918,9 @@ void MainWindow::saveFileAs()
     editor->syncToDocument();
 
     Document *doc = editor->document();
-    if (doc->saveAs(path)) {
+    if (doc->saveAs(path) == SaveResult::Ok) {
+        // Same reasoning as saveFile: clear both flags only after a good write.
+        editor->runSyncedEdit(SyncTarget::Clean, {});
         // Update language based on new extension
         QString ext = FileUtils::fileExtension(path);
         QString language = LanguageManager::instance().languageForExtension(ext);

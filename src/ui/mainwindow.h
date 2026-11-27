@@ -53,9 +53,15 @@ public:
     // Tab access
     TabWidget *tabWidget() const { return m_tabWidget; }
     bool isSplit() const { return m_tabWidget2 != nullptr; }
+    // Editors of both panes. Anything that must reach every open document
+    // (session, unsaved cache, settings) iterates this, not one tab widget.
+    QList<Editor*> allEditors() const;
 
     // Session
     QStringList openFilePaths() const;
+
+    // Informational message in the notification bar, with no Yes/No question.
+    void showNotification(const QString &message);
 
 public slots:
     // Encoding operations
@@ -72,7 +78,9 @@ public slots:
 
     // File operations
     void newFile();
-    void openFile(const QString &filePath = QString());
+    // Returns the editor showing the file (an existing one if it is already
+    // open), or null on failure or a cancelled dialog.
+    Editor *openFile(const QString &filePath = QString());
     void saveFile();
     void saveFileAs();
     void saveAllFiles();
@@ -281,6 +289,7 @@ private:
     int findEditorIndex(Editor *editor) const;
     int findEditorIndex(Document *document) const;
     void updateTabTextForDocument(Document *doc);
+    Editor *activateOpenEditor(const QString &path);
 
     void printDocument(QPrinter *printer, Editor *editor);
     TabWidget *activeTabWidget() const;

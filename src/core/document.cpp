@@ -164,48 +164,63 @@ bool Document::load(const QString &filePath)
     return true;
 }
 
-bool Document::save()
+namespace {
+
+// The 1.0.0 save-path encoder, moved out of saveAs unchanged so saveAs stays
+// under 50 lines. T1.3 replaces it with TextCodec::encode.
+QByteArray encodeForSave(const QString &text, const QString &encoding)
 {
-    if (m_filePath.isEmpty()) {
-        return false;
+    if (encoding == "UTF-8-BOM") {
+        return QByteArray("\xEF\xBB\xBF") + text.toUtf8();
     }
-    return saveAs(m_filePath);
+    if (encoding == "UTF-16LE") {
+        auto encoder = QStringEncoder(QStringEncoder::Utf16LE);
+        return encoder(text);
+    }
+    if (encoding == "UTF-16BE") {
+        auto encoder = QStringEncoder(QStringEncoder::Utf16BE);
+        return encoder(text);
+    }
+    if (encoding == "ISO-8859-1") {
+        return text.toLatin1();
+    }
+    return text.toUtf8(); // UTF-8 and every unrecognised name, as in 1.0.0
 }
 
-bool Document::saveAs(const QString &filePath)
+} // namespace
+
+// W0 maps the 1.0.0 bool onto SaveResult (true -> Ok, false -> IoError) without
+// changing what is written; T1.1 gives the refusals and WriteMode their meaning.
+SaveResult Document::save(WriteMode mode)
 {
+    if (m_filePath.isEmpty()) {
+        m_lastError = tr("The document has no file name.");
+        return SaveResult::IoError;
+    }
+    return saveAs(m_filePath, mode);
+}
+
+SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
+{
+    Q_UNUSED(mode);
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly)) {
-        return false;
+        m_lastError = file.errorString();
+        return SaveResult::IoError;
     }
 
     // Get text and convert line endings
     QString text = m_content.text();
     text = normalizeLineEndings(text, m_lineEnding);
 
-    // Convert encoding
-    QByteArray data;
-    if (m_encoding == "UTF-8") {
-        data = text.toUtf8();
-    } else if (m_encoding == "UTF-8-BOM") {
-        data = QByteArray("\xEF\xBB\xBF") + text.toUtf8();
-    } else if (m_encoding == "UTF-16LE") {
-        auto encoder = QStringEncoder(QStringEncoder::Utf16LE);
-        data = encoder(text);
-    } else if (m_encoding == "UTF-16BE") {
-        auto encoder = QStringEncoder(QStringEncoder::Utf16BE);
-        data = encoder(text);
-    } else if (m_encoding == "ISO-8859-1") {
-        data = text.toLatin1();
-    } else {
-        data = text.toUtf8();
-    }
+    QByteArray data = encodeForSave(text, m_encoding);
 
     qint64 written = file.write(data);
     file.close();
 
     if (written != data.size()) {
-        return false;
+        m_lastError = file.errorString();
+        return SaveResult::IoError;
     }
 
     QString oldPath = m_filePath;
@@ -218,7 +233,49 @@ bool Document::saveAs(const QString &filePath)
     emit modifiedChanged(m_modified);
     clearRecovery();
 
-    return true;
+    m_lastError.clear();
+    return SaveResult::Ok;
+}
+
+// Placeholders (spec R2-1). These contracts are declared at the W0 base so later
+// suites compile against it; each returns the 1.0.0 behaviour until the named
+// task defines it.
+
+bool Document::directWriteAvailable() const
+{
+    return false; // T1.1
+}
+
+bool Document::lastSaveWasDirect() const
+{
+    return false; // T1.1
+}
+
+bool Document::isFormatDirty() const
+{
+    return false; // T1.2
+}
+
+bool Document::hadMixedLineEndings() const
+{
+    return false; // T1.2
+}
+
+bool Document::wasDecodedLossily() const
+{
+    return false; // T1.3
+}
+
+bool Document::reloadWithEncoding(const QString &name)
+{
+    Q_UNUSED(name);
+    return false; // T1.3
+}
+
+void Document::setSizeThresholdsForTest(qint64 medium, qint64 large)
+{
+    Q_UNUSED(medium);
+    Q_UNUSED(large); // T1.3
 }
 
 QString Document::fileName() const

@@ -1296,6 +1296,46 @@ void Editor::syncToDocument()
     m_syncing = false;
 }
 
+// Programmatic edits (load, reload, RTL pass, draft restore) must not be taken for
+// user edits, and must leave both modified flags in the same state: when the two
+// flags disagree, Save, the close prompt and the unsaved cache disagree too.
+void Editor::runSyncedEdit(SyncTarget target, const std::function<void()> &edit)
+{
+    QTextDocument *textDoc = QPlainTextEdit::document();
+    const bool textWasModified = textDoc->isModified();
+    const bool docWasModified = m_document && m_document->isModified();
+    const bool oldSyncing = m_syncing;
+    m_syncing = true;
+
+    if (edit) {
+        edit();
+    }
+
+    bool textModified = target == SyncTarget::Modified;
+    bool docModified = textModified;
+    if (target == SyncTarget::Preserve) {
+        textModified = textWasModified;
+        docModified = docWasModified;
+    }
+    // Still inside m_syncing, so the modificationChanged hook cannot copy the
+    // QTextDocument flag over the Document flag.
+    textDoc->setModified(textModified);
+    if (m_document) {
+        m_document->setModified(docModified);
+    }
+    m_syncing = oldSyncing;
+}
+
+// toPlainText() turns U+00A0 into a space and U+2028 into LF, which rewrites the
+// user's text on save. toRawText() keeps both; only the block separator U+2029
+// needs mapping back to the LF it stands for.
+QString Editor::rawText() const
+{
+    QString text = QPlainTextEdit::document()->toRawText();
+    text.replace(QChar::ParagraphSeparator, QLatin1Char('\n'));
+    return text;
+}
+
 void Editor::syncFromDocument()
 {
     // Sync document content to editor (called after load/reload)
