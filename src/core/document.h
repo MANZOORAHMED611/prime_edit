@@ -56,7 +56,9 @@ public:
     // True when the last successful save wrote in place (hard link or foreign
     // owner), because an atomic replace would have broken the link or owner.
     bool lastSaveWasDirect() const;
-    bool isModified() const { return m_modified; }
+    // A pending encoding or line-ending conversion is a change too, and text
+    // undo cannot reach it: only a successful save or load clears it.
+    bool isModified() const { return m_modified || m_formatDirty; }
     bool isFormatDirty() const;
     bool isUntitled() const { return m_filePath.isEmpty(); }
 
@@ -141,12 +143,16 @@ private:
     QString m_lastError;
     bool m_directWriteAvailable = false;
     bool m_lastSaveWasDirect = false;
+    bool m_formatDirty = false;
+    bool m_mixedLineEndings = false;
 
+    void setFormatDirty(bool dirty);
     SaveResult refusalFor() const;
     SaveResult writeAtomic(const QString &path, const QByteArray &data, WriteMode mode);
     SaveResult writeDirect(const QString &path, const QByteArray &data);
     void finishSave(const QString &path);
-    static LineEnding detectLineEnding(const QString &text);
+    static LineEnding detectLineEnding(const QString &text, bool *mixed);
+    static LineEnding defaultLineEnding();
     QString normalizeLineEndings(const QString &text, LineEnding target);
     QString recoveryFilePath() const;
 };

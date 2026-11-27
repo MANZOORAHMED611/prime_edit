@@ -1,6 +1,7 @@
 #include "document.h"
 #include "charsetdetector.h"
 #include "largefile.h"
+#include "utils/settings.h"
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
@@ -64,7 +65,7 @@ bool Document::load(const QString &filePath)
         // Don't load into PieceTable at all — Editor will load directly
         // into QTextDocument to avoid the double/triple copy that causes OOM
         m_filePath = filePath;
-        m_modified = false;
+        m_modified = m_formatDirty = false;
         setReadOnly(true);
 
         // Detect encoding from first 8KB only
@@ -92,7 +93,7 @@ bool Document::load(const QString &filePath)
         QString text = QString::fromUtf8(data);
         data.clear(); // free byte array
 
-        m_lineEnding = detectLineEnding(text);
+        m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
         text = normalizeLineEndings(text, Unix);
 
         // Check for long lines — break them
@@ -109,7 +110,7 @@ bool Document::load(const QString &filePath)
 
         m_content.setText(text);
         m_filePath = filePath;
-        m_modified = false;
+        m_modified = m_formatDirty = false;
         emit filePathChanged(m_filePath);
         emit encodingChanged(m_encoding);
         return true;
@@ -152,12 +153,12 @@ bool Document::load(const QString &filePath)
     }
 
     // Detect and normalize line endings
-    m_lineEnding = detectLineEnding(text);
+    m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
     text = normalizeLineEndings(text, Unix);  // Internally use Unix line endings
 
     m_content.setText(text);
     m_filePath = filePath;
-    m_modified = false;
+    m_modified = m_formatDirty = false;
 
     emit filePathChanged(m_filePath);
     emit encodingChanged(m_encoding);
@@ -302,7 +303,7 @@ void Document::finishSave(const QString &path)
 {
     const QString oldPath = m_filePath;
     m_filePath = path;
-    m_modified = false;
+    m_modified = m_formatDirty = false;
     if (oldPath != m_filePath)
         emit filePathChanged(m_filePath);
     emit modifiedChanged(m_modified);
@@ -320,19 +321,19 @@ bool Document::lastSaveWasDirect() const
     return m_lastSaveWasDirect;
 }
 
-// Placeholders (spec R2-1). These contracts are declared at the W0 base so later
-// suites compile against it; each returns the 1.0.0 behaviour until the named
-// task defines it.
-
 bool Document::isFormatDirty() const
 {
-    return false; // T1.2
+    return m_formatDirty;
 }
 
 bool Document::hadMixedLineEndings() const
 {
-    return false; // T1.2
+    return m_mixedLineEndings;
 }
+
+// Placeholders (spec R2-1). These contracts are declared at the W0 base so later
+// suites compile against it; each returns the 1.0.0 behaviour until the named
+// task defines it.
 
 bool Document::wasDecodedLossily() const
 {
@@ -375,7 +376,7 @@ void Document::setEncoding(const QString &encoding)
         return;
     if (m_encoding != encoding) {
         m_encoding = encoding;
-        setModified(true);
+        setFormatDirty(true);
         emit encodingChanged(m_encoding);
     }
 }
@@ -386,7 +387,7 @@ void Document::setLineEnding(LineEnding ending)
         return;
     if (m_lineEnding != ending) {
         m_lineEnding = ending;
-        setModified(true);
+        setFormatDirty(true);
         emit lineEndingChanged(m_lineEnding);
     }
 }
@@ -452,12 +453,22 @@ void Document::setReadOnly(bool readOnly)
     }
 }
 
+// Sets the content flag only. modifiedChanged reports isModified(), so a pending
+// conversion keeps the document modified when the editor's undo reaches clean.
 void Document::setModified(bool modified)
 {
-    if (m_modified != modified) {
-        m_modified = modified;
-        emit modifiedChanged(m_modified);
-    }
+    const bool wasModified = isModified();
+    m_modified = modified;
+    if (isModified() != wasModified)
+        emit modifiedChanged(isModified());
+}
+
+void Document::setFormatDirty(bool dirty)
+{
+    const bool wasModified = isModified();
+    m_formatDirty = dirty;
+    if (isModified() != wasModified)
+        emit modifiedChanged(isModified());
 }
 
 bool Document::hasRecoveryFile() const
@@ -510,7 +521,10 @@ void Document::clearRecovery()
     }
 }
 
-Document::LineEnding Document::detectLineEnding(const QString &text)
+// The majority ending wins and *mixed records that more than one kind occurred,
+// because saving normalises a mixed file to that majority. A file with no line
+// break takes the configured default; 1.0.0 reported CRLF for every such file.
+Document::LineEnding Document::detectLineEnding(const QString &text, bool *mixed)
 {
     qint64 crlf = 0, lf = 0, cr = 0;
 
@@ -527,8 +541,18 @@ Document::LineEnding Document::detectLineEnding(const QString &text)
         }
     }
 
+    *mixed = (crlf > 0) + (lf > 0) + (cr > 0) > 1;
+    if (crlf + lf + cr == 0) return defaultLineEnding();
     if (crlf >= lf && crlf >= cr) return Windows;
     if (cr > lf) return ClassicMac;
+    return Unix;
+}
+
+Document::LineEnding Document::defaultLineEnding()
+{
+    const QString setting = Settings::instance().defaultLineEnding();
+    if (setting == QLatin1String("CRLF")) return Windows;
+    if (setting == QLatin1String("CR")) return ClassicMac;
     return Unix;
 }
 
