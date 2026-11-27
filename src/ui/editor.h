@@ -142,7 +142,8 @@ public:
     bool isFoldableLine(int blockNumber) const;
     bool isFoldedLine(int blockNumber) const;
     // Header block numbers of the folded regions, the form the session stores.
-    QList<int> foldedRegions() const { return m_foldedRegions.keys(); }
+    // Computed on demand from the blocks (spec D2); nothing is cached.
+    QList<int> foldedRegions() const;
 
     // Whitespace / EOL / indent guide visualization
     void setShowWhitespace(bool show);
@@ -217,9 +218,13 @@ private:
     bool m_syncing = false;
     qint64 m_largeFileOffset = 0;
 
-    // Code folding
-    QMap<int, QStringList> m_foldedRegions;
+    // Code folding (view-only: hidden blocks plus a header marker, spec D2)
     int findFoldEnd(int blockNumber) const;
+    void setupFoldTracking();
+    void revealBlock(const QTextBlock &block);
+    void revealRange(const QTextCursor &range);
+    void revealEditedFolds(int position, int removed, int added);
+    void refreshFoldLayout(int from, int length);
 
     // Column/block selection
     struct ColumnSelection {

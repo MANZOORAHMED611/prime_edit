@@ -97,6 +97,7 @@ Editor::Editor(Document *document, QWidget *parent)
     runSyncedEdit(m_document->isModified() ? SyncTarget::Modified : SyncTarget::Clean,
                   [this]() { loadInitialContent(); });
     bindReadOnly();
+    setupFoldTracking();
 
     // Set language — skip syntax highlighting if file is over 5MB
     // (regex on thousands of 2000+ char lines causes noticeable lag)
@@ -608,7 +609,10 @@ void Editor::resetZoom()
 
 void Editor::goToLine(int line)
 {
-    QTextBlock block = QPlainTextEdit::document()->findBlockByLineNumber(line - 1);
+    // By block number: findBlockByLineNumber counts layout lines, which skips
+    // hidden (folded) blocks and counts wrapped lines. The cursor hook then
+    // unfolds a target inside a fold.
+    QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(line - 1);
     if (block.isValid()) {
         QTextCursor cursor(block);
         setTextCursor(cursor);
@@ -663,6 +667,7 @@ int Editor::replaceAll(const QString &findText, const QString &replaceText, QTex
         QTextCursor found = QPlainTextEdit::document()->find(findText, cursor, flags);
         if (found.isNull()) break;
 
+        revealRange(found); // never replace inside a fold unseen
         found.insertText(replaceText);
         // Move cursor past the replacement to avoid re-matching
         cursor.setPosition(found.position());
@@ -1837,9 +1842,31 @@ static bool isBlankLine(const QTextBlock &block)
     return block.text().trimmed().isEmpty();
 }
 
+namespace {
+
+// Marks a fold header block. Fold state is derived, never stored: a region is
+// folded when its header carries this marker and the next block is hidden. No
+// QTextBlock handles are kept, so edits cannot leave a stale fold behind (D2).
+class FoldHeaderData : public QTextBlockUserData
+{
+};
+
+bool isFoldHeader(const QTextBlock &block)
+{
+    return block.isValid() && dynamic_cast<FoldHeaderData *>(block.userData()) != nullptr;
+}
+
+bool isFoldedHeader(const QTextBlock &block)
+{
+    const QTextBlock next = block.next();
+    return isFoldHeader(block) && next.isValid() && !next.isVisible();
+}
+
+} // namespace
+
 bool Editor::isFoldableLine(int blockNumber) const
 {
-    if (m_foldedRegions.contains(blockNumber)) return true;
+    if (isFoldedLine(blockNumber)) return true;
 
     QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(blockNumber);
     if (!block.isValid()) return false;
@@ -1870,7 +1897,17 @@ bool Editor::isFoldableLine(int blockNumber) const
 
 bool Editor::isFoldedLine(int blockNumber) const
 {
-    return m_foldedRegions.contains(blockNumber);
+    return isFoldedHeader(QPlainTextEdit::document()->findBlockByNumber(blockNumber));
+}
+
+QList<int> Editor::foldedRegions() const
+{
+    QList<int> headers;
+    for (QTextBlock b = QPlainTextEdit::document()->begin(); b.isValid(); b = b.next()) {
+        if (isFoldedHeader(b))
+            headers.append(b.blockNumber());
+    }
+    return headers;
 }
 
 int Editor::findFoldEnd(int blockNumber) const
@@ -1923,105 +1960,119 @@ int Editor::findFoldEnd(int blockNumber) const
     return -1;
 }
 
+// Folding is view-only (D2): the body blocks are hidden, and no text is ever
+// removed or inserted, so the buffer, the save path and the undo stack never
+// see a fold.
 void Editor::foldAt(int blockNumber)
 {
-    if (m_foldedRegions.contains(blockNumber)) return;
+    if (isFoldedLine(blockNumber)) return;
 
-    int foldEnd = findFoldEnd(blockNumber);
+    const int foldEnd = findFoldEnd(blockNumber);
     if (foldEnd <= blockNumber) return;
 
-    // Cache the lines to be folded (blockNumber+1 through foldEnd)
-    QStringList cachedLines;
-    for (int i = blockNumber + 1; i <= foldEnd; ++i) {
-        QTextBlock block =
-            QPlainTextEdit::document()->findBlockByNumber(i);
-        if (!block.isValid()) break;
-        cachedLines.append(block.text());
+    QTextDocument *doc = QPlainTextEdit::document();
+    QTextBlock header = doc->findBlockByNumber(blockNumber);
+    const QTextBlock last = doc->findBlockByNumber(foldEnd);
+    if (!header.isValid() || !last.isValid()) return;
+
+    // A cursor, selection or extra cursor inside the body would sit in hidden
+    // text, so the cursor moves to the header and extra cursors are dropped.
+    const int bodyStart = header.next().position();
+    const int bodyEnd = last.position() + last.length() - 1;
+    const QTextCursor current = textCursor();
+    if (current.selectionEnd() >= bodyStart && current.selectionStart() <= bodyEnd) {
+        QTextCursor parked(header);
+        parked.movePosition(QTextCursor::EndOfBlock);
+        setTextCursor(parked);
     }
+    if (!m_extraCursors.isEmpty())
+        clearExtraCursors();
 
-    if (cachedLines.isEmpty()) return;
-
-    m_foldedRegions[blockNumber] = cachedLines;
-
-    // Remove the cached lines from the document
-    bool oldSyncing = m_syncing;
-    m_syncing = true;
-
-    QTextBlock startBlock =
-        QPlainTextEdit::document()->findBlockByNumber(blockNumber + 1);
-    QTextBlock endBlock =
-        QPlainTextEdit::document()->findBlockByNumber(
-            blockNumber + cachedLines.size());
-
-    if (startBlock.isValid() && endBlock.isValid()) {
-        QTextCursor cursor = textCursor();
-        // Select from end of header block to end of last folded block
-        cursor.setPosition(startBlock.position() - 1);
-        cursor.setPosition(
-            endBlock.position() + endBlock.length() - 1,
-            QTextCursor::KeepAnchor);
-        cursor.beginEditBlock();
-        cursor.removeSelectedText();
-        cursor.endEditBlock();
-    }
-
-    // Add fold indicator to the header line
-    QTextBlock headerBlock =
-        QPlainTextEdit::document()->findBlockByNumber(blockNumber);
-    if (headerBlock.isValid()) {
-        QTextCursor cursor(headerBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock);
-        cursor.beginEditBlock();
-        cursor.insertText(" [...]");
-        cursor.endEditBlock();
-    }
-
-    m_syncing = oldSyncing;
-    m_lineNumberArea->update();
+    header.setUserData(new FoldHeaderData);
+    for (QTextBlock b = header.next(); b.isValid() && b.blockNumber() <= foldEnd; b = b.next())
+        b.setVisible(false);
+    refreshFoldLayout(header.position(), bodyEnd + 1 - header.position());
 }
 
 void Editor::unfoldAt(int blockNumber)
 {
-    if (!m_foldedRegions.contains(blockNumber)) return;
+    const QTextBlock header = QPlainTextEdit::document()->findBlockByNumber(blockNumber);
+    if (isFoldedHeader(header))
+        revealBlock(header.next());
+}
 
-    QStringList cachedLines = m_foldedRegions.take(blockNumber);
+// Shows the run of hidden blocks that contains block, and clears the fold
+// markers of its header and of any nested header inside it.
+void Editor::revealBlock(const QTextBlock &block)
+{
+    if (!block.isValid() || block.isVisible()) return;
 
-    bool oldSyncing = m_syncing;
-    m_syncing = true;
+    QTextBlock start = block;
+    while (start.previous().isValid() && !start.previous().isVisible())
+        start = start.previous();
+    QTextBlock header = start.previous();
+    if (isFoldHeader(header))
+        header.setUserData(nullptr);
 
-    QTextBlock headerBlock =
-        QPlainTextEdit::document()->findBlockByNumber(blockNumber);
-    if (!headerBlock.isValid()) {
-        m_syncing = oldSyncing;
-        return;
+    QTextBlock lastHidden = start;
+    for (QTextBlock b = start; b.isValid() && !b.isVisible(); b = b.next()) {
+        if (isFoldHeader(b))
+            b.setUserData(nullptr);
+        b.setVisible(true);
+        lastHidden = b;
     }
+    refreshFoldLayout(start.position(), lastHidden.position() + lastHidden.length() - start.position());
+}
 
-    // Remove [...] indicator from header line
-    QString headerText = headerBlock.text();
-    if (headerText.endsWith(" [...]")) {
-        QTextCursor cursor(headerBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock);
-        // " [...]" = 6 chars
-        cursor.movePosition(
-            QTextCursor::Left, QTextCursor::KeepAnchor, 6);
-        cursor.beginEditBlock();
-        cursor.removeSelectedText();
-
-        // Re-insert cached lines
-        cursor.movePosition(QTextCursor::EndOfBlock);
-        for (const QString &line : cachedLines) {
-            cursor.insertText("\n" + line);
-        }
-        cursor.endEditBlock();
+// Unfold rule for cursors and selections: any range that reaches a hidden
+// block unfolds it first, so nothing can be selected or edited unseen.
+void Editor::revealRange(const QTextCursor &range)
+{
+    QTextDocument *doc = QPlainTextEdit::document();
+    const QTextBlock last = doc->findBlock(range.selectionEnd());
+    for (QTextBlock b = doc->findBlock(range.selectionStart()); b.isValid(); b = b.next()) {
+        revealBlock(b);
+        if (b == last) break;
     }
+}
 
-    m_syncing = oldSyncing;
+// Unfold rules for edits: text placed in a hidden block (undo, a command with
+// its own cursor) becomes visible, and a hidden run whose header was removed
+// is shown again. Programmatic loads (m_syncing) create no hidden blocks.
+void Editor::revealEditedFolds(int position, int /* removed */, int added)
+{
+    if (m_syncing) return;
+
+    QTextDocument *doc = QPlainTextEdit::document();
+    const QTextBlock last = doc->findBlock(position + added);
+    for (QTextBlock b = doc->findBlock(position); b.isValid(); b = b.next()) {
+        revealBlock(b);
+        if (!isFoldHeader(b))
+            revealBlock(b.next());
+        if (b == last) break;
+    }
+}
+
+// Visibility changes are not content changes, so the layout must be told.
+void Editor::refreshFoldLayout(int from, int length)
+{
+    QPlainTextEdit::document()->markContentsDirty(from, length);
+    viewport()->update();
     m_lineNumberArea->update();
+}
+
+void Editor::setupFoldTracking()
+{
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, [this]() {
+        revealRange(textCursor());
+    });
+    connect(QPlainTextEdit::document(), &QTextDocument::contentsChange,
+            this, &Editor::revealEditedFolds);
 }
 
 void Editor::toggleFoldAt(int blockNumber)
 {
-    if (m_foldedRegions.contains(blockNumber)) {
+    if (isFoldedLine(blockNumber)) {
         unfoldAt(blockNumber);
     } else if (isFoldableLine(blockNumber)) {
         foldAt(blockNumber);
@@ -2039,12 +2090,13 @@ void Editor::foldAll()
 
 void Editor::unfoldAll()
 {
-    QList<int> foldedKeys = m_foldedRegions.keys();
-    std::sort(foldedKeys.begin(), foldedKeys.end(),
-              std::greater<int>());
-    for (int key : foldedKeys) {
-        unfoldAt(key);
+    QTextDocument *doc = QPlainTextEdit::document();
+    for (QTextBlock b = doc->begin(); b.isValid(); b = b.next()) {
+        if (isFoldHeader(b))
+            b.setUserData(nullptr);
+        b.setVisible(true);
     }
+    refreshFoldLayout(0, doc->characterCount());
 }
 
 void Editor::toggleFoldAtCursor()
@@ -2185,6 +2237,7 @@ void Editor::updateMultiCursorSelections()
     Theme theme = ThemeManager::instance().currentTheme();
 
     for (const auto &cur : m_extraCursors) {
+        revealRange(cur); // every cursor that will edit must be visible (D2)
         if (cur.hasSelection()) {
             // Highlight the selection
             QTextEdit::ExtraSelection sel;
