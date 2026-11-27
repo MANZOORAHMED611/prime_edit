@@ -96,6 +96,7 @@ Editor::Editor(Document *document, QWidget *parent)
     // already holds unsaved edits must not hide them.
     runSyncedEdit(m_document->isModified() ? SyncTarget::Modified : SyncTarget::Clean,
                   [this]() { loadInitialContent(); });
+    bindReadOnly();
 
     // Set language — skip syntax highlighting if file is over 5MB
     // (regex on thousands of 2000+ char lines causes noticeable lag)
@@ -153,6 +154,37 @@ Editor::~Editor()
 {
 }
 
+// Read-only is decided by the Document for every cause: partial view, lossy
+// decode, Medium-mode long lines, no write permission. The Editor mirrors it at
+// bind time and whenever it changes, so edits are refused, not discarded (D12).
+void Editor::bindReadOnly()
+{
+    applyReadOnly(m_document->isReadOnly());
+    connect(m_document, &Document::readOnlyChanged, this, &Editor::applyReadOnly);
+}
+
+// setReadOnly(true) also drops keyboard selection. Keep it, so a read-only file
+// can still be navigated, selected and copied from the keyboard.
+void Editor::applyReadOnly(bool readOnly)
+{
+    setReadOnly(readOnly);
+    if (readOnly)
+        setTextInteractionFlags(textInteractionFlags() | Qt::TextSelectableByKeyboard);
+}
+
+// keyPressEvent inserts through QTextCursor for Enter, Tab, brackets and column
+// edits, which bypasses QPlainTextEdit's read-only check. While read-only, key
+// presses go straight to the base class: it still navigates, selects and
+// copies, and edits nothing.
+bool Editor::event(QEvent *e)
+{
+    if (e->type() == QEvent::KeyPress && isReadOnly()) {
+        QPlainTextEdit::keyPressEvent(static_cast<QKeyEvent *>(e));
+        return true;
+    }
+    return QPlainTextEdit::event(e);
+}
+
 // Fills the QTextDocument from the Document. Runs inside runSyncedEdit, which
 // sets both modified flags afterwards.
 void Editor::loadInitialContent()
@@ -169,9 +201,9 @@ void Editor::loadInitialContent()
     QFile file(m_document->filePath());
     if (file.open(QIODevice::ReadOnly)) {
         constexpr qint64 PREVIEW_SIZE = 2 * 1024 * 1024;
+        // No "showing first N of M" text is appended: it would become part of
+        // the buffer. MainWindow shows the banner in the notification bar (D3).
         QByteArray raw = file.read(PREVIEW_SIZE);
-        bool truncated = !file.atEnd();
-        qint64 totalSize = file.size();
         file.close();
 
         QString text = QString::fromUtf8(raw);
@@ -187,12 +219,6 @@ void Editor::loadInitialContent()
                 broken.append(text.mid(i, LINE_LEN));
             }
             text = broken;
-        }
-
-        if (truncated) {
-            text.append(QString("\n\n[ Showing first %1 of %2 — file is read-only ]")
-                .arg(QLocale().formattedDataSize(PREVIEW_SIZE))
-                .arg(QLocale().formattedDataSize(totalSize)));
         }
 
         setPlainText(text);
