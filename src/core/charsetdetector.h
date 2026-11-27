@@ -24,6 +24,7 @@ public:
 
 private:
     static QString detectWithoutBom(const unsigned char *bytes, qsizetype len);
+    static QString detectUtf16(const unsigned char *bytes, qsizetype len);
     static bool isValidUtf8(const unsigned char *data, qsizetype length);
     static qsizetype countHighBytes(
         const unsigned char *data, qsizetype length,

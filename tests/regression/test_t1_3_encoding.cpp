@@ -42,6 +42,7 @@ private slots:
     void bomKeptOnSave();
     void cp932ManyToOneOpensReadOnly();
     void encodeLossyLeavesFileUntouched();
+    void nulBesideLineBreakOpensReadOnlyUnnormalised();
 };
 
 void TestT13Encoding::codecReportsUnmappablePositions()
@@ -222,6 +223,33 @@ void TestT13Encoding::encodeLossyLeavesFileUntouched()
     QCOMPARE(doc.save(), SaveResult::EncodeLossy);
     QVERIFY(!doc.lastError().isEmpty());
     QVERIFY(doc.isModified());
+    QCOMPARE(regression::readBytes(path), bytes);
+}
+
+// T1.8 safety net. CJK-heavy BOM-less UTF-16LE has too few NUL bytes for the
+// UTF-16 detector (2 of 14 units per line), so it decodes as an 8-bit charset
+// with CR NUL LF NUL. Normalising that would double every line break on save.
+void TestT13Encoding::nulBesideLineBreakOpensReadOnlyUnnormalised()
+{
+    regression::TempDir dir;
+    const QString path = dir.filePath("cjk16.txt");
+    const QString text = QString::fromUtf8("日本語日本語日本語日本語\r\n").repeated(3);
+    const QByteArray bytes = utf16Le(text);
+    QVERIFY(regression::writeBytes(path, bytes));
+    Document doc;
+    QVERIFY(doc.load(path));
+
+    QVERIFY(!doc.encoding().startsWith("UTF-16"));
+    QVERIFY(doc.wasDecodedLossily());
+    QVERIFY(doc.isReadOnly());
+    QVERIFY(!doc.hadMixedLineEndings());
+    QCOMPARE(doc.save(), SaveResult::ReadOnly);
+    QCOMPARE(regression::readBytes(path), bytes);
+
+    QVERIFY(doc.reloadWithEncoding("UTF-16LE"));
+    QVERIFY(!doc.isReadOnly());
+    QCOMPARE(doc.text(), QString::fromUtf8("日本語日本語日本語日本語\n").repeated(3));
+    QCOMPARE(doc.save(), SaveResult::Ok);
     QCOMPARE(regression::readBytes(path), bytes);
 }
 

@@ -37,11 +37,42 @@ CharsetGuess CharsetDetector::detectCharset(const QByteArray &data)
 }
 
 // The 1.0.0 heuristics, unchanged except that they see every byte they are
-// given (1.0.0 stopped at 8 KB) and return the spec 9.1 spellings. A wrong
+// given (1.0.0 stopped at 8 KB), return the spec 9.1 spellings, and try
+// BOM-less UTF-16 first (T1.8). A wrong
 // guess is caught by the lossless check on load, which opens the file
 // read-only and offers Reopen with Encoding.
+// BOM-less UTF-16: NUL bytes are valid UTF-8, so this runs first. Text with
+// any Latin content has many code units whose high byte is NUL, all at one
+// parity: odd offsets for little endian, even for big endian. Requires 1 in 4
+// units, and nearly none at the other parity.
+QString CharsetDetector::detectUtf16(const unsigned char *bytes, qsizetype len)
+{
+    if (len < 2 || len % 2 != 0) {
+        return QString();
+    }
+    qsizetype evenNuls = 0;
+    qsizetype oddNuls = 0;
+    for (qsizetype i = 0; i < len; i += 2) {
+        evenNuls += bytes[i] == 0;
+        oddNuls += bytes[i + 1] == 0;
+    }
+    const qsizetype units = len / 2;
+    if (oddNuls * 4 >= units && evenNuls * 20 <= oddNuls) {
+        return "UTF-16LE";
+    }
+    if (evenNuls * 4 >= units && oddNuls * 20 <= evenNuls) {
+        return "UTF-16BE";
+    }
+    return QString();
+}
+
 QString CharsetDetector::detectWithoutBom(const unsigned char *bytes, qsizetype len)
 {
+    const QString utf16 = detectUtf16(bytes, len);
+    if (!utf16.isEmpty()) {
+        return utf16;
+    }
+
     if (isValidUtf8(bytes, len)) {
         return "UTF-8";
     }

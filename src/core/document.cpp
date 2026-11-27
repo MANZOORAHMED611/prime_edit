@@ -103,8 +103,7 @@ bool Document::load(const QString &filePath)
         QString text = decodeLoaded(data);
         data.clear(); // free byte array
 
-        m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
-        text = normalizeLineEndings(text, Unix);
+        text = adoptLineEndings(text);
 
         // Check for long lines — break them
         const int MAX_LINE = 8000;
@@ -141,9 +140,8 @@ bool Document::load(const QString &filePath)
     // Detect the charset on the whole file and decode through TextCodec
     QString text = decodeLoaded(data);
 
-    // Detect and normalize line endings
-    m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
-    text = normalizeLineEndings(text, Unix);  // Internally use Unix line endings
+    // Record line endings and normalise to LF (unless the T1.8 safety net trips)
+    text = adoptLineEndings(text);
 
     m_content.setText(text);
     m_filePath = filePath;
@@ -323,6 +321,45 @@ QString Document::decodeLoaded(const QByteArray &data)
     m_decodedLossily = !decoded.lossless;
     setReadOnly(m_decodedLossily);
     return decoded.text;
+}
+
+namespace {
+
+bool isLineBreak(QChar c)
+{
+    return c == QLatin1Char('\r') || c == QLatin1Char('\n');
+}
+
+// CR NUL LF NUL is UTF-16 decoded as an 8-bit charset; real text does not put
+// NUL beside a line break.
+bool hasNulBesideLineBreak(const QString &text)
+{
+    for (qsizetype i = text.indexOf(QChar(0)); i >= 0; i = text.indexOf(QChar(0), i + 1)) {
+        if ((i > 0 && isLineBreak(text.at(i - 1)))
+            || (i + 1 < text.size() && isLineBreak(text.at(i + 1)))) {
+            return true;
+        }
+    }
+    return false;
+}
+
+} // namespace
+
+// Records the file's line endings and normalises the text to LF (D9, D11).
+// T1.8 safety net: text that looks like misdecoded UTF-16 is left untouched
+// and opened read-only, because normalising its CR NUL LF NUL would double
+// every line break on save. The UI offers Reopen with Encoding.
+QString Document::adoptLineEndings(const QString &text)
+{
+    if (hasNulBesideLineBreak(text)) {
+        m_lineEnding = defaultLineEnding();
+        m_mixedLineEndings = false;
+        m_decodedLossily = true;
+        setReadOnly(true);
+        return text;
+    }
+    m_lineEnding = detectLineEnding(text, &m_mixedLineEndings);
+    return normalizeLineEndings(text, Unix);
 }
 
 // Re-reads the file's original bytes with the chosen codec. It is a reload,

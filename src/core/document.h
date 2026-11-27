@@ -151,6 +151,7 @@ private:
     static qint64 s_largeThreshold;
 
     QString decodeLoaded(const QByteArray &data);
+    QString adoptLineEndings(const QString &text);
     void setFormatDirty(bool dirty);
     SaveResult refusalFor() const;
     SaveResult writeAtomic(const QString &path, const QByteArray &data, WriteMode mode);
