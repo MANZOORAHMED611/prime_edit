@@ -1289,11 +1289,13 @@ void Editor::onTextChanged()
 
 void Editor::syncToDocument()
 {
-    // Sync editor content to document (called before save)
+    // Copies the editor text into the PieceTable before a save. rawText() keeps
+    // U+00A0 and U+2028 (D11). Neither modified flag is touched: the caller
+    // clears both only after SaveResult::Ok, so a failed save stays modified (D7).
+    const bool oldSyncing = m_syncing;
     m_syncing = true;
-    m_document->content()->setText(toPlainText());
-    QPlainTextEdit::document()->setModified(false);
-    m_syncing = false;
+    m_document->content()->setText(rawText());
+    m_syncing = oldSyncing;
 }
 
 // Programmatic edits (load, reload, RTL pass, draft restore) must not be taken for
