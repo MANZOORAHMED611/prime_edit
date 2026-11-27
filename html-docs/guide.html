@@ -696,7 +696,7 @@ make -j$(nproc)
                 <li>Every edit marks the tab as modified at once, so the close prompt and the unsaved-document cache always see it.</li>
                 <li>Unsaved documents, in both split panes and including untitled tabs, are written to the cache every 30 seconds and when PrimeEdit closes. A crash loses at most the last 30 seconds of typing.</li>
                 <li>The list of open files, with their bookmarks, folds and the active tab, is recorded within 5 seconds of any change, and nothing is written while nothing changes. After a crash, a kill or a power loss, the files you had open are reopened on the next start when <strong>Restore previous session on startup</strong> is on. Drafts are cached as described above, unchanged.</li>
-                <li>The cache is restored on <strong>every</strong> start, also when you open PrimeEdit with files on the command line. <strong>Restore session on startup</strong> controls only whether the files you had open are reopened.</li>
+                <li>The cache is restored on <strong>every</strong> start, also when you open PrimeEdit with files on the command line. <strong>Restore previous session on startup</strong> controls only whether the files you had open are reopened.</li>
                 <li>If a draft's original file can no longer be opened, the draft is restored in a new untitled tab and the notification bar names the file. <strong>Save As</strong> suggests the original path.</li>
                 <li>A cache entry that cannot be read is moved to <code>~/.local/share/PrimeEdit/sessions/unsaved.corrupt/</code> and kept, never deleted.</li>
             </ul>
@@ -781,7 +781,7 @@ make -j$(nproc)
             <ul>
                 <li><strong>Default encoding</strong> and <strong>line ending</strong></li>
                 <li><strong>Trim trailing whitespace</strong> and <strong>insert final newline</strong> on save</li>
-                <li><strong>Restore session on startup</strong> &mdash; reopens the files you had open. Unsaved drafts are restored on every start regardless.</li>
+                <li><strong>Restore previous session on startup</strong> &mdash; reopens the files you had open. Unsaved drafts are restored on every start regardless.</li>
             </ul>
 
             <div class="info-box note">
