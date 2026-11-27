@@ -65,6 +65,13 @@ public:
     // Informational message in the notification bar, with no Yes/No question.
     void showNotification(const QString &message);
 
+    // Periodic session.json write (spec P1.10). main.cpp enables it only after
+    // restoreAndOpen() returns; enabling rebases the corrupt-file hold.
+    void setSessionAutosaveEnabled(bool enabled);
+    bool sessionAutosaveActive() const;
+    // Tests only: the autosave interval in ms (default 5000).
+    static void setSessionAutosaveIntervalForTest(int ms);
+
 public slots:
     // Encoding operations
     void convertToANSI();
@@ -456,6 +463,10 @@ private:
     int m_untitledCounter = 0;
     bool m_closingAll = false;
     bool m_distractionFree = false;
+
+    // Session autosave (spec P1.10)
+    bool m_sessionAutosaveEnabled = false;
+    static int s_sessionAutosaveIntervalMs;
 };
 
 #endif // MAINWINDOW_H

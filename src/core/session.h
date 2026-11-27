@@ -17,6 +17,9 @@ public:
 
     void save(MainWindow *window);
     void restore(MainWindow *window);
+    // Re-takes the corrupt-file hold baseline from the window as it is now.
+    // No-op when no hold is active (spec P1.10 3.2).
+    void rebaseHold(MainWindow *window);
 
     // Named sessions
     QStringList savedSessions() const;

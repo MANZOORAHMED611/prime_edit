@@ -37,6 +37,12 @@ void Session::save(MainWindow *window)
     FileUtils::writeFileAtomic(sessionFilePath(), QJsonDocument(json).toJson());
 }
 
+// 1.0.1-behaviour placeholder.
+void Session::rebaseHold(MainWindow *window)
+{
+    Q_UNUSED(window);
+}
+
 // Returns the parsed object, or an empty one after copying an unparsable file
 // to "<file>.corrupt-<timestamp>". The original is never modified.
 QJsonObject Session::readSessionFile(const QString &path, bool *corrupt) const

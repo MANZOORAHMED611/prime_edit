@@ -1160,6 +1160,24 @@ QStringList MainWindow::openFilePaths() const
     return paths;
 }
 
+int MainWindow::s_sessionAutosaveIntervalMs = 5000;
+
+// 1.0.1-behaviour placeholder: the flag is stored, nothing is started.
+void MainWindow::setSessionAutosaveEnabled(bool enabled)
+{
+    m_sessionAutosaveEnabled = enabled;
+}
+
+bool MainWindow::sessionAutosaveActive() const
+{
+    return false;
+}
+
+void MainWindow::setSessionAutosaveIntervalForTest(int ms)
+{
+    s_sessionAutosaveIntervalMs = ms;
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     // Notepad++ behavior: silently persist ALL unsaved documents.

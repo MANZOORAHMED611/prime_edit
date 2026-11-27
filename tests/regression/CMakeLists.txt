@@ -11,6 +11,7 @@ set(REGRESSION_SUITES
     test_t1_5_cache
     test_t1_6_instance
     test_t1_7_watch
+    test_t1_10_session_autosave
     test_t2_1_modified
     test_t2_2_sync
     test_t2_3_folding
