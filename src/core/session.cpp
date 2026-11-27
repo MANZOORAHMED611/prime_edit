@@ -145,7 +145,7 @@ QJsonObject Session::windowToJson(MainWindow *window) const
         docObj["bookmarks"] = bookmarksArray;
 
         QJsonArray foldsArray;
-        for (int foldLine : editor->foldedRegions().keys()) {
+        for (int foldLine : editor->foldedRegions()) {
             foldsArray.append(foldLine);
         }
         docObj["foldedRegions"] = foldsArray;

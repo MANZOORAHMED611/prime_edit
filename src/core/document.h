@@ -10,6 +10,15 @@
 
 class LargeFileReader;
 
+// Outcome of a save. Callers branch on this instead of a bool so that a refused
+// save (partial view, read-only, unencodable text) is never mistaken for an I/O
+// error, and so the modified flags are cleared only on Ok.
+enum class SaveResult { Ok, PartialView, EncodeLossy, ReadOnly, IoError };
+
+// Atomic is the default. AllowDirect is passed only after the user confirms a
+// non-atomic write, because a direct write can truncate the original on failure.
+enum class WriteMode { Atomic, AllowDirect };
+
 class Document : public QObject
 {
     Q_OBJECT
@@ -38,9 +47,13 @@ public:
 
     // File operations
     bool load(const QString &filePath);
-    bool save();
-    bool saveAs(const QString &filePath);
+    SaveResult save(WriteMode mode = WriteMode::Atomic);
+    SaveResult saveAs(const QString &filePath, WriteMode mode = WriteMode::Atomic);
+    QString lastError() const { return m_lastError; }
+    bool directWriteAvailable() const;
+    bool lastSaveWasDirect() const;
     bool isModified() const { return m_modified; }
+    bool isFormatDirty() const;
     bool isUntitled() const { return m_filePath.isEmpty(); }
 
     // File info
@@ -54,6 +67,9 @@ public:
     LineEnding lineEnding() const { return m_lineEnding; }
     void setLineEnding(LineEnding ending);
     QString lineEndingString() const;
+    bool wasDecodedLossily() const;
+    bool hadMixedLineEndings() const;
+    bool reloadWithEncoding(const QString &name);
 
     // Content access
     PieceTable *content() { return &m_content; }
@@ -81,6 +97,10 @@ public:
 
     // Large file support
     bool isLargeFile() const { return m_largeFileReader != nullptr; }
+    // A LargeFile-mode document holds only part of the file, so saving it would
+    // truncate the file on disk.
+    bool isPartialView() const { return m_fileMode == LargeFile; }
+    static void setSizeThresholdsForTest(qint64 medium, qint64 large);
     LargeFileReader *largeFileReader() const { return m_largeFileReader; }
 
     // Recovery
@@ -97,6 +117,7 @@ signals:
     void languageChanged(const QString &language);
     void readOnlyChanged(bool readOnly);
     void contentsChanged();
+    void saved(const QString &path, const QByteArray &sha1, qint64 size);
 
 public slots:
     void setModified(bool modified);
@@ -113,6 +134,7 @@ private:
     bool m_isMinified = false;
     LargeFileReader *m_largeFileReader = nullptr;
     QString m_uuid;
+    QString m_lastError;
 
     static LineEnding detectLineEnding(const QString &text);
     QString normalizeLineEndings(const QString &text, LineEnding target);
