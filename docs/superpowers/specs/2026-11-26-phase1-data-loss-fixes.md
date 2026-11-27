@@ -251,7 +251,13 @@ Behaviour changes users will notice:
 
 ## 7. Rollback and install
 
-- **Rollback** is the 1.0.0 package: keep `release/prime-edit_1.0.0_amd64.deb` and reinstall it with `sudo dpkg -i`. Per-commit reverts are not independent: D3 uses D7's SaveResult, D10 relies on D4's lock, and D4 relies on D5's `allEditors()`.
+- **Rollback** is the 1.0.0 package: keep `release/prime-edit_1.0.0_amd64.deb` and reinstall it with `sudo dpkg -i`. **Rollback procedure** (rehearsed 2026-11-27):
+  1. Quit 1.0.1.
+  2. Copy `~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved/` aside.
+  3. Install the 1.0.0 package from `~/primeedit-rollback/`.
+  4. Start 1.0.0 **with no file arguments**, and only while `session.json` exists.
+
+  1.0.0 restores drafts only from `Session::restore()`, which returns early when `session.json` is missing or when files are given on the command line. 1.0.0's 30 s writer then deletes the cache. The rehearsal confirmed both outcomes: drafts are lost without `session.json` and restored identically with it. Per-commit reverts are not independent: D3 uses D7's SaveResult, D10 relies on D4's lock, and D4 relies on D5's `allEditors()`.
 - **Rehearsal** (integration step, before the user installs):
   1. Run the new build in a scratch profile and leave drafts and a leftover `unsaved.old/`.
   2. Install 1.0.0 into a scratch prefix.
