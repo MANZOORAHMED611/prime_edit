@@ -1651,22 +1651,6 @@ void MainWindow::toggleComment()
     }
 }
 
-void MainWindow::sortLinesAscending()
-{
-    Editor *editor = currentEditor();
-    if (editor) {
-        editor->sortLinesAscending();
-    }
-}
-
-void MainWindow::sortLinesDescending()
-{
-    Editor *editor = currentEditor();
-    if (editor) {
-        editor->sortLinesDescending();
-    }
-}
-
 void MainWindow::removeDuplicateLines()
 {
     Editor *editor = currentEditor();

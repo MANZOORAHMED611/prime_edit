@@ -76,6 +76,8 @@ void MainWindow::removeUnnecessaryBlanks()
     transformCurrent(TransformScope::LinesOrDocument, TextTransforms::trimBothAndEolToSpace);
 }
 
+// Insert Blank Line Above/Below Current keep the Notepad++ shortcuts
+// Ctrl+Alt+Enter and Ctrl+Alt+Shift+Enter; neither was taken.
 void MainWindow::setupLineOperationsMenu(QMenu *menu)
 {
     menu->addSeparator();
@@ -86,9 +88,85 @@ void MainWindow::setupLineOperationsMenu(QMenu *menu)
     menu->addAction(tr("Remove Empty Lines"), this, &MainWindow::removeEmptyLines);
     menu->addAction(tr("Remove Empty Lines (Containing Blank characters)"), this,
                     &MainWindow::removeEmptyLinesWithBlanks);
+    const auto insertBlank = [this](bool above) {
+        Editor *editor = currentEditor();
+        if (editor) editor->insertBlankLine(above);
+    };
+    menu->addAction(tr("Insert Blank Line Above Current"), this, [insertBlank]() { insertBlank(true); },
+                    QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_Return));
+    menu->addAction(tr("Insert Blank Line Below Current"), this, [insertBlank]() { insertBlank(false); },
+                    QKeySequence(Qt::CTRL | Qt::ALT | Qt::SHIFT | Qt::Key_Return));
     menu->addSeparator();
-    menu->addAction(tr("&Sort Lines (Ascending)"), this, &MainWindow::sortLinesAscending);
-    menu->addAction(tr("Sort Lines (Descending)"), this, &MainWindow::sortLinesDescending);
+    setupSortMenu(menu);
+}
+
+void MainWindow::setupSortMenu(QMenu *menu)
+{
+    using namespace TextTransforms;
+    const TransformScope lines = TransformScope::LinesOrDocument;
+    const auto pair = [this, menu, lines](const QString &ascending, const QString &descending,
+                                          const std::function<QString(const QString &, SortOrder)> &sort) {
+        addTransformAction(menu, ascending, lines,
+                           [sort](const QString &t) { return sort(t, SortOrder::Ascending); });
+        addTransformAction(menu, descending, lines,
+                           [sort](const QString &t) { return sort(t, SortOrder::Descending); });
+    };
+    menu->addAction(tr("Sort Lines Lexicographically Ascending"), this, &MainWindow::sortLinesAscending);
+    menu->addAction(tr("Sort Lines Lexicographically Descending"), this, &MainWindow::sortLinesDescending);
+    pair(tr("Sort Lines Lex. Ascending Ignoring Case"), tr("Sort Lines Lex. Descending Ignoring Case"),
+         [](const QString &t, SortOrder o) { return sortLexicographic(t, o, Qt::CaseInsensitive); });
+    pair(tr("Sort Lines In Locale Order Ascending"), tr("Sort Lines In Locale Order Descending"),
+         [](const QString &t, SortOrder o) { return sortLocale(t, o, QLocale::system()); });
+    pair(tr("Sort Lines As Integers Ascending"), tr("Sort Lines As Integers Descending"), sortIntegers);
+    pair(tr("Sort Lines As Decimals (Comma) Ascending"), tr("Sort Lines As Decimals (Comma) Descending"),
+         [](const QString &t, SortOrder o) { return sortDecimals(t, o, QLatin1Char(',')); });
+    pair(tr("Sort Lines As Decimals (Dot) Ascending"), tr("Sort Lines As Decimals (Dot) Descending"),
+         [](const QString &t, SortOrder o) { return sortDecimals(t, o, QLatin1Char('.')); });
+    pair(tr("Sort Lines By Length Ascending"), tr("Sort Lines By Length Descending"), sortByLength);
+    menu->addSeparator();
+    addTransformAction(menu, tr("Reverse Line Order"), lines, reverseLines);
+    addTransformAction(menu, tr("Randomize Line Order"), lines, [](const QString &t) {
+        return shuffleLines(t, QRandomGenerator::global()->generate());
+    });
+}
+
+void MainWindow::sortLinesAscending()
+{
+    transformCurrent(TransformScope::LinesOrDocument, [](const QString &t) {
+        return TextTransforms::sortLexicographic(t, TextTransforms::SortOrder::Ascending, Qt::CaseSensitive);
+    });
+}
+
+void MainWindow::sortLinesDescending()
+{
+    transformCurrent(TransformScope::LinesOrDocument, [](const QString &t) {
+        return TextTransforms::sortLexicographic(t, TextTransforms::SortOrder::Descending, Qt::CaseSensitive);
+    });
+}
+
+// TAB/space conversions use the current editor's tab width.
+void MainWindow::tabToSpace()
+{
+    Editor *editor = currentEditor();
+    const int width = editor ? editor->tabWidth() : 4;
+    transformCurrent(TransformScope::LinesOrDocument,
+                     [width](const QString &t) { return TextTransforms::tabsToSpaces(t, width); });
+}
+
+void MainWindow::spaceToTabAll()
+{
+    Editor *editor = currentEditor();
+    const int width = editor ? editor->tabWidth() : 4;
+    transformCurrent(TransformScope::LinesOrDocument,
+                     [width](const QString &t) { return TextTransforms::spacesToTabs(t, width, false); });
+}
+
+void MainWindow::spaceToTabLeading()
+{
+    Editor *editor = currentEditor();
+    const int width = editor ? editor->tabWidth() : 4;
+    transformCurrent(TransformScope::LinesOrDocument,
+                     [width](const QString &t) { return TextTransforms::spacesToTabs(t, width, true); });
 }
 
 // Notepad++ shortcuts: Alt+U, Alt+Shift+U, Ctrl+Alt+U, Ctrl+Alt+Shift+U,
@@ -124,6 +202,12 @@ void MainWindow::setupCaseMenu()
 void MainWindow::setupNppEditMenus()
 {
     setupCaseMenu();
+    setupBlankOperationsMenu();
+    setupEolMenu();
+}
+
+void MainWindow::setupBlankOperationsMenu()
+{
     QMenu *blankMenu = m_editMenu->addMenu(tr("&Blank Operations"));
     blankMenu->addAction(tr("Trim Trailing Space"), this, &MainWindow::trimTrailingSpace);
     blankMenu->addAction(tr("Trim Leading Space"), this, &MainWindow::trimLeadingWhitespace);
@@ -132,7 +216,14 @@ void MainWindow::setupNppEditMenus()
     blankMenu->addAction(tr("EOL to Space"), this, &MainWindow::eolToSpace);
     blankMenu->addAction(tr("Remove Unnecessary Blank and EOL"), this,
                          &MainWindow::removeUnnecessaryBlanks);
+    blankMenu->addSeparator();
+    blankMenu->addAction(tr("TAB to Space"), this, &MainWindow::tabToSpace);
+    blankMenu->addAction(tr("Space to TAB (All)"), this, &MainWindow::spaceToTabAll);
+    blankMenu->addAction(tr("Space to TAB (Leading)"), this, &MainWindow::spaceToTabLeading);
+}
 
+void MainWindow::setupEolMenu()
+{
     QMenu *eolMenu = m_editMenu->addMenu(tr("EOL Conversion"));
     QActionGroup *eolGroup = new QActionGroup(eolMenu);
     const auto addEol = [&](const QString &text, void (MainWindow::*slot)(), Document::LineEnding ending) {

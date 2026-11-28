@@ -1,17 +1,39 @@
 #include "texttransforms.h"
-
-#include <functional>
+#include "texttransforms_p.h"
 
 namespace TextTransforms {
 
-namespace {
+using detail::eachLine;
+using detail::isBlank;
+using detail::mapLines;
 
-// Notepad++ blank operations treat only space and tab as blanks. U+00A0 is
-// text the user typed on purpose (spec D11), so it is never trimmed.
-bool isBlank(QChar ch)
+namespace detail {
+
+QString mapLines(const QString &text, const std::function<QStringList(const QStringList &)> &fn)
 {
-    return ch == QLatin1Char(' ') || ch == QLatin1Char('\t');
+    SplitText split = splitLines(text);
+    split.lines = fn(split.lines);
+    if (split.lines.isEmpty()) {
+        // Every line was removed: what is left is at most the trailing EOL.
+        return split.trailingEol ? split.eol : QString();
+    }
+    return joinLines(split);
 }
+
+QString eachLine(const QString &text, const std::function<QString(const QString &)> &fn)
+{
+    return mapLines(text, [&fn](const QStringList &lines) {
+        QStringList out;
+        out.reserve(lines.size());
+        for (const QString &line : lines)
+            out.append(fn(line));
+        return out;
+    });
+}
+
+} // namespace detail
+
+namespace {
 
 int leadingBlanks(const QString &line)
 {
@@ -29,18 +51,6 @@ int trailingBlanksStart(const QString &line)
     return end;
 }
 
-// Applies fn to the line list and rejoins with the original EOL convention.
-QString mapLines(const QString &text, const std::function<QStringList(const QStringList &)> &fn)
-{
-    SplitText split = splitLines(text);
-    split.lines = fn(split.lines);
-    if (split.lines.isEmpty()) {
-        // Every line was removed: what is left is at most the trailing EOL.
-        return split.trailingEol ? split.eol : QString();
-    }
-    return joinLines(split);
-}
-
 QStringList filterLines(const QStringList &lines, const std::function<bool(const QString &)> &keep)
 {
     QStringList out;
@@ -51,15 +61,61 @@ QStringList filterLines(const QStringList &lines, const std::function<bool(const
     return out;
 }
 
-QString eachLine(const QString &text, const std::function<QString(const QString &)> &fn)
+int nextTabStop(int column, int tabWidth)
 {
-    return mapLines(text, [&fn](const QStringList &lines) {
-        QStringList out;
-        out.reserve(lines.size());
-        for (const QString &line : lines)
-            out.append(fn(line));
-        return out;
-    });
+    return (column / tabWidth + 1) * tabWidth;
+}
+
+QString expandTabs(const QString &line, int tabWidth)
+{
+    QString out;
+    for (QChar ch : line) {
+        if (ch == QLatin1Char('\t'))
+            out.append(QString(nextTabStop(int(out.size()), tabWidth) - int(out.size()), QLatin1Char(' ')));
+        else
+            out.append(ch);
+    }
+    return out;
+}
+
+// Spaces are held back until the run ends. A run that reaches a tab stop
+// with two or more spaces becomes a tab; one followed by a tab is dropped,
+// since the tab reaches the same stop.
+QString compressSpaces(const QString &line, int tabWidth, bool leadingOnly)
+{
+    QString out;
+    int column = 0;
+    int pending = 0;
+    const int stop = leadingOnly ? leadingBlanks(line) : int(line.size());
+    for (int i = 0; i < line.size(); ++i) {
+        const QChar ch = line.at(i);
+        if (i >= stop) {
+            out.append(QString(pending, QLatin1Char(' '))).append(line.mid(i));
+            return out;
+        }
+        if (ch == QLatin1Char(' ')) {
+            ++pending;
+            ++column;
+            if (column % tabWidth == 0 && pending >= 2) {
+                out.append(QLatin1Char('\t'));
+                pending = 0;
+            } else if (column % tabWidth == 0) {
+                out.append(QString(pending, QLatin1Char(' ')));
+                pending = 0;
+            }
+            continue;
+        }
+        if (ch == QLatin1Char('\t')) {
+            pending = 0;
+            column = nextTabStop(column, tabWidth);
+        } else {
+            out.append(QString(pending, QLatin1Char(' ')));
+            pending = 0;
+            ++column;
+        }
+        out.append(ch);
+    }
+    return out.append(QString(pending, QLatin1Char(' ')));
 }
 
 } // namespace
@@ -155,6 +211,20 @@ QString eolToSpace(const QString &text)
 QString trimBothAndEolToSpace(const QString &text)
 {
     return eolToSpace(trimBoth(text));
+}
+
+QString tabsToSpaces(const QString &text, int tabWidth)
+{
+    const int width = qMax(1, tabWidth);
+    return eachLine(text, [width](const QString &line) { return expandTabs(line, width); });
+}
+
+QString spacesToTabs(const QString &text, int tabWidth, bool leadingOnly)
+{
+    const int width = qMax(1, tabWidth);
+    return eachLine(text, [width, leadingOnly](const QString &line) {
+        return compressSpaces(line, width, leadingOnly);
+    });
 }
 
 } // namespace TextTransforms

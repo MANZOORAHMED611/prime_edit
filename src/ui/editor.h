@@ -125,6 +125,7 @@ public:
     // only these two.
     QString textInRange(int start, int end) const;
     void replaceRange(int start, int end, const QString &text, bool selectResult);
+    void insertBlankLine(bool above);
 
     // Line operations
     void duplicateLine();

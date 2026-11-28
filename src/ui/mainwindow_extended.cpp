@@ -75,63 +75,6 @@ void MainWindow::splitLines()
     cursor.insertText("\n");
 }
 
-void MainWindow::tabToSpace()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    text.replace('\t', "    "); // 4 spaces per tab
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(text);
-    cursor.endEditBlock();
-}
-
-void MainWindow::spaceToTabAll()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    text.replace("    ", "\t"); // 4 spaces to tab
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(text);
-    cursor.endEditBlock();
-}
-
-void MainWindow::spaceToTabLeading()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    QStringList lines = text.split('\n');
-
-    for (QString &line : lines) {
-        // Only convert leading spaces
-        int spaceCount = 0;
-        while (spaceCount < line.length() && line[spaceCount] == ' ') {
-            spaceCount++;
-        }
-
-        int tabs = spaceCount / 4;
-        int remaining = spaceCount % 4;
-
-        line = QString("\t").repeated(tabs) + QString(" ").repeated(remaining) + line.mid(spaceCount);
-    }
-
-    QString newText = lines.join('\n');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(newText);
-    cursor.endEditBlock();
-}
-
 // View operations
 void MainWindow::toggleWhitespace()
 {

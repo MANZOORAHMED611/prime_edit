@@ -1,6 +1,7 @@
 #ifndef TEXTTRANSFORMS_H
 #define TEXTTRANSFORMS_H
 
+#include <QLocale>
 #include <QString>
 #include <QStringList>
 
@@ -35,6 +36,25 @@ QString trimLeading(const QString &text);
 QString trimBoth(const QString &text);
 QString eolToSpace(const QString &text);                   // keeps a trailing EOL
 QString trimBothAndEolToSpace(const QString &text);
+// Columns advance to the next multiple of tabWidth at a tab. Runs of two or
+// more spaces that reach a tab stop become a tab; a single space is left
+// alone. leadingOnly limits the conversion to each line's indentation.
+QString tabsToSpaces(const QString &text, int tabWidth);
+QString spacesToTabs(const QString &text, int tabWidth, bool leadingOnly);
+
+// Line order. Sorts are stable. Integer and decimal sorts read the number at
+// the start of each line (after blanks); lines with no number keep their
+// relative order and go first when ascending, last when descending. Integers
+// compare by digits, so any length works; decimals take one separator, no
+// thousands grouping. Length counts code points.
+enum class SortOrder { Ascending, Descending };
+QString sortLexicographic(const QString &text, SortOrder order, Qt::CaseSensitivity cs);
+QString sortLocale(const QString &text, SortOrder order, const QLocale &locale);
+QString sortIntegers(const QString &text, SortOrder order);
+QString sortDecimals(const QString &text, SortOrder order, QChar decimalSeparator);
+QString sortByLength(const QString &text, SortOrder order);
+QString reverseLines(const QString &text);
+QString shuffleLines(const QString &text, quint32 seed);
 
 // Case, per code point, so surrogate pairs are handled and characters with no
 // case (Arabic, CJK, digits) pass through unchanged. Proper: a letter that

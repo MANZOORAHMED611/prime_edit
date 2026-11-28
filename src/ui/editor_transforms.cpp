@@ -52,6 +52,20 @@ QPair<int, int> Editor::scopeRange(TransformScope scope) const
     return {first.position(), last.position() + last.length() - 1};
 }
 
+// Notepad++ Insert Blank Line Above/Below Current: an empty line with no
+// indentation, and the cursor on it.
+void Editor::insertBlankLine(bool above)
+{
+    if (isReadOnly())
+        return;
+    const QTextBlock block = textCursor().block();
+    const int at = above ? block.position() : block.position() + block.length() - 1;
+    replaceRange(at, at, QStringLiteral("\n"), false);
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(above ? at : at + 1);
+    setTextCursor(cursor);
+}
+
 bool Editor::applyTextTransform(TransformScope scope, const TextTransform &fn)
 {
     if (isReadOnly() || !fn)

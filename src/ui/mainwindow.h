@@ -313,6 +313,9 @@ private:
     void setupLineOperationsMenu(QMenu *menu);
     void setupNppEditMenus();
     void setupCaseMenu();
+    void setupBlankOperationsMenu();
+    void setupEolMenu();
+    void setupSortMenu(QMenu *menu);
     QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,
                                 const TextTransform &fn,
                                 const QKeySequence &shortcut = QKeySequence());

@@ -60,6 +60,7 @@ set(CORE_SOURCES
     src/core/singleinstance.cpp
     src/core/texttransforms.cpp
     src/core/texttransforms_case.cpp
+    src/core/texttransforms_sort.cpp
 )
 
 set(UI_SOURCES
@@ -134,6 +135,7 @@ set(HEADERS
     src/core/schemavalidator.h
     src/core/singleinstance.h
     src/core/texttransforms.h
+    src/core/texttransforms_p.h
     src/ui/transformscope.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h

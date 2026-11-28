@@ -229,6 +229,162 @@ private slots:
         QCOMPARE(TextTransforms::randomCase(QString(), 7), QString());
     }
 
+    // ---- group 3: sorting and line order ---------------------------------
+    void sortLexicographic_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<int>("cs");
+        QTest::addColumn<QString>("asc");
+        QTest::addColumn<QString>("desc");
+        QTest::newRow("empty") << "" << int(Qt::CaseSensitive) << "" << "";
+        QTest::newRow("case sensitive") << "b\na\nC" << int(Qt::CaseSensitive) << "C\na\nb" << "b\na\nC";
+        QTest::newRow("ignoring case") << "b\na\nC" << int(Qt::CaseInsensitive) << "a\nb\nC" << "C\nb\na";
+        QTest::newRow("stable ties") << "B\nb\nA" << int(Qt::CaseInsensitive) << "A\nB\nb" << "B\nb\nA";
+        QTest::newRow("trailing eol stays last") << "b\na\n" << int(Qt::CaseSensitive) << "a\nb\n" << "b\na\n";
+        QTest::newRow("no trailing eol") << "b\n\na" << int(Qt::CaseSensitive) << "\na\nb" << "b\na\n";
+        QTest::newRow("crlf") << "b\r\na" << int(Qt::CaseSensitive) << "a\r\nb" << "b\r\na";
+    }
+    void sortLexicographic()
+    {
+        QFETCH(QString, in);
+        QFETCH(int, cs);
+        QFETCH(QString, asc);
+        QFETCH(QString, desc);
+        const auto sensitivity = Qt::CaseSensitivity(cs);
+        QCOMPARE(TextTransforms::sortLexicographic(in, SortOrder::Ascending, sensitivity), asc);
+        QCOMPARE(TextTransforms::sortLexicographic(in, SortOrder::Descending, sensitivity), desc);
+    }
+    void sortLocale()
+    {
+        const QLocale english(QLocale::English, QLocale::UnitedStates);
+        const QString in = QStringLiteral("f\né\ne");  // code-unit order would put é last
+        QCOMPARE(TextTransforms::sortLocale(in, SortOrder::Ascending, english),
+                 QStringLiteral("e\né\nf"));
+        QCOMPARE(TextTransforms::sortLocale(in, SortOrder::Descending, english),
+                 QStringLiteral("f\né\ne"));
+        QCOMPARE(TextTransforms::sortLocale(QString(), SortOrder::Ascending, english), QString());
+    }
+    // Non-numeric lines keep their order: first when ascending, last when descending.
+    void sortIntegers_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("asc");
+        QTest::addColumn<QString>("desc");
+        QTest::newRow("empty") << "" << "" << "";
+        QTest::newRow("mixed") << "10\n9\nx\n-3\n\n2 apples" << "x\n\n-3\n2 apples\n9\n10"
+                               << "10\n9\n2 apples\n-3\nx\n";
+        QTest::newRow("huge") << "99999999999999999999\n1" << "1\n99999999999999999999"
+                              << "99999999999999999999\n1";
+        QTest::newRow("zeros and signs") << "007\n+5\n-0\n0\n--5" << "--5\n-0\n0\n+5\n007"
+                                         << "007\n+5\n-0\n0\n--5";
+        QTest::newRow("indent and crlf") << "  20\r\n\t3\r\n" << "\t3\r\n  20\r\n" << "  20\r\n\t3\r\n";
+    }
+    void sortIntegers()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, asc);
+        QFETCH(QString, desc);
+        QCOMPARE(TextTransforms::sortIntegers(in, SortOrder::Ascending), asc);
+        QCOMPARE(TextTransforms::sortIntegers(in, SortOrder::Descending), desc);
+    }
+    void sortDecimals()
+    {
+        const QString dot = QStringLiteral("1.5\n1.25\n-0.5\nabc\n.75");
+        QCOMPARE(TextTransforms::sortDecimals(dot, SortOrder::Ascending, QLatin1Char('.')),
+                 QStringLiteral("abc\n-0.5\n.75\n1.25\n1.5"));
+        QCOMPARE(TextTransforms::sortDecimals(dot, SortOrder::Descending, QLatin1Char('.')),
+                 QStringLiteral("1.5\n1.25\n.75\n-0.5\nabc"));
+        const QString comma = QStringLiteral("1,5\n1,25\n2\nn/a\n");
+        QCOMPARE(TextTransforms::sortDecimals(comma, SortOrder::Ascending, QLatin1Char(',')),
+                 QStringLiteral("n/a\n1,25\n1,5\n2\n"));
+        // With a comma separator "1.5" reads as 1, so it ties with "1" and stays first
+        QCOMPARE(TextTransforms::sortDecimals(QStringLiteral("1.5\n1\n0,5"), SortOrder::Ascending,
+                                              QLatin1Char(',')),
+                 QStringLiteral("0,5\n1.5\n1"));
+        QCOMPARE(TextTransforms::sortDecimals(QString(), SortOrder::Ascending, QLatin1Char('.')),
+                 QString());
+    }
+    void sortByLength()
+    {
+        const QString in = QStringLiteral("ccc\na\nbb\nd");
+        QCOMPARE(TextTransforms::sortByLength(in, SortOrder::Ascending), QStringLiteral("a\nd\nbb\nccc"));
+        QCOMPARE(TextTransforms::sortByLength(in, SortOrder::Descending), QStringLiteral("ccc\nbb\na\nd"));
+        // Length counts code points, not UTF-16 units
+        const QString wide = QString::fromUcs4(U"ab\n\U00010400", 4);
+        QCOMPARE(TextTransforms::sortByLength(wide, SortOrder::Ascending),
+                 QString::fromUcs4(U"\U00010400\nab", 4));
+        QCOMPARE(TextTransforms::sortByLength(kArabic + "\nab", SortOrder::Ascending),
+                 QStringLiteral("ab\n") + kArabic);
+    }
+    void reverseAndShuffle()
+    {
+        QCOMPARE(reverseLines(QString()), QString());
+        QCOMPARE(reverseLines(QStringLiteral("a\nb\nc\n")), QStringLiteral("c\nb\na\n"));
+        QCOMPARE(reverseLines(QStringLiteral("a\r\nb")), QStringLiteral("b\r\na"));
+        const QString in = QStringLiteral("1\n2\n3\n4\n5\n6\n7\n8\n");
+        const QString out = shuffleLines(in, 42);
+        QVERIFY(out.endsWith(QLatin1Char('\n')));
+        QStringList sorted = splitLines(out).lines;
+        sorted.sort();
+        QCOMPARE(sorted, splitLines(in).lines);
+        QCOMPARE(shuffleLines(in, 42), out);
+    }
+    void tabsToSpaces_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("out");
+        QTest::newRow("empty") << "" << "";
+        QTest::newRow("tab stops") << "\ta\tb" << "    a   b";
+        QTest::newRow("trailing") << "ab\t\n" << "ab  \n";
+        QTest::newRow("arabic") << kArabic + "\tx" << kArabic + "   x";
+        QTest::newRow("crlf") << "\ta\r\n\tb" << "    a\r\n    b";
+    }
+    void tabsToSpaces()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, out);
+        QCOMPARE(TextTransforms::tabsToSpaces(in, 4), out);
+    }
+    void spacesToTabs_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("all");
+        QTest::addColumn<QString>("leading");
+        QTest::newRow("empty") << "" << "" << "";
+        QTest::newRow("indent") << "        a" << "\t\ta" << "\t\ta";
+        QTest::newRow("inner run") << "a   b" << "a\tb" << "a   b";
+        QTest::newRow("single space") << "a b\n a" << "a b\n a" << "a b\n a";
+        QTest::newRow("partial") << "     a" << "\t a" << "\t a";
+        QTest::newRow("leading only") << "    a    b" << "\ta\t b" << "\ta    b";
+        QTest::newRow("spaces before tab") << "  \t  a" << "\t  a" << "\t  a";
+        QTest::newRow("crlf") << "    a\r\n    b" << "\ta\r\n\tb" << "\ta\r\n\tb";
+    }
+    void spacesToTabs()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, all);
+        QFETCH(QString, leading);
+        QCOMPARE(TextTransforms::spacesToTabs(in, 4, false), all);
+        QCOMPARE(TextTransforms::spacesToTabs(in, 4, true), leading);
+    }
+    void editorInsertBlankLine()
+    {
+        Document doc;
+        Editor editor(&doc);
+        editor.setPlainText(QStringLiteral("a\nb\nc"));
+        editor.goToLine(2);
+        editor.insertBlankLine(true);
+        QCOMPARE(editor.toPlainText(), QStringLiteral("a\n\nb\nc"));
+        QCOMPARE(editor.currentLine(), 2);
+        editor.goToLine(3);
+        editor.insertBlankLine(false);
+        QCOMPARE(editor.toPlainText(), QStringLiteral("a\n\nb\n\nc"));
+        QCOMPARE(editor.currentLine(), 4);
+        QVERIFY(doc.isModified());
+        editor.undo();
+        QCOMPARE(editor.toPlainText(), QStringLiteral("a\n\nb\nc"));
+    }
+
     // ---- editor adapter ---------------------------------------------------
     // A whole-document transform is one undo step and marks the file modified.
     void editorTransformIsOneUndoStep()
