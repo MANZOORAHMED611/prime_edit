@@ -305,6 +305,7 @@ void MainWindow::setupEncodingTools()
         if (action->actionGroup())
             action->actionGroup()->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
     }
+    setupCharacterSetsMenu();
     // The lossy-load notification's button reopens the document it named
     connect(m_notificationBar, &NotificationBar::actionTriggered, this, [this]() {
         const QString path = m_notificationBar->property("reopenPath").toString();
@@ -339,21 +340,31 @@ QStringList MainWindow::reopenEncodingNames() const
     return names;
 }
 
-void MainWindow::reopenWithEncoding()
+// The current editor when its file can be decoded again: saved, fully
+// loaded, and either unmodified or the user agreed to discard the changes.
+Editor *MainWindow::reopenableEditor()
 {
     Editor *e = currentEditor();
     Document *doc = e ? e->document() : nullptr;
     if (!doc || doc->isUntitled() || doc->isPartialView()) {
         showNotification(tr("Reopen with Encoding needs a saved file that is fully loaded."));
-        return;
+        return nullptr;
     }
     if (doc->isModified()
         && QMessageBox::question(this, tr("Reopen with Encoding"),
                                  tr("Reopening '%1' discards your unsaved changes. Continue?")
                                      .arg(doc->displayName()),
                                  QMessageBox::Discard | QMessageBox::Cancel) != QMessageBox::Discard) {
-        return;
+        return nullptr;
     }
+    return e;
+}
+
+void MainWindow::reopenWithEncoding()
+{
+    Editor *e = reopenableEditor();
+    if (!e) return;
+    Document *doc = e->document();
     const QStringList names = reopenEncodingNames();
     bool ok = false;
     const QString name = QInputDialog::getItem(

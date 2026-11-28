@@ -394,6 +394,9 @@ private:
     void setupEncodingTools();
     QStringList reopenEncodingNames() const;
     void reopenEditorWithEncoding(Editor *editor, const QString &name);
+    Editor *reopenableEditor();
+    // Encoding > Character Sets: reopen the file in a legacy code page
+    void setupCharacterSetsMenu();
     void showOpenNotices(Document *doc);
     void showReopenNotice(Document *doc);
     UnmappableChoice askUnmappable(Editor *editor, const QString &encoding,

@@ -2,6 +2,7 @@
 // hashes, MIME Tools and Converter.
 #include "mainwindow.h"
 #include "editor.h"
+#include "core/charactersets.h"
 #include "core/codectransforms.h"
 #include "core/document.h"
 #include "core/texttransforms.h"
@@ -175,4 +176,23 @@ void MainWindow::copyPathToClipboard(PathPart part)
     }
     QApplication::clipboard()->setText(text);
     statusBar()->showMessage(tr("Copied %1").arg(text), 3000);
+}
+
+// Each item decodes the file's bytes again in that code page, through the
+// Reopen with Encoding path: nothing is written, and the document's save
+// encoding becomes that code page exactly as Reopen with Encoding sets it.
+void MainWindow::setupCharacterSetsMenu()
+{
+    m_encodingMenu->addSeparator();
+    QMenu *sets = m_encodingMenu->addMenu(tr("Character Sets"));
+    for (const CharacterSets::Group &group : CharacterSets::available()) {
+        QMenu *region = sets->addMenu(group.region);
+        for (const CharacterSets::Set &set : group.sets) {
+            const QString encoding = set.encoding;
+            region->addAction(set.label, this, [this, encoding]() {
+                if (Editor *e = reopenableEditor())
+                    reopenEditorWithEncoding(e, encoding);
+            });
+        }
+    }
 }

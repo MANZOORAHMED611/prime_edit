@@ -4,8 +4,10 @@
 // modified.
 #include "support.h"
 
+#include "core/charactersets.h"
 #include "core/codectransforms.h"
 #include "core/document.h"
+#include "core/textcodec.h"
 #include "core/texttransforms.h"
 #include "ui/editor.h"
 #include "ui/mainwindow.h"
@@ -808,6 +810,51 @@ private slots:
         QCOMPARE(second->toPlainText(), QStringLiteral("y on disk\n"));
         QVERIFY(second->document()->isModified());
         QCOMPARE(regression::readBytes(path), QByteArray("x on disk\n"));
+    }
+
+    // ---- group 8: character sets -----------------------------------------
+    void characterSetsAreAvailableAndGrouped()
+    {
+        const QList<CharacterSets::Group> groups = CharacterSets::available();
+        QStringList regions;
+        QStringList encodings;
+        for (const CharacterSets::Group &group : groups) {
+            regions << group.region;
+            QVERIFY2(!group.sets.isEmpty(), qPrintable(group.region));
+            for (const CharacterSets::Set &set : group.sets) {
+                QVERIFY2(!TextCodec::canonicalName(set.encoding).isEmpty(), qPrintable(set.encoding));
+                encodings << TextCodec::canonicalName(set.encoding);
+            }
+        }
+        QCOMPARE(regions, (QStringList{"Arabic", "Baltic", "Celtic", "Cyrillic", "Central European",
+                                       "Chinese", "Eastern European", "Greek", "Hebrew", "Japanese",
+                                       "Korean", "North European", "Thai", "Turkish",
+                                       "Western European", "Vietnamese"}));
+        for (const char *name : {"windows-1256", "ISO-8859-6", "KOI8-R", "Big5", "Shift_JIS",
+                                 "windows-1252", "ISO-8859-15", "TIS-620", "windows-1258"}) {
+            QVERIFY2(encodings.contains(TextCodec::canonicalName(QString::fromLatin1(name))), name);
+        }
+        // A code page this ICU lacks is left out rather than offered and failing
+        const bool oem720 = !TextCodec::canonicalName(QStringLiteral("ibm-720")).isEmpty();
+        QCOMPARE(encodings.contains(TextCodec::canonicalName(QStringLiteral("ibm-720"))), oem720);
+    }
+    // Reopening in a code page re-decodes the file's bytes: the text changes,
+    // the document is clean, and the file on disk is untouched.
+    void characterSetReopensTheFile()
+    {
+        regression::TempDir tmp;
+        const QString path = tmp.filePath(QStringLiteral("arabic.txt"));
+        const QByteArray cp1256("\xE3\xD1\xCD\xC8\xC7\n");  // marhaban in windows-1256
+        QVERIFY(regression::writeBytes(path, cp1256));
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.openFile(path);
+        QVERIFY(editor);
+        QVERIFY(trigger(mw, QStringLiteral("Windows-1256")));
+        QCOMPARE(editor->document()->encoding(), TextCodec::canonicalName(QStringLiteral("windows-1256")));
+        QCOMPARE(editor->toPlainText(), kArabic + QLatin1Char('\n'));
+        QVERIFY(!editor->document()->isModified());
+        QCOMPARE(regression::readBytes(path), cp1256);
     }
 
     // Qt's text controls claim some Ctrl letters on X11 (Ctrl+K deletes to the

@@ -64,6 +64,7 @@ set(CORE_SOURCES
     src/core/texttransforms_comment.cpp
     src/core/codectransforms.cpp
     src/core/texttransforms_lines.cpp
+    src/core/charactersets.cpp
 )
 
 set(UI_SOURCES
@@ -144,6 +145,7 @@ set(HEADERS
     src/core/texttransforms.h
     src/core/texttransforms_p.h
     src/core/codectransforms.h
+    src/core/charactersets.h
     src/ui/transformscope.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
