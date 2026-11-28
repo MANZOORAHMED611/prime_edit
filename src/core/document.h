@@ -39,6 +39,11 @@ public:
     static constexpr qint64 READONLY_FILE_THRESHOLD = 100 * 1024 * 1024;  // same as large
 
     enum FileMode { SmallFile, MediumFile, LargeFile };
+
+    // What a failed save left on disk. Unchanged: never written, or reserved
+    // and trimmed back. Restored: written part-way, then the original bytes
+    // were written back. Damaged: the restore failed too.
+    enum class DiskState { Unchanged, Restored, Damaged };
     FileMode fileMode() const { return m_fileMode; }
     bool isMinified() const { return m_isMinified; }
 
@@ -56,6 +61,14 @@ public:
     // True when the last successful save wrote in place (hard link or foreign
     // owner), because an atomic replace would have broken the link or owner.
     bool lastSaveWasDirect() const;
+    // Meaningful after a save that did not return Ok.
+    DiskState lastSaveDiskState() const;
+    // Where the original bytes were copied when a Damaged write could not be
+    // undone; empty unless that copy was written.
+    QString recoveryCopyPath() const;
+    // Tests only: false skips the space reservation before a direct write, so
+    // a failing write reaches the restore step.
+    static void setReserveSpaceForTest(bool reserve);
     // A pending encoding or line-ending conversion is a change too, and text
     // undo cannot reach it: only a successful save or load clears it.
     bool isModified() const { return m_modified || m_formatDirty; }

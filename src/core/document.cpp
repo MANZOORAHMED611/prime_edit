@@ -296,6 +296,20 @@ bool Document::lastSaveWasDirect() const
     return m_lastSaveWasDirect;
 }
 
+Document::DiskState Document::lastSaveDiskState() const
+{
+    return DiskState::Unchanged;
+}
+
+QString Document::recoveryCopyPath() const
+{
+    return QString();
+}
+
+void Document::setReserveSpaceForTest(bool)
+{
+}
+
 bool Document::isFormatDirty() const
 {
     return m_formatDirty;

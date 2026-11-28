@@ -5,6 +5,7 @@
 #include <QMimeDatabase>
 #include <QDateTime>
 #include <QSaveFile>
+#include <QStandardPaths>
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -174,6 +175,12 @@ bool fsyncDirectory(const QString &path)
     const bool synced = ::fsync(fd) == 0;
     ::close(fd);
     return synced;
+}
+
+QString unsavedCacheBase()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+           + QStringLiteral("/sessions/unsaved");
 }
 
 }

@@ -967,6 +967,12 @@ bool MainWindow::confirmDirectWrite(Document *doc)
     return box.clickedButton() == direct;
 }
 
+QString MainWindow::saveFailureMessage(const SaveFailureInfo &info)
+{
+    return tr("Could not save '%1': %2\nThe file on disk is unchanged.")
+        .arg(info.displayName, info.error);
+}
+
 // Tells the user why nothing was written. Every result but Ok leaves both
 // modified flags set, so the close prompt and the cache still see the edits.
 void MainWindow::reportSaveFailure(Document *doc, SaveResult result)
@@ -984,8 +990,8 @@ void MainWindow::reportSaveFailure(Document *doc, SaveResult result)
     case SaveResult::EncodeLossy:
     case SaveResult::IoError:
         QMessageBox::warning(this, tr("Save Failed"),
-                             tr("Could not save '%1': %2\nThe file on disk is unchanged.")
-                                 .arg(name, doc->lastError()));
+                             saveFailureMessage({name, doc->lastSaveDiskState(),
+                                                 doc->recoveryCopyPath(), doc->lastError()}));
         break;
     case SaveResult::Ok:
         break;
