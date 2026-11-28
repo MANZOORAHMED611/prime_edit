@@ -165,6 +165,86 @@ QList<int> loneSurrogates(const QString &text)
     return positions;
 }
 
+// Compares encoder output with the input bytes as it is produced, so the
+// lossless check never holds a full re-encode (spec P1.11 F5).
+class ByteMatcher
+{
+public:
+    explicit ByteMatcher(QByteArrayView expected) : m_expected(expected) {}
+    bool feed(QByteArrayView chunk)
+    {
+        if (m_ok && chunk.size() <= m_expected.size() - m_pos
+            && m_expected.sliced(m_pos, chunk.size()) == chunk) {
+            m_pos += chunk.size();
+        } else {
+            m_ok = false;
+        }
+        return m_ok;
+    }
+    bool ok() const { return m_ok; }
+    // Every input byte was matched, and nothing more.
+    bool complete() const { return m_ok && m_pos == m_expected.size(); }
+
+private:
+    QByteArrayView m_expected;
+    qsizetype m_pos = 0;
+    bool m_ok = true;
+};
+
+// One stateful encoder across all slices, so a surrogate pair split by a
+// slice boundary still encodes as one character.
+bool utfRoundTrips(const QString &text, QByteArrayView body, QStringConverter::Encoding encoding)
+{
+    QStringEncoder encoder(encoding);
+    ByteMatcher match(body);
+    const QStringView view(text);
+    for (qsizetype at = 0; at < view.size() && match.ok(); at += TextCodec::kVerifyChunk) {
+        const QByteArray out = encoder(view.sliced(at, qMin(TextCodec::kVerifyChunk, view.size() - at)));
+        match.feed(out);
+    }
+    return match.complete();
+}
+
+// Encodes one slice. Pending state, shift sequences and the flush output can
+// exceed the target, so drain and continue while ICU reports overflow.
+bool icuEncodeSlice(UConverter *conv, const UChar **source, const UChar *limit, bool flush,
+                    ByteMatcher *match)
+{
+    char target[16 * 1024];
+    for (;;) {
+        char *out = target;
+        UErrorCode status = U_ZERO_ERROR;
+        ucnv_fromUnicode(conv, &out, target + sizeof target, source, limit, nullptr, flush, &status);
+        if (!match->feed(QByteArrayView(target, out - target)))
+            return false;
+        if (status != U_BUFFER_OVERFLOW_ERROR)
+            return U_SUCCESS(status);
+    }
+}
+
+// The STOP callback turns any unmappable character into a failure status.
+bool icuRoundTrips(const QString &text, QByteArrayView bytes, const QString &name)
+{
+    Converter conv(name);
+    if (!conv.handle)
+        return false;
+    UErrorCode status = U_ZERO_ERROR;
+    ucnv_setFromUCallBack(conv.handle, UCNV_FROM_U_CALLBACK_STOP, nullptr, nullptr, nullptr, &status);
+    if (U_FAILURE(status))
+        return false;
+    ByteMatcher match(bytes);
+    const UChar *source = reinterpret_cast<const UChar *>(text.utf16());
+    const UChar *end = source + text.size();
+    bool flush = false;
+    while (!flush) {
+        const UChar *limit = source + qMin<qsizetype>(TextCodec::kVerifyChunk, end - source);
+        flush = limit == end;
+        if (!icuEncodeSlice(conv.handle, &source, limit, flush, &match))
+            return false;
+    }
+    return match.complete();
+}
+
 } // namespace
 
 namespace TextCodec {
@@ -172,20 +252,23 @@ namespace TextCodec {
 DecodeResult decode(const QByteArray &bytes, const QString &name)
 {
     const ParsedName parsed = parseName(name);
+    const auto utf = utfCodec(parsed.base);
+    if (!utf) {
+        // ICU names ignore a -BOM suffix, as encode does.
+        DecodeResult result = decodeIcu(bytes, parsed.base);
+        result.lossless = result.lossless && icuRoundTrips(result.text, bytes, parsed.base);
+        return result;
+    }
+    // A declared BOM must be present for a lossless result; the comparison
+    // starts after it. A view, not mid(): mid() copies the whole input.
+    const bool hasBom = parsed.bom && bytes.startsWith(utf->bom);
+    const QByteArrayView body = QByteArrayView(bytes).sliced(hasBom ? utf->bom.size() : 0);
+    // A BOM the name does not declare is kept as U+FEFF, never dropped.
+    QStringDecoder decoder(utf->encoding, QStringConverter::Flag::ConvertInitialBom);
     DecodeResult result;
-    if (const auto utf = utfCodec(parsed.base)) {
-        const bool stripBom = parsed.bom && bytes.startsWith(utf->bom);
-        // A BOM the name does not declare is kept as U+FEFF, never dropped.
-        QStringDecoder decoder(utf->encoding, QStringConverter::Flag::ConvertInitialBom);
-        result.text = decoder(stripBom ? bytes.mid(utf->bom.size()) : bytes);
-        result.lossless = !decoder.hasError();
-    } else {
-        result = decodeIcu(bytes, parsed.base);
-    }
-    if (result.lossless) {
-        const EncodeResult back = encode(result.text, name);
-        result.lossless = back.unmappable.isEmpty() && back.bytes == bytes;
-    }
+    result.text = decoder(body);
+    result.lossless = !decoder.hasError() && hasBom == parsed.bom
+        && loneSurrogates(result.text).isEmpty() && utfRoundTrips(result.text, body, utf->encoding);
     return result;
 }
 
