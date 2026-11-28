@@ -466,7 +466,7 @@ QJsonObject Session::draftEntry(Editor *editor) const
     return obj;
 }
 
-void Session::saveUnsavedDocuments(MainWindow *window)
+bool Session::saveUnsavedDocuments(MainWindow *window)
 {
     // Entries on disk this process never wrote or restored were never placed
     // (restore has not run): keep them rather than replace them.
@@ -480,6 +480,7 @@ void Session::saveUnsavedDocuments(MainWindow *window)
     }
     entries += m_unplacedDrafts;
     replaceCacheSet(entries);
+    return true;  // TODO(P1.11-B): placeholder, the result is not reported yet
 }
 
 // Write unsaved.new/, then swap it in by two renames. Any failure before the

@@ -38,7 +38,7 @@ public:
     void restoreFiles(MainWindow *window);
     // Replaces the cached set atomically with every editor's draft (both
     // panes) plus every draft that restore could not place.
-    void saveUnsavedDocuments(MainWindow *window);
+    bool saveUnsavedDocuments(MainWindow *window);
     // 1.0.0 name, kept for the frozen validation suites: restoreDrafts().
     void restoreUnsavedDocuments(MainWindow *window);
     void clearUnsavedCache();
