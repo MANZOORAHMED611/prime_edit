@@ -36,7 +36,8 @@ QString createBackup(const QString &path);
 bool restoreBackup(const QString &backupPath, const QString &originalPath);
 
 // Persistence files (spec D10)
-// Writes through QSaveFile: the previous content survives any failed write.
+// Writes through QSaveFile: the previous content survives any failed write or
+// data sync, and the call returns false.
 bool writeFileAtomic(const QString &path, const QByteArray &bytes);
 // Copies an unparsable file to "<path>.corrupt-<yyyyMMdd-hhmmss>" and leaves
 // the original in place. Returns the copy's path, or empty if it failed.

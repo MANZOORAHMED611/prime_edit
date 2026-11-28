@@ -14,6 +14,7 @@ set(REGRESSION_SUITES
     test_t1_10_session_autosave
     test_t1_11a_direct_write
     test_t1_11b_drafts
+    test_t1_12_short_write
     test_t2_1_modified
     test_t2_2_sync
     test_t2_3_folding
@@ -46,3 +47,10 @@ foreach(suite IN LISTS REGRESSION_SUITES)
         SKIP_RETURN_CODE 77
         TIMEOUT 300)
 endforeach()
+
+# P1.12 case 5: a failed fdatasync is not reachable on ext4 from CTest, so the
+# receipt runs this driver under tools/fdatasync_eio_shim.c. Not a test and not
+# built by default.
+add_executable(sync_failure_driver EXCLUDE_FROM_ALL tools/sync_failure_driver.cpp)
+target_include_directories(sync_failure_driver PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../validation)
+target_link_libraries(sync_failure_driver PRIVATE prime-edit-core)

@@ -144,11 +144,14 @@ bool restoreBackup(const QString &backupPath, const QString &originalPath)
 
 bool writeFileAtomic(const QString &path, const QByteArray &bytes)
 {
+    // Unbuffered and synced here, as in Document::writeAtomic: a buffered
+    // QSaveFile commits a temp file truncated by a failed write(2), and Qt's
+    // commit() ignores a failed fdatasync (spec P1.12).
     QSaveFile file(path);
-    if (!file.open(QIODevice::WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Unbuffered)) {
         return false;
     }
-    if (file.write(bytes) != bytes.size()) {
+    if (file.write(bytes) != bytes.size() || ::fdatasync(file.handle()) != 0) {
         file.cancelWriting();
         return false;
     }
