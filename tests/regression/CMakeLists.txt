@@ -14,6 +14,7 @@ set(REGRESSION_SUITES
     test_t1_10_session_autosave
     test_t1_11a_direct_write
     test_t1_11b_drafts
+    test_t1_12_short_write
     test_t2_1_modified
     test_t2_2_sync
     test_t2_3_folding
