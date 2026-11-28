@@ -602,17 +602,18 @@ make -j$(nproc)
         <!-- Saving Files -->
         <section id="saving">
             <h2>Saving Files</h2>
-            <p>A save either writes the whole file or leaves the file on disk unchanged.</p>
+            <p>A save either writes the whole file or leaves the file on disk unchanged. A save that writes in place (see below) never empties the file first: if the write fails part-way, PrimeEdit writes the original contents back.</p>
 
             <h3>When a save fails</h3>
             <ul>
                 <li>An error dialog names the file and the reason, and says the file on disk is unchanged.</li>
+                <li>If an in-place write failed and the original contents could not be written back either, the dialog says instead that the write failed part-way and the file may be incomplete. When PrimeEdit could keep a copy of the previous contents, the dialog gives its path, in <code>~/.local/share/PrimeEdit/sessions/unsaved.recovered/</code>.</li>
                 <li>The tab stays modified. Undo does not make it look saved, so the close prompt still asks about it.</li>
                 <li>A file without write permission (for example mode 0444) cannot be saved. Use <strong>Save As</strong> to write a copy elsewhere.</li>
             </ul>
 
             <h3>Save Directly (Not Atomic)</h3>
-            <p>PrimeEdit normally writes to a temporary file and swaps it in, so an interrupted save never leaves a half-written file. When the folder does not allow that temporary file but the file itself is writable, the error dialog offers <strong>Save Directly (Not Atomic)</strong>. It writes over the file in place; if that write is interrupted, the file can be left incomplete. It is never offered after an error such as a full disk, where writing in place would destroy the original.</p>
+            <p>PrimeEdit normally writes to a temporary file and swaps it in, so an interrupted save never leaves a half-written file. When the folder does not allow that temporary file but the file itself is writable, the error dialog offers <strong>Save Directly (Not Atomic)</strong>. It writes over the file in place. It first reserves the space the new contents need, and if the write still fails it writes the original contents back, so a full disk normally leaves the file as it was. Only a crash or power loss in the middle of the write can leave the file incomplete. It is not offered after an error such as a full disk, where the temporary file could be created but not written.</p>
             <p>A hard-linked file, or a file owned by another user, is always written in place so the link and the owner are kept. The notification bar says when that happened.</p>
 
             <h3>Closing a tab with unsaved changes</h3>
@@ -699,6 +700,7 @@ make -j$(nproc)
                 <li>The cache is restored on <strong>every</strong> start, also when you open PrimeEdit with files on the command line. <strong>Restore previous session on startup</strong> controls only whether the files you had open are reopened.</li>
                 <li>If a draft's original file can no longer be opened, the draft is restored in a new untitled tab and the notification bar names the file. <strong>Save As</strong> suggests the original path.</li>
                 <li>A cache entry that cannot be read is moved to <code>~/.local/share/PrimeEdit/sessions/unsaved.corrupt/</code> and kept, never deleted.</li>
+                <li>If an in-place save fails and the file's original contents cannot be written back, a copy of those contents is kept in <code>~/.local/share/PrimeEdit/sessions/unsaved.recovered/</code>, named after the file. PrimeEdit never deletes it.</li>
             </ul>
 
             <h3>Opening files while PrimeEdit is running</h3>
@@ -765,6 +767,7 @@ make -j$(nproc)
                     <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/sessions/</code></td></tr>
                     <tr><td>Unsaved document cache</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved/</code></td></tr>
                     <tr><td>Unreadable cache entries (kept)</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved.corrupt/</code></td></tr>
+                    <tr><td>Previous contents of a file an in-place save damaged (kept)</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved.recovered/</code></td></tr>
                 </tbody>
             </table>
 
