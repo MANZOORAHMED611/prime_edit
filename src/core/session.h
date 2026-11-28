@@ -37,7 +37,9 @@ public:
     // Only under the "restore previous session" preference: reopens files.
     void restoreFiles(MainWindow *window);
     // Replaces the cached set atomically with every editor's draft (both
-    // panes) plus every draft that restore could not place.
+    // panes) plus every draft that restore could not place. False only when
+    // there was something to store and the replace failed (spec P1.11 3.2.1).
+    // While restoreDrafts runs it writes nothing and returns true (3.3.2).
     bool saveUnsavedDocuments(MainWindow *window);
     // 1.0.0 name, kept for the frozen validation suites: restoreDrafts().
     void restoreUnsavedDocuments(MainWindow *window);
@@ -68,6 +70,10 @@ private:
     // Cache entry names this process wrote or restore read. An entry on disk
     // outside this set was never placed, so the writer adopts it.
     QSet<QString> m_seenEntries;
+    // Set for the whole body of restoreDrafts. readCacheEntries has marked
+    // every entry seen before any is placed, so a write then would drop the
+    // drafts not yet placed (spec P1.11 F3).
+    bool m_restoringDrafts = false;
 
     QList<QJsonObject> readCacheEntries(const QSet<QString> &skip);
     void moveToCorruptDir(const QString &path) const;

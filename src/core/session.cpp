@@ -13,6 +13,7 @@
 #include <QUuid>
 #include <QScrollBar>
 #include <QFileInfo>
+#include <QScopeGuard>
 #include <QTabWidget>
 
 Session &Session::instance()
@@ -374,6 +375,8 @@ QList<QJsonObject> Session::readCacheEntries(const QSet<QString> &skip)
 
 void Session::restoreDrafts(MainWindow *window)
 {
+    m_restoringDrafts = true;
+    const auto endRestore = qScopeGuard([this]() { m_restoringDrafts = false; });
     recoverCacheDirectories();
     m_unplacedDrafts.clear();
     QSet<Editor *> placed;
@@ -407,8 +410,9 @@ void Session::restoreUnsavedDocuments(MainWindow *window)
 }
 
 // The cached text goes only into the editor whose document is the original
-// file. If it cannot be opened, a new untitled tab takes the text and keeps the
-// path as the "originalFilePath" property (Save As default, and re-cached).
+// file. If it cannot be opened, or opens read-only, a new untitled tab takes the
+// text and keeps the path as the "originalFilePath" property (Save As default,
+// and re-cached).
 bool Session::placeDraft(MainWindow *window, const QJsonObject &draft, QSet<Editor *> *placed)
 {
     const QString original = draft["originalFilePath"].toString();
@@ -423,6 +427,10 @@ bool Session::placeDraft(MainWindow *window, const QJsonObject &draft, QSet<Edit
         if (opened && placed->contains(opened)) {
             notice = QObject::tr("%1 had more than one unsaved draft. "
                                  "This one was restored in a new tab.");
+        } else if (opened && opened->document()
+                   && (opened->document()->isReadOnly() || opened->document()->isPartialView())) {
+            // Save As refuses a read-only document, so the draft could never be saved.
+            notice = QObject::tr("%1 opened read-only. Its unsaved text was restored in a new tab.");
         } else if (opened && opened->document() && opened->document()->filePath() == original) {
             editor = opened;
         }
@@ -468,6 +476,9 @@ QJsonObject Session::draftEntry(Editor *editor) const
 
 bool Session::saveUnsavedDocuments(MainWindow *window)
 {
+    if (m_restoringDrafts) {
+        return true;  // the on-disk set is complete and untouched
+    }
     // Entries on disk this process never wrote or restored were never placed
     // (restore has not run): keep them rather than replace them.
     m_unplacedDrafts += readCacheEntries(m_seenEntries);
@@ -479,8 +490,9 @@ bool Session::saveUnsavedDocuments(MainWindow *window)
         }
     }
     entries += m_unplacedDrafts;
-    replaceCacheSet(entries);
-    return true;  // TODO(P1.11-B): placeholder, the result is not reported yet
+    // With nothing to store, a failed replace leaves the previous set on disk:
+    // stale drafts may come back, but nothing is lost (spec P1.11 R1-2).
+    return replaceCacheSet(entries) || entries.isEmpty();
 }
 
 // Write unsaved.new/, then swap it in by two renames. Any failure before the

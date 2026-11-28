@@ -217,15 +217,6 @@ void MainWindow::setupUi()
         ThemeManager::instance().applyTheme(themeName);
     });
 
-    // Periodic unsaved document backup (crash safety net)
-    // Saves every 30 seconds so a crash never loses more than 30s of work
-    QTimer *unsavedBackupTimer = new QTimer(this);
-    unsavedBackupTimer->setInterval(30000);
-    connect(unsavedBackupTimer, &QTimer::timeout, this, [this]() {
-        Session::instance().saveUnsavedDocuments(this);
-    });
-    unsavedBackupTimer->start();
-
     connect(&Settings::instance(), &Settings::fontChanged, this, [this]() {
         // Re-apply theme to pick up font changes in stylesheets
         ThemeManager::instance().applyTheme(ThemeManager::instance().currentTheme());
@@ -1170,6 +1161,26 @@ void MainWindow::setupSessionAutosave()
     connect(m_sessionAutosaveTimer, &QTimer::timeout, this, [this]() {
         Session::instance().save(this);
     });
+
+    // Unsaved-document backup (crash safety net): a crash loses at most 30 s
+    // of typing. Not started here, so no draft write runs inside a startup
+    // modal before restore has finished (spec P1.11 3.3.1).
+    m_draftBackupTimer = new QTimer(this);
+    m_draftBackupTimer->setObjectName(QStringLiteral("draftBackupTimer"));
+    m_draftBackupTimer->setInterval(30000);
+    connect(m_draftBackupTimer, &QTimer::timeout, this, &MainWindow::backupDrafts);
+}
+
+// Only the first failure after a success notifies, so a full disk does not
+// re-post the same message every 30 s (spec P1.11 3.2.3).
+void MainWindow::backupDrafts()
+{
+    const bool stored = Session::instance().saveUnsavedDocuments(this);
+    if (!stored && !m_draftCacheFailing) {
+        showNotification(tr("Unsaved changes could not be stored for recovery. "
+                            "Free disk space or save your files."));
+    }
+    m_draftCacheFailing = !stored;
 }
 
 // Enabling rebases the corrupt-file hold on the window as restore left it, so
@@ -1178,10 +1189,12 @@ void MainWindow::setSessionAutosaveEnabled(bool enabled)
 {
     if (!enabled) {
         m_sessionAutosaveTimer->stop();
+        m_draftBackupTimer->stop();
         return;
     }
     Session::instance().rebaseHold(this);
     m_sessionAutosaveTimer->start();
+    m_draftBackupTimer->start();
 }
 
 bool MainWindow::sessionAutosaveActive() const
@@ -1194,14 +1207,38 @@ void MainWindow::setSessionAutosaveIntervalForTest(int ms)
     s_sessionAutosaveIntervalMs = ms;
 }
 
+// Asked only when unsaved changes could not be stored at quit. Cancel is the
+// default and the Escape answer, so an accidental key press keeps the window.
+bool MainWindow::confirmQuitWithoutDrafts()
+{
+    QMessageBox box(QMessageBox::Warning, tr("Unsaved changes could not be kept"),
+                    tr("Unsaved changes could not be kept"), QMessageBox::Cancel, this);
+    box.setInformativeText(tr("PrimeEdit could not store your unsaved changes for recovery "
+                              "(the disk may be full or the settings folder unwritable). "
+                              "If you quit now, changes not yet stored for recovery are lost."));
+    QPushButton *quit = box.addButton(tr("Quit and Discard Changes"),
+                                      QMessageBox::DestructiveRole);
+    box.setDefaultButton(QMessageBox::Cancel);
+    box.setEscapeButton(QMessageBox::Cancel);
+    box.exec();
+    return box.clickedButton() == quit;
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    // Cancel below restarts exactly the timers that were running (R1-8).
+    const bool sessionTimerWasActive = m_sessionAutosaveTimer->isActive();
+    const bool draftTimerWasActive = m_draftBackupTimer->isActive();
     m_sessionAutosaveTimer->stop();  // no tick while editors are torn down
-    // Notepad++ behavior: silently persist ALL unsaved documents.
-    // No save prompts on application quit. Everything is restored on next launch.
-
-    // Save unsaved documents FIRST — most critical data
-    Session::instance().saveUnsavedDocuments(this);
+    m_draftBackupTimer->stop();
+    // Notepad++ behavior: silently persist ALL unsaved documents. Quit asks
+    // only when they could not be stored (spec P1.11 3.2.2).
+    if (!Session::instance().saveUnsavedDocuments(this) && !confirmQuitWithoutDrafts()) {
+        event->ignore();
+        if (sessionTimerWasActive) m_sessionAutosaveTimer->start();
+        if (draftTimerWasActive) m_draftBackupTimer->start();
+        return;
+    }
     Session::instance().save(this);
     Settings::instance().save();
     m_closingAll = true;

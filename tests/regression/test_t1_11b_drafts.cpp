@@ -71,7 +71,7 @@ void writeEntry(const QString &name, const QJsonObject &obj)
     QVERIFY(regression::writeBytes(cacheDir() + "/" + name, QJsonDocument(obj).toJson()));
 }
 
-// Same as test_t3_2_save_ui.cpp: answers every QMessageBox that opens while it
+// As in test_t3_2_save_ui.cpp (texts here also keep the informative text): answers every QMessageBox that opens while it
 // is alive by clicking the button whose text contains wantedText (or the wanted
 // standard button). A missing button is recorded as a miss and the box is closed
 // with its escape or first button, so the test fails instead of hanging.
@@ -107,7 +107,7 @@ private:
         auto *box = qobject_cast<QMessageBox*>(QApplication::activeModalWidget());
         if (!box || box->property("answered").toBool()) return;
         box->setProperty("answered", true);
-        m_texts << box->text();
+        m_texts << box->text() + QLatin1Char('\n') + box->informativeText();
         QAbstractButton *button = wantedButton(box);
         if (button) {
             ++m_answered;
