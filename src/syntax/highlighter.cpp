@@ -42,6 +42,7 @@ void SyntaxHighlighter::setLanguage(const QString &language)
 
     m_language = language;
     m_rules.clear();
+    m_commentSyntax = {};
     loadLanguageRules(language);
     rehighlight();
 }
@@ -414,8 +415,8 @@ void SyntaxHighlighter::loadFromDefinition(const QString &resourcePath)
     }
 
     // Multi-line comments
-    QString mlStart = obj["multiLineCommentStart"].toString();
-    QString mlEnd = obj["multiLineCommentEnd"].toString();
+    m_commentSyntax = {slComment, obj["multiLineCommentStart"].toString(), obj["multiLineCommentEnd"].toString()};
+    const QString &mlStart = m_commentSyntax.blockStart, &mlEnd = m_commentSyntax.blockEnd;
     if (!mlStart.isEmpty() && !mlEnd.isEmpty()) {
         m_commentStartExpression =
             QRegularExpression(QRegularExpression::escape(mlStart));

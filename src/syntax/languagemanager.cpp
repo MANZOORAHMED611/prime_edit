@@ -398,6 +398,19 @@ QString LanguageManager::detectLanguage(const QString &filename, const QString &
     return "Plain Text";
 }
 
+QString LanguageManager::resolveLanguageName(const QString &name) const
+{
+    if (name.isEmpty())
+        return QString();
+    if (name.compare(QLatin1String("normal"), Qt::CaseInsensitive) == 0)
+        return QStringLiteral("Plain Text");
+    for (const QString &language : availableLanguages()) {
+        if (language.compare(name, Qt::CaseInsensitive) == 0)
+            return language;
+    }
+    return m_extensionToLanguage.value(name.toLower());
+}
+
 QString LanguageManager::definitionPath(const QString &language) const
 {
     return ":/syntax/" + language.toLower() + ".json";

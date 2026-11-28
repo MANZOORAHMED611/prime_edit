@@ -58,13 +58,27 @@ set(CORE_SOURCES
     src/core/schemavalidator.cpp
     src/core/textcodec.cpp
     src/core/singleinstance.cpp
+    src/core/texttransforms.cpp
+    src/core/texttransforms_case.cpp
+    src/core/texttransforms_sort.cpp
+    src/core/texttransforms_comment.cpp
+    src/core/codectransforms.cpp
+    src/core/texttransforms_lines.cpp
+    src/core/charactersets.cpp
+    src/core/commandline.cpp
 )
 
 set(UI_SOURCES
     src/ui/mainwindow.cpp
     src/ui/mainwindow_extended.cpp
+    src/ui/mainwindow_npp.cpp
+    src/ui/mainwindow_npp_format.cpp
+    src/ui/mainwindow_npp_tools.cpp
+    src/ui/mainwindow_npp_search.cpp
+    src/ui/mainwindow_npp_find.cpp
     src/ui/tabwidget.cpp
     src/ui/editor.cpp
+    src/ui/editor_transforms.cpp
     src/ui/statusbar.cpp
     src/ui/searchdialog.cpp
     src/ui/searchresultspanel.cpp
@@ -129,6 +143,13 @@ set(HEADERS
     src/core/islamicbridge.h
     src/core/schemavalidator.h
     src/core/singleinstance.h
+    src/core/texttransforms.h
+    src/core/texttransforms_p.h
+    src/core/codectransforms.h
+    src/core/charactersets.h
+    src/core/commandline.h
+    src/core/openoptions.h
+    src/ui/transformscope.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h

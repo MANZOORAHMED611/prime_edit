@@ -24,13 +24,29 @@ QString appDataDir()
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
-QByteArray requestLine(const QStringList &files, int gotoLine)
+QByteArray requestLine(const QStringList &files, const OpenOptions &options)
 {
     QJsonObject message;
     message["v"] = 1;
     message["files"] = QJsonArray::fromStringList(files);
-    message["goto"] = gotoLine > 0 ? QJsonValue(gotoLine) : QJsonValue(QJsonValue::Null);
+    message["goto"] = options.line > 0 ? QJsonValue(options.line) : QJsonValue(QJsonValue::Null);
+    if (options.column > 0) message["column"] = options.column;
+    if (options.position >= 0) message["position"] = options.position;
+    if (!options.language.isEmpty()) message["language"] = options.language;
+    if (options.readOnly) message["readOnly"] = true;
     return QJsonDocument(message).toJson(QJsonDocument::Compact) + '\n';
+}
+
+// Values of the wrong type or range count as absent, as on the command line.
+OpenOptions optionsFrom(const QJsonObject &message)
+{
+    OpenOptions options;
+    options.line = qMax(0, message["goto"].toInt(0));
+    options.column = qMax(0, message["column"].toInt(0));
+    options.position = qMax(-1, message["position"].toInt(-1));
+    options.language = message["language"].toString();
+    options.readOnly = message["readOnly"].toBool(false);
+    return options;
 }
 
 // Reads one newline-terminated line within the remaining time budget.
@@ -125,19 +141,19 @@ void SingleInstance::handleRequest(QLocalSocket *socket)
     }
     // Receivers connect with Qt::QueuedConnection, so the opens are queued and
     // the ack is not held up by a dialog an open might show.
-    deliver(files, message["goto"].toInt(0));
+    deliver(files, optionsFrom(message));
     socket->write("{\"ack\":true}\n");
     socket->flush();
     socket->disconnectFromServer();
 }
 
-void SingleInstance::deliver(const QStringList &files, int gotoLine)
+void SingleInstance::deliver(const QStringList &files, const OpenOptions &options)
 {
     if (isSignalConnected(QMetaMethod::fromSignal(&SingleInstance::openRequested))) {
-        emit openRequested(files, gotoLine);
+        emit openRequested(files, options);
         return;
     }
-    m_pending.append({files, gotoLine});
+    m_pending.append({files, options});
 }
 
 void SingleInstance::connectNotify(const QMetaMethod &signal)
@@ -154,11 +170,19 @@ void SingleInstance::flushPending()
 {
     const QList<PendingOpen> pending = std::exchange(m_pending, {});
     for (const PendingOpen &open : pending) {
-        emit openRequested(open.files, open.gotoLine);
+        emit openRequested(open.files, open.options);
     }
 }
 
 bool SingleInstance::forward(const QStringList &absoluteFiles, int gotoLine,
+                             int connectMs, int ackMs)
+{
+    OpenOptions options;
+    options.line = gotoLine;
+    return forward(absoluteFiles, options, connectMs, ackMs);
+}
+
+bool SingleInstance::forward(const QStringList &absoluteFiles, const OpenOptions &options,
                              int connectMs, int ackMs)
 {
     QLocalSocket socket;
@@ -168,7 +192,7 @@ bool SingleInstance::forward(const QStringList &absoluteFiles, int gotoLine,
     }
     QElapsedTimer timer;
     timer.start();
-    socket.write(requestLine(absoluteFiles, gotoLine));
+    socket.write(requestLine(absoluteFiles, options));
     if (!socket.waitForBytesWritten(ackMs)) {
         return false;
     }

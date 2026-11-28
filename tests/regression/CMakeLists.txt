@@ -24,6 +24,7 @@ set(REGRESSION_SUITES
     test_t3_3_encoding_ui
     test_t3_4_reload
     test_i1_roundtrip
+    test_npp_qw1
 )
 
 foreach(suite IN LISTS REGRESSION_SUITES)

@@ -1,0 +1,152 @@
+// Editor side of the Notepad++-style transforms. The transforms themselves are
+// pure functions (core/texttransforms.h); this file only picks the text they
+// read and writes their result back. textInRange and replaceRange are the only
+// places that touch QTextDocument, so the Scintilla port rewrites only them.
+#include "editor.h"
+#include "linenumberarea.h"
+#include "syntax/highlighter.h"
+
+#include <QTextBlock>
+#include <QTextCursor>
+
+QString Editor::textInRange(int start, int end) const
+{
+    QTextCursor cursor(QPlainTextEdit::document());
+    cursor.setPosition(start);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
+    QString text = cursor.selectedText();
+    text.replace(QChar::ParagraphSeparator, QLatin1Char('\n'));
+    return text;
+}
+
+// One edit block, so the change is one undo step. It is a user edit, not a
+// synced one: the modificationChanged hook marks the Document modified.
+void Editor::replaceRange(int start, int end, const QString &text, bool selectResult)
+{
+    QTextCursor cursor(QPlainTextEdit::document());
+    cursor.setPosition(start);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
+    cursor.beginEditBlock();
+    cursor.insertText(text);
+    cursor.endEditBlock();
+    if (selectResult) {
+        cursor.setPosition(start);
+        cursor.setPosition(start + int(text.size()), QTextCursor::KeepAnchor);
+    }
+    setTextCursor(cursor);
+}
+
+QPair<int, int> Editor::scopeRange(TransformScope scope) const
+{
+    const QTextCursor cursor = textCursor();
+    const QTextDocument *doc = QPlainTextEdit::document();
+    if (scope == TransformScope::Selection)
+        return {cursor.selectionStart(), cursor.selectionEnd()};
+    if (scope == TransformScope::Document
+        || (!cursor.hasSelection() && scope == TransformScope::LinesOrDocument))
+        return {0, doc->characterCount() - 1};
+
+    const QTextBlock first = doc->findBlock(cursor.selectionStart());
+    QTextBlock last = doc->findBlock(cursor.selectionEnd());
+    // A selection that ends at column 0 of a later line does not include it,
+    // as in Notepad++.
+    if (cursor.hasSelection() && last != first && cursor.selectionEnd() == last.position())
+        last = last.previous();
+    return {first.position(), last.position() + last.length() - 1};
+}
+
+// Notepad++ Insert Blank Line Above/Below Current: an empty line with no
+// indentation, and the cursor on it.
+void Editor::insertBlankLine(bool above)
+{
+    if (isReadOnly())
+        return;
+    const QTextBlock block = textCursor().block();
+    const int at = above ? block.position() : block.position() + block.length() - 1;
+    replaceRange(at, at, QStringLiteral("\n"), false);
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(above ? at : at + 1);
+    setTextCursor(cursor);
+}
+
+void Editor::setBookmarks(const QSet<int> &lines)
+{
+    m_bookmarks = lines;
+    m_lineNumberArea->update();
+}
+
+// Notepad++ Select and Find Next: with nothing selected, the word under the
+// cursor becomes the selection.
+QString Editor::selectWordIfNoSelection()
+{
+    QTextCursor cursor = textCursor();
+    if (!cursor.hasSelection()) {
+        cursor.select(QTextCursor::WordUnderCursor);
+        setTextCursor(cursor);
+    }
+    return textInRange(cursor.selectionStart(), cursor.selectionEnd());
+}
+
+// Selects from the brace at (or before) the cursor to its match, both included.
+bool Editor::selectBetweenMatchingBraces()
+{
+    const TextTransforms::BracePair pair = TextTransforms::matchingBrace(rawText(), textCursor().position());
+    if (!pair.isValid())
+        return false;
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(qMin(pair.brace, pair.match));
+    cursor.setPosition(qMax(pair.brace, pair.match) + 1, QTextCursor::KeepAnchor);
+    setTextCursor(cursor);
+    return true;
+}
+
+// Command-line navigation (-n -c -p). A column past the end of the line
+// stops at its end; a line or position past the document is ignored.
+void Editor::goToLineColumn(int line, int column)
+{
+    const QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(line - 1);
+    if (!block.isValid())
+        return;
+    QTextCursor cursor(block);
+    cursor.setPosition(block.position() + qBound(0, column - 1, block.length() - 1));
+    setTextCursor(cursor);
+    centerCursor();
+}
+
+void Editor::goToPosition(int position)
+{
+    if (position < 0 || position >= QPlainTextEdit::document()->characterCount())
+        return;
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(position);
+    setTextCursor(cursor);
+    centerCursor();
+}
+
+TextTransforms::CommentSyntax Editor::commentSyntax() const
+{
+    return m_highlighter->commentSyntax();
+}
+
+bool Editor::applyTextTransform(TransformScope scope, const TextTransform &fn)
+{
+    if (isReadOnly() || !fn)
+        return false;
+    const QPair<int, int> range = scopeRange(scope);
+    if (scope == TransformScope::Selection && range.first == range.second)
+        return false;
+    const QString before = textInRange(range.first, range.second);
+    const QString after = fn(before);
+    if (after == before)
+        return false;
+    const bool hadSelection = textCursor().hasSelection();
+    const int caret = textCursor().position();
+    replaceRange(range.first, range.second, after, hadSelection);
+    if (!hadSelection) {
+        // Keep the caret where it was rather than at the end of the new text
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(qMin(caret, QPlainTextEdit::document()->characterCount() - 1));
+        setTextCursor(cursor);
+    }
+    return true;
+}

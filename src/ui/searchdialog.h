@@ -20,11 +20,17 @@ public:
     explicit SearchDialog(QWidget *parent = nullptr);
 
     void setSearchText(const QString &text);
+    void setReplaceText(const QString &text);
     void showTab(int index);
 
     QString searchText() const;
     QString replaceText() const;
     SearchEngine::Options searchOptions() const;
+
+    // "In selection": Replace All, Count and Mark work inside the selection.
+    // One option, shown on the Find, Replace and Mark tabs.
+    bool inSelection() const;
+    void setInSelection(bool on);
 
     // Find in Files accessors
     QString directory() const;
@@ -37,6 +43,7 @@ signals:
     void findPrevious();
     void replaceOne();
     void replaceAll();
+    void replaceAllInAllOpen();
     void countRequested();
     void findAllInCurrent();
     void findAllInAllOpen();
@@ -50,7 +57,10 @@ private:
     void setupReplaceTab();
     void setupFindInFilesTab();
     void setupMarkTab();
+    void setupNppOptions();
     void addToHistory(const QString &text);
+
+    QList<QCheckBox *> m_inSelectionChecks;
 
     QTabWidget *m_tabWidget;
 

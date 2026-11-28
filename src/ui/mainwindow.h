@@ -14,6 +14,11 @@
 #include <QSet>
 #include "../core/remoteconnection.h"
 #include "../core/document.h"
+#include "transformscope.h"
+#include "../core/openoptions.h"
+#include <optional>
+
+namespace CodecTransforms { enum class HashAlgorithm; }
 
 class QPrinter;
 class QTimer;
@@ -72,6 +77,10 @@ public:
 
     // Session
     QStringList openFilePaths() const;
+
+    // Command-line options for an opened file (-n -c -p -l -ro). Read-only
+    // lasts until the file is reloaded and is never saved in the session.
+    void applyOpenOptions(Editor *editor, const OpenOptions &options);
 
     // Informational message in the notification bar, with no Yes/No question.
     void showNotification(const QString &message);
@@ -146,21 +155,26 @@ private slots:
     void moveLineUp();
     void moveLineDown();
     void toggleComment();
+    // Notepad++ Comment/Uncomment (mainwindow_npp.cpp)
+    void singleLineComment();
+    void singleLineUncomment();
     void blockComment();
-    void streamComment();
+    void blockUncomment();
     void sortLinesAscending();
     void sortLinesDescending();
     void removeDuplicateLines();
+    // Line and blank operations on the selected lines or the whole document
+    // (mainwindow_npp.cpp). Slots, so tests can reach them by name.
     void removeEmptyLines();
     void removeEmptyLinesWithBlanks();
     void removeConsecutiveDuplicateLines();
-    void joinLines();
-    void splitLines();
-    void trimTrailingWhitespace();
+    void trimTrailingSpace();
     void trimLeadingWhitespace();
     void trimLeadingAndTrailing();
     void eolToSpace();
     void removeUnnecessaryBlanks();
+    void joinLines();
+    void splitLines();
     void tabToSpace();
     void spaceToTabAll();
     void spaceToTabLeading();
@@ -168,10 +182,6 @@ private slots:
     // Text case operations
     void toUpperCase();
     void toLowerCase();
-    void toTitleCase();
-    void toSentenceCase();
-    void toInvertCase();
-    void toRandomCase();
 
     // Search menu
     void find();
@@ -309,6 +319,51 @@ private:
     void updateMenuState();
     void populateCommandPalette();
 
+    // Notepad++-parity commands (mainwindow_npp*.cpp). Each text command runs
+    // a pure TextTransforms function through Editor::applyTextTransform.
+    void setupLineOperationsMenu(QMenu *menu);
+    void setupNppEditMenus();
+    void setupCaseMenu();
+    void setupBlankOperationsMenu();
+    void setupEolMenu();
+    void setupSortMenu(QMenu *menu);
+    void setupCommentAndIndentMenus();
+    void setupInsertAndClipboardMenus();
+    void insertDateTime(bool longFormat);
+    enum class PathPart { FullPath, FileName, Directory };
+    void copyPathToClipboard(PathPart part);
+    void setupNppToolsMenu();
+    using CodecFn = std::function<std::optional<QString>(const QString &)>;
+    void applyCodec(const QString &command, const CodecFn &fn);
+    void showTextHash(const QString &name, CodecTransforms::HashAlgorithm algorithm);
+    void showFileHashes(const QString &name, CodecTransforms::HashAlgorithm algorithm);
+    void showHashResult(const QString &title, const QString &result);
+    void notifyReadOnly(const Editor *editor);
+
+    // Search additions (mainwindow_npp_search.cpp, mainwindow_npp_find.cpp)
+    void setupNppSearchMenu();
+    void selectAndFind(bool backward);
+    bool copyBookmarkedLines();
+    void cutBookmarkedLines();
+    void pasteToBookmarkedLines();
+    void removeBookmarkedLines();
+    void removeUnmarkedLines();
+    void inverseBookmark();
+    void ensureSearchDialog();
+    void fillSearchFromSelection();
+    std::optional<QString> searchScopeText(Editor *e);
+    int replaceAllIn(Editor *e, TransformScope scope);
+    void replaceAllInCurrent();
+    void replaceAllInAllOpen();
+    void markAllFromDialog();
+    // Null, with a notification, when the current language has no comments.
+    Editor *commentableEditor(bool needBlock);
+    QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,
+                                const TextTransform &fn,
+                                const QKeySequence &shortcut = QKeySequence());
+    bool transformCurrent(TransformScope scope, const TextTransform &fn);
+    void syncEolMenu(QMenu *menu);
+
     Editor *createEditor(Document *document);
     int findEditorIndex(Editor *editor) const;
     int findEditorIndex(Document *document) const;
@@ -344,6 +399,9 @@ private:
     void setupEncodingTools();
     QStringList reopenEncodingNames() const;
     void reopenEditorWithEncoding(Editor *editor, const QString &name);
+    Editor *reopenableEditor();
+    // Encoding > Character Sets: reopen the file in a legacy code page
+    void setupCharacterSetsMenu();
     void showOpenNotices(Document *doc);
     void showReopenNotice(Document *doc);
     UnmappableChoice askUnmappable(Editor *editor, const QString &encoding,

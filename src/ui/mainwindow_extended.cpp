@@ -22,7 +22,6 @@
 #include <QMessageBox>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QRandomGenerator>
 #include <QRegularExpression>
 #include <QProcess>
 #include <QDesktopServices>
@@ -37,114 +36,7 @@
 #include <QToolTip>
 #include "columneditor.h"
 
-// Comment operations
-void MainWindow::blockComment()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    // Add block comment markers (/* */)
-    cursor.insertText("/* " + selectedText + " */");
-}
-
-void MainWindow::streamComment()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    // Stream comment - add // to each line
-    QStringList lines = selectedText.split(QChar::ParagraphSeparator);
-    for (QString &line : lines) {
-        line = "// " + line;
-    }
-    cursor.insertText(lines.join("\n"));
-}
-
 // Line operations
-void MainWindow::removeEmptyLines()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    QStringList lines = text.split('\n');
-    QStringList nonEmptyLines;
-
-    for (const QString &line : lines) {
-        if (!line.trimmed().isEmpty()) {
-            nonEmptyLines.append(line);
-        }
-    }
-
-    QString newText = nonEmptyLines.join('\n');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(newText);
-    cursor.endEditBlock();
-}
-
-void MainWindow::removeEmptyLinesWithBlanks()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    QStringList lines = text.split('\n');
-    QStringList filteredLines;
-
-    for (const QString &line : lines) {
-        bool hasNonBlank = false;
-        for (const QChar &ch : line) {
-            if (!ch.isSpace()) {
-                hasNonBlank = true;
-                break;
-            }
-        }
-        if (hasNonBlank) {
-            filteredLines.append(line);
-        }
-    }
-
-    QString newText = filteredLines.join('\n');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(newText);
-    cursor.endEditBlock();
-}
-
-void MainWindow::removeConsecutiveDuplicateLines()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    QStringList lines = text.split('\n');
-    QStringList uniqueLines;
-
-    QString previousLine;
-    for (const QString &line : lines) {
-        if (line != previousLine || uniqueLines.isEmpty()) {
-            uniqueLines.append(line);
-        }
-        previousLine = line;
-    }
-
-    QString newText = uniqueLines.join('\n');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(newText);
-    cursor.endEditBlock();
-}
-
 void MainWindow::splitLines()
 {
     Editor *editor = currentEditor();
@@ -152,200 +44,6 @@ void MainWindow::splitLines()
 
     QTextCursor cursor = editor->textCursor();
     cursor.insertText("\n");
-}
-
-void MainWindow::trimLeadingWhitespace()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    QStringList lines = text.split('\n');
-
-    for (QString &line : lines) {
-        int i = 0;
-        while (i < line.length() && line[i].isSpace()) {
-            i++;
-        }
-        line = line.mid(i);
-    }
-
-    QString newText = lines.join('\n');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(newText);
-    cursor.endEditBlock();
-}
-
-void MainWindow::trimLeadingAndTrailing()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    QStringList lines = text.split('\n');
-
-    for (QString &line : lines) {
-        line = line.trimmed();
-    }
-
-    QString newText = lines.join('\n');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(newText);
-    cursor.endEditBlock();
-}
-
-void MainWindow::eolToSpace()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    text.replace('\n', ' ');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(text);
-    cursor.endEditBlock();
-}
-
-void MainWindow::removeUnnecessaryBlanks()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-
-    // Remove multiple consecutive blank lines
-    text.replace(QRegularExpression("\n\\s*\n\\s*\n"), "\n\n");
-
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(text);
-    cursor.endEditBlock();
-}
-
-void MainWindow::tabToSpace()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    text.replace('\t', "    "); // 4 spaces per tab
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(text);
-    cursor.endEditBlock();
-}
-
-void MainWindow::spaceToTabAll()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    text.replace("    ", "\t"); // 4 spaces to tab
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(text);
-    cursor.endEditBlock();
-}
-
-void MainWindow::spaceToTabLeading()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QString text = editor->rawText();
-    QStringList lines = text.split('\n');
-
-    for (QString &line : lines) {
-        // Only convert leading spaces
-        int spaceCount = 0;
-        while (spaceCount < line.length() && line[spaceCount] == ' ') {
-            spaceCount++;
-        }
-
-        int tabs = spaceCount / 4;
-        int remaining = spaceCount % 4;
-
-        line = QString("\t").repeated(tabs) + QString(" ").repeated(remaining) + line.mid(spaceCount);
-    }
-
-    QString newText = lines.join('\n');
-    QTextCursor cursor = editor->textCursor();
-    cursor.beginEditBlock();
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(newText);
-    cursor.endEditBlock();
-}
-
-// Text case operations
-void MainWindow::toSentenceCase()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    if (selectedText.isEmpty()) return;
-
-    QString result = selectedText.toLower();
-    if (!result.isEmpty()) {
-        result[0] = result[0].toUpper();
-    }
-
-    cursor.insertText(result);
-}
-
-void MainWindow::toInvertCase()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    QString result;
-    for (const QChar &ch : selectedText) {
-        if (ch.isUpper()) {
-            result += ch.toLower();
-        } else if (ch.isLower()) {
-            result += ch.toUpper();
-        } else {
-            result += ch;
-        }
-    }
-
-    cursor.insertText(result);
-}
-
-void MainWindow::toRandomCase()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    QString result;
-    for (const QChar &ch : selectedText) {
-        if (ch.isLetter()) {
-            bool upper = QRandomGenerator::global()->bounded(2) == 1;
-            result += upper ? ch.toUpper() : ch.toLower();
-        } else {
-            result += ch;
-        }
-    }
-
-    cursor.insertText(result);
 }
 
 // View operations
@@ -607,6 +305,7 @@ void MainWindow::setupEncodingTools()
         if (action->actionGroup())
             action->actionGroup()->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
     }
+    setupCharacterSetsMenu();
     // The lossy-load notification's button reopens the document it named
     connect(m_notificationBar, &NotificationBar::actionTriggered, this, [this]() {
         const QString path = m_notificationBar->property("reopenPath").toString();
@@ -641,21 +340,31 @@ QStringList MainWindow::reopenEncodingNames() const
     return names;
 }
 
-void MainWindow::reopenWithEncoding()
+// The current editor when its file can be decoded again: saved, fully
+// loaded, and either unmodified or the user agreed to discard the changes.
+Editor *MainWindow::reopenableEditor()
 {
     Editor *e = currentEditor();
     Document *doc = e ? e->document() : nullptr;
     if (!doc || doc->isUntitled() || doc->isPartialView()) {
         showNotification(tr("Reopen with Encoding needs a saved file that is fully loaded."));
-        return;
+        return nullptr;
     }
     if (doc->isModified()
         && QMessageBox::question(this, tr("Reopen with Encoding"),
                                  tr("Reopening '%1' discards your unsaved changes. Continue?")
                                      .arg(doc->displayName()),
                                  QMessageBox::Discard | QMessageBox::Cancel) != QMessageBox::Discard) {
-        return;
+        return nullptr;
     }
+    return e;
+}
+
+void MainWindow::reopenWithEncoding()
+{
+    Editor *e = reopenableEditor();
+    if (!e) return;
+    Document *doc = e->document();
     const QStringList names = reopenEncodingNames();
     bool ok = false;
     const QString name = QInputDialog::getItem(

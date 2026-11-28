@@ -13,6 +13,8 @@
 #include "core/largefile.h"
 #include "core/gitgutter.h"
 #include "ui/completionpopup.h"
+#include "ui/transformscope.h"
+#include "core/texttransforms.h"
 
 class QPainter;
 struct Theme;
@@ -86,7 +88,8 @@ public:
                    QTextDocument::FindFlags flags = QTextDocument::FindFlags());
 
     // Mark system
-    void markAll(const QString &pattern, const SearchEngine::Options &opts);
+    // Marks matches that lie within [from, to); to < 0 means the end.
+    void markAll(const QString &pattern, const SearchEngine::Options &opts, int from = 0, int to = -1);
     void clearMarks();
     int markCount() const { return m_markSelections.size(); }
 
@@ -114,6 +117,24 @@ public:
     void syncFromDocument();
     void runSyncedEdit(SyncTarget target, const std::function<void()> &edit);
     QString rawText() const;
+
+    // Text transforms (editor_transforms.cpp). applyTextTransform runs fn on
+    // the scoped text and writes the result back as one undo step; it returns
+    // false when the scope is empty, nothing changed, or the file is read-only.
+    bool applyTextTransform(TransformScope scope, const TextTransform &fn);
+    // The adapter every transform goes through. Positions are QTextDocument
+    // positions; text uses LF for line breaks. The Scintilla port rewrites
+    // only these two.
+    QString textInRange(int start, int end) const;
+    void replaceRange(int start, int end, const QString &text, bool selectResult);
+    void insertBlankLine(bool above);
+    void setBookmarks(const QSet<int> &lines);  // 1-based line numbers
+    QString selectWordIfNoSelection();
+    bool selectBetweenMatchingBraces();
+    void goToLineColumn(int line, int column);
+    void goToPosition(int position);  // 0-based
+    // The current language's comment delimiters (empty for plain text).
+    TextTransforms::CommentSyntax commentSyntax() const;
 
     // Line operations
     void duplicateLine();
@@ -199,6 +220,8 @@ private:
     void applyReadOnly(bool readOnly);
     void applySettings();
     QString indentString() const;
+    // [start, end) a TransformScope covers; start == end when it is empty.
+    QPair<int, int> scopeRange(TransformScope scope) const;
 
     Document *m_document;
     SyntaxHighlighter *m_highlighter;

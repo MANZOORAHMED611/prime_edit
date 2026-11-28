@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDir>
-#include <QFileInfo>
 #include <QStandardPaths>
 #include <QIcon>
 #include <QMessageBox>
@@ -16,6 +15,7 @@
 #include "core/session.h"
 #include "core/pluginmanager.h"
 #include "core/singleinstance.h"
+#include "core/commandline.h"
 
 namespace {
 
@@ -36,35 +36,18 @@ void setApplicationIcon(QApplication &app)
     app.setDesktopFileName("prime-edit");
 }
 
-struct LaunchRequest {
-    QStringList files;  // absolute, made so against this process's cwd
-    int gotoLine = 0;   // 0 when no valid --goto was given
-};
-
+// Notepad++ syntax (-n12 -c5 -p100 -lpython -ro) is accepted alongside the
+// long options; see core/commandline.h.
 LaunchRequest parseArguments(QApplication &app)
 {
     QCommandLineParser parser;
     parser.setApplicationDescription("The editor for structured knowledge work");
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("files", "Files to open", "[files...]");
-    // Forwarded like any other launch until one process supports several
-    // windows (spec Q2).
-    QCommandLineOption newWindowOption("new-window", "Open in a new window");
-    parser.addOption(newWindowOption);
-    QCommandLineOption lineOption(QStringList() << "g" << "goto", "Go to line number", "line");
-    parser.addOption(lineOption);
+    CommandLine::addOptions(parser);
     // --help and --version exit here, before the instance lock is touched.
-    parser.process(app);
-
-    LaunchRequest request;
-    for (const QString &file : parser.positionalArguments()) {
-        request.files.append(QFileInfo(file).absoluteFilePath());
-    }
-    bool ok = false;
-    const int line = parser.value(lineOption).toInt(&ok);
-    request.gotoLine = ok && line > 0 ? line : 0;
-    return request;
+    parser.process(CommandLine::normalizeNppArguments(app.arguments()));
+    return CommandLine::request(parser);
 }
 
 void ensureDirectories()
@@ -81,7 +64,7 @@ void ensureDirectories()
 // and exit 1; never start a second writer of the same cache.
 int forwardToRunningInstance(const LaunchRequest &request)
 {
-    if (SingleInstance::forward(request.files, request.gotoLine)) {
+    if (SingleInstance::forward(request.files, request.options)) {
         return 0;
     }
     const QString message = QObject::tr("PrimeEdit is running but not responding.");
@@ -93,13 +76,15 @@ int forwardToRunningInstance(const LaunchRequest &request)
     return 1;
 }
 
-void openRequested(MainWindow &window, const QStringList &files, int gotoLine)
+// The options apply to every file opened. With no file, a line still moves
+// the current editor, as before.
+void openRequested(MainWindow &window, const QStringList &files, const OpenOptions &options)
 {
     for (const QString &file : files) {
-        window.openFile(file);
+        window.applyOpenOptions(window.openFile(file), options);
     }
-    if (gotoLine > 0) {
-        window.goToLine(gotoLine);
+    if (files.isEmpty() && options.line > 0) {
+        window.goToLine(options.line);
     }
 }
 
@@ -111,7 +96,7 @@ void restoreAndOpen(MainWindow &window, const LaunchRequest &request)
     if (Settings::instance().restoreSession()) {
         Session::instance().restoreFiles(&window);
     }
-    openRequested(window, request.files, request.gotoLine);
+    openRequested(window, request.files, request.options);
     if (window.tabWidget()->count() > 1) {
         Editor *first = qobject_cast<Editor*>(window.tabWidget()->widget(0));
         if (first && first->document() && first->document()->isUntitled()
@@ -160,8 +145,8 @@ int main(int argc, char *argv[])
     // A launch forwarded while restore ran was acked and held by SingleInstance;
     // connecting delivers it now, after the drafts and command-line files.
     QObject::connect(&instance, &SingleInstance::openRequested, &mainWindow,
-                     [&mainWindow](const QStringList &files, int gotoLine) {
-                         openRequested(mainWindow, files, gotoLine);
+                     [&mainWindow](const QStringList &files, const OpenOptions &options) {
+                         openRequested(mainWindow, files, options);
                          mainWindow.raise();
                          mainWindow.activateWindow();
                      }, Qt::QueuedConnection);
