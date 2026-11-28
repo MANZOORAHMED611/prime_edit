@@ -1,0 +1,12 @@
+BENCH t_event_loop_ms=138.5
+BENCH t_loaded_ms=1602.8
+BENCH t_visible_ms=1611.1
+BENCH t_editable_ms=1765.6
+BENCH scroll_to_end_ms=4.6
+BENCH first_visible_line_after_end=5759865.0
+BENCH line_count=5759899.0
+BENCH bytes=500000016.0
+BENCH vm_hwm_kb=681008.0
+BENCH vm_rss_kb=637044.0
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.85
+	Maximum resident set size (kbytes): 681008

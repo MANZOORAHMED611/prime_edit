@@ -1,0 +1,25 @@
+CHECK lsp_incremental      PASS 16 SCN_MODIFIED-derived changes replayed into a shadow copy; shadow == buffer: 1
+    didChange {"range":{"start":{"line":1,"character":0},"end":{"line":1,"character":0}},"text":"NEW "}
+    didChange {"range":{"start":{"line":0,"character":2},"end":{"line":1,"character":6}},"text":""}
+    didChange {"range":{"start":{"line":0,"character":0},"end":{"line":0,"character":3}},"text":""}
+    didChange {"range":{"start":{"line":0,"character":0},"end":{"line":0,"character":0}},"text":"x\ny\nz"}
+    didChange {"range":{"start":{"line":1,"character":1},"end":{"line":1,"character":1}},"text":"#"}
+    didChange {"range":{"start":{"line":0,"character":1},"end":{"line":0,"character":1}},"text":"#"}
+    didChange {"range":{"start":{"line":1,"character":2},"end":{"line":1,"character":2}},"text":"#"}
+CHECK git_gutter_lines     PASS gutter marker lines from SCN_MODIFIED: {0,1,2}
+CHECK dirty_flag           PASS save-point notifications: SCN_SAVEPOINTLEFT -> SCN_SAVEPOINTREACHED -> SCN_SAVEPOINTLEFT -> SCN_SAVEPOINTREACHED
+CHECK toysave_whole        PASS ok=1 bytes=268441092 VmRSS 906072->906136 kB (delta 64 kB), VmHWM 1029972->1029972 kB, pointer 22.83 ms, write+fdatasync+commit 277.6 ms ; file sha256 == buffer sha256: 1
+CHECK toysave_chunked      PASS ok=1 bytes=268441095 VmRSS 906156->906156 kB (delta 0 kB), VmHWM 1029972->1029972 kB, pointer 0.00 ms, write+fdatasync+commit 276.6 ms ; file sha256 == buffer sha256: 1
+    contrast: SCI_GETTEXT full copy moves VmRSS by 262152 kB
+CHECK undo_grouping        PASS 5-line comment transform: grouped needs 1 undo (canUndo after: false), ungrouped needs 5; transformed="// one\n// two\n// thr"
+CHECK rect_virtual_default INFO rect anchor=5+0v caret=28+0v mode=1; after typing '|' once: "alp|\na m|h longer line\nbet|\n" (expected "alpha|\na muc|longer line\nbeta |\n")
+CHECK rect_virtual_user    PASS rect anchor=5+0v caret=29+4v mode=1; after typing '|' once: "alpha|\na muc|onger line\nbeta |\n"
+CHECK multi_select_typing  PASS selections=3; typed '_x' once: "one_x\ntwo_x\nthree_x\n"
+CHECK smart_highlight      PASS whole-word 'value': 3 matches filled with INDIC_ROUNDBOX on indicator 8; indicator runs read back: 3
+CHECK change_history       PASS SCI_GETCHANGEHISTORY=3; L0=none L1=saved L2=reverted_to_origin L3=modified L4=none
+CHECK hide_lines           PASS lines 5-9 hidden; doc line 10 shown at display line 5; allLinesVisible hidden=0 after SHOWLINES=1
+CHECK fold_levels          PASS headers L2:depth0 L3:depth1 L5:depth2 L6:depth3; collapse level 2: visible lines 17 -> 7, namespace expanded=1, class expanded=0
+CHECK html_embedded_js     PASS styles: <p>=1 class=3 function=47 42=45 "hi"=48 hello=46 (expected 1 3 47 45 48 46)
+CHECK html_embedded_css    FAIL styles inside <style>: selector=0 '{'=0 property=0 value=0 (identical = no CSS sub-lexer in Lexilla's hypertext lexer)
+    INFO bidi: SCI_SETBIDIRECTIONAL(L2R) then SCI_GETBIDIRECTIONAL = 0 (0 = SC_BIDIRECTIONAL_DISABLED: the Qt platform layer does not implement it)
+SELFTEST failures=1

@@ -1,0 +1,28 @@
+weston pid=1697203 socket=dbus-1
+wl-spike
+wl-spike.lock
+Failed to launch bus: Bus exited with code 1dbus-daemon[1697199]: [session uid=1000 pid=1697199 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.2' (uid=1000 pid=1697217 comm="/usr/libexec/ibus-extension-gtk3" label="unconfined")
+libEGL warning: DRI3 error: Could not get DRI3 device
+libEGL warning: Activate DRI3 at Xorg or build mesa with DRI2
+libEGL warning: DRI3 error: Could not get DRI3 device
+libEGL warning: Activate DRI3 at Xorg or build mesa with DRI2
+Failed to launch bus: Bus exited with code 1dbus-daemon[1697199]: [session uid=1000 pid=1697199 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+
+** (/usr/libexec/xdg-desktop-portal:1697272): WARNING **: 08:20:28.777: Failed connect to PipeWire: Couldn't connect to PipeWire
+** Message: 08:20:28.785: couldn't access control socket: /tmp/pe-ime.RMBrz2/keyring/control: No such file or directory
+ibus engine now: libpinyin
+Failed to launch bus: Bus exited with code 1weston X window=0x200005
+--- IME events received by the widget:
+IME preedit="" [] commit="" []
+IME preedit="年" [U+5E74] commit="" []
+IME preedit="你" [U+4F60] commit="" []
+IME preedit="你和" [U+4F60 U+548C] commit="" []
+IME preedit="你哈" [U+4F60 U+54C8] commit="" []
+IME preedit="你好" [U+4F60 U+597D] commit="" []
+IME preedit="" [] commit="你好" [U+4F60 U+597D]
+IME preedit="" [] commit="" []
+--- first line of buffer after commit:
+#include <cstdio>
+
+--- first line as code points:
+U+0023 U+0069 U+006E U+0063 U+006C U+0075 U+0064 U+0065 U+0020 U+003C U+0063 U+0073 U+0074 U+0064 U+0069 U+006F U+003E

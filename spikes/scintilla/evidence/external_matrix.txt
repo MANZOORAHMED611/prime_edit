@@ -1,0 +1,50 @@
+== demo_100mb
+open: {"first_change_ms": 661, "settled_ms": 661, "timed_out": false, "polls": 59, "changes": [[661, 447741]]}
+end: {"first_change_ms": 114, "settled_ms": 114, "timed_out": false, "polls": 54, "changes": [[114, 151478]]}
+typed: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 27, "changes": []}
+Command terminated by signal 15
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:11.92
+	Maximum resident set size (kbytes): 323168
+	Exit status: 0
+== pe_100mb
+open: {"first_change_ms": 655, "settled_ms": 655, "timed_out": false, "polls": 60, "changes": [[655, 719616]]}
+end: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 53, "changes": []}
+typed: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 27, "changes": []}
+Command terminated by signal 15
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:11.73
+	Maximum resident set size (kbytes): 167476
+	Exit status: 0
+== demo_500mb
+open: {"first_change_ms": 2421, "settled_ms": 2421, "timed_out": false, "polls": 82, "changes": [[2421, 447741]]}
+end: {"first_change_ms": 118, "settled_ms": 118, "timed_out": false, "polls": 54, "changes": [[118, 154665]]}
+typed: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 27, "changes": []}
+Command terminated by signal 15
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:13.84
+	Maximum resident set size (kbytes): 1169264
+	Exit status: 0
+== pe_500mb
+open: {"first_change_ms": 581, "settled_ms": 581, "timed_out": false, "polls": 51, "changes": [[581, 719617]]}
+end: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 49, "changes": []}
+typed: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 27, "changes": []}
+Command terminated by signal 15
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:11.80
+	Maximum resident set size (kbytes): 165692
+	Exit status: 0
+== pe_json
+open: {"first_change_ms": 1570, "settled_ms": 5044, "timed_out": false, "polls": 168, "changes": [[1570, 719232], [5044, 1020]]}
+end: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 104, "changes": []}
+typed: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 28, "changes": []}
+Command terminated by signal 15
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:24.26
+	Maximum resident set size (kbytes): 625764
+	Exit status: 0
+== demo_json
+open: {"first_change_ms": 55022, "settled_ms": 55022, "timed_out": false, "polls": 1746, "changes": [[55022, 449955]]}
+end: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 966, "changes": []}
+typed: {"first_change_ms": null, "settled_ms": null, "timed_out": false, "polls": 27, "changes": []}
+Command terminated by signal 15
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:18.17
+	Maximum resident set size (kbytes): 886736
+	Exit status: 0
+
+[exited with code 0]
