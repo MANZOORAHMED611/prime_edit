@@ -7,6 +7,7 @@
 #include "core/document.h"
 #include "core/texttransforms.h"
 #include "ui/editor.h"
+#include "ui/mainwindow.h"
 
 #include <QTextDocument>
 
@@ -383,6 +384,130 @@ private slots:
         QVERIFY(doc.isModified());
         editor.undo();
         QCOMPARE(editor.toPlainText(), QStringLiteral("a\n\nb\nc"));
+    }
+
+    // ---- group 4: comment and indent -------------------------------------
+    void commentLines_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("commented");
+        QTest::newRow("empty single line") << "" << "// ";
+        QTest::newRow("indent kept") << "  a\n\tb" << "  // a\n\t// b";
+        QTest::newRow("blank lines skipped") << "a\n\n  \nb\n" << "// a\n\n  \n// b\n";
+        QTest::newRow("crlf") << "a\r\nb" << "// a\r\n// b";
+        QTest::newRow("arabic") << kArabic << "// " + kArabic;
+    }
+    void commentLines()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, commented);
+        const CommentSyntax cpp{QStringLiteral("//"), QStringLiteral("/*"), QStringLiteral("*/")};
+        QCOMPARE(TextTransforms::commentLines(in, cpp), commented);
+        QCOMPARE(TextTransforms::uncommentLines(commented, cpp), in);
+    }
+    void uncommentLines()
+    {
+        const CommentSyntax py{QStringLiteral("#"), QString(), QString()};
+        QCOMPARE(TextTransforms::uncommentLines(QStringLiteral("  #a\n# b\nc # d\n#  e"), py),
+                 QStringLiteral("  a\nb\nc # d\n e"));
+        QCOMPARE(TextTransforms::uncommentLines(QString(), py), QString());
+    }
+    void commentLinesBlockFallback()
+    {
+        const CommentSyntax html{QString(), QStringLiteral("<!--"), QStringLiteral("-->")};
+        const QString commented = TextTransforms::commentLines(QStringLiteral("  <p>\n</p>"), html);
+        QCOMPARE(commented, QStringLiteral("  <!-- <p> -->\n<!-- </p> -->"));
+        QCOMPARE(TextTransforms::uncommentLines(commented, html), QStringLiteral("  <p>\n</p>"));
+        const CommentSyntax none;
+        QCOMPARE(TextTransforms::commentLines(QStringLiteral("a"), none), QStringLiteral("a"));
+    }
+    void blockComment_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("commented");
+        QTest::newRow("words") << "a b" << "/* a b */";
+        QTest::newRow("whitespace outside") << "  a\nb\n" << "  /* a\nb */\n";
+        QTest::newRow("crlf inside") << "a\r\nb" << "/* a\r\nb */";
+        QTest::newRow("arabic") << kArabic << "/* " + kArabic + " */";
+    }
+    void blockComment()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, commented);
+        const CommentSyntax cpp{QStringLiteral("//"), QStringLiteral("/*"), QStringLiteral("*/")};
+        QCOMPARE(TextTransforms::blockComment(in, cpp), commented);
+        QCOMPARE(blockUncomment(commented, cpp), std::optional<QString>(in));
+    }
+    void blockUncommentEdges()
+    {
+        const CommentSyntax cpp{QStringLiteral("//"), QStringLiteral("/*"), QStringLiteral("*/")};
+        QCOMPARE(blockUncomment(QStringLiteral("/*x*/"), cpp), std::optional<QString>(QStringLiteral("x")));
+        QCOMPARE(blockUncomment(QStringLiteral("a b"), cpp), std::nullopt);
+        QCOMPARE(blockUncomment(QStringLiteral("/*/"), cpp), std::nullopt);
+        QCOMPARE(blockUncomment(QString(), cpp), std::nullopt);
+        QCOMPARE(TextTransforms::blockComment(QStringLiteral("   "), cpp), QStringLiteral("   "));
+        const CommentSyntax lineOnly{QStringLiteral("#"), QString(), QString()};
+        QCOMPARE(TextTransforms::blockComment(QStringLiteral("a"), lineOnly), QStringLiteral("a"));
+        QCOMPARE(blockUncomment(QStringLiteral("a"), lineOnly), std::nullopt);
+    }
+    void indentLines_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("indented");
+        QTest::addColumn<QString>("unindented");
+        QTest::newRow("empty") << "" << "    " << "";
+        QTest::newRow("lines") << "a\n  b\n\tc" << "    a\n      b\n    \tc" << "a\nb\nc";
+        QTest::newRow("to previous stop") << "      a" << "          a" << "    a";
+        QTest::newRow("empty lines skipped") << "a\n\nb\n" << "    a\n\n    b\n" << "a\n\nb\n";
+        QTest::newRow("crlf") << "  a\r\nb" << "      a\r\n    b" << "a\r\nb";
+    }
+    void indentLines()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, indented);
+        QFETCH(QString, unindented);
+        QCOMPARE(TextTransforms::indentLines(in, QStringLiteral("    ")), indented);
+        QCOMPARE(TextTransforms::unindentLines(in, 4), unindented);
+        QCOMPARE(TextTransforms::indentLines(QStringLiteral("a"), QStringLiteral("\t")), QStringLiteral("\ta"));
+    }
+    // The language definitions supply the delimiters (resources/syntax/*.json).
+    void editorCommentSyntaxFromLanguage()
+    {
+        Document doc;
+        Editor editor(&doc);
+        editor.setLanguage(QStringLiteral("C++"));
+        QCOMPARE(editor.commentSyntax().line, QStringLiteral("//"));
+        QCOMPARE(editor.commentSyntax().blockStart, QStringLiteral("/*"));
+        QCOMPARE(editor.commentSyntax().blockEnd, QStringLiteral("*/"));
+        editor.setLanguage(QStringLiteral("Python"));
+        QCOMPARE(editor.commentSyntax().line, QStringLiteral("#"));
+    }
+
+    // Qt's text controls claim some Ctrl letters on X11 (Ctrl+K deletes to the
+    // end of the line), which would starve a menu shortcut. Typed into a
+    // focused editor, each Notepad++ shortcut must reach its action.
+    void shortcutsReachActionsFromTheEditor()
+    {
+        MainWindow mw;
+        mw.show();
+        QVERIFY(QTest::qWaitForWindowActive(&mw));
+        Editor *editor = mw.currentEditor();
+        QVERIFY(editor);
+        editor->setFocus();
+        editor->setLanguage(QStringLiteral("C++"));
+        editor->setPlainText(QStringLiteral("abc def"));
+
+        QTest::keyClick(editor, Qt::Key_K, Qt::ControlModifier);
+        QCOMPARE(editor->toPlainText(), QStringLiteral("// abc def"));
+        QTest::keyClick(editor, Qt::Key_Q, Qt::ControlModifier | Qt::ShiftModifier);
+        QCOMPARE(editor->toPlainText(), QStringLiteral("/* // abc def */"));
+        editor->selectAll();
+        QTest::keyClick(editor, Qt::Key_U, Qt::AltModifier);
+        QCOMPARE(editor->toPlainText(), QStringLiteral("/* // Abc Def */"));
+        QTest::keyClick(editor, Qt::Key_I, Qt::ControlModifier | Qt::AltModifier);
+        QCOMPARE(editor->toPlainText(), QStringLiteral("/* // aBC dEF */"));
+        QTest::keyClick(editor, Qt::Key_Return, Qt::ControlModifier | Qt::AltModifier);
+        QCOMPARE(editor->toPlainText(), QStringLiteral("\n/* // aBC dEF */"));
     }
 
     // ---- editor adapter ---------------------------------------------------

@@ -61,12 +61,14 @@ set(CORE_SOURCES
     src/core/texttransforms.cpp
     src/core/texttransforms_case.cpp
     src/core/texttransforms_sort.cpp
+    src/core/texttransforms_comment.cpp
 )
 
 set(UI_SOURCES
     src/ui/mainwindow.cpp
     src/ui/mainwindow_extended.cpp
     src/ui/mainwindow_npp.cpp
+    src/ui/mainwindow_npp_format.cpp
     src/ui/tabwidget.cpp
     src/ui/editor.cpp
     src/ui/editor_transforms.cpp

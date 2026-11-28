@@ -204,6 +204,7 @@ void MainWindow::setupNppEditMenus()
     setupCaseMenu();
     setupBlankOperationsMenu();
     setupEolMenu();
+    setupCommentAndIndentMenus();
 }
 
 void MainWindow::setupBlankOperationsMenu()

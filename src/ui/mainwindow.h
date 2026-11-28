@@ -147,8 +147,11 @@ private slots:
     void moveLineUp();
     void moveLineDown();
     void toggleComment();
+    // Notepad++ Comment/Uncomment (mainwindow_npp.cpp)
+    void singleLineComment();
+    void singleLineUncomment();
     void blockComment();
-    void streamComment();
+    void blockUncomment();
     void sortLinesAscending();
     void sortLinesDescending();
     void removeDuplicateLines();
@@ -316,6 +319,9 @@ private:
     void setupBlankOperationsMenu();
     void setupEolMenu();
     void setupSortMenu(QMenu *menu);
+    void setupCommentAndIndentMenus();
+    // Null, with a notification, when the current language has no comments.
+    Editor *commentableEditor(bool needBlock);
     QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,
                                 const TextTransform &fn,
                                 const QKeySequence &shortcut = QKeySequence());

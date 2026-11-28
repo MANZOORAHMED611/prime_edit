@@ -3,6 +3,7 @@
 // read and writes their result back. textInRange and replaceRange are the only
 // places that touch QTextDocument, so the Scintilla port rewrites only them.
 #include "editor.h"
+#include "syntax/highlighter.h"
 
 #include <QTextBlock>
 #include <QTextCursor>
@@ -64,6 +65,11 @@ void Editor::insertBlankLine(bool above)
     QTextCursor cursor = textCursor();
     cursor.setPosition(above ? at : at + 1);
     setTextCursor(cursor);
+}
+
+TextTransforms::CommentSyntax Editor::commentSyntax() const
+{
+    return m_highlighter->commentSyntax();
 }
 
 bool Editor::applyTextTransform(TransformScope scope, const TextTransform &fn)

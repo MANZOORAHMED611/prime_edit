@@ -14,6 +14,7 @@
 #include "core/gitgutter.h"
 #include "ui/completionpopup.h"
 #include "ui/transformscope.h"
+#include "core/texttransforms.h"
 
 class QPainter;
 struct Theme;
@@ -126,6 +127,8 @@ public:
     QString textInRange(int start, int end) const;
     void replaceRange(int start, int end, const QString &text, bool selectResult);
     void insertBlankLine(bool above);
+    // The current language's comment delimiters (empty for plain text).
+    TextTransforms::CommentSyntax commentSyntax() const;
 
     // Line operations
     void duplicateLine();

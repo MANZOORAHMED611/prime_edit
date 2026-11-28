@@ -5,6 +5,8 @@
 #include <QString>
 #include <QStringList>
 
+#include <optional>
+
 // Pure text transforms behind the Notepad++-parity Edit commands. QString in,
 // QString out, no widgets: the editor core is moving from QPlainTextEdit to
 // Scintilla, and only the adapter that applies a result (Editor::replaceRange)
@@ -55,6 +57,33 @@ QString sortDecimals(const QString &text, SortOrder order, QChar decimalSeparato
 QString sortByLength(const QString &text, SortOrder order);
 QString reverseLines(const QString &text);
 QString shuffleLines(const QString &text, quint32 seed);
+
+// Indentation. When there is more than one line, empty lines are left alone.
+// Unindent removes a leading tab, or spaces back to the previous tab stop.
+QString indentLines(const QString &text, const QString &unit);
+QString unindentLines(const QString &text, int tabWidth);
+
+// Comment delimiters of a language (resources/syntax/*.json).
+struct CommentSyntax {
+    QString line;
+    QString blockStart;
+    QString blockEnd;
+    bool hasLine() const { return !line.isEmpty(); }
+    bool hasBlock() const { return !blockStart.isEmpty() && !blockEnd.isEmpty(); }
+};
+// Single-line comment: the token and a space go after each line's indent.
+// Blank lines are skipped when there is more than one line. A language with
+// no line comment wraps each line in its block delimiters instead.
+QString commentLines(const QString &text, const CommentSyntax &syntax);
+// Removes one comment token (and one space after it) from each line that
+// starts with it after its indent; other lines are unchanged.
+QString uncommentLines(const QString &text, const CommentSyntax &syntax);
+// Block comment: the delimiters go inside the surrounding whitespace, each
+// with a space. Unchanged when the language has no block delimiters or the
+// text is only whitespace.
+QString blockComment(const QString &text, const CommentSyntax &syntax);
+// Removes one pair of block delimiters; nullopt when the text is not wrapped.
+std::optional<QString> blockUncomment(const QString &text, const CommentSyntax &syntax);
 
 // Case, per code point, so surrogate pairs are handled and characters with no
 // case (Arabic, CJK, digits) pass through unchanged. Proper: a letter that

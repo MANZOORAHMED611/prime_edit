@@ -36,35 +36,6 @@
 #include <QToolTip>
 #include "columneditor.h"
 
-// Comment operations
-void MainWindow::blockComment()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    // Add block comment markers (/* */)
-    cursor.insertText("/* " + selectedText + " */");
-}
-
-void MainWindow::streamComment()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    // Stream comment - add // to each line
-    QStringList lines = selectedText.split(QChar::ParagraphSeparator);
-    for (QString &line : lines) {
-        line = "// " + line;
-    }
-    cursor.insertText(lines.join("\n"));
-}
-
 // Line operations
 void MainWindow::splitLines()
 {

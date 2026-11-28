@@ -6,6 +6,8 @@
 #include <QRegularExpression>
 #include <QVector>
 
+#include "core/texttransforms.h"
+
 class SyntaxHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -15,6 +17,8 @@ public:
 
     void setLanguage(const QString &language);
     QString language() const { return m_language; }
+    // Comment delimiters from the language definition; empty when it has none.
+    TextTransforms::CommentSyntax commentSyntax() const { return m_commentSyntax; }
     void setupFormats();
 
 protected:
@@ -30,6 +34,7 @@ private:
 
     QString m_language;
     QVector<HighlightingRule> m_rules;
+    TextTransforms::CommentSyntax m_commentSyntax;
 
     // Formats
     QTextCharFormat m_keywordFormat;
