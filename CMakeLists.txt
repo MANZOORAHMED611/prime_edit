@@ -58,13 +58,16 @@ set(CORE_SOURCES
     src/core/schemavalidator.cpp
     src/core/textcodec.cpp
     src/core/singleinstance.cpp
+    src/core/texttransforms.cpp
 )
 
 set(UI_SOURCES
     src/ui/mainwindow.cpp
     src/ui/mainwindow_extended.cpp
+    src/ui/mainwindow_npp.cpp
     src/ui/tabwidget.cpp
     src/ui/editor.cpp
+    src/ui/editor_transforms.cpp
     src/ui/statusbar.cpp
     src/ui/searchdialog.cpp
     src/ui/searchresultspanel.cpp
@@ -129,6 +132,8 @@ set(HEADERS
     src/core/islamicbridge.h
     src/core/schemavalidator.h
     src/core/singleinstance.h
+    src/core/texttransforms.h
+    src/ui/transformscope.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h

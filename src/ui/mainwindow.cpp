@@ -352,19 +352,8 @@ void MainWindow::setupMenus()
     QAction *moveLineDownAction = lineOpsMenu->addAction(tr("Move Line &Down"), this, &MainWindow::moveLineDown);
     moveLineDownAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Down));
 
-    lineOpsMenu->addSeparator();
-
-    lineOpsMenu->addAction(tr("&Sort Lines (Ascending)"), this, &MainWindow::sortLinesAscending);
-    lineOpsMenu->addAction(tr("Sort Lines (Descending)"), this, &MainWindow::sortLinesDescending);
-    lineOpsMenu->addAction(tr("&Remove Duplicate Lines"), this, &MainWindow::removeDuplicateLines);
-    lineOpsMenu->addAction(tr("&Join Lines"), this, &MainWindow::joinLines);
-    lineOpsMenu->addAction(tr("&Trim Trailing Whitespace"), this, &MainWindow::trimTrailingWhitespace);
-
-    // Case conversion submenu
-    QMenu *caseMenu = m_editMenu->addMenu(tr("&Convert Case"));
-    caseMenu->addAction(tr("&UPPERCASE"), this, &MainWindow::toUpperCase);
-    caseMenu->addAction(tr("&lowercase"), this, &MainWindow::toLowerCase);
-    caseMenu->addAction(tr("&Title Case"), this, &MainWindow::toTitleCase);
+    setupLineOperationsMenu(lineOpsMenu);
+    setupNppEditMenus();  // Convert Case, Blank Operations, EOL Conversion, ...
 
     m_editMenu->addSeparator();
 
@@ -1691,14 +1680,6 @@ void MainWindow::joinLines()
     Editor *editor = currentEditor();
     if (editor) {
         editor->joinLines();
-    }
-}
-
-void MainWindow::trimTrailingWhitespace()
-{
-    Editor *editor = currentEditor();
-    if (editor) {
-        editor->trimTrailingWhitespace();
     }
 }
 

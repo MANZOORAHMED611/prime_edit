@@ -14,6 +14,7 @@
 #include <QSet>
 #include "../core/remoteconnection.h"
 #include "../core/document.h"
+#include "transformscope.h"
 
 class QPrinter;
 class QTimer;
@@ -151,16 +152,18 @@ private slots:
     void sortLinesAscending();
     void sortLinesDescending();
     void removeDuplicateLines();
+    // Line and blank operations on the selected lines or the whole document
+    // (mainwindow_npp.cpp). Slots, so tests can reach them by name.
     void removeEmptyLines();
     void removeEmptyLinesWithBlanks();
     void removeConsecutiveDuplicateLines();
-    void joinLines();
-    void splitLines();
-    void trimTrailingWhitespace();
+    void trimTrailingSpace();
     void trimLeadingWhitespace();
     void trimLeadingAndTrailing();
     void eolToSpace();
     void removeUnnecessaryBlanks();
+    void joinLines();
+    void splitLines();
     void tabToSpace();
     void spaceToTabAll();
     void spaceToTabLeading();
@@ -308,6 +311,16 @@ private:
     void updateStatusBar();
     void updateMenuState();
     void populateCommandPalette();
+
+    // Notepad++-parity commands (mainwindow_npp*.cpp). Each text command runs
+    // a pure TextTransforms function through Editor::applyTextTransform.
+    void setupLineOperationsMenu(QMenu *menu);
+    void setupNppEditMenus();
+    QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,
+                                const TextTransform &fn,
+                                const QKeySequence &shortcut = QKeySequence());
+    bool transformCurrent(TransformScope scope, const TextTransform &fn);
+    void syncEolMenu(QMenu *menu);
 
     Editor *createEditor(Document *document);
     int findEditorIndex(Editor *editor) const;

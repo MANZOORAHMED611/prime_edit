@@ -13,6 +13,7 @@
 #include "core/largefile.h"
 #include "core/gitgutter.h"
 #include "ui/completionpopup.h"
+#include "ui/transformscope.h"
 
 class QPainter;
 struct Theme;
@@ -115,6 +116,16 @@ public:
     void runSyncedEdit(SyncTarget target, const std::function<void()> &edit);
     QString rawText() const;
 
+    // Text transforms (editor_transforms.cpp). applyTextTransform runs fn on
+    // the scoped text and writes the result back as one undo step; it returns
+    // false when the scope is empty, nothing changed, or the file is read-only.
+    bool applyTextTransform(TransformScope scope, const TextTransform &fn);
+    // The adapter every transform goes through. Positions are QTextDocument
+    // positions; text uses LF for line breaks. The Scintilla port rewrites
+    // only these two.
+    QString textInRange(int start, int end) const;
+    void replaceRange(int start, int end, const QString &text, bool selectResult);
+
     // Line operations
     void duplicateLine();
     void deleteLine();
@@ -199,6 +210,8 @@ private:
     void applyReadOnly(bool readOnly);
     void applySettings();
     QString indentString() const;
+    // [start, end) a TransformScope covers; start == end when it is empty.
+    QPair<int, int> scopeRange(TransformScope scope) const;
 
     Document *m_document;
     SyntaxHighlighter *m_highlighter;
