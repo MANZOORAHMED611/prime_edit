@@ -62,6 +62,7 @@ set(CORE_SOURCES
     src/core/texttransforms_case.cpp
     src/core/texttransforms_sort.cpp
     src/core/texttransforms_comment.cpp
+    src/core/codectransforms.cpp
 )
 
 set(UI_SOURCES
@@ -139,6 +140,7 @@ set(HEADERS
     src/core/singleinstance.h
     src/core/texttransforms.h
     src/core/texttransforms_p.h
+    src/core/codectransforms.h
     src/ui/transformscope.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h

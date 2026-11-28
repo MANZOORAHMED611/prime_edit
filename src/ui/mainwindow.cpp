@@ -590,6 +590,7 @@ void MainWindow::setupMenus()
     m_toolsMenu->addSeparator();
     m_toolsMenu->addAction(
         tr("&Plugins..."), this, &MainWindow::showPluginDialog);
+    setupNppToolsMenu();  // MD5/SHA, MIME Tools, Converter
 
     // ============================================================
     // Macro menu

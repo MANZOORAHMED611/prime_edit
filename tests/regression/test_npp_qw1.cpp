@@ -4,6 +4,7 @@
 // modified.
 #include "support.h"
 
+#include "core/codectransforms.h"
 #include "core/document.h"
 #include "core/texttransforms.h"
 #include "ui/editor.h"
@@ -11,10 +12,14 @@
 
 #include <QAction>
 #include <QClipboard>
+#include <QDialog>
 #include <QDir>
+#include <QPlainTextEdit>
 #include <QTextDocument>
+#include <QTimer>
 
 using namespace TextTransforms;
+using namespace CodecTransforms;
 
 namespace {
 
@@ -538,6 +543,109 @@ private slots:
         QVERIFY(editor->document()->isModified());
         editor->undo();
         QCOMPARE(editor->toPlainText(), QStringLiteral("x"));
+    }
+
+    // ---- group 6: tools ----------------------------------------------------
+    // Reference values from Python's hashlib, base64 and urllib.
+    void hashes()
+    {
+        using CodecTransforms::HashAlgorithm;
+        QCOMPARE(hashText(QString(), HashAlgorithm::Md5), QStringLiteral("d41d8cd98f00b204e9800998ecf8427e"));
+        QCOMPARE(hashText(QStringLiteral("abc"), HashAlgorithm::Sha1),
+                 QStringLiteral("a9993e364706816aba3e25717850c26c9cd0d89d"));
+        QCOMPARE(hashText(QStringLiteral("abc"), HashAlgorithm::Sha256),
+                 QStringLiteral("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"));
+        QCOMPARE(hashText(QStringLiteral("abc"), HashAlgorithm::Sha512),
+                 QStringLiteral("ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a"
+                                "2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f"));
+        QCOMPARE(hashText(kArabic, HashAlgorithm::Md5), QStringLiteral("9530db02d3c8217be00c1aa98ec51861"));
+    }
+    void hashFileReadsBytes()
+    {
+        using CodecTransforms::HashAlgorithm;
+        regression::TempDir tmp;
+        const QString path = tmp.filePath(QStringLiteral("crlf.txt"));
+        QVERIFY(regression::writeBytes(path, "abc\r\n"));
+        QCOMPARE(CodecTransforms::hashFile(path, HashAlgorithm::Sha256),
+                 std::optional<QString>(
+                     QStringLiteral("552bab6864c7a7b69a502ed1854b9245c0e1a30f008aaa0b281da62585fdb025")));
+        QCOMPARE(regression::readBytes(path), QByteArray("abc\r\n"));  // read-only
+        QCOMPARE(CodecTransforms::hashFile(tmp.filePath(QStringLiteral("missing")), HashAlgorithm::Md5),
+                 std::nullopt);
+    }
+    void base64()
+    {
+        QCOMPARE(base64Encode(QStringLiteral("Hello")), QStringLiteral("SGVsbG8="));
+        QCOMPARE(base64Encode(kArabic), QStringLiteral("2YXYsdit2KjYpw=="));
+        QCOMPARE(base64Encode(QString()), QString());
+        QCOMPARE(base64Decode(QStringLiteral("2YXYsdit2KjYpw==")), std::optional<QString>(kArabic));
+        QCOMPARE(base64Decode(QStringLiteral("SGVs\r\nbG8=")), std::optional<QString>(QStringLiteral("Hello")));
+        QCOMPARE(base64Decode(QString()), std::optional<QString>(QString()));
+        QCOMPARE(base64Decode(QStringLiteral("SGV$bG8=")), std::nullopt);   // bad character
+        QCOMPARE(base64Decode(QStringLiteral("/w==")), std::nullopt);       // 0xFF is not UTF-8
+    }
+    void urlCoding()
+    {
+        const QString plain = QStringLiteral("a b&c/é~-._");
+        QCOMPARE(urlEncode(plain), QStringLiteral("a%20b%26c%2F%C3%A9~-._"));
+        QCOMPARE(urlDecode(QStringLiteral("a%20b%26c%2F%C3%A9~-._")), std::optional<QString>(plain));
+        QCOMPARE(urlDecode(QStringLiteral("a+b")), std::optional<QString>(QStringLiteral("a+b")));
+        QCOMPARE(urlDecode(QStringLiteral("%zz")), std::nullopt);
+        QCOMPARE(urlDecode(QStringLiteral("abc%E")), std::nullopt);
+        QCOMPARE(urlDecode(QStringLiteral("%FF")), std::nullopt);
+        QCOMPARE(urlEncode(kArabic), QStringLiteral("%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"));
+    }
+    void hexCoding()
+    {
+        QCOMPARE(asciiToHex(QStringLiteral("Hi\n")), QStringLiteral("48690A"));
+        QCOMPARE(asciiToHex(kArabic), QStringLiteral("D985D8B1D8ADD8A8D8A7"));
+        QCOMPARE(hexToAscii(QStringLiteral("48 69\r\n0a")), std::optional<QString>(QStringLiteral("Hi\n")));
+        QCOMPARE(hexToAscii(QStringLiteral("D985D8B1D8ADD8A8D8A7")), std::optional<QString>(kArabic));
+        QCOMPARE(hexToAscii(QString()), std::optional<QString>(QString()));
+        QCOMPARE(hexToAscii(QStringLiteral("486")), std::nullopt);   // odd digit count
+        QCOMPARE(hexToAscii(QStringLiteral("4G")), std::nullopt);
+        QCOMPARE(hexToAscii(QStringLiteral("FF")), std::nullopt);    // not UTF-8
+    }
+    // With nothing selected the digest covers the whole document; the dialog
+    // shows it and leaves the document untouched.
+    void hashDialogShowsDocumentDigest()
+    {
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.currentEditor();
+        QVERIFY(editor);
+        editor->setPlainText(QStringLiteral("abc"));
+        QString shown;
+        QTimer::singleShot(0, &mw, [&shown]() {
+            auto *dialog = qobject_cast<QDialog *>(QApplication::activeModalWidget());
+            if (!dialog) return;
+            if (auto *view = dialog->findChild<QPlainTextEdit *>()) shown = view->toPlainText();
+            dialog->reject();
+        });
+        auto *action = mw.findChild<QAction *>(QStringLiteral("hashText SHA-1"));
+        QVERIFY(action);
+        action->trigger();
+        QCOMPARE(shown, QStringLiteral("a9993e364706816aba3e25717850c26c9cd0d89d"));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("abc"));
+    }
+    // Invalid input leaves the selection exactly as it was and says so.
+    void invalidDecodeLeavesTextUnchanged()
+    {
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.currentEditor();
+        QVERIFY(editor);
+        editor->setPlainText(QStringLiteral("not base64!"));
+        editor->selectAll();
+        textDoc(*editor)->setModified(false);
+        editor->document()->setModified(false);
+        QVERIFY(trigger(mw, QStringLiteral("Base64 Decode")));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("not base64!"));
+        QVERIFY(!editor->document()->isModified());
+        QVERIFY(trigger(mw, QStringLiteral("Base64 Encode")));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("bm90IGJhc2U2NCE="));
+        QVERIFY(trigger(mw, QStringLiteral("Base64 Decode")));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("not base64!"));
     }
 
     // Qt's text controls claim some Ctrl letters on X11 (Ctrl+K deletes to the

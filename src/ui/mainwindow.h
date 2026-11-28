@@ -15,6 +15,9 @@
 #include "../core/remoteconnection.h"
 #include "../core/document.h"
 #include "transformscope.h"
+#include <optional>
+
+namespace CodecTransforms { enum class HashAlgorithm; }
 
 class QPrinter;
 class QTimer;
@@ -324,6 +327,12 @@ private:
     void insertDateTime(bool longFormat);
     enum class PathPart { FullPath, FileName, Directory };
     void copyPathToClipboard(PathPart part);
+    void setupNppToolsMenu();
+    using CodecFn = std::function<std::optional<QString>(const QString &)>;
+    void applyCodec(const QString &command, const CodecFn &fn);
+    void showTextHash(const QString &name, CodecTransforms::HashAlgorithm algorithm);
+    void showFileHashes(const QString &name, CodecTransforms::HashAlgorithm algorithm);
+    void showHashResult(const QString &title, const QString &result);
     // Null, with a notification, when the current language has no comments.
     Editor *commentableEditor(bool needBlock);
     QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,
