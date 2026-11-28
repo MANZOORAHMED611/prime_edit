@@ -28,6 +28,11 @@ Sources: the 2026-11-26 full review, the Phase 1 integration check (Abu Bakr) an
 - Menu commands (sort, duplicate, case) bypass the read-only key guard. Nothing reaches disk, because save is refused, but the tab is marked modified.
 - The plugin API's `currentText()` returns `toPlainText()`, so a plugin's read-modify-write loses U+00A0. This is a public interface, so the change is high-risk. (integ m5)
 - A forward that arrives during startup restore can be acknowledged and then dropped. (integ m4, fixed in T1.9)
+- **Writers outside P1.12** (spec `2026-11-28-atomic-short-write.md` §2; P1.12 fixed only `Document::writeAtomic` and `FileUtils::writeFileAtomic`):
+  - `ThemeManager` theme writes (`theme.cpp:692, 765`): truncate in place, result ignored.
+  - `LLMEvaluator::saveEndpoint` (`llmevaluator.cpp:132`): truncates the endpoint config (including the API key) in place, result ignored.
+  - Hex viewer Export Selection (`hexviewer.cpp:435`): reports success unconditionally. Left out of P1.12 because it is an explicit export to a path the user chose, in a rare flow — not because it cannot overwrite (it can).
+  - `Document::saveRecovery` (`document.cpp:663`; the spec cites 542, before P1.11 moved it): live writer with no reader: removal candidate. `DocumentManager::saveRecoveryData` calls it on `m_recoveryTimer`; `recoverableDocuments`, `recoverDocuments`, `loadRecovery` and `hasRecoveryFile` have no callers, so a truncated `.recovery` file loses nothing. See also gate f under Phase 3.
 
 ## Phase 3: performance, features and cleanup
 - **Length rule.** About 78 legacy functions are over 50 lines; split them. The Phase 1 grandfathering ruling lapses here. (gate a)
