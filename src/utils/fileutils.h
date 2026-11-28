@@ -35,6 +35,19 @@ QString combinedFilter();
 QString createBackup(const QString &path);
 bool restoreBackup(const QString &backupPath, const QString &originalPath);
 
+// Persistence files (spec D10)
+// Writes through QSaveFile: the previous content survives any failed write or
+// data sync, and the call returns false.
+bool writeFileAtomic(const QString &path, const QByteArray &bytes);
+// Copies an unparsable file to "<path>.corrupt-<yyyyMMdd-hhmmss>" and leaves
+// the original in place. Returns the copy's path, or empty if it failed.
+QString preserveCorruptCopy(const QString &path);
+// fsync on the directory itself, so renames inside it reach the disk.
+bool fsyncDirectory(const QString &path);
+// The unsaved-draft cache directory (AppDataLocation/sessions/unsaved). Its
+// siblings (.new, .old, .corrupt, .recovered) are derived from this path.
+QString unsavedCacheBase();
+
 }
 
 #endif // FILEUTILS_H

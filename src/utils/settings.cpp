@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "fileutils.h"
 #include <QSettings>
 #include <QStandardPaths>
 #include <QFile>
@@ -30,7 +31,7 @@ void Settings::load()
 
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     if (doc.isNull() || !doc.isObject()) {
-        return;
+        return holdCorruptFile(filePath);
     }
 
     QJsonObject root = doc.object();
@@ -78,12 +79,32 @@ void Settings::load()
     }
 }
 
+// The unparsable file is copied aside and left in place. The defaults stay in
+// memory, and save() writes nothing until they differ from this snapshot, so a
+// torn read can never replace good settings with defaults.
+void Settings::holdCorruptFile(const QString &filePath)
+{
+    FileUtils::preserveCorruptCopy(filePath);
+    m_heldState = toJson();
+    m_holdWrites = true;
+}
+
 void Settings::save()
 {
+    const QJsonObject root = toJson();
+    if (m_holdWrites && root == m_heldState) {
+        return;
+    }
+    m_holdWrites = false;
+
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     QDir().mkpath(configPath);
-    QString filePath = configPath + "/settings.json";
+    FileUtils::writeFileAtomic(configPath + "/settings.json",
+                               QJsonDocument(root).toJson(QJsonDocument::Indented));
+}
 
+QJsonObject Settings::toJson() const
+{
     QJsonObject root;
 
     // Editor settings
@@ -122,14 +143,7 @@ void Settings::save()
     files["trimTrailingWhitespace"] = m_trimTrailingWhitespace;
     files["insertFinalNewline"] = m_insertFinalNewline;
     root["files"] = files;
-
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        return;
-    }
-
-    QJsonDocument doc(root);
-    file.write(doc.toJson(QJsonDocument::Indented));
+    return root;
 }
 
 void Settings::reset()

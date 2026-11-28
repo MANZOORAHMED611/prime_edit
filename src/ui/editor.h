@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QSet>
 #include <QTimer>
+#include <functional>
 
 #include "core/searchengine.h"
 #include "core/lspclient.h"
@@ -18,6 +19,10 @@ struct Theme;
 class Document;
 class SyntaxHighlighter;
 class LineNumberArea;
+
+// The modified state a synced edit leaves behind in both the QTextDocument and
+// the Document. Preserve restores whatever both flags were before the edit.
+enum class SyncTarget { Preserve, Clean, Modified };
 
 class Editor : public QPlainTextEdit
 {
@@ -107,6 +112,8 @@ public:
     // Sync
     void syncToDocument();
     void syncFromDocument();
+    void runSyncedEdit(SyncTarget target, const std::function<void()> &edit);
+    QString rawText() const;
 
     // Line operations
     void duplicateLine();
@@ -134,7 +141,9 @@ public:
     void toggleFoldAt(int blockNumber);
     bool isFoldableLine(int blockNumber) const;
     bool isFoldedLine(int blockNumber) const;
-    QMap<int, QStringList> foldedRegions() const { return m_foldedRegions; }
+    // Header block numbers of the folded regions, the form the session stores.
+    // Computed on demand from the blocks (spec D2); nothing is cached.
+    QList<int> foldedRegions() const;
 
     // Whitespace / EOL / indent guide visualization
     void setShowWhitespace(bool show);
@@ -168,6 +177,7 @@ public slots:
     void jumpToMatchingBracket();
 
 protected:
+    bool event(QEvent *e) override;
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
@@ -184,6 +194,9 @@ private slots:
 
 private:
     void setupEditor();
+    void loadInitialContent();
+    void bindReadOnly();
+    void applyReadOnly(bool readOnly);
     void applySettings();
     QString indentString() const;
 
@@ -205,9 +218,13 @@ private:
     bool m_syncing = false;
     qint64 m_largeFileOffset = 0;
 
-    // Code folding
-    QMap<int, QStringList> m_foldedRegions;
+    // Code folding (view-only: hidden blocks plus a header marker, spec D2)
     int findFoldEnd(int blockNumber) const;
+    void setupFoldTracking();
+    void revealBlock(const QTextBlock &block);
+    void revealRange(const QTextCursor &range);
+    void revealEditedFolds(int position, int removed, int added);
+    void refreshFoldLayout(int from, int length);
 
     // Column/block selection
     struct ColumnSelection {
@@ -277,6 +294,7 @@ private:
 
     // Arabic RTL support
     void updateTextDirection();
+    bool applyBlockDirection(const QTextBlock &block);
     QTimer *m_rtlTimer = nullptr;
     bool m_hasArabicContent = false;
 

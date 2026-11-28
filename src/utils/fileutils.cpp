@@ -4,6 +4,11 @@
 #include <QFile>
 #include <QMimeDatabase>
 #include <QDateTime>
+#include <QSaveFile>
+#include <QStandardPaths>
+
+#include <fcntl.h>
+#include <unistd.h>
 
 namespace FileUtils {
 
@@ -135,6 +140,50 @@ bool restoreBackup(const QString &backupPath, const QString &originalPath)
     }
 
     return QFile::copy(backupPath, originalPath);
+}
+
+bool writeFileAtomic(const QString &path, const QByteArray &bytes)
+{
+    // Unbuffered and synced here, as in Document::writeAtomic: a buffered
+    // QSaveFile commits a temp file truncated by a failed write(2), and Qt's
+    // commit() ignores a failed fdatasync (spec P1.12).
+    QSaveFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Unbuffered)) {
+        return false;
+    }
+    if (file.write(bytes) != bytes.size() || ::fdatasync(file.handle()) != 0) {
+        file.cancelWriting();
+        return false;
+    }
+    return file.commit();
+}
+
+QString preserveCorruptCopy(const QString &path)
+{
+    const QString copy = path + QStringLiteral(".corrupt-")
+        + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss"));
+    // A copy made earlier in the same second is kept, never overwritten.
+    if (QFile::exists(copy) || QFile::copy(path, copy)) {
+        return copy;
+    }
+    return QString();
+}
+
+bool fsyncDirectory(const QString &path)
+{
+    const int fd = ::open(QFile::encodeName(path).constData(), O_RDONLY | O_DIRECTORY);
+    if (fd < 0) {
+        return false;
+    }
+    const bool synced = ::fsync(fd) == 0;
+    ::close(fd);
+    return synced;
+}
+
+QString unsavedCacheBase()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+           + QStringLiteral("/sessions/unsaved");
 }
 
 }

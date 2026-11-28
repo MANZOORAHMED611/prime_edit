@@ -11,11 +11,15 @@
 #include <QSplitter>
 #include <QDockWidget>
 #include <QMap>
+#include <QSet>
 #include "../core/remoteconnection.h"
+#include "../core/document.h"
 
 class QPrinter;
+class QTimer;
 class Editor;
 class Document;
+enum class SaveResult;
 class TabWidget;
 class LSPBridge;
 class StatusBarWidget;
@@ -37,6 +41,15 @@ class PluginDialog;
 struct HadithValidation;
 
 
+// Everything the save-failure message depends on, so its wording can be
+// tested without a Document that really failed.
+struct SaveFailureInfo {
+    QString displayName;
+    Document::DiskState diskState = Document::DiskState::Unchanged;
+    QString recoveryPath;
+    QString error;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -53,9 +66,24 @@ public:
     // Tab access
     TabWidget *tabWidget() const { return m_tabWidget; }
     bool isSplit() const { return m_tabWidget2 != nullptr; }
+    // Editors of both panes. Anything that must reach every open document
+    // (session, unsaved cache, settings) iterates this, not one tab widget.
+    QList<Editor*> allEditors() const;
 
     // Session
     QStringList openFilePaths() const;
+
+    // Informational message in the notification bar, with no Yes/No question.
+    void showNotification(const QString &message);
+    // The Save Failed text: says the file is unchanged only when it is.
+    static QString saveFailureMessage(const SaveFailureInfo &info);
+
+    // Periodic session.json write (spec P1.10). main.cpp enables it only after
+    // restoreAndOpen() returns; enabling rebases the corrupt-file hold.
+    void setSessionAutosaveEnabled(bool enabled);
+    bool sessionAutosaveActive() const;
+    // Tests only: the autosave interval in ms (default 5000).
+    static void setSessionAutosaveIntervalForTest(int ms);
 
 public slots:
     // Encoding operations
@@ -72,7 +100,9 @@ public slots:
 
     // File operations
     void newFile();
-    void openFile(const QString &filePath = QString());
+    // Returns the editor showing the file (an existing one if it is already
+    // open), or null on failure or a cancelled dialog.
+    Editor *openFile(const QString &filePath = QString());
     void saveFile();
     void saveFileAs();
     void saveAllFiles();
@@ -87,6 +117,9 @@ public slots:
 
     // Navigation
     void goToLine(int line);
+
+    // Encoding: decode the current file's bytes again with a chosen encoding
+    void reopenWithEncoding();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -208,7 +241,6 @@ private slots:
     void closeTabsToRight();
     void closeTabsToLeft();
     void moveToOtherView();
-    void cloneToOtherView();
     void previousTab();
     void nextTab();
 
@@ -281,6 +313,7 @@ private:
     int findEditorIndex(Editor *editor) const;
     int findEditorIndex(Document *document) const;
     void updateTabTextForDocument(Document *doc);
+    Editor *activateOpenEditor(const QString &path);
 
     void printDocument(QPrinter *printer, Editor *editor);
     TabWidget *activeTabWidget() const;
@@ -288,9 +321,49 @@ private:
     void splitView(Qt::Orientation orientation);
     void unsplit();
     void connectTabWidget(TabWidget *tw);
-    void onTab2CloseRequested(int index);
+    bool closeTab(TabWidget *tw, int index);
+    bool confirmCloseEditor(Editor *editor);
+    bool isDocumentShownElsewhere(const Editor *editor) const;
     void onTab2Changed(int index);
     void checkUnsplitNeeded();
+
+    // Save path: every function takes the editor, never the focused one
+    bool saveEditor(Editor *editor);
+    bool saveEditorAs(Editor *editor);
+    bool writeDocument(Editor *editor, const QString &path);
+    void finishEditorSave(Editor *editor);
+    bool confirmDirectWrite(Document *doc);
+    void reportSaveFailure(Document *doc, SaveResult result);
+    bool anySaveableModified() const;
+    void syncEncodingMenu(bool convertible);
+    Editor *convertibleEditor();
+    QString partialViewNotice(const Document *doc) const;
+
+    // Encoding tools (spec D6, D11)
+    enum class UnmappableChoice { Cancel, Replace, SaveUtf8 };
+    void setupEncodingTools();
+    QStringList reopenEncodingNames() const;
+    void reopenEditorWithEncoding(Editor *editor, const QString &name);
+    void showOpenNotices(Document *doc);
+    void showReopenNotice(Document *doc);
+    UnmappableChoice askUnmappable(Editor *editor, const QString &encoding,
+                                   const QList<int> &positions, bool offerUtf8);
+    void replaceUnmappable(Editor *editor, const QList<int> &positions);
+    void convertEncoding(const QString &name, const QString &label);
+    bool resolveEncodeLossy(Editor *editor, const QString &path);
+    void noteMixedLineEndings(Document *doc);
+    QAction *m_reopenEncodingAction = nullptr;
+    bool isConvertible(const Document *doc) const;
+
+    // Reload bar (spec D8). Paths changed on disk whose bar is still owed;
+    // a background tab's bar is shown when the tab is activated.
+    void onFileExternallyModified(const QString &path);
+    void showPendingReloadBar();
+    void showReloadBar(Document *doc);
+    void onReloadAccepted();
+    void onReloadRejected();
+    bool reloadEditor(Editor *editor);
+    QSet<QString> m_pendingReloads;
 
     // Split view
     QSplitter *m_splitter = nullptr;
@@ -314,6 +387,7 @@ private:
     QDockWidget *m_documentMapDock = nullptr;
     FunctionListPanel *m_functionList = nullptr;
     QDockWidget *m_functionListDock = nullptr;
+    class MarkdownModeController *m_markdownMode = nullptr;
 
     // Menus
     QMenu *m_fileMenu = nullptr;
@@ -337,6 +411,7 @@ private:
     QAction *m_newAction = nullptr;
     QAction *m_openAction = nullptr;
     QAction *m_saveAction = nullptr;
+    QAction *m_saveAsAction = nullptr;
     QAction *m_saveAllAction = nullptr;
     QAction *m_closeAction = nullptr;
     QAction *m_printAction = nullptr;
@@ -401,6 +476,19 @@ private:
     int m_untitledCounter = 0;
     bool m_closingAll = false;
     bool m_distractionFree = false;
+
+    // Session autosave (spec P1.10): created in the constructor, started only
+    // by setSessionAutosaveEnabled(true).
+    void setupSessionAutosave();
+    QTimer *m_sessionAutosaveTimer = nullptr;
+    static int s_sessionAutosaveIntervalMs;
+
+    // Draft-cache backup every 30 s (spec P1.11 3.2, 3.3): objectName
+    // "draftBackupTimer", started and stopped with the session autosave.
+    void backupDrafts();
+    bool confirmQuitWithoutDrafts();
+    QTimer *m_draftBackupTimer = nullptr;
+    bool m_draftCacheFailing = false;
 };
 
 #endif // MAINWINDOW_H

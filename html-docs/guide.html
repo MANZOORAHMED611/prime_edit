@@ -156,6 +156,11 @@
         <a href="#themes">Themes</a>
         <a href="#macros">Macros</a>
         <a href="#largefile">Large Files</a>
+        <a href="#saving">Saving Files</a>
+        <a href="#encodings">Encodings</a>
+        <a href="#readonly">Read-Only Documents</a>
+        <a href="#recovery">Unsaved Work &amp; Recovery</a>
+        <a href="#markdown">Markdown</a>
         <a href="#plugins">Plugins</a>
         <a href="#config">Configuration</a>
 
@@ -210,7 +215,7 @@ make -j$(nproc)
             </ul>
 
             <div class="info-box note">
-                <strong>Unsaved work is safe.</strong> If you close PrimeEdit with unsaved content in any tab &mdash; even untitled tabs &mdash; everything is silently preserved. Next time you open PrimeEdit, all your tabs reappear exactly as you left them. No prompts. No save dialogs on quit.
+                <strong>Unsaved work is safe.</strong> If you close PrimeEdit with unsaved content in any tab &mdash; even untitled tabs, and tabs in either split pane &mdash; it is preserved without a prompt and restored the next time PrimeEdit starts. See <a href="#recovery">Unsaved Work &amp; Recovery</a>.
             </div>
 
             <h3>Interface Overview</h3>
@@ -386,7 +391,7 @@ make -j$(nproc)
         <!-- Split-Screen -->
         <section id="splitscreen">
             <h2>Split-Screen</h2>
-            <p>View two files side by side, or two different parts of the same file.</p>
+            <p>View two files side by side. Each document is open in one pane at a time.</p>
 
             <h3>Splitting</h3>
             <ul>
@@ -396,11 +401,13 @@ make -j$(nproc)
                 <li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>\</kbd> closes the current split</li>
             </ul>
 
-            <h3>Cloning a Document</h3>
-            <p>Right-click a tab and select <strong>Clone to Other View</strong>. Both views share the same document &mdash; edits in one pane appear instantly in the other. This is useful for editing one part of a file while referencing another part.</p>
+            <p>A new split opens an <strong>empty</strong> second pane. Fill it by moving tabs into it.</p>
 
             <h3>Moving Tabs</h3>
-            <p>Drag a tab from one pane to the other, or right-click and select <strong>Move to Other View</strong>.</p>
+            <p>Select a tab and choose <strong>View &gt; Move to Other View</strong>. If the editor is not split yet, this splits it and moves the tab into the new pane. When the second pane's last tab closes, the split closes.</p>
+
+            <h3>Closing Tabs</h3>
+            <p>A tab's close button closes the tab it belongs to, in whichever pane that is, even while the other pane has focus.</p>
         </section>
 
         <div class="divider"></div>
@@ -452,7 +459,7 @@ make -j$(nproc)
                     <tr><td>Go</td><td>gopls</td><td><code>go install golang.org/x/tools/gopls@latest</code></td></tr>
                 </tbody>
             </table>
-            <p>For other languages, create <code>~/.config/PrimeEdit/lsp-servers.json</code>:</p>
+            <p>For other languages, create <code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code>:</p>
             <pre><code>{
   "python": {"command": "pylsp", "args": []},
   "c++": {"command": "clangd", "args": ["--background-index"]},
@@ -512,7 +519,7 @@ make -j$(nproc)
             </ul>
 
             <h3>Branch Switching</h3>
-            <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select one to switch. PrimeEdit reloads any open files that changed between branches.</p>
+            <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select one to switch. Open files that changed between branches show the notification bar, so you choose whether to reload each one.</p>
         </section>
 
         <div class="divider"></div>
@@ -567,7 +574,7 @@ make -j$(nproc)
             <p>Via <strong>Macro &gt; Run Multiple Times</strong>: enter a count, or choose "Run until end of file" to repeat the macro until the cursor reaches the last line.</p>
 
             <h3>Save &amp; Load</h3>
-            <p>Macros can be saved to disk and loaded later. Saved macros persist across restarts via <code>~/.config/PrimeEdit/macros.json</code>.</p>
+            <p>Macros can be saved to disk and loaded later. Saved macros persist across restarts via <code>~/.config/PrimeEdit/PrimeEdit/macros.json</code>.</p>
         </section>
 
         <div class="divider"></div>
@@ -577,14 +584,143 @@ make -j$(nproc)
             <h2>Large Files</h2>
             <p>PrimeEdit handles files that other editors cannot open.</p>
             <ul>
-                <li>Files <strong>&gt;10MB</strong> automatically open in <strong>large file mode</strong> &mdash; memory-mapped, viewport-loaded</li>
-                <li>Files <strong>&gt;100MB</strong> open in <strong>read-only mode</strong> by default</li>
+                <li>Files <strong>over 50 MB</strong>, and minified files (almost no line breaks) <strong>over 20 MB</strong>, open as a <strong>partial view</strong>: only part of the file is loaded</li>
+                <li>A partial view is <strong>read-only</strong>. Save, Save As, Save All and the encoding and line-ending changes are disabled for that tab, and the notification bar says so when the file opens</li>
                 <li>A <strong>1GB file uses only 95MB of memory</strong> (verified by stress testing)</li>
                 <li>Scrolling is smooth &mdash; only visible lines plus a buffer are in memory</li>
             </ul>
             <div class="info-box tip">
                 <strong>No special action needed.</strong> Just open the file normally. PrimeEdit detects the file size and switches modes automatically.
             </div>
+            <div class="info-box note">
+                <strong>Why a partial view cannot be saved:</strong> saving it would replace the whole file on disk with the part that is loaded, and the rest would be lost.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Saving Files -->
+        <section id="saving">
+            <h2>Saving Files</h2>
+            <p>A save either writes the whole file or leaves the file on disk unchanged. A save that writes in place (see below) never empties the file first: if the write fails part-way, PrimeEdit writes the original contents back.</p>
+
+            <h3>When a save fails</h3>
+            <ul>
+                <li>An error dialog names the file and the reason, and says the file on disk is unchanged.</li>
+                <li>If an in-place write failed and the original contents could not be written back either, the dialog says instead that the write failed part-way and the file may be incomplete. When PrimeEdit could keep a copy of the previous contents, the dialog gives its path, in <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.recovered/</code>.</li>
+                <li>The tab stays modified. Undo does not make it look saved, so the close prompt still asks about it.</li>
+                <li>A file without write permission (for example mode 0444) cannot be saved. Use <strong>Save As</strong> to write a copy elsewhere.</li>
+            </ul>
+
+            <h3>Save Directly (Not Atomic)</h3>
+            <p>PrimeEdit normally writes to a temporary file and swaps it in, so an interrupted save never leaves a half-written file. When the folder does not allow that temporary file but the file itself is writable, the error dialog offers <strong>Save Directly (Not Atomic)</strong>. It writes over the file in place. It first reserves the space the new contents need, and if the write still fails it writes the original contents back, so a full disk normally leaves the file as it was. Only a crash or power loss in the middle of the write can leave the file incomplete. It is not offered after an error such as a full disk, where the temporary file could be created but not written.</p>
+            <p>A hard-linked file, or a file owned by another user, is always written in place so the link and the owner are kept. The notification bar says when that happened.</p>
+
+            <h3>Closing a tab with unsaved changes</h3>
+            <ul>
+                <li>Every modified tab asks before it closes. <strong>Save</strong> saves that tab's file, whichever pane it is in and whichever pane has focus.</li>
+                <li>A read-only document, such as a partial view, cannot be saved, so its prompt offers only <strong>Discard</strong> or <strong>Cancel</strong>.</li>
+                <li><strong>Save All</strong> saves every modified tab in both panes and skips read-only ones.</li>
+            </ul>
+
+            <h3>Save As for a recovered draft</h3>
+            <p>If a draft's original file could not be reopened at startup, the draft opens as an untitled tab. <strong>Save As</strong> then suggests the original file's path.</p>
+
+            <h3>Files changed by another program</h3>
+            <ul>
+                <li>When another program changes an open file, the notification bar says so and offers <strong>Reload</strong> and <strong>Keep mine</strong>. Your own saves never raise it.</li>
+                <li>If the tab has unsaved changes, the button reads <strong>Reload (discard my changes)</strong>. Nothing reloads until you choose.</li>
+                <li>If the changed file is in a background tab, the bar appears when you switch to that tab.</li>
+                <li><strong>Keep mine</strong> keeps your text; the next change on disk asks again. <strong>Reload</strong> replaces the tab's text with the file on disk, and the tab is no longer modified.</li>
+            </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Encodings -->
+        <section id="encodings">
+            <h2>Encodings</h2>
+            <p>The status bar shows each file's encoding by its standard name: <code>UTF-8</code>, <code>UTF-8-BOM</code>, <code>UTF-16LE-BOM</code>, <code>windows-1252</code>, <code>Shift_JIS</code>, <code>ISO-8859-1</code> and so on. The Encoding menu checks the matching <strong>Encode in</strong> item; an encoding with no item, such as <code>windows-1252</code>, leaves none checked.</p>
+
+            <h3>Reopen with Encoding</h3>
+            <p>Detection reads the whole file. It looks for a byte order mark, then for UTF-16 without one, then checks for valid UTF-8, then guesses <code>windows-1252</code>, <code>Shift_JIS</code> or <code>ISO-8859-1</code>. It cannot recognise <code>ISO-8859-6</code> or <code>windows-1256</code>, so such a file opens as something else and its text looks wrong. To correct it, choose <strong>Encoding &gt; Reopen with Encoding...</strong> (the first item in the menu, and also in the status-bar encoding menu) and pick the right encoding. This decodes the file's bytes again; it does not convert or save anything. If the tab has unsaved changes, you are asked before they are discarded.</p>
+            <div class="info-box note">
+                <strong>Opened read-only?</strong> If a file's bytes do not decode exactly in the detected encoding, PrimeEdit opens it read-only so a save cannot change bytes you did not edit. The notification bar says so and has a <strong>Reopen with Encoding...</strong> button.
+            </div>
+
+            <h3>Converting (Encode in ...)</h3>
+            <ul>
+                <li>Conversions are disabled for read-only documents (a lossy decode, a partial view, or a file without write permission), because the converted file could not be saved. Use <strong>Reopen with Encoding...</strong> to read such a file differently.</li>
+                <li>Before converting, PrimeEdit checks that every character can be written in the new encoding. If some cannot (for example Arabic text and <strong>Encode in ANSI</strong>), a dialog gives the count and the first five positions as line:column, and offers <strong>Cancel</strong> or <strong>Replace N characters with ?</strong>.</li>
+                <li><strong>Replace</strong> is one edit, so a single <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes it. Nothing is written until you save.</li>
+                <li><strong>Encode in UCS-2 BE BOM</strong> and <strong>UCS-2 LE BOM</strong> save as UTF-16 with a byte order mark (<code>UTF-16BE-BOM</code>, <code>UTF-16LE-BOM</code>).</li>
+                <li>A conversion is a change: the tab stays modified until you save, even if you undo every text edit.</li>
+                <li>A file that had a byte order mark keeps it when you save.</li>
+            </ul>
+
+            <h3>Characters the encoding cannot hold</h3>
+            <p>If you type text the file's encoding cannot hold, Save does not write the file. A dialog names the count and positions and offers <strong>Save as UTF-8</strong>, <strong>Replace N characters with ?</strong>, or <strong>Cancel</strong>.</p>
+
+            <h3>Line endings</h3>
+            <p>A new file, and a file with no line break at all, uses the default line ending from Preferences (LF unless you change it).</p>
+
+            <h3>Mixed line endings</h3>
+            <p>A file whose lines end in a mix of CRLF and LF is saved with the ending most of its lines use. The notification bar says so at the first save of that document, for example <em>Mixed line endings in 'notes.txt' will be saved as CRLF.</em></p>
+
+            <h3>Special spaces</h3>
+            <p>No-break spaces (U+00A0) and line separators (U+2028) are kept as they are when you save, when you use <strong>Replace All</strong>, and when you use the line commands (remove empty or duplicate lines, trim whitespace, EOL to space, tab and space conversion).</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Read-Only Documents -->
+        <section id="readonly">
+            <h2>Read-Only Documents</h2>
+            <p>A document opens read-only when saving it could change bytes you did not edit:</p>
+            <ul>
+                <li>a <strong>partial view</strong> of a large file (see <a href="#largefile">Large Files</a>);</li>
+                <li>a file whose bytes do not decode exactly in the detected encoding (see <a href="#encodings">Encodings</a>).</li>
+            </ul>
+            <p>A read-only document refuses typing, but you can still move around, select and copy. Save is refused and says why. If the document had unsaved changes before it became read-only, closing it still asks, with <strong>Discard</strong> or <strong>Cancel</strong>.</p>
+            <p>A file without write permission opens normally, but Save reports that the file is read-only and leaves it unchanged; use <strong>Save As</strong>. Encoding and line-ending conversions are disabled for all of these.</p>
+
+            <h3>Code folding never changes text</h3>
+            <p>Folding only hides lines. Saving a document with folded regions writes all of its text. A fold opens by itself when the cursor, a Find match, Go to Line or a multi-cursor edit reaches inside it, when you delete its header line, and when undo changes text inside it.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Unsaved Work & Recovery -->
+        <section id="recovery">
+            <h2>Unsaved Work &amp; Recovery</h2>
+            <ul>
+                <li>Every edit marks the tab as modified at once, so the close prompt and the unsaved-document cache always see it.</li>
+                <li>Unsaved documents, in both split panes and including untitled tabs, are written to the cache every 30 seconds and when PrimeEdit closes. A crash loses at most the last 30 seconds of typing.</li>
+                <li>If a periodic write fails, the notification bar says <em>Unsaved changes could not be stored for recovery. Free disk space or save your files.</em> It says so once; it says it again only after a write has succeeded and a later one fails.</li>
+                <li>If the write fails when PrimeEdit closes, it asks before quitting: <strong>Unsaved changes could not be kept</strong>. <strong>Cancel</strong> (the default, also <kbd>Esc</kbd>) keeps the window open so you can save your files or free disk space; <strong>Quit and Discard Changes</strong> quits, and changes not yet stored for recovery are lost. When there is nothing unsaved to store, PrimeEdit quits without asking.</li>
+                <li>The list of open files, with their bookmarks, folds and the active tab, is recorded within 5 seconds of any change, and nothing is written while nothing changes. After a crash, a kill or a power loss, the files you had open are reopened on the next start when <strong>Restore previous session on startup</strong> is on. Drafts are cached as described above, unchanged.</li>
+                <li>The cache is restored on <strong>every</strong> start, also when you open PrimeEdit with files on the command line. <strong>Restore previous session on startup</strong> controls only whether the files you had open are reopened.</li>
+                <li>If a draft's original file can no longer be opened, or opens read-only (for example, its bytes no longer decode exactly), the draft is restored in a new untitled tab and the notification bar names the file. A read-only file stays open in its own tab, showing what is on disk. <strong>Save As</strong> from the draft's tab suggests the original path.</li>
+                <li>A cache entry that cannot be read is moved to <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.corrupt/</code> and kept, never deleted.</li>
+                <li>If an in-place save fails and the file's original contents cannot be written back, a copy of those contents is kept in <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.recovered/</code>, named after the file. PrimeEdit never deletes it.</li>
+            </ul>
+
+            <h3>Opening files while PrimeEdit is running</h3>
+            <p>Only one PrimeEdit runs per user profile. Launching it again, for example from a file manager, opens the files in the running window and brings it to the front. If the running window does not answer, the second launch reports <em>PrimeEdit is running but not responding</em> and exits without touching your unsaved work.</p>
+
+            <h3>Damaged settings and session files</h3>
+            <p>Settings, sessions and macros are written atomically, so an interrupted write leaves the previous file intact. If <code>settings.json</code>, <code>session.json</code>, a named session or <code>macros.json</code> cannot be read, PrimeEdit copies it to <code>&lt;name&gt;.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, leaves the original as it is, and uses defaults in memory. Nothing is written to that file until you change something; for <code>session.json</code>, until you open or close a file, or change a bookmark, a fold or the active tab. Moving or resizing the window alone does not count.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Markdown -->
+        <section id="markdown">
+            <h2>Markdown</h2>
+            <ul>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (<strong>View &gt; Markdown Preview</strong>) cycles a Markdown tab through source, side by side with a live preview, and rendered only. <kbd>Esc</kbd> in the rendered view returns to the source.</li>
+                <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> (<strong>View &gt; Markdown Outline</strong>) shows or hides the Outline panel, a heading tree that jumps to each section.</li>
+            </ul>
         </section>
 
         <div class="divider"></div>
@@ -596,7 +732,7 @@ make -j$(nproc)
 
             <h3>Plugin Locations</h3>
             <ul>
-                <li><strong>User plugins:</strong> <code>~/.config/PrimeEdit/plugins/</code></li>
+                <li><strong>User plugins:</strong> <code>~/.config/PrimeEdit/PrimeEdit/plugins/</code></li>
                 <li><strong>System-wide plugins:</strong> <code>/usr/lib/prime-edit/plugins/</code></li>
             </ul>
 
@@ -625,13 +761,15 @@ make -j$(nproc)
             <table>
                 <thead><tr><th>File</th><th>Location</th></tr></thead>
                 <tbody>
-                    <tr><td>Editor settings</td><td><code>~/.config/PrimeEdit/settings.json</code></td></tr>
-                    <tr><td>LSP server config</td><td><code>~/.config/PrimeEdit/lsp-servers.json</code></td></tr>
-                    <tr><td>Saved macros</td><td><code>~/.config/PrimeEdit/macros.json</code></td></tr>
-                    <tr><td>AI endpoint config</td><td><code>~/.config/PrimeEdit/eval-endpoint.json</code></td></tr>
-                    <tr><td>User plugins</td><td><code>~/.config/PrimeEdit/plugins/</code></td></tr>
-                    <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/sessions/</code></td></tr>
-                    <tr><td>Unsaved document cache</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved/</code></td></tr>
+                    <tr><td>Editor settings</td><td><code>~/.config/PrimeEdit/PrimeEdit/settings.json</code></td></tr>
+                    <tr><td>LSP server config</td><td><code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code></td></tr>
+                    <tr><td>Saved macros</td><td><code>~/.config/PrimeEdit/PrimeEdit/macros.json</code></td></tr>
+                    <tr><td>AI endpoint config</td><td><code>~/.config/PrimeEdit/PrimeEdit/eval-endpoint.json</code></td></tr>
+                    <tr><td>User plugins</td><td><code>~/.config/PrimeEdit/PrimeEdit/plugins/</code></td></tr>
+                    <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/</code></td></tr>
+                    <tr><td>Unsaved document cache</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved/</code></td></tr>
+                    <tr><td>Unreadable cache entries (kept)</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.corrupt/</code></td></tr>
+                    <tr><td>Previous contents of a file an in-place save damaged (kept)</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.recovered/</code></td></tr>
                 </tbody>
             </table>
 
@@ -648,12 +786,11 @@ make -j$(nproc)
             <ul>
                 <li><strong>Default encoding</strong> and <strong>line ending</strong></li>
                 <li><strong>Trim trailing whitespace</strong> and <strong>insert final newline</strong> on save</li>
-                <li><strong>Auto-save interval</strong> (default: 30 seconds)</li>
-                <li><strong>Restore session on startup</strong></li>
+                <li><strong>Restore previous session on startup</strong> &mdash; reopens the files you had open. Unsaved drafts are restored on every start regardless.</li>
             </ul>
 
             <div class="info-box note">
-                Settings are saved to <code>~/.config/PrimeEdit/settings.json</code> and take effect immediately. Click <strong>Apply</strong> to see changes without closing the dialog. To reset everything, delete the settings file and restart PrimeEdit.
+                Settings are saved to <code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> and take effect immediately. Click <strong>Apply</strong> to see changes without closing the dialog. To reset everything, delete the settings file and restart PrimeEdit.
             </div>
         </section>
 

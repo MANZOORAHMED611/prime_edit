@@ -1,8 +1,10 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDir>
+#include <QFileInfo>
 #include <QStandardPaths>
 #include <QIcon>
+#include <QMessageBox>
 #include <QPixmap>
 #include "ui/mainwindow.h"
 #include "ui/editor.h"
@@ -13,99 +15,156 @@
 #include "utils/settings.h"
 #include "core/session.h"
 #include "core/pluginmanager.h"
+#include "core/singleinstance.h"
 
-int main(int argc, char *argv[])
+namespace {
+
+// Window icon at several sizes for proper WM display.
+void setApplicationIcon(QApplication &app)
 {
-    QApplication app(argc, argv);
-    app.setApplicationName("PrimeEdit");
-    app.setApplicationVersion("1.0.0");
-    app.setOrganizationName("PrimeEdit");
-    app.setOrganizationDomain("primeedit.dev");
-    // Set window icon — add at multiple sizes for proper WM display
     QIcon appIcon;
     QPixmap iconPixmap(":/icons/prime_edit_icon.png");
     if (!iconPixmap.isNull()) {
-        // Add scaled versions for taskbar (48), titlebar (32), and small (16)
-        appIcon.addPixmap(iconPixmap.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        appIcon.addPixmap(iconPixmap.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        appIcon.addPixmap(iconPixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        appIcon.addPixmap(iconPixmap.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        appIcon.addPixmap(iconPixmap.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        appIcon.addPixmap(iconPixmap.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        // Taskbar (48), titlebar (32) and small (16), plus larger sizes.
+        for (int size : {256, 128, 64, 48, 32, 16}) {
+            appIcon.addPixmap(iconPixmap.scaled(size, size, Qt::KeepAspectRatio,
+                                                Qt::SmoothTransformation));
+        }
     }
     app.setWindowIcon(appIcon);
-
-    // Set the desktop filename for proper icon association in GNOME/KDE
+    // The desktop filename gives the icon association in GNOME/KDE.
     app.setDesktopFileName("prime-edit");
+}
 
-    // Ensure config directories exist
-    QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
-    QString dataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QDir().mkpath(configPath);
-    QDir().mkpath(dataPath);
-    QDir().mkpath(dataPath + "/recovery");
-    QDir().mkpath(dataPath + "/sessions");
+struct LaunchRequest {
+    QStringList files;  // absolute, made so against this process's cwd
+    int gotoLine = 0;   // 0 when no valid --goto was given
+};
 
-    // Parse command line arguments
+LaunchRequest parseArguments(QApplication &app)
+{
     QCommandLineParser parser;
     parser.setApplicationDescription("The editor for structured knowledge work");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("files", "Files to open", "[files...]");
-
+    // Forwarded like any other launch until one process supports several
+    // windows (spec Q2).
     QCommandLineOption newWindowOption("new-window", "Open in a new window");
     parser.addOption(newWindowOption);
-
     QCommandLineOption lineOption(QStringList() << "g" << "goto", "Go to line number", "line");
     parser.addOption(lineOption);
-
+    // --help and --version exit here, before the instance lock is touched.
     parser.process(app);
 
-    // Load settings
-    Settings::instance().load();
+    LaunchRequest request;
+    for (const QString &file : parser.positionalArguments()) {
+        request.files.append(QFileInfo(file).absoluteFilePath());
+    }
+    bool ok = false;
+    const int line = parser.value(lineOption).toInt(&ok);
+    request.gotoLine = ok && line > 0 ? line : 0;
+    return request;
+}
 
-    // Load and apply theme from settings
+void ensureDirectories()
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    const QString dataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(configPath);
+    QDir().mkpath(dataPath);
+    QDir().mkpath(dataPath + "/recovery");
+    QDir().mkpath(dataPath + "/sessions");
+}
+
+// Another instance holds the profile: hand it the files. On no answer, report
+// and exit 1; never start a second writer of the same cache.
+int forwardToRunningInstance(const LaunchRequest &request)
+{
+    if (SingleInstance::forward(request.files, request.gotoLine)) {
+        return 0;
+    }
+    const QString message = QObject::tr("PrimeEdit is running but not responding.");
+    qCritical("%s", qPrintable(message));
+    const QString platform = QGuiApplication::platformName();
+    if (platform != QLatin1String("offscreen") && platform != QLatin1String("minimal")) {
+        QMessageBox::critical(nullptr, QObject::tr("PrimeEdit"), message);
+    }
+    return 1;
+}
+
+void openRequested(MainWindow &window, const QStringList &files, int gotoLine)
+{
+    for (const QString &file : files) {
+        window.openFile(file);
+    }
+    if (gotoLine > 0) {
+        window.goToLine(gotoLine);
+    }
+}
+
+// Drafts on every launch; saved files only under the preference; then the
+// command line. The initial empty "Untitled" tab is closed as before.
+void restoreAndOpen(MainWindow &window, const LaunchRequest &request)
+{
+    Session::instance().restoreDrafts(&window);
+    if (Settings::instance().restoreSession()) {
+        Session::instance().restoreFiles(&window);
+    }
+    openRequested(window, request.files, request.gotoLine);
+    if (window.tabWidget()->count() > 1) {
+        Editor *first = qobject_cast<Editor*>(window.tabWidget()->widget(0));
+        if (first && first->document() && first->document()->isUntitled()
+            && first->toPlainText().isEmpty()) {
+            window.closeFile(0);
+        }
+    }
+}
+
+} // namespace
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    app.setApplicationName("PrimeEdit");
+    app.setApplicationVersion(QStringLiteral(PRIMEEDIT_VERSION));
+    app.setOrganizationName("PrimeEdit");
+    app.setOrganizationDomain("primeedit.dev");
+    setApplicationIcon(app);
+
+    const LaunchRequest request = parseArguments(app);
+    ensureDirectories();
+
+    // Spec 9.1 startup order: lock, socket, cache recovery, then settings
+    // (whose corrupt-file copy is a write), then the window.
+    SingleInstance instance;
+    if (!instance.acquire()) {
+        return forwardToRunningInstance(request);
+    }
+    if (!instance.listen()) {
+        qWarning("Single-instance socket unavailable; later launches will not forward.");
+    }
+    Session::instance().recoverCacheDirectories();
+    Settings::instance().load();
     ThemeManager::instance().loadThemes();
     ThemeManager::instance().applyTheme(Settings::instance().theme());
 
-    // Unsaved documents are restored silently by Session::restore()
-    // via restoreUnsavedDocuments() — no dialog, Notepad++ behavior
-
-    // Create main window
     MainWindow mainWindow;
     mainWindow.show();
-
-    // Load plugins
     PluginManager::instance().loadPlugins();
+    restoreAndOpen(mainWindow, request);
+    // Only after restore: a modal dialog there runs a nested event loop, and a
+    // running timer would write a half-restored file list (spec P1.10 3.4).
+    mainWindow.setSessionAutosaveEnabled(true);
 
-    // Open files from command line
-    const QStringList files = parser.positionalArguments();
-    for (const QString &file : files) {
-        mainWindow.openFile(file);
-    }
+    // A launch forwarded while restore ran was acked and held by SingleInstance;
+    // connecting delivers it now, after the drafts and command-line files.
+    QObject::connect(&instance, &SingleInstance::openRequested, &mainWindow,
+                     [&mainWindow](const QStringList &files, int gotoLine) {
+                         openRequested(mainWindow, files, gotoLine);
+                         mainWindow.raise();
+                         mainWindow.activateWindow();
+                     }, Qt::QueuedConnection);
 
-    // Go to line if specified
-    if (parser.isSet(lineOption)) {
-        bool ok;
-        int line = parser.value(lineOption).toInt(&ok);
-        if (ok && line > 0) {
-            mainWindow.goToLine(line);
-        }
-    }
-
-    // Restore session if no files specified and setting enabled
-    if (files.isEmpty() && Settings::instance().restoreSession()) {
-        Session::instance().restore(&mainWindow);
-        // Close the initial empty "Untitled 1" tab if session restored files
-        if (mainWindow.tabWidget()->count() > 1) {
-            Editor *first = qobject_cast<Editor*>(mainWindow.tabWidget()->widget(0));
-            if (first && first->document() && first->document()->isUntitled() && first->toPlainText().isEmpty()) {
-                mainWindow.closeFile(0);
-            }
-        }
-    }
-
-    int result = app.exec();
-
-    return result;
+    return app.exec();
 }

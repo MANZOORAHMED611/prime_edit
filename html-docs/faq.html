@@ -246,6 +246,16 @@
             </div>
 
             <div class="faq-item">
+                <div class="faq-question">How do I preview Markdown?</div>
+                <div class="faq-answer"><p><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> cycles a Markdown tab through source, side by side with a live preview, and rendered only; <kbd>Esc</kbd> in the rendered view returns to the source. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> shows or hides the Outline panel.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Does code folding change my file?</div>
+                <div class="faq-answer"><p>No. Folding only hides lines; Save writes all of the text. A fold opens by itself when the cursor, a Find match, Go to Line or an edit reaches inside it.</p></div>
+            </div>
+
+            <div class="faq-item">
                 <div class="faq-question">How do I toggle comments?</div>
                 <div class="faq-answer"><p><kbd>Ctrl</kbd>+<kbd>/</kbd> toggles single-line comments. For HTML/XML, it uses <code>&lt;!-- --&gt;</code> block comments automatically.</p></div>
             </div>
@@ -265,7 +275,7 @@
             <div class="faq-item">
                 <div class="faq-question">How do I split the screen?</div>
                 <div class="faq-answer">
-                    <p><kbd>Ctrl</kbd>+<kbd>\</kbd> for a vertical split. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> for a horizontal split. <kbd>F6</kbd> switches focus between panes. You can also clone a document to the other view &mdash; both views share the same content and edits sync in real time.</p>
+                    <p><kbd>Ctrl</kbd>+<kbd>\</kbd> for a vertical split. <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> for a horizontal split. <kbd>F6</kbd> switches focus between panes. A new split opens an empty second pane; use <strong>View &gt; Move to Other View</strong> to move the current tab into it. Each document is open in one pane at a time.</p>
                 </div>
             </div>
 
@@ -291,27 +301,48 @@
             <div class="faq-item">
                 <div class="faq-question">Will my unsaved work be lost if I close PrimeEdit?</div>
                 <div class="faq-answer">
-                    <p><strong>No.</strong> PrimeEdit silently preserves all unsaved content &mdash; including untitled tabs. When you reopen PrimeEdit, everything reappears exactly as you left it. No save dialog. No prompt. This is the same behavior as Notepad++.</p>
+                    <p><strong>No.</strong> PrimeEdit preserves all unsaved content without a prompt &mdash; including untitled tabs and tabs in either split pane &mdash; and restores it on every start, also when you open files from the command line. The cache is written every 30 seconds and on close, so a crash loses at most the last 30 seconds. The list of open files is recorded within 5 seconds of a change, so after a crash the files you had open reopen too, when <strong>Restore previous session on startup</strong> is on. If a draft's original file is gone, the draft comes back in a new untitled tab and the notification bar names the file. This is the same idea as Notepad++.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What happens if I launch PrimeEdit while it is already running?</div>
+                <div class="faq-answer">
+                    <p>The files open in the running window, which comes to the front. Only one PrimeEdit runs per user profile, so two windows can never overwrite each other's unsaved work. If the running window does not answer, the new launch says <em>PrimeEdit is running but not responding</em> and exits.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Why can't I type in a document?</div>
+                <div class="faq-answer">
+                    <p>It is read-only: a partial view of a large file, or a file whose bytes do not decode exactly in the detected encoding. You can still move around, select and copy. For an encoding problem, use <strong>Encoding &gt; Reopen with Encoding...</strong>.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Does saving ever change characters I did not edit?</div>
+                <div class="faq-answer">
+                    <p>No. Saves are atomic and write either the whole file or nothing. No-break spaces and line separators are kept, and a byte order mark is kept. If your text cannot be written in the file's encoding, Save asks first (Save as UTF-8, Replace, or Cancel). The one documented change is mixed line endings, which are saved with the majority ending and announced in the notification bar.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How does encoding detection work?</div>
                 <div class="faq-answer">
-                    <p>PrimeEdit uses a multi-stage approach: (1) BOM detection for UTF-8-BOM, UTF-16, UTF-32. (2) UTF-8 validation. (3) Byte-frequency heuristics for Windows-1252, ISO-8859-1, Shift-JIS. If ICU libraries are installed, additional encodings are supported (KOI8-R, GB2312, Big5, etc.).</p>
+                    <p>PrimeEdit reads the whole file and checks, in order: (1) a byte order mark for UTF-8, UTF-16 or UTF-32; (2) UTF-16 without a byte order mark; (3) valid UTF-8; (4) a guess between windows-1252, Shift_JIS and ISO-8859-1. ISO-8859-6 and windows-1256 are not recognised, so such a file opens as something else. Use <strong>Encoding &gt; Reopen with Encoding...</strong> to decode it again with the right encoding. If the bytes do not decode exactly in the detected encoding, the file opens read-only and the notification bar offers the same command.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How do I change a file's encoding or line endings?</div>
                 <div class="faq-answer">
-                    <p>Click the <strong>encoding indicator</strong> in the status bar (e.g., "UTF-8") to see conversion options. Similarly, click the <strong>EOL indicator</strong> (e.g., "LF") to convert between Unix (LF), Windows (CRLF), and Mac (CR). You can also use the <strong>Encoding</strong> menu.</p>
+                    <p>Click the <strong>encoding indicator</strong> in the status bar (e.g., "UTF-8") to see conversion options. Similarly, click the <strong>EOL indicator</strong> (e.g., "LF") to convert between Unix (LF), Windows (CRLF), and Mac (CR). You can also use the <strong>Encoding</strong> menu. If some characters cannot be written in the new encoding, you are shown how many and where, and can cancel or replace them with <code>?</code>. To read a file in a different encoding without converting it, use <strong>Reopen with Encoding...</strong>.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">What happens when a file is modified externally?</div>
-                <div class="faq-answer"><p>PrimeEdit monitors open files using <code>QFileSystemWatcher</code>. When a change is detected, a yellow notification bar appears: "This file has been modified by another program. Reload?" Click Yes to reload or No to keep your version.</p></div>
+                <div class="faq-answer"><p>PrimeEdit watches open files. When another program changes one, the notification bar offers <strong>Reload</strong> or <strong>Keep mine</strong>; with unsaved changes the button reads <strong>Reload (discard my changes)</strong>. It never reloads on its own, your own saves never raise it, and a background tab shows the bar when you switch to it.</p></div>
             </div>
 
             <div class="faq-item">
@@ -369,7 +400,7 @@
             <div class="faq-item">
                 <div class="faq-question">How do I set up LSP for my language?</div>
                 <div class="faq-answer">
-                    <p>Install the language server for your language (e.g., <code>sudo apt install clangd</code> for C++). PrimeEdit has built-in configurations for C++, Python, JavaScript/TypeScript, Rust, and Go. For other languages, create <code>~/.config/PrimeEdit/lsp-servers.json</code> with the server command and arguments.</p>
+                    <p>Install the language server for your language (e.g., <code>sudo apt install clangd</code> for C++). PrimeEdit has built-in configurations for C++, Python, JavaScript/TypeScript, Rust, and Go. For other languages, create <code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code> with the server command and arguments.</p>
                 </div>
             </div>
 
@@ -402,7 +433,7 @@
             <div class="faq-item">
                 <div class="faq-question">How do I switch branches?</div>
                 <div class="faq-answer">
-                    <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select the branch you want to switch to. PrimeEdit will reload any open files that changed between branches.</p>
+                    <p><strong>Git &gt; Switch Branch</strong> shows a list of local branches. Select the branch you want to switch to. Open files that changed between branches show the notification bar, so you choose whether to reload each one.</p>
                 </div>
             </div>
 
@@ -421,7 +452,7 @@
             <div class="faq-item">
                 <div class="faq-question">Where are plugins stored?</div>
                 <div class="faq-answer">
-                    <p><code>~/.config/PrimeEdit/plugins/</code> for user plugins, <code>/usr/lib/prime-edit/plugins/</code> for system-wide plugins.</p>
+                    <p><code>~/.config/PrimeEdit/PrimeEdit/plugins/</code> for user plugins, <code>/usr/lib/prime-edit/plugins/</code> for system-wide plugins.</p>
                 </div>
             </div>
 
@@ -451,7 +482,7 @@
 
             <div class="faq-item">
                 <div class="faq-question">Why does a large file open in read-only mode?</div>
-                <div class="faq-answer"><p>Files over 100MB open read-only by default to prevent accidental edits to very large files (which could be slow). This is a safety feature, not a limitation.</p></div>
+                <div class="faq-answer"><p>Files over 50 MB, and minified files over 20 MB, open as a partial view: only part of the file is loaded. Saving it would replace the whole file with that part, so a partial view is read-only. Save, Save As, Save All and the encoding and line-ending changes are disabled for that tab, and the notification bar says so when the file opens.</p></div>
             </div>
 
             <div class="faq-item">
@@ -502,21 +533,21 @@
             <div class="faq-item">
                 <div class="faq-question">Where are settings stored?</div>
                 <div class="faq-answer">
-                    <p><code>~/.config/PrimeEdit/settings.json</code> &mdash; all editor preferences, theme selection, file defaults.</p>
+                    <p><code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> &mdash; all editor preferences, theme selection, file defaults. It is written atomically. If it cannot be read, PrimeEdit copies it to <code>settings.json.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, keeps the original, uses defaults, and writes nothing until you change a setting. <code>session.json</code>, named sessions and <code>macros.json</code> are handled the same way, except that <code>session.json</code> is written again only once you open or close a file, or change a bookmark, a fold or the active tab; moving or resizing the window alone does not count.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">Where are sessions stored?</div>
                 <div class="faq-answer">
-                    <p><code>~/.local/share/PrimeEdit/sessions/</code> &mdash; open tabs, cursor positions, bookmarks, fold state. Unsaved documents are cached in the <code>unsaved/</code> subdirectory.</p>
+                    <p><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/</code> &mdash; open tabs, cursor positions, bookmarks, fold state. Unsaved documents are cached in the <code>unsaved/</code> subdirectory; an entry that cannot be read is moved to <code>unsaved.corrupt/</code> and kept.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How do I reset all settings to defaults?</div>
                 <div class="faq-answer">
-                    <p>Open <strong>Settings &gt; Preferences</strong> and click <strong>Reset to Defaults</strong>. Or delete <code>~/.config/PrimeEdit/settings.json</code> and restart.</p>
+                    <p>Open <strong>Settings &gt; Preferences</strong> and click <strong>Reset to Defaults</strong>. Or delete <code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> and restart.</p>
                 </div>
             </div>
         </div>
@@ -531,8 +562,8 @@
                     <p>Try these steps:</p>
                     <ul>
                         <li>Run from terminal to see error messages: <code>./build/PrimeEdit</code></li>
-                        <li>Delete settings: <code>rm ~/.config/PrimeEdit/settings.json</code></li>
-                        <li>Delete session cache: <code>rm -rf ~/.local/share/PrimeEdit/sessions/</code></li>
+                        <li>Move settings aside: <code>mv ~/.config/PrimeEdit/PrimeEdit/settings.json ~/settings.json.bak</code></li>
+                        <li>Do not delete <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/</code>: its <code>unsaved/</code> folder holds your unsaved drafts. Move it aside instead if you must.</li>
                         <li>Verify Qt is installed: <code>qmake6 --version</code> or <code>qmake --version</code></li>
                     </ul>
                 </div>
@@ -548,14 +579,14 @@
             <div class="faq-item">
                 <div class="faq-question">The file shows as modified when I haven't changed anything</div>
                 <div class="faq-answer">
-                    <p>This was a known issue that has been fixed. PrimeEdit now uses <code>QTextDocument::contentsChange</code> instead of <code>textChanged</code> to distinguish real edits from formatting-only changes. If you still see this, please report it.</p>
+                    <p>An encoding or line-ending conversion counts as a change, so the tab stays modified until you save, even if you undo every text edit. Otherwise only real edits mark a tab modified; if you still see this, please report it.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">Theme changes don't apply</div>
                 <div class="faq-answer">
-                    <p>Theme changes should apply instantly. If they don't: (1) make sure you clicked <strong>Apply</strong> or <strong>OK</strong> in Preferences, (2) try restarting PrimeEdit, (3) delete <code>~/.config/PrimeEdit/settings.json</code> and restart to reset to defaults.</p>
+                    <p>Theme changes should apply instantly. If they don't: (1) make sure you clicked <strong>Apply</strong> or <strong>OK</strong> in Preferences, (2) try restarting PrimeEdit, (3) delete <code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> and restart to reset to defaults.</p>
                 </div>
             </div>
         </div>

@@ -1,52 +1,93 @@
 #include "charsetdetector.h"
 
-QString CharsetDetector::detect(const QByteArray &data, int maxBytes)
+QString CharsetDetector::detect(const QByteArray &data)
 {
-    if (data.isEmpty()) {
-        return "UTF-8";
-    }
+    const CharsetGuess guess = detectCharset(data);
+    if (guess.hasBom && guess.name == QLatin1String("UTF-8"))
+        return QStringLiteral("UTF-8-BOM");
+    return guess.name;
+}
 
+CharsetGuess CharsetDetector::detectCharset(const QByteArray &data)
+{
     const unsigned char *bytes =
         reinterpret_cast<const unsigned char *>(data.constData());
-    int len = qMin(data.size(), maxBytes);
+    const qsizetype len = data.size();
 
-    // Check BOM markers first
+    // BOM markers first. UTF-32LE before UTF-16LE: both start with FF FE.
     if (len >= 4 && bytes[0] == 0xFF && bytes[1] == 0xFE
         && bytes[2] == 0x00 && bytes[3] == 0x00) {
-        return "UTF-32LE";
+        return {"UTF-32LE", true};
+    }
+    if (len >= 4 && bytes[0] == 0x00 && bytes[1] == 0x00
+        && bytes[2] == 0xFE && bytes[3] == 0xFF) {
+        return {"UTF-32BE", true};
     }
     if (len >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB
         && bytes[2] == 0xBF) {
-        return "UTF-8-BOM";
+        return {"UTF-8", true};
     }
     if (len >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE) {
-        return "UTF-16LE";
+        return {"UTF-16LE", true};
     }
     if (len >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF) {
+        return {"UTF-16BE", true};
+    }
+    return {detectWithoutBom(bytes, len), false};
+}
+
+// The 1.0.0 heuristics, unchanged except that they see every byte they are
+// given (1.0.0 stopped at 8 KB), return the spec 9.1 spellings, and try
+// BOM-less UTF-16 first (T1.8). A wrong
+// guess is caught by the lossless check on load, which opens the file
+// read-only and offers Reopen with Encoding.
+// BOM-less UTF-16: NUL bytes are valid UTF-8, so this runs first. Text with
+// any Latin content has many code units whose high byte is NUL, all at one
+// parity: odd offsets for little endian, even for big endian. Requires 1 in 4
+// units, and nearly none at the other parity.
+QString CharsetDetector::detectUtf16(const unsigned char *bytes, qsizetype len)
+{
+    if (len < 2 || len % 2 != 0) {
+        return QString();
+    }
+    qsizetype evenNuls = 0;
+    qsizetype oddNuls = 0;
+    for (qsizetype i = 0; i < len; i += 2) {
+        evenNuls += bytes[i] == 0;
+        oddNuls += bytes[i + 1] == 0;
+    }
+    const qsizetype units = len / 2;
+    if (oddNuls * 4 >= units && evenNuls * 20 <= oddNuls) {
+        return "UTF-16LE";
+    }
+    if (evenNuls * 4 >= units && oddNuls * 20 <= evenNuls) {
         return "UTF-16BE";
     }
+    return QString();
+}
 
-    // Check if valid UTF-8
+QString CharsetDetector::detectWithoutBom(const unsigned char *bytes, qsizetype len)
+{
+    const QString utf16 = detectUtf16(bytes, len);
+    if (!utf16.isEmpty()) {
+        return utf16;
+    }
+
     if (isValidUtf8(bytes, len)) {
         return "UTF-8";
     }
 
-    // Heuristic: count bytes in high ranges
-    int highBytes = countHighBytes(bytes, len, 0x80, 0xFF);
-    if (highBytes == 0) {
-        return "UTF-8"; // Pure ASCII
-    }
+    const qsizetype highBytes = countHighBytes(bytes, len, 0x80, 0xFF);
 
     // Windows-1252: bytes in 0x80-0x9F are control chars in
     // ISO-8859-1 but printable in Windows-1252
-    int win1252Range = countHighBytes(bytes, len, 0x80, 0x9F);
-    if (win1252Range > 0) {
-        return "Windows-1252";
+    if (countHighBytes(bytes, len, 0x80, 0x9F) > 0) {
+        return "windows-1252";
     }
 
     // Shift-JIS: lead bytes 0x81-0x9F and 0xE0-0xEF
-    int sjisLeads = 0;
-    for (int i = 0; i < len - 1; ++i) {
+    qsizetype sjisLeads = 0;
+    for (qsizetype i = 0; i < len - 1; ++i) {
         if ((bytes[i] >= 0x81 && bytes[i] <= 0x9F)
             || (bytes[i] >= 0xE0 && bytes[i] <= 0xEF)) {
             if (bytes[i + 1] >= 0x40 && bytes[i + 1] <= 0xFC
@@ -57,17 +98,16 @@ QString CharsetDetector::detect(const QByteArray &data, int maxBytes)
         }
     }
     if (sjisLeads > highBytes / 3) {
-        return "Shift-JIS";
+        return "Shift_JIS";
     }
 
-    // Default fallback
     return "ISO-8859-1";
 }
 
 bool CharsetDetector::isValidUtf8(
-    const unsigned char *data, int length)
+    const unsigned char *data, qsizetype length)
 {
-    for (int i = 0; i < length;) {
+    for (qsizetype i = 0; i < length;) {
         if (data[i] < 0x80) {
             i++;
             continue;
@@ -97,12 +137,12 @@ bool CharsetDetector::isValidUtf8(
     return true;
 }
 
-int CharsetDetector::countHighBytes(
-    const unsigned char *data, int length,
+qsizetype CharsetDetector::countHighBytes(
+    const unsigned char *data, qsizetype length,
     int rangeStart, int rangeEnd)
 {
-    int count = 0;
-    for (int i = 0; i < length; ++i) {
+    qsizetype count = 0;
+    for (qsizetype i = 0; i < length; ++i) {
         if (data[i] >= rangeStart && data[i] <= rangeEnd) {
             count++;
         }

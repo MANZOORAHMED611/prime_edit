@@ -1,362 +1,140 @@
 #include "markdownpreview.h"
-#include <QVBoxLayout>
-#include <QRegularExpression>
+
+#include <QDesktopServices>
+#include <QDir>
+#include <QFileInfo>
+#include <QImageReader>
 #include <QScrollBar>
+#include <QAbstractTextDocumentLayout>
+#include <QApplication>
+#include <QFontDatabase>
+#include <QTextCursor>
+#include <QTextFrame>
+#include <QTextTable>
+#include <QTextBlock>
+#include <QTextDocument>
 
 MarkdownPreview::MarkdownPreview(QWidget *parent)
-    : QWidget(parent)
-    , m_autoUpdate(true)
-    , m_updateDelay(500)
-    , m_zoomFactor(1.0)
+    : QTextBrowser(parent)
 {
-    setupUI();
-
-    m_updateTimer = new QTimer(this);
-    m_updateTimer->setSingleShot(true);
-    connect(m_updateTimer, &QTimer::timeout, this, &MarkdownPreview::updatePreview);
+    setReadOnly(true);
+    // Never navigate inside the preview: links are routed by onAnchorClicked.
+    setOpenLinks(false);
+    setOpenExternalLinks(false);
+    document()->setDocumentMargin(16);
+    // As an overlay this widget is a child of the (monospace) editor; reading
+    // text should use the normal UI font, not inherit the code font.
+    setFont(QApplication::font());
+    connect(this, &QTextBrowser::anchorClicked, this, &MarkdownPreview::onAnchorClicked);
 }
 
-void MarkdownPreview::setupUI()
+void MarkdownPreview::render(const QString &markdown, const QString &baseDir)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+    // Keep the reading position across live re-renders while typing.
+    QScrollBar *bar = verticalScrollBar();
+    const double fraction = bar->maximum() > 0
+        ? static_cast<double>(bar->value()) / bar->maximum() : 0.0;
 
-    m_browser = new QTextBrowser(this);
-    m_browser->setOpenExternalLinks(true);
-    m_browser->setReadOnly(true);
+    m_baseDir = baseDir;
+    if (!baseDir.isEmpty()) {
+        document()->setBaseUrl(QUrl::fromLocalFile(baseDir + QDir::separator()));
+    }
+    document()->setMarkdown(markdown, QTextDocument::MarkdownDialectGitHub);
+    polishDocument();
 
-    layout->addWidget(m_browser);
+    bar->setValue(static_cast<int>(fraction * bar->maximum()));
 }
 
-void MarkdownPreview::setMarkdown(const QString &markdown)
+void MarkdownPreview::polishDocument()
 {
-    m_markdown = markdown;
-
-    if (m_autoUpdate) {
-        m_updateTimer->start(m_updateDelay);
+    const QFont mono = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    const QColor shade = palette().color(QPalette::AlternateBase);
+    for (QTextBlock block = document()->begin(); block.isValid(); block = block.next()) {
+        QTextBlockFormat fmt = block.blockFormat();
+        if (fmt.hasProperty(QTextFormat::BlockCodeFence)) {
+            QTextCursor cursor(block);
+            fmt.setBackground(shade);
+            fmt.setLeftMargin(8);
+            cursor.setBlockFormat(fmt);
+            cursor.select(QTextCursor::BlockUnderCursor);
+            QTextCharFormat chars;
+            chars.setFont(mono);
+            cursor.mergeCharFormat(chars);
+        }
+        if (!fmt.hasProperty(QTextFormat::BlockCodeFence)) {
+            shadeInlineCode(block, shade);
+        }
+        if (QTextTable *table = QTextCursor(block).currentTable()) {
+            QTextTableFormat tf = table->format();
+            if (tf.cellPadding() < 4) {
+                tf.setCellPadding(5);
+                tf.setCellSpacing(0);
+                tf.setBorderCollapse(true);
+                table->setFormat(tf);
+            }
+        }
     }
 }
 
-void MarkdownPreview::updatePreview()
+// The Markdown importer gives `inline code` the fixed-pitch font only, which
+// beside the body font is easy to miss; shade it like the fenced blocks.
+void MarkdownPreview::shadeInlineCode(const QTextBlock &block, const QColor &shade)
 {
-    // Save scroll position
-    int scrollPos = m_browser->verticalScrollBar()->value();
-
-    QString html = markdownToHtml(m_markdown);
-    m_browser->setHtml(html);
-
-    // Restore scroll position
-    m_browser->verticalScrollBar()->setValue(scrollPos);
-}
-
-void MarkdownPreview::refresh()
-{
-    updatePreview();
-}
-
-void MarkdownPreview::setAutoUpdate(bool enabled)
-{
-    m_autoUpdate = enabled;
-    if (enabled) {
-        updatePreview();
+    for (auto it = block.begin(); !it.atEnd(); ++it) {
+        const QTextFragment frag = it.fragment();
+        if (!frag.charFormat().fontFixedPitch()) {
+            continue;
+        }
+        QTextCursor cursor(document());
+        cursor.setPosition(frag.position());
+        cursor.setPosition(frag.position() + frag.length(), QTextCursor::KeepAnchor);
+        QTextCharFormat chars;
+        chars.setBackground(shade);
+        cursor.mergeCharFormat(chars);
     }
 }
 
-void MarkdownPreview::setUpdateDelay(int ms)
+void MarkdownPreview::scrollToHeading(int headingIndex)
 {
-    m_updateDelay = ms;
-    m_updateTimer->setInterval(ms);
-}
-
-void MarkdownPreview::zoomIn()
-{
-    m_zoomFactor *= 1.1;
-    QFont font = m_browser->font();
-    font.setPointSizeF(font.pointSizeF() * 1.1);
-    m_browser->setFont(font);
-}
-
-void MarkdownPreview::zoomOut()
-{
-    m_zoomFactor /= 1.1;
-    QFont font = m_browser->font();
-    font.setPointSizeF(font.pointSizeF() / 1.1);
-    m_browser->setFont(font);
-}
-
-void MarkdownPreview::resetZoom()
-{
-    m_zoomFactor = 1.0;
-    QFont font = m_browser->font();
-    font.setPointSizeF(10.0); // Default size
-    m_browser->setFont(font);
-}
-
-QString MarkdownPreview::generateCSS()
-{
-    return R"(
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            color: #333;
-            background-color: #fff;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            margin-top: 24px;
-            margin-bottom: 16px;
-            font-weight: 600;
-            line-height: 1.25;
-        }
-
-        h1 {
-            font-size: 2em;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.3em;
-        }
-
-        h2 {
-            font-size: 1.5em;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.3em;
-        }
-
-        h3 { font-size: 1.25em; }
-        h4 { font-size: 1em; }
-        h5 { font-size: 0.875em; }
-        h6 { font-size: 0.85em; color: #6a737d; }
-
-        p {
-            margin-top: 0;
-            margin-bottom: 16px;
-        }
-
-        a {
-            color: #0366d6;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        code {
-            background-color: rgba(27, 31, 35, 0.05);
-            border-radius: 3px;
-            font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
-            font-size: 85%;
-            margin: 0;
-            padding: 0.2em 0.4em;
-        }
-
-        pre {
-            background-color: #f6f8fa;
-            border-radius: 3px;
-            font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
-            font-size: 85%;
-            line-height: 1.45;
-            overflow: auto;
-            padding: 16px;
-        }
-
-        pre code {
-            background-color: transparent;
-            border: 0;
-            display: inline;
-            line-height: inherit;
-            margin: 0;
-            overflow: visible;
-            padding: 0;
-            word-wrap: normal;
-        }
-
-        blockquote {
-            border-left: 4px solid #dfe2e5;
-            color: #6a737d;
-            margin: 0 0 16px 0;
-            padding: 0 1em;
-        }
-
-        ul, ol {
-            margin-bottom: 16px;
-            padding-left: 2em;
-        }
-
-        li {
-            margin-bottom: 0.25em;
-        }
-
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            margin-bottom: 16px;
-            width: 100%;
-        }
-
-        table th {
-            background-color: #f6f8fa;
-            font-weight: 600;
-            padding: 6px 13px;
-            border: 1px solid #dfe2e5;
-        }
-
-        table td {
-            padding: 6px 13px;
-            border: 1px solid #dfe2e5;
-        }
-
-        table tr {
-            background-color: #fff;
-            border-top: 1px solid #c6cbd1;
-        }
-
-        table tr:nth-child(2n) {
-            background-color: #f6f8fa;
-        }
-
-        img {
-            max-width: 100%;
-            box-sizing: content-box;
-        }
-
-        hr {
-            border: 0;
-            border-top: 1px solid #e1e4e8;
-            height: 0;
-            margin: 24px 0;
-        }
-
-        input[type="checkbox"] {
-            margin-right: 0.5em;
-        }
-    )";
-}
-
-QString MarkdownPreview::markdownToHtml(const QString &markdown)
-{
-    QString html = markdown;
-
-    // Escape HTML entities
-    html.replace("&", "&amp;");
-    html.replace("<", "&lt;");
-    html.replace(">", "&gt;");
-
-    // Headers (must be before other patterns)
-    html.replace(QRegularExpression("^######\\s+(.+)$", QRegularExpression::MultilineOption), "<h6>\\1</h6>");
-    html.replace(QRegularExpression("^#####\\s+(.+)$", QRegularExpression::MultilineOption), "<h5>\\1</h5>");
-    html.replace(QRegularExpression("^####\\s+(.+)$", QRegularExpression::MultilineOption), "<h4>\\1</h4>");
-    html.replace(QRegularExpression("^###\\s+(.+)$", QRegularExpression::MultilineOption), "<h3>\\1</h3>");
-    html.replace(QRegularExpression("^##\\s+(.+)$", QRegularExpression::MultilineOption), "<h2>\\1</h2>");
-    html.replace(QRegularExpression("^#\\s+(.+)$", QRegularExpression::MultilineOption), "<h1>\\1</h1>");
-
-    // Code blocks (fenced with ```)
-    QRegularExpression codeBlockRegex("```([\\s\\S]*?)```");
-    html.replace(codeBlockRegex, "<pre><code>\\1</code></pre>");
-
-    // Inline code
-    html.replace(QRegularExpression("`([^`]+)`"), "<code>\\1</code>");
-
-    // Bold
-    html.replace(QRegularExpression("\\*\\*([^*]+)\\*\\*"), "<strong>\\1</strong>");
-    html.replace(QRegularExpression("__([^_]+)__"), "<strong>\\1</strong>");
-
-    // Italic
-    html.replace(QRegularExpression("\\*([^*]+)\\*"), "<em>\\1</em>");
-    html.replace(QRegularExpression("_([^_]+)_"), "<em>\\1</em>");
-
-    // Strikethrough
-    html.replace(QRegularExpression("~~([^~]+)~~"), "<del>\\1</del>");
-
-    // Links [text](url)
-    html.replace(QRegularExpression("\\[([^\\]]+)\\]\\(([^)]+)\\)"), "<a href=\"\\2\">\\1</a>");
-
-    // Images ![alt](url)
-    html.replace(QRegularExpression("!\\[([^\\]]*)\\]\\(([^)]+)\\)"), "<img src=\"\\2\" alt=\"\\1\" />");
-
-    // Blockquotes
-    html.replace(QRegularExpression("^>\\s+(.+)$", QRegularExpression::MultilineOption), "<blockquote>\\1</blockquote>");
-
-    // Horizontal rules
-    html.replace(QRegularExpression("^---$", QRegularExpression::MultilineOption), "<hr />");
-    html.replace(QRegularExpression("^\\*\\*\\*$", QRegularExpression::MultilineOption), "<hr />");
-
-    // Unordered lists
-    QStringList lines = html.split('\n');
-    QStringList processedLines;
-    bool inUl = false;
-    bool inOl = false;
-
-    for (const QString &line : lines) {
-        QString trimmed = line.trimmed();
-
-        // Unordered list items
-        if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
-            if (!inUl) {
-                processedLines.append("<ul>");
-                inUl = true;
-            }
-            QString item = trimmed.mid(2);
-            processedLines.append("<li>" + item + "</li>");
-        }
-        // Ordered list items
-        else if (QRegularExpression("^\\d+\\.\\s+").match(trimmed).hasMatch()) {
-            if (!inOl) {
-                processedLines.append("<ol>");
-                inOl = true;
-            }
-            QString item = trimmed.mid(trimmed.indexOf('.') + 1).trimmed();
-            processedLines.append("<li>" + item + "</li>");
-        }
-        else {
-            if (inUl) {
-                processedLines.append("</ul>");
-                inUl = false;
-            }
-            if (inOl) {
-                processedLines.append("</ol>");
-                inOl = false;
-            }
-            processedLines.append(line);
+    int seen = -1;
+    for (QTextBlock block = document()->begin(); block.isValid(); block = block.next()) {
+        if (block.blockFormat().headingLevel() > 0 && ++seen == headingIndex) {
+            const QRectF rect = document()->documentLayout()->blockBoundingRect(block);
+            verticalScrollBar()->setValue(static_cast<int>(rect.top()));
+            return;
         }
     }
+}
 
-    if (inUl) processedLines.append("</ul>");
-    if (inOl) processedLines.append("</ol>");
-
-    html = processedLines.join('\n');
-
-    // Paragraphs (wrap non-tagged lines)
-    lines = html.split('\n');
-    processedLines.clear();
-
-    for (const QString &line : lines) {
-        QString trimmed = line.trimmed();
-        if (!trimmed.isEmpty() &&
-            !trimmed.startsWith('<') &&
-            !trimmed.endsWith('>')) {
-            processedLines.append("<p>" + line + "</p>");
-        } else {
-            processedLines.append(line);
-        }
+QVariant MarkdownPreview::loadResource(int type, const QUrl &name)
+{
+    if (type != QTextDocument::ImageResource) {
+        return {};
     }
+    const QUrl resolved = document()->baseUrl().resolved(name);
+    if (!resolved.isLocalFile()) {
+        return {}; // no network fetches from document content
+    }
+    const QString path = resolved.toLocalFile();
+    if (QImageReader::imageFormat(path).isEmpty()) {
+        return {}; // only real images, never arbitrary files
+    }
+    return QTextBrowser::loadResource(type, resolved);
+}
 
-    html = processedLines.join('\n');
-
-    // Wrap in HTML document
-    QString css = generateCSS();
-    QString fullHtml = QString(
-        "<!DOCTYPE html>\n"
-        "<html>\n"
-        "<head>\n"
-        "<meta charset=\"utf-8\">\n"
-        "<style>\n%1\n</style>\n"
-        "</head>\n"
-        "<body>\n%2\n</body>\n"
-        "</html>"
-    ).arg(css, html);
-
-    return fullHtml;
+void MarkdownPreview::onAnchorClicked(const QUrl &url)
+{
+    if (url.scheme().isEmpty() && url.path().isEmpty() && url.hasFragment()) {
+        scrollToAnchor(url.fragment());
+        return;
+    }
+    const QString scheme = url.scheme().toLower();
+    if (scheme == "http" || scheme == "https" || scheme == "mailto") {
+        QDesktopServices::openUrl(url);
+        return;
+    }
+    const QUrl resolved = document()->baseUrl().resolved(url);
+    if (resolved.isLocalFile() && QFileInfo(resolved.toLocalFile()).isFile()) {
+        emit openFileRequested(resolved.toLocalFile());
+    }
 }

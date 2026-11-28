@@ -7,6 +7,7 @@
 #include <QFont>
 #include <QColor>
 #include <QVariant>
+#include <QJsonObject>
 
 class Settings : public QObject
 {
@@ -104,6 +105,14 @@ private:
     bool m_insertFinalNewline = true;
 
     QMap<QString, QVariant> m_customSettings;
+
+    // Set when load() found settings.json unparsable: save() is a no-op while
+    // the in-memory state still equals m_heldState (the defaults).
+    bool m_holdWrites = false;
+    QJsonObject m_heldState;
+
+    void holdCorruptFile(const QString &filePath);
+    QJsonObject toJson() const;
 };
 
 #endif // SETTINGS_H

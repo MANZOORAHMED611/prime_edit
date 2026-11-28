@@ -1,45 +1,41 @@
 #ifndef MARKDOWNPREVIEW_H
 #define MARKDOWNPREVIEW_H
 
-#include <QWidget>
 #include <QTextBrowser>
-#include <QTimer>
 #include <QString>
+#include <QUrl>
 
-class MarkdownPreview : public QWidget
+// Read-only rendered view of Markdown source, using Qt's built-in GitHub
+// dialect (tables, task lists, fenced code, strikethrough). QTextBrowser runs
+// no scripts; loadResource() additionally restricts resources to local image
+// files so a document can never trigger network access.
+class QTextBlock;
+
+class MarkdownPreview : public QTextBrowser
 {
     Q_OBJECT
 
 public:
     explicit MarkdownPreview(QWidget *parent = nullptr);
-    ~MarkdownPreview() override = default;
 
-    void setMarkdown(const QString &markdown);
-    void updatePreview();
+    // baseDir resolves relative image paths and relative links.
+    void render(const QString &markdown, const QString &baseDir);
+    // Scrolls so the Nth heading (document order, 0-based) is at the top.
+    void scrollToHeading(int headingIndex);
 
-    void setAutoUpdate(bool enabled);
-    bool autoUpdate() const { return m_autoUpdate; }
+signals:
+    // A link to a local file (e.g. another .md) the editor should open.
+    void openFileRequested(const QString &path);
 
-    void setUpdateDelay(int ms);
-    int updateDelay() const { return m_updateDelay; }
-
-public slots:
-    void refresh();
-    void zoomIn();
-    void zoomOut();
-    void resetZoom();
+protected:
+    QVariant loadResource(int type, const QUrl &name) override;
 
 private:
-    void setupUI();
-    QString markdownToHtml(const QString &markdown);
-    QString generateCSS();
+    void onAnchorClicked(const QUrl &url);
+    void polishDocument(); // table padding, code-block shading
+    void shadeInlineCode(const QTextBlock &block, const QColor &shade);
 
-    QTextBrowser *m_browser;
-    QTimer *m_updateTimer;
-    QString m_markdown;
-    bool m_autoUpdate;
-    int m_updateDelay;
-    qreal m_zoomFactor;
+    QString m_baseDir;
 };
 
 #endif // MARKDOWNPREVIEW_H

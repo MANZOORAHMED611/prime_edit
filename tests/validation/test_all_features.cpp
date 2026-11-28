@@ -12,6 +12,7 @@
 #include <QTextDocument>
 #include <QPlainTextEdit>
 #include <QStandardPaths>
+#include "test_isolation.h"
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QRegularExpression>
@@ -208,7 +209,7 @@ void test_document() {
     }
     {
         TEST("Large file threshold constant");
-        CHECK(Document::LARGE_FILE_THRESHOLD == 10 * 1024 * 1024, "should be 10MB");
+        CHECK(Document::LARGE_FILE_THRESHOLD == 50 * 1024 * 1024, "should be 50MB (README: files over 50MB)");
     }
     {
         TEST("Read-only threshold constant");
@@ -618,12 +619,15 @@ void test_largefile() {
         TEST("Line count is correct");
         LargeFileReader reader;
         reader.open(tmpFile.fileName());
-        CHECK(reader.lineCount() == 100000, QString("expected 100000, got %1").arg(reader.lineCount()).toStdString().c_str());
+        reader.waitForIndex(); // index builds on a worker thread
+        // 100000 newline-terminated lines = 100001 lines, matching QTextDocument::blockCount
+        CHECK(reader.lineCount() == 100001, QString("expected 100001, got %1").arg(reader.lineCount()).toStdString().c_str());
     }
     {
         TEST("Read first line");
         LargeFileReader reader;
         reader.open(tmpFile.fileName());
+        reader.waitForIndex(); // index builds on a worker thread
         QString line = reader.line(0);
         CHECK(line.startsWith("Line 1:"), "first line should start with 'Line 1:'");
     }
@@ -631,6 +635,7 @@ void test_largefile() {
         TEST("Read last line");
         LargeFileReader reader;
         reader.open(tmpFile.fileName());
+        reader.waitForIndex(); // index builds on a worker thread
         QString line = reader.line(99999);
         CHECK(line.startsWith("Line 100000:"), "last line should start with 'Line 100000:'");
     }
@@ -638,6 +643,7 @@ void test_largefile() {
         TEST("Read middle line");
         LargeFileReader reader;
         reader.open(tmpFile.fileName());
+        reader.waitForIndex(); // index builds on a worker thread
         QString line = reader.line(49999);
         CHECK(line.startsWith("Line 50000:"), "middle line");
     }
@@ -645,6 +651,7 @@ void test_largefile() {
         TEST("Read batch of lines");
         LargeFileReader reader;
         reader.open(tmpFile.fileName());
+        reader.waitForIndex(); // index builds on a worker thread
         QStringList lines = reader.lines(0, 10);
         CHECK(lines.size() == 10, "should get 10 lines");
     }
@@ -877,7 +884,7 @@ void test_file_io() {
         TEST("Save to read-only location fails gracefully");
         Document doc;
         doc.setText("test");
-        bool saved = doc.saveAs("/proc/test_file_that_cannot_be_created");
+        bool saved = doc.saveAs("/proc/test_file_that_cannot_be_created") == SaveResult::Ok;
         CHECK(!saved, "should fail to save to /proc");
     }
     {
@@ -909,7 +916,7 @@ void test_file_io() {
         QString unicodePath = tmpDir.path() + "/test_\xC3\xA9\xC3\xA0\xC3\xBC.txt";
         Document doc;
         doc.setText("Unicode filename test");
-        bool saved = doc.saveAs(unicodePath);
+        bool saved = doc.saveAs(unicodePath) == SaveResult::Ok;
         if (saved) {
             Document doc2;
             bool loaded = doc2.load(unicodePath);
@@ -1000,8 +1007,7 @@ void test_resources() {
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName("PrimeEdit");
-    app.setOrganizationName("PrimeEdit");
+    isolateFromUserData();
 
     std::cout << "============================================================" << std::endl;
     std::cout << "  PrimeEdit Feature Validation Suite" << std::endl;

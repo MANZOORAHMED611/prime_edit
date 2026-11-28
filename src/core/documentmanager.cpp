@@ -2,6 +2,8 @@
 #include "utils/settings.h"
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
+#include <QCryptographicHash>
 #include <QStandardPaths>
 
 DocumentManager &DocumentManager::instance()
@@ -35,8 +37,7 @@ Document *DocumentManager::createDocument()
 {
     Document *doc = new Document(this);
     m_documents.append(doc);
-
-    connect(doc, &Document::modifiedChanged, this, &DocumentManager::onDocumentModifiedChanged);
+    trackDocument(doc);
 
     emit documentCreated(doc);
     return doc;
@@ -59,8 +60,7 @@ Document *DocumentManager::openDocument(const QString &filePath)
     m_documents.append(doc);
     addRecentFile(filePath);
     m_fileWatcher->addPath(filePath);
-
-    connect(doc, &Document::modifiedChanged, this, &DocumentManager::onDocumentModifiedChanged);
+    trackDocument(doc);
 
     emit documentOpened(doc);
     return doc;
@@ -78,6 +78,7 @@ bool DocumentManager::closeDocument(Document *document, bool force)
 
     if (!document->filePath().isEmpty()) {
         m_fileWatcher->removePath(document->filePath());
+        m_ownSaves.remove(document->filePath());
     }
     document->clearRecovery();
     m_documents.removeOne(document);
@@ -178,11 +179,49 @@ void DocumentManager::onDocumentModifiedChanged(bool modified)
     }
 }
 
+void DocumentManager::trackDocument(Document *doc)
+{
+    connect(doc, &Document::modifiedChanged, this, &DocumentManager::onDocumentModifiedChanged);
+    connect(doc, &Document::saved, this, &DocumentManager::onDocumentSaved);
+}
+
+// Records what the save wrote, and watches the path: after Save As the
+// document lives at a path the watcher has not seen yet.
+void DocumentManager::onDocumentSaved(const QString &path, const QByteArray &sha1, qint64 size)
+{
+    m_ownSaves.insert(path, SaveRecord{QFileInfo(path).lastModified(), size, sha1});
+    if (!m_fileWatcher->files().contains(path)) {
+        m_fileWatcher->addPath(path);
+    }
+}
+
+// Cheap checks first; the hash is read only when mtime and size both match.
+bool DocumentManager::matchesOwnSave(const QString &path) const
+{
+    const auto it = m_ownSaves.constFind(path);
+    if (it == m_ownSaves.constEnd()) {
+        return false;
+    }
+    const QFileInfo info(path);
+    if (!info.exists() || info.size() != it->size || info.lastModified() != it->mtime) {
+        return false;
+    }
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+    return QCryptographicHash::hash(file.readAll(), QCryptographicHash::Sha1) == it->sha1;
+}
+
 void DocumentManager::onFileChanged(const QString &path)
 {
-    // Re-add to watcher (Qt removes it after notification)
+    // Re-add to watcher (Qt removes it after notification, and an atomic
+    // save replaces the inode it was watching)
     if (QFile::exists(path)) {
         m_fileWatcher->addPath(path);
+    }
+    if (matchesOwnSave(path)) {
+        return;
     }
     emit fileExternallyModified(path);
 }

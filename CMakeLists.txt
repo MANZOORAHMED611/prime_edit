@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(PrimeEdit VERSION 1.0.0 LANGUAGES CXX)
+project(PrimeEdit VERSION 1.0.2 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,7 +19,10 @@ find_package(Qt6 QUIET COMPONENTS
 )
 
 if(NOT Qt6_FOUND)
-    message(STATUS "Qt6 not found, trying Qt5...")
+    # QUIET hides why Qt6 failed (e.g. missing libgl-dev), and the Qt5 error
+    # that follows is misleading, so surface the real reason first.
+    message(STATUS "Qt6 not usable: ${Qt6_NOT_FOUND_MESSAGE}")
+    message(STATUS "Trying Qt5...")
     find_package(Qt5 REQUIRED COMPONENTS
         Core
         Gui
@@ -53,6 +56,8 @@ set(CORE_SOURCES
     src/core/llmevaluator.cpp
     src/core/islamicbridge.cpp
     src/core/schemavalidator.cpp
+    src/core/textcodec.cpp
+    src/core/singleinstance.cpp
 )
 
 set(UI_SOURCES
@@ -74,6 +79,8 @@ set(UI_SOURCES
     src/ui/theme.cpp
     src/ui/themeeditor.cpp
     src/ui/markdownpreview.cpp
+    src/ui/markdownmode.cpp
+    src/ui/markdownoutline.cpp
     src/ui/hexviewer.cpp
     src/ui/remoteconnectiondialog.cpp
     src/ui/gitdiffviewer.cpp
@@ -121,6 +128,7 @@ set(HEADERS
     src/core/llmevaluator.h
     src/core/islamicbridge.h
     src/core/schemavalidator.h
+    src/core/singleinstance.h
     src/ui/mainwindow.h
     src/ui/tabwidget.h
     src/ui/editor.h
@@ -138,6 +146,8 @@ set(HEADERS
     src/ui/theme.h
     src/ui/themeeditor.h
     src/ui/markdownpreview.h
+    src/ui/markdownmode.h
+    src/ui/markdownoutline.h
     src/ui/hexviewer.h
     src/ui/remoteconnectiondialog.h
     src/ui/gitdiffviewer.h
@@ -165,9 +175,11 @@ set(RESOURCES
     resources/resources.qrc
 )
 
-# Create executable
-add_executable(prime-edit
-    src/main.cpp
+# Everything except main.cpp lives in an object library so the app and the
+# test executables compile from one source list (they had drifted apart).
+# OBJECT, not STATIC: the compiled-in resources.qrc registers itself via a
+# static initializer that a static archive would drop at link time.
+add_library(prime-edit-core OBJECT
     ${CORE_SOURCES}
     ${UI_SOURCES}
     ${SYNTAX_SOURCES}
@@ -176,13 +188,11 @@ add_executable(prime-edit
     ${RESOURCES}
 )
 
-set_target_properties(prime-edit PROPERTIES OUTPUT_NAME "PrimeEdit")
-
-target_include_directories(prime-edit PRIVATE
+target_include_directories(prime-edit-core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(prime-edit PRIVATE
+target_link_libraries(prime-edit-core PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
@@ -192,11 +202,21 @@ target_link_libraries(prime-edit PRIVATE
     Qt${QT_VERSION_MAJOR}::Concurrent
 )
 
-# Optional ICU support for enhanced charset detection
-find_package(ICU QUIET COMPONENTS uc data)
-if(ICU_FOUND)
-    target_link_libraries(prime-edit PRIVATE ICU::uc ICU::data)
-    target_compile_definitions(prime-edit PRIVATE HAVE_ICU=1)
+# ICU is required: TextCodec converts legacy encodings through ucnv (libicuuc).
+# A silent fallback when ICU is missing is how the encoding corruption shipped.
+find_package(ICU 70 REQUIRED COMPONENTS uc data)
+target_link_libraries(prime-edit-core PUBLIC ICU::uc ICU::data)
+
+add_executable(prime-edit src/main.cpp)
+set_target_properties(prime-edit PROPERTIES OUTPUT_NAME "PrimeEdit")
+target_link_libraries(prime-edit PRIVATE prime-edit-core)
+# The version shown by --version comes from project(); dpkg must see an upgrade.
+target_compile_definitions(prime-edit PRIVATE PRIMEEDIT_VERSION="${PROJECT_VERSION}")
+
+option(PRIMEEDIT_BUILD_TESTS "Build the test suites (run with ctest)" ON)
+if(PRIMEEDIT_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
 # Install rules
