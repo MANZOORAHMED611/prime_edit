@@ -13,6 +13,7 @@
 #include <QMap>
 #include <QSet>
 #include "../core/remoteconnection.h"
+#include "../core/document.h"
 
 class QPrinter;
 class QTimer;
@@ -40,6 +41,15 @@ class PluginDialog;
 struct HadithValidation;
 
 
+// Everything the save-failure message depends on, so its wording can be
+// tested without a Document that really failed.
+struct SaveFailureInfo {
+    QString displayName;
+    Document::DiskState diskState = Document::DiskState::Unchanged;
+    QString recoveryPath;
+    QString error;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -65,6 +75,8 @@ public:
 
     // Informational message in the notification bar, with no Yes/No question.
     void showNotification(const QString &message);
+    // The Save Failed text: says the file is unchanged only when it is.
+    static QString saveFailureMessage(const SaveFailureInfo &info);
 
     // Periodic session.json write (spec P1.10). main.cpp enables it only after
     // restoreAndOpen() returns; enabling rebases the corrupt-file hold.

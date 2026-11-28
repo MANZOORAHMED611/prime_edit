@@ -16,7 +16,8 @@ class LargeFileReader;
 enum class SaveResult { Ok, PartialView, EncodeLossy, ReadOnly, IoError };
 
 // Atomic is the default. AllowDirect is passed only after the user confirms a
-// non-atomic write, because a direct write can truncate the original on failure.
+// non-atomic write: a direct write restores the original when it fails, but a
+// crash in the middle of one can still leave the file mixed.
 enum class WriteMode { Atomic, AllowDirect };
 
 class Document : public QObject
@@ -39,6 +40,11 @@ public:
     static constexpr qint64 READONLY_FILE_THRESHOLD = 100 * 1024 * 1024;  // same as large
 
     enum FileMode { SmallFile, MediumFile, LargeFile };
+
+    // What a failed save left on disk. Unchanged: never written, or reserved
+    // and trimmed back. Restored: written part-way, then the original bytes
+    // were written back. Damaged: the restore failed too.
+    enum class DiskState { Unchanged, Restored, Damaged };
     FileMode fileMode() const { return m_fileMode; }
     bool isMinified() const { return m_isMinified; }
 
@@ -56,6 +62,14 @@ public:
     // True when the last successful save wrote in place (hard link or foreign
     // owner), because an atomic replace would have broken the link or owner.
     bool lastSaveWasDirect() const;
+    // Meaningful after a save that did not return Ok.
+    DiskState lastSaveDiskState() const;
+    // Where the original bytes were copied when a Damaged write could not be
+    // undone; empty unless that copy was written.
+    QString recoveryCopyPath() const;
+    // Tests only: false skips the space reservation before a direct write, so
+    // a failing write reaches the restore step.
+    static void setReserveSpaceForTest(bool reserve);
     // A pending encoding or line-ending conversion is a change too, and text
     // undo cannot reach it: only a successful save or load clears it.
     bool isModified() const { return m_modified || m_formatDirty; }
@@ -147,8 +161,11 @@ private:
     bool m_mixedLineEndings = false;
     bool m_decodedLossily = false;
     QString m_forcedEncoding;  // set only while reloadWithEncoding runs load()
+    DiskState m_lastDiskState = DiskState::Unchanged;
+    QString m_recoveryCopyPath;
     static qint64 s_mediumThreshold;
     static qint64 s_largeThreshold;
+    static bool s_reserveSpace;
 
     QString decodeLoaded(const QByteArray &data);
     QString adoptLineEndings(const QString &text);
@@ -156,6 +173,8 @@ private:
     SaveResult refusalFor() const;
     SaveResult writeAtomic(const QString &path, const QByteArray &data, WriteMode mode);
     SaveResult writeDirect(const QString &path, const QByteArray &data);
+    bool reserveSpace(int fd, const QString &path, const QByteArray &original, qint64 size);
+    void restoreOriginal(int fd, const QString &path, const QByteArray &original);
     void finishSave(const QString &path, const QByteArray &written);
     static LineEnding detectLineEnding(const QString &text, bool *mixed);
     static LineEnding defaultLineEnding();

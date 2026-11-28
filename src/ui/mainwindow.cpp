@@ -958,8 +958,26 @@ bool MainWindow::confirmDirectWrite(Document *doc)
     return box.clickedButton() == direct;
 }
 
-// Tells the user why nothing was written. Every result but Ok leaves both
-// modified flags set, so the close prompt and the cache still see the edits.
+// A Restored file is byte-identical to the original, so it is "unchanged" too.
+// Only a Damaged file, whose restore also failed, gets a different sentence.
+QString MainWindow::saveFailureMessage(const SaveFailureInfo &info)
+{
+    if (info.diskState != Document::DiskState::Damaged) {
+        return tr("Could not save '%1': %2\nThe file on disk is unchanged.")
+            .arg(info.displayName, info.error);
+    }
+    if (info.recoveryPath.isEmpty()) {
+        return tr("Could not save '%1': %2\nThe write failed part-way and '%1' may be "
+                  "incomplete.").arg(info.displayName, info.error);
+    }
+    return tr("Could not save '%1': %2\nThe write failed part-way and '%1' may be incomplete. "
+              "Its previous contents were saved to %3.")
+        .arg(info.displayName, info.error, info.recoveryPath);
+}
+
+// Tells the user why the save failed and what it left on disk. Every result
+// but Ok leaves both modified flags set, so the close prompt and the cache
+// still see the edits.
 void MainWindow::reportSaveFailure(Document *doc, SaveResult result)
 {
     const QString name = doc->displayName();
@@ -975,8 +993,8 @@ void MainWindow::reportSaveFailure(Document *doc, SaveResult result)
     case SaveResult::EncodeLossy:
     case SaveResult::IoError:
         QMessageBox::warning(this, tr("Save Failed"),
-                             tr("Could not save '%1': %2\nThe file on disk is unchanged.")
-                                 .arg(name, doc->lastError()));
+                             saveFailureMessage({name, doc->lastSaveDiskState(),
+                                                 doc->recoveryCopyPath(), doc->lastError()}));
         break;
     case SaveResult::Ok:
         break;

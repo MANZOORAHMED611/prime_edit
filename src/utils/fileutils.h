@@ -43,6 +43,9 @@ bool writeFileAtomic(const QString &path, const QByteArray &bytes);
 QString preserveCorruptCopy(const QString &path);
 // fsync on the directory itself, so renames inside it reach the disk.
 bool fsyncDirectory(const QString &path);
+// The unsaved-draft cache directory (AppDataLocation/sessions/unsaved). Its
+// siblings (.new, .old, .corrupt, .recovered) are derived from this path.
+QString unsavedCacheBase();
 
 }
 

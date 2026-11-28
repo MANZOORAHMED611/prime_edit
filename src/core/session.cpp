@@ -296,8 +296,7 @@ bool moveTree(const QString &from, const QString &to)
 
 QString Session::unsavedCacheDir() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-           + "/sessions/unsaved";
+    return FileUtils::unsavedCacheBase();
 }
 
 // Spec 3 D4 recovery table. Each state is a point where a cache write or a

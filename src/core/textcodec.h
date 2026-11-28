@@ -22,6 +22,9 @@ struct EncodeResult {
 // The single byte/text converter for the load and save paths. Stateless, so it
 // is a namespace rather than a QObject. Encoding names follow spec section 9.1.
 namespace TextCodec {
+// decode re-encodes its text in slices of this many UTF-16 code units to prove
+// the result lossless, so it never holds a second full copy of the bytes.
+constexpr qsizetype kVerifyChunk = 1024 * 1024;
 DecodeResult decode(const QByteArray &bytes, const QString &name);
 EncodeResult encode(const QString &text, const QString &name);
 // The table spelling of an encoding name or alias (e.g. "cp1256" ->
