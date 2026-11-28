@@ -78,3 +78,33 @@ The 14 material findings keep this from approval; most need a paragraph or a tab
 
 ### Next step
 The author applies R1-1 to R1-14 and dispositions R1-15 to R1-19 in the same commit. Round 2 is a scoped re-check of the R1-1 to R1-14 fixes only; if it does not reach approve, the matter goes to Mohammed with both positions. Phase A stays held until npp-qw1 merges and R1-4 is regenerated against that commit.
+
+## Round 2 (scoped re-check)
+
+**Spec commit:** 630cd0d (sha256 `3bd142ed9314b0c35b6165a4e630cf848585c6eeb209e5d381ee4a6d03dbc18c`)
+**Verdict at:** 2026-11-28T14:36:32Z
+**Reviewer:** Umar (fresh spawn)
+**Verdict: revise.** Escalated to Mohammed under the loop cap.
+
+**Umar's position (quoted):**
+> All 14 round-1 material findings are resolved and I close them. One new material defect came in with the R1-10 fix itself (R2-1). The fix added a test-function inventory check that cannot be run on 2 of the 24 suites. On test_runner it fails every time, because that suite prints a timestamp. On crash_test it does not check anything. So the check is broken for two suites, and those two suites are being ported. The defect traces back to my own round-1 wording ("each suite's -functions listing"), which the author applied exactly as written. The fix is to rescope one check in two places (§5.2 rule 2 and the §10 verification block). I would approve on that change alone, with no further review. R2-2 is minor and can ride along on an approve. My recommendation: apply the R2-1 change and dispatch. No design question is open.
+
+**Rubric:** items 1–3 and 5–8 pass; item 4 (test strategy) is a concern (R2-1).
+
+| ID | Status | Note |
+|---|---|---|
+| R1-1 … R1-14 | **closed** in round 2 | Citations checked at ce5d206; memory arithmetic verified; Scintilla line-index API confirmed in source |
+| R2-1 | **open (material, fix-introduced)** | `-functions` diff works only for QTest suites (REGRESSION_SUITES + tst_markdown). `test_runner` prints a timestamp, so the diff never matches; `crash_test` ignores the flag. Fix: scope the `-functions` diff to the QTest suites; for crash_test and test_all_features, diff the source inventory of `runTest("…"` / `test_*()` calls, require the `CHECK(` count not to fall, and add `CHECK` and `runTest` to the rule-2 grep. |
+| R2-2 | open (minor) | `finishSave` must call `setSavePoint` and clear draftDirty/formatDirty **before** emitting any signal; S1 case 6 also asserts `isModified()` is true after the slot's `setText`. |
+
+**Notes for the author:**
+- the SB3 Depends line should say it touches `lexercatalog.*` only after SB2 merges;
+- G4 vs the absolute <100 MB target: report it or gate it, explicitly;
+- row 11: the backward-wrap mechanism plus a test;
+- cite the probe output from this verdict file, not the scratchpad path;
+- §4.2: the L bound holds at load;
+- row order is cosmetic.
+
+**Probe output (preserved here because the scratchpad is not durable):** Qt 6.2.4, offscreen. `keyClick(Ctrl+End), keyClick(End): hits=2 global_ctrl=1 after=0`; `sendEvent only: hits=1 global_ctrl=1`.
+
+**Escalation:** under the loop cap this goes to Mohammed with both positions. The author applied every round-1 finding as worded and has no competing position on R2-1. Umar recommends: apply R2-1 (and R2-2 plus the notes) → **approve with no further review**. Phase A dispatch stays held until PR #6 merges.
