@@ -18,6 +18,10 @@ public:
     QStringList extensionsForLanguage(const QString &language) const;
 
     QString detectLanguage(const QString &filename, const QString &content) const;
+    // A language named on the command line (-l): a PrimeEdit language name in
+    // any case, a file extension (cpp, cs, js), or Notepad++'s "normal" for
+    // plain text. Empty when it names no known language.
+    QString resolveLanguageName(const QString &name) const;
     QString definitionPath(const QString &language) const;
 
 private:

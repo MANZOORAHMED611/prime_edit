@@ -131,6 +131,8 @@ public:
     void setBookmarks(const QSet<int> &lines);  // 1-based line numbers
     QString selectWordIfNoSelection();
     bool selectBetweenMatchingBraces();
+    void goToLineColumn(int line, int column);
+    void goToPosition(int position);  // 0-based
     // The current language's comment delimiters (empty for plain text).
     TextTransforms::CommentSyntax commentSyntax() const;
 

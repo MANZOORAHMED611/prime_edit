@@ -6,6 +6,8 @@
 #include <QStringList>
 #include <memory>
 
+#include "openoptions.h"
+
 class QLocalServer;
 class QLocalSocket;
 class QLockFile;
@@ -15,8 +17,11 @@ class QLockFile;
 // local socket; a later launch forwards its files there and exits.
 //
 // Protocol: the client sends one line {"v":1,"files":[absolute paths],
-// "goto":<int or null>} and the holder answers {"ack":true} after queueing the
-// opens. Lives in prime-edit-core so the suites can link it.
+// "goto":<int or null>,"column":<int>,"position":<int>,"language":<string>,
+// "readOnly":<bool>} and the holder answers {"ack":true} after queueing the
+// opens. The last four are optional and sent only when set: a holder built
+// before them ignores unknown keys and still opens the files at the line.
+// Lives in prime-edit-core so the suites can link it.
 class SingleInstance : public QObject
 {
     Q_OBJECT
@@ -37,13 +42,15 @@ public:
     bool listen();
 
     // Client side, before any event loop: blocks at most connectMs to connect
-    // and ackMs for the ack. gotoLine < 1 is sent as null. True on ack.
+    // and ackMs for the ack. A line < 1 is sent as null. True on ack.
+    static bool forward(const QStringList &absoluteFiles, const OpenOptions &options,
+                        int connectMs = 2000, int ackMs = 5000);
     static bool forward(const QStringList &absoluteFiles, int gotoLine,
                         int connectMs = 2000, int ackMs = 5000);
 
 signals:
-    // Emitted once per forwarded launch; gotoLine is 0 when none was given.
-    void openRequested(const QStringList &files, int gotoLine);
+    // Emitted once per forwarded launch; options.line is 0 when none was given.
+    void openRequested(const QStringList &files, const OpenOptions &options);
 
 protected:
     void connectNotify(const QMetaMethod &signal) override;
@@ -54,11 +61,11 @@ private:
     // delivered once a receiver connects, so an acked open is never dropped.
     struct PendingOpen {
         QStringList files;
-        int gotoLine = 0;
+        OpenOptions options;
     };
     QList<PendingOpen> m_pending;
 
-    void deliver(const QStringList &files, int gotoLine);
+    void deliver(const QStringList &files, const OpenOptions &options);
     void flushPending();
     void onNewConnection();
     void handleRequest(QLocalSocket *socket);

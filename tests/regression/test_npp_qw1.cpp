@@ -6,8 +6,11 @@
 
 #include "core/charactersets.h"
 #include "core/codectransforms.h"
+#include "core/commandline.h"
 #include "core/document.h"
+#include "core/singleinstance.h"
 #include "core/textcodec.h"
+#include "syntax/languagemanager.h"
 #include "core/texttransforms.h"
 #include "ui/editor.h"
 #include "ui/mainwindow.h"
@@ -15,11 +18,17 @@
 
 #include <QAction>
 #include <QClipboard>
+#include <QCommandLineParser>
 #include <QDialog>
 #include <QDir>
 #include <QPlainTextEdit>
+#include <QScopeGuard>
+#include <QTemporaryDir>
 #include <QTextDocument>
 #include <QTimer>
+
+#include <atomic>
+#include <thread>
 
 using namespace TextTransforms;
 using namespace CodecTransforms;
@@ -855,6 +864,139 @@ private slots:
         QCOMPARE(editor->toPlainText(), kArabic + QLatin1Char('\n'));
         QVERIFY(!editor->document()->isModified());
         QCOMPARE(regression::readBytes(path), cp1256);
+    }
+
+    // ---- group 9: command line ----------------------------------------------
+    void normalizeNppArguments()
+    {
+        QCOMPARE(CommandLine::normalizeNppArguments({"pe", "-n12", "-c5", "-p100", "-lpython", "-ro", "f.txt"}),
+                 (QStringList{"pe", "--line=12", "--column=5", "--position=100", "--language=python",
+                              "--read-only", "f.txt"}));
+        // Left alone: no value, a value of the wrong kind, the program name, after --
+        QCOMPARE(CommandLine::normalizeNppArguments({"-n12", "-n", "-nx", "-l", "-rox", "--", "-n3"}),
+                 (QStringList{"-n12", "-n", "-nx", "-l", "-rox", "--", "-n3"}));
+    }
+    void parseLaunchRequest_data()
+    {
+        QTest::addColumn<QStringList>("args");
+        QTest::addColumn<int>("line");
+        QTest::addColumn<int>("column");
+        QTest::addColumn<int>("position");
+        QTest::addColumn<QString>("language");
+        QTest::addColumn<bool>("readOnly");
+        QTest::newRow("npp syntax") << QStringList{"-n12", "-c5", "-lcpp", "-ro", "a.txt"}
+                                    << 12 << 5 << -1 << "cpp" << true;
+        QTest::newRow("long syntax") << QStringList{"--line=7", "--column", "2", "--position=9", "a.txt"}
+                                     << 7 << 2 << 9 << "" << false;
+        QTest::newRow("existing goto") << QStringList{"--goto", "4", "a.txt"} << 4 << 0 << -1 << "" << false;
+        QTest::newRow("short with space") << QStringList{"-n", "3", "a.txt"} << 3 << 0 << -1 << "" << false;
+        QTest::newRow("invalid values") << QStringList{"--line=0", "--column=-3", "--position=x", "a.txt"}
+                                        << 0 << 0 << -1 << "" << false;
+    }
+    void parseLaunchRequest()
+    {
+        QFETCH(QStringList, args);
+        QCommandLineParser parser;
+        CommandLine::addOptions(parser);
+        QVERIFY2(parser.parse(CommandLine::normalizeNppArguments(QStringList{"pe"} + args)),
+                 qPrintable(parser.errorText()));
+        const LaunchRequest request = CommandLine::request(parser);
+        QCOMPARE(request.files, QStringList{QFileInfo(QStringLiteral("a.txt")).absoluteFilePath()});
+        QTEST(request.options.line, "line");
+        QTEST(request.options.column, "column");
+        QTEST(request.options.position, "position");
+        QTEST(request.options.language, "language");
+        QTEST(request.options.readOnly, "readOnly");
+    }
+    void resolveLanguageName()
+    {
+        const LanguageManager &languages = LanguageManager::instance();
+        QCOMPARE(languages.resolveLanguageName(QStringLiteral("python")), QStringLiteral("Python"));
+        QCOMPARE(languages.resolveLanguageName(QStringLiteral("cpp")), QStringLiteral("C++"));
+        QCOMPARE(languages.resolveLanguageName(QStringLiteral("JavaScript")), QStringLiteral("JavaScript"));
+        QCOMPARE(languages.resolveLanguageName(QStringLiteral("normal")), QStringLiteral("Plain Text"));
+        QCOMPARE(languages.resolveLanguageName(QStringLiteral("bogus")), QString());
+        QCOMPARE(languages.resolveLanguageName(QString()), QString());
+    }
+    void applyOpenOptions()
+    {
+        regression::TempDir tmp;
+        const QString path = tmp.filePath(QStringLiteral("opts.txt"));
+        QVERIFY(regression::writeBytes(path, "first\nsecond line\nthird\n"));
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.openFile(path);
+        QVERIFY(editor);
+        OpenOptions options;
+        options.line = 2;
+        options.column = 4;
+        options.language = QStringLiteral("cpp");
+        options.readOnly = true;
+        mw.applyOpenOptions(editor, options);
+        QCOMPARE(editor->currentLine(), 2);
+        QCOMPARE(editor->currentColumn(), 4);
+        QCOMPARE(editor->language(), QStringLiteral("C++"));
+        QVERIFY(editor->document()->isReadOnly());
+        QVERIFY(editor->isReadOnly());
+
+        OpenOptions byPosition;
+        byPosition.position = 8;  // 0-based: "first\nse|cond"
+        byPosition.column = 99;   // clamped to the line
+        mw.applyOpenOptions(editor, byPosition);
+        QCOMPARE(editor->textCursor().position(), 8);
+        OpenOptions far;
+        far.line = 99;
+        far.column = 99;
+        mw.applyOpenOptions(editor, far);
+        QCOMPARE(editor->currentLine(), 2);  // a line past the end is ignored
+        QCOMPARE(regression::readBytes(path), QByteArray("first\nsecond line\nthird\n"));
+    }
+    // The extra options travel in the forwarding request; an old holder that
+    // does not know them still gets the files and the line.
+    void forwardCarriesOpenOptions()
+    {
+        // A short scratch XDG_RUNTIME_DIR (0700): the ctest one can exceed the
+        // 104-byte socket path limit, and the real one must never be reached.
+        QTemporaryDir runtime(QStringLiteral("/tmp/pe-rt-XXXXXX"));
+        QVERIFY(runtime.isValid());
+        QVERIFY(QFile::setPermissions(runtime.path(), QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner));
+        const QByteArray previousRuntime = qgetenv("XDG_RUNTIME_DIR");
+        qputenv("XDG_RUNTIME_DIR", runtime.path().toUtf8());
+        const auto restore = qScopeGuard([&] { qputenv("XDG_RUNTIME_DIR", previousRuntime); });
+        QVERIFY2(SingleInstance::serverName().startsWith(runtime.path() + "/"),
+                 qPrintable(SingleInstance::serverName()));
+
+        SingleInstance holder;
+        QVERIFY(holder.acquire());
+        QVERIFY(holder.listen());
+        QStringList received;
+        OpenOptions got;
+        QObject::connect(&holder, &SingleInstance::openRequested, &holder,
+                         [&](const QStringList &files, const OpenOptions &options) {
+                             received = files;
+                             got = options;
+                         }, Qt::QueuedConnection);
+        OpenOptions sent;
+        sent.line = 5;
+        sent.column = 3;
+        sent.position = 0;
+        sent.language = QStringLiteral("python");
+        sent.readOnly = true;
+        std::atomic<bool> done{false};
+        bool acked = false;
+        std::thread client([&] {
+            acked = SingleInstance::forward({QStringLiteral("/tmp/forwarded.txt")}, sent);
+            done = true;
+        });
+        QTRY_VERIFY_WITH_TIMEOUT(done.load(), 10000);
+        client.join();
+        QVERIFY(acked);
+        QTRY_COMPARE_WITH_TIMEOUT(received, QStringList{QStringLiteral("/tmp/forwarded.txt")}, 3000);
+        QCOMPARE(got.line, 5);
+        QCOMPARE(got.column, 3);
+        QCOMPARE(got.position, 0);
+        QCOMPARE(got.language, QStringLiteral("python"));
+        QVERIFY(got.readOnly);
     }
 
     // Qt's text controls claim some Ctrl letters on X11 (Ctrl+K deletes to the

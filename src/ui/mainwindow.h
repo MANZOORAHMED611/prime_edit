@@ -15,6 +15,7 @@
 #include "../core/remoteconnection.h"
 #include "../core/document.h"
 #include "transformscope.h"
+#include "../core/openoptions.h"
 #include <optional>
 
 namespace CodecTransforms { enum class HashAlgorithm; }
@@ -76,6 +77,10 @@ public:
 
     // Session
     QStringList openFilePaths() const;
+
+    // Command-line options for an opened file (-n -c -p -l -ro). Read-only
+    // lasts until the file is reloaded and is never saved in the session.
+    void applyOpenOptions(Editor *editor, const OpenOptions &options);
 
     // Informational message in the notification bar, with no Yes/No question.
     void showNotification(const QString &message);

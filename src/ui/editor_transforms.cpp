@@ -100,6 +100,29 @@ bool Editor::selectBetweenMatchingBraces()
     return true;
 }
 
+// Command-line navigation (-n -c -p). A column past the end of the line
+// stops at its end; a line or position past the document is ignored.
+void Editor::goToLineColumn(int line, int column)
+{
+    const QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(line - 1);
+    if (!block.isValid())
+        return;
+    QTextCursor cursor(block);
+    cursor.setPosition(block.position() + qBound(0, column - 1, block.length() - 1));
+    setTextCursor(cursor);
+    centerCursor();
+}
+
+void Editor::goToPosition(int position)
+{
+    if (position < 0 || position >= QPlainTextEdit::document()->characterCount())
+        return;
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(position);
+    setTextCursor(cursor);
+    centerCursor();
+}
+
 TextTransforms::CommentSyntax Editor::commentSyntax() const
 {
     return m_highlighter->commentSyntax();

@@ -303,9 +303,9 @@ void TestT16Instance::forwardAckedDuringStartupIsDelivered()
     QStringList received;
     int line = 0;
     QObject::connect(&holder, &SingleInstance::openRequested, &holder,
-                     [&](const QStringList &files, int gotoLine) {
+                     [&](const QStringList &files, const OpenOptions &options) {
                          received = files;
-                         line = gotoLine;
+                         line = options.line;
                      });
     QTRY_COMPARE_WITH_TIMEOUT(received, QStringList{file}, 3000);
     QCOMPARE(line, 3);

@@ -8,6 +8,7 @@
 #include "core/document.h"
 #include "core/searchengine.h"
 #include "core/texttransforms.h"
+#include "syntax/languagemanager.h"
 
 #include <QAction>
 #include <QApplication>
@@ -154,6 +155,26 @@ void MainWindow::pasteToBookmarkedLines()
     for (int i = 0; i < order.size(); ++i)
         moved.insert(order.at(i) + i * grow + 1);
     editor->setBookmarks(moved);
+}
+
+void MainWindow::applyOpenOptions(Editor *editor, const OpenOptions &options)
+{
+    if (!editor)
+        return;
+    if (!options.language.isEmpty()) {
+        const QString language = LanguageManager::instance().resolveLanguageName(options.language);
+        if (language.isEmpty())
+            showNotification(tr("Unknown language '%1' given with -l; the detected language is kept.")
+                                 .arg(options.language));
+        else
+            editor->setLanguage(language);
+    }
+    if (options.readOnly)
+        editor->document()->setReadOnly(true);
+    if (options.line > 0)
+        editor->goToLineColumn(options.line, qMax(1, options.column));
+    else if (options.position >= 0)
+        editor->goToPosition(options.position);
 }
 
 void MainWindow::inverseBookmark()
