@@ -36,6 +36,16 @@ QString trimBoth(const QString &text);
 QString eolToSpace(const QString &text);                   // keeps a trailing EOL
 QString trimBothAndEolToSpace(const QString &text);
 
+// Case, per code point, so surrogate pairs are handled and characters with no
+// case (Arabic, CJK, digits) pass through unchanged. Proper: a letter that
+// follows no letter or digit starts a word (an apostrophe inside a word does
+// not). Sentence: a sentence starts at the beginning, after . ! ? and after a
+// blank line. Blend keeps existing capitals; the plain form lowercases the rest.
+QString properCase(const QString &text, bool blend);
+QString sentenceCase(const QString &text, bool blend);
+QString invertCase(const QString &text);
+QString randomCase(const QString &text, quint32 seed);
+
 } // namespace TextTransforms
 
 #endif // TEXTTRANSFORMS_H

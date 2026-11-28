@@ -171,10 +171,6 @@ private slots:
     // Text case operations
     void toUpperCase();
     void toLowerCase();
-    void toTitleCase();
-    void toSentenceCase();
-    void toInvertCase();
-    void toRandomCase();
 
     // Search menu
     void find();
@@ -316,6 +312,7 @@ private:
     // a pure TextTransforms function through Editor::applyTextTransform.
     void setupLineOperationsMenu(QMenu *menu);
     void setupNppEditMenus();
+    void setupCaseMenu();
     QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,
                                 const TextTransform &fn,
                                 const QKeySequence &shortcut = QKeySequence());

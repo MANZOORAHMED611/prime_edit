@@ -11,6 +11,7 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QMenu>
+#include <QRandomGenerator>
 
 QAction *MainWindow::addTransformAction(QMenu *menu, const QString &text, TransformScope scope,
                                         const TextTransform &fn, const QKeySequence &shortcut)
@@ -90,13 +91,39 @@ void MainWindow::setupLineOperationsMenu(QMenu *menu)
     menu->addAction(tr("Sort Lines (Descending)"), this, &MainWindow::sortLinesDescending);
 }
 
-void MainWindow::setupNppEditMenus()
+// Notepad++ shortcuts: Alt+U, Alt+Shift+U, Ctrl+Alt+U, Ctrl+Alt+Shift+U,
+// Ctrl+Alt+I, Ctrl+Alt+Shift+I. None is taken in PrimeEdit. Proper Case
+// replaces the old Title Case item, which did the same with fewer rules.
+void MainWindow::setupCaseMenu()
 {
+    const TransformScope sel = TransformScope::Selection;
     QMenu *caseMenu = m_editMenu->addMenu(tr("&Convert Case"));
     caseMenu->addAction(tr("&UPPERCASE"), this, &MainWindow::toUpperCase);
     caseMenu->addAction(tr("&lowercase"), this, &MainWindow::toLowerCase);
-    caseMenu->addAction(tr("&Title Case"), this, &MainWindow::toTitleCase);
+    addTransformAction(caseMenu, tr("&Proper Case"), sel,
+                       [](const QString &t) { return TextTransforms::properCase(t, false); },
+                       QKeySequence(Qt::ALT | Qt::Key_U));
+    addTransformAction(caseMenu, tr("Proper Case (blend)"), sel,
+                       [](const QString &t) { return TextTransforms::properCase(t, true); },
+                       QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_U));
+    addTransformAction(caseMenu, tr("&Sentence case"), sel,
+                       [](const QString &t) { return TextTransforms::sentenceCase(t, false); },
+                       QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_U));
+    addTransformAction(caseMenu, tr("Sentence case (blend)"), sel,
+                       [](const QString &t) { return TextTransforms::sentenceCase(t, true); },
+                       QKeySequence(Qt::CTRL | Qt::ALT | Qt::SHIFT | Qt::Key_U));
+    addTransformAction(caseMenu, tr("&iNVERT cASE"), sel, TextTransforms::invertCase,
+                       QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_I));
+    addTransformAction(caseMenu, tr("ran&DOM cASE"), sel,
+                       [](const QString &t) {
+                           return TextTransforms::randomCase(t, QRandomGenerator::global()->generate());
+                       },
+                       QKeySequence(Qt::CTRL | Qt::ALT | Qt::SHIFT | Qt::Key_I));
+}
 
+void MainWindow::setupNppEditMenus()
+{
+    setupCaseMenu();
     QMenu *blankMenu = m_editMenu->addMenu(tr("&Blank Operations"));
     blankMenu->addAction(tr("Trim Trailing Space"), this, &MainWindow::trimTrailingSpace);
     blankMenu->addAction(tr("Trim Leading Space"), this, &MainWindow::trimLeadingWhitespace);

@@ -1699,14 +1699,6 @@ void MainWindow::toLowerCase()
     }
 }
 
-void MainWindow::toTitleCase()
-{
-    Editor *editor = currentEditor();
-    if (editor) {
-        editor->toTitleCase();
-    }
-}
-
 void MainWindow::find()
 {
     if (!m_searchDialog) {

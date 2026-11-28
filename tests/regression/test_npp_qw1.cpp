@@ -156,6 +156,79 @@ private slots:
         QCOMPARE(trimBothAndEolToSpace(in), trimmed);
     }
 
+    // ---- group 2: case -----------------------------------------------------
+    void properCase_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("force");
+        QTest::addColumn<QString>("blend");
+        QTest::newRow("empty") << "" << "" << "";
+        QTest::newRow("words") << "hello wORLD" << "Hello World" << "Hello WORLD";
+        QTest::newRow("apostrophe") << "don't STOP" << "Don't Stop" << "Don't STOP";
+        QTest::newRow("digit prefix") << "3rd place" << "3rd Place" << "3rd Place";
+        QTest::newRow("separators") << "foo_bar-baz" << "Foo_Bar-Baz" << "Foo_Bar-Baz";
+        QTest::newRow("lines crlf") << "a b\r\nc d" << "A B\r\nC D" << "A B\r\nC D";
+        QTest::newRow("accents") << QString("élan ÉCOLE") << QString("Élan École")
+                                 << QString("Élan ÉCOLE");
+        QTest::newRow("arabic") << kArabic << kArabic << kArabic;
+        // U+10428 DESERET SMALL LETTER LONG I uppercases to U+10400 (surrogate pairs)
+        QTest::newRow("non-bmp") << QString::fromUcs4(U"\U00010428\U00010428", 2)
+                                 << QString::fromUcs4(U"\U00010400\U00010428", 2)
+                                 << QString::fromUcs4(U"\U00010400\U00010428", 2);
+    }
+    void properCase()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, force);
+        QFETCH(QString, blend);
+        QCOMPARE(TextTransforms::properCase(in, false), force);
+        QCOMPARE(TextTransforms::properCase(in, true), blend);
+    }
+    void sentenceCase_data()
+    {
+        QTest::addColumn<QString>("in");
+        QTest::addColumn<QString>("force");
+        QTest::addColumn<QString>("blend");
+        QTest::newRow("empty") << "" << "" << "";
+        QTest::newRow("punctuation") << "hello WORLD. this IS it! ok? yes"
+                                     << "Hello world. This is it! Ok? Yes"
+                                     << "Hello WORLD. This IS it! Ok? Yes";
+        QTest::newRow("single newline continues") << "one\ntwo" << "One\ntwo" << "One\ntwo";
+        QTest::newRow("blank line starts") << "one\n\ntwo" << "One\n\nTwo" << "One\n\nTwo";
+        QTest::newRow("crlf blank line") << "one\r\n\r\ntwo" << "One\r\n\r\nTwo" << "One\r\n\r\nTwo";
+        QTest::newRow("cr blank line") << "one\r\rtwo" << "One\r\rTwo" << "One\r\rTwo";
+        QTest::newRow("digit first") << "3 apples. ok" << "3 Apples. Ok" << "3 Apples. Ok";
+        QTest::newRow("arabic") << kArabic + ". " + kArabic << kArabic + ". " + kArabic
+                                << kArabic + ". " + kArabic;
+    }
+    void sentenceCase()
+    {
+        QFETCH(QString, in);
+        QFETCH(QString, force);
+        QFETCH(QString, blend);
+        QCOMPARE(TextTransforms::sentenceCase(in, false), force);
+        QCOMPARE(TextTransforms::sentenceCase(in, true), blend);
+    }
+    void invertCase()
+    {
+        QCOMPARE(TextTransforms::invertCase(QString()), QString());
+        QCOMPARE(TextTransforms::invertCase(QStringLiteral("Hello, World 42")),
+                 QStringLiteral("hELLO, wORLD 42"));
+        QCOMPARE(TextTransforms::invertCase(kArabic), kArabic);
+        QCOMPARE(TextTransforms::invertCase(QString::fromUcs4(U"\U00010400", 1)),
+                 QString::fromUcs4(U"\U00010428", 1));
+    }
+    void randomCase()
+    {
+        const QString in = QStringLiteral("The quick brown fox, 123!\r\n") + kArabic;
+        const QString out = TextTransforms::randomCase(in, 7);
+        QCOMPARE(out.size(), in.size());
+        QCOMPARE(out.toLower(), in.toLower());
+        QVERIFY(out.endsWith(QStringLiteral(", 123!\r\n") + kArabic));
+        QCOMPARE(TextTransforms::randomCase(in, 7), out);  // deterministic per seed
+        QCOMPARE(TextTransforms::randomCase(QString(), 7), QString());
+    }
+
     // ---- editor adapter ---------------------------------------------------
     // A whole-document transform is one undo step and marks the file modified.
     void editorTransformIsOneUndoStep()

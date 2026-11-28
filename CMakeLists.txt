@@ -59,6 +59,7 @@ set(CORE_SOURCES
     src/core/textcodec.cpp
     src/core/singleinstance.cpp
     src/core/texttransforms.cpp
+    src/core/texttransforms_case.cpp
 )
 
 set(UI_SOURCES

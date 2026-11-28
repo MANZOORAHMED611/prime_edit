@@ -22,7 +22,6 @@
 #include <QMessageBox>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QRandomGenerator>
 #include <QRegularExpression>
 #include <QProcess>
 #include <QDesktopServices>
@@ -131,68 +130,6 @@ void MainWindow::spaceToTabLeading()
     cursor.select(QTextCursor::Document);
     cursor.insertText(newText);
     cursor.endEditBlock();
-}
-
-// Text case operations
-void MainWindow::toSentenceCase()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    if (selectedText.isEmpty()) return;
-
-    QString result = selectedText.toLower();
-    if (!result.isEmpty()) {
-        result[0] = result[0].toUpper();
-    }
-
-    cursor.insertText(result);
-}
-
-void MainWindow::toInvertCase()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    QString result;
-    for (const QChar &ch : selectedText) {
-        if (ch.isUpper()) {
-            result += ch.toLower();
-        } else if (ch.isLower()) {
-            result += ch.toUpper();
-        } else {
-            result += ch;
-        }
-    }
-
-    cursor.insertText(result);
-}
-
-void MainWindow::toRandomCase()
-{
-    Editor *editor = currentEditor();
-    if (!editor) return;
-
-    QTextCursor cursor = editor->textCursor();
-    QString selectedText = cursor.selectedText();
-
-    QString result;
-    for (const QChar &ch : selectedText) {
-        if (ch.isLetter()) {
-            bool upper = QRandomGenerator::global()->bounded(2) == 1;
-            result += upper ? ch.toUpper() : ch.toLower();
-        } else {
-            result += ch;
-        }
-    }
-
-    cursor.insertText(result);
 }
 
 // View operations
