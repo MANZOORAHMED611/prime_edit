@@ -459,7 +459,7 @@ make -j$(nproc)
                     <tr><td>Go</td><td>gopls</td><td><code>go install golang.org/x/tools/gopls@latest</code></td></tr>
                 </tbody>
             </table>
-            <p>For other languages, create <code>~/.config/PrimeEdit/lsp-servers.json</code>:</p>
+            <p>For other languages, create <code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code>:</p>
             <pre><code>{
   "python": {"command": "pylsp", "args": []},
   "c++": {"command": "clangd", "args": ["--background-index"]},
@@ -574,7 +574,7 @@ make -j$(nproc)
             <p>Via <strong>Macro &gt; Run Multiple Times</strong>: enter a count, or choose "Run until end of file" to repeat the macro until the cursor reaches the last line.</p>
 
             <h3>Save &amp; Load</h3>
-            <p>Macros can be saved to disk and loaded later. Saved macros persist across restarts via <code>~/.config/PrimeEdit/macros.json</code>.</p>
+            <p>Macros can be saved to disk and loaded later. Saved macros persist across restarts via <code>~/.config/PrimeEdit/PrimeEdit/macros.json</code>.</p>
         </section>
 
         <div class="divider"></div>
@@ -607,7 +607,7 @@ make -j$(nproc)
             <h3>When a save fails</h3>
             <ul>
                 <li>An error dialog names the file and the reason, and says the file on disk is unchanged.</li>
-                <li>If an in-place write failed and the original contents could not be written back either, the dialog says instead that the write failed part-way and the file may be incomplete. When PrimeEdit could keep a copy of the previous contents, the dialog gives its path, in <code>~/.local/share/PrimeEdit/sessions/unsaved.recovered/</code>.</li>
+                <li>If an in-place write failed and the original contents could not be written back either, the dialog says instead that the write failed part-way and the file may be incomplete. When PrimeEdit could keep a copy of the previous contents, the dialog gives its path, in <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.recovered/</code>.</li>
                 <li>The tab stays modified. Undo does not make it look saved, so the close prompt still asks about it.</li>
                 <li>A file without write permission (for example mode 0444) cannot be saved. Use <strong>Save As</strong> to write a copy elsewhere.</li>
             </ul>
@@ -701,8 +701,8 @@ make -j$(nproc)
                 <li>The list of open files, with their bookmarks, folds and the active tab, is recorded within 5 seconds of any change, and nothing is written while nothing changes. After a crash, a kill or a power loss, the files you had open are reopened on the next start when <strong>Restore previous session on startup</strong> is on. Drafts are cached as described above, unchanged.</li>
                 <li>The cache is restored on <strong>every</strong> start, also when you open PrimeEdit with files on the command line. <strong>Restore previous session on startup</strong> controls only whether the files you had open are reopened.</li>
                 <li>If a draft's original file can no longer be opened, or opens read-only (for example, its bytes no longer decode exactly), the draft is restored in a new untitled tab and the notification bar names the file. A read-only file stays open in its own tab, showing what is on disk. <strong>Save As</strong> from the draft's tab suggests the original path.</li>
-                <li>A cache entry that cannot be read is moved to <code>~/.local/share/PrimeEdit/sessions/unsaved.corrupt/</code> and kept, never deleted.</li>
-                <li>If an in-place save fails and the file's original contents cannot be written back, a copy of those contents is kept in <code>~/.local/share/PrimeEdit/sessions/unsaved.recovered/</code>, named after the file. PrimeEdit never deletes it.</li>
+                <li>A cache entry that cannot be read is moved to <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.corrupt/</code> and kept, never deleted.</li>
+                <li>If an in-place save fails and the file's original contents cannot be written back, a copy of those contents is kept in <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.recovered/</code>, named after the file. PrimeEdit never deletes it.</li>
             </ul>
 
             <h3>Opening files while PrimeEdit is running</h3>
@@ -732,7 +732,7 @@ make -j$(nproc)
 
             <h3>Plugin Locations</h3>
             <ul>
-                <li><strong>User plugins:</strong> <code>~/.config/PrimeEdit/plugins/</code></li>
+                <li><strong>User plugins:</strong> <code>~/.config/PrimeEdit/PrimeEdit/plugins/</code></li>
                 <li><strong>System-wide plugins:</strong> <code>/usr/lib/prime-edit/plugins/</code></li>
             </ul>
 
@@ -761,15 +761,15 @@ make -j$(nproc)
             <table>
                 <thead><tr><th>File</th><th>Location</th></tr></thead>
                 <tbody>
-                    <tr><td>Editor settings</td><td><code>~/.config/PrimeEdit/settings.json</code></td></tr>
-                    <tr><td>LSP server config</td><td><code>~/.config/PrimeEdit/lsp-servers.json</code></td></tr>
-                    <tr><td>Saved macros</td><td><code>~/.config/PrimeEdit/macros.json</code></td></tr>
-                    <tr><td>AI endpoint config</td><td><code>~/.config/PrimeEdit/eval-endpoint.json</code></td></tr>
-                    <tr><td>User plugins</td><td><code>~/.config/PrimeEdit/plugins/</code></td></tr>
-                    <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/sessions/</code></td></tr>
-                    <tr><td>Unsaved document cache</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved/</code></td></tr>
-                    <tr><td>Unreadable cache entries (kept)</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved.corrupt/</code></td></tr>
-                    <tr><td>Previous contents of a file an in-place save damaged (kept)</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved.recovered/</code></td></tr>
+                    <tr><td>Editor settings</td><td><code>~/.config/PrimeEdit/PrimeEdit/settings.json</code></td></tr>
+                    <tr><td>LSP server config</td><td><code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code></td></tr>
+                    <tr><td>Saved macros</td><td><code>~/.config/PrimeEdit/PrimeEdit/macros.json</code></td></tr>
+                    <tr><td>AI endpoint config</td><td><code>~/.config/PrimeEdit/PrimeEdit/eval-endpoint.json</code></td></tr>
+                    <tr><td>User plugins</td><td><code>~/.config/PrimeEdit/PrimeEdit/plugins/</code></td></tr>
+                    <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/</code></td></tr>
+                    <tr><td>Unsaved document cache</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved/</code></td></tr>
+                    <tr><td>Unreadable cache entries (kept)</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.corrupt/</code></td></tr>
+                    <tr><td>Previous contents of a file an in-place save damaged (kept)</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved.recovered/</code></td></tr>
                 </tbody>
             </table>
 
@@ -790,7 +790,7 @@ make -j$(nproc)
             </ul>
 
             <div class="info-box note">
-                Settings are saved to <code>~/.config/PrimeEdit/settings.json</code> and take effect immediately. Click <strong>Apply</strong> to see changes without closing the dialog. To reset everything, delete the settings file and restart PrimeEdit.
+                Settings are saved to <code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> and take effect immediately. Click <strong>Apply</strong> to see changes without closing the dialog. To reset everything, delete the settings file and restart PrimeEdit.
             </div>
         </section>
 

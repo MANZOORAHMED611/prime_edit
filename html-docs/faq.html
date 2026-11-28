@@ -400,7 +400,7 @@
             <div class="faq-item">
                 <div class="faq-question">How do I set up LSP for my language?</div>
                 <div class="faq-answer">
-                    <p>Install the language server for your language (e.g., <code>sudo apt install clangd</code> for C++). PrimeEdit has built-in configurations for C++, Python, JavaScript/TypeScript, Rust, and Go. For other languages, create <code>~/.config/PrimeEdit/lsp-servers.json</code> with the server command and arguments.</p>
+                    <p>Install the language server for your language (e.g., <code>sudo apt install clangd</code> for C++). PrimeEdit has built-in configurations for C++, Python, JavaScript/TypeScript, Rust, and Go. For other languages, create <code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code> with the server command and arguments.</p>
                 </div>
             </div>
 
@@ -452,7 +452,7 @@
             <div class="faq-item">
                 <div class="faq-question">Where are plugins stored?</div>
                 <div class="faq-answer">
-                    <p><code>~/.config/PrimeEdit/plugins/</code> for user plugins, <code>/usr/lib/prime-edit/plugins/</code> for system-wide plugins.</p>
+                    <p><code>~/.config/PrimeEdit/PrimeEdit/plugins/</code> for user plugins, <code>/usr/lib/prime-edit/plugins/</code> for system-wide plugins.</p>
                 </div>
             </div>
 
@@ -533,21 +533,21 @@
             <div class="faq-item">
                 <div class="faq-question">Where are settings stored?</div>
                 <div class="faq-answer">
-                    <p><code>~/.config/PrimeEdit/settings.json</code> &mdash; all editor preferences, theme selection, file defaults. It is written atomically. If it cannot be read, PrimeEdit copies it to <code>settings.json.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, keeps the original, uses defaults, and writes nothing until you change a setting. <code>session.json</code>, named sessions and <code>macros.json</code> are handled the same way, except that <code>session.json</code> is written again only once you open or close a file, or change a bookmark, a fold or the active tab; moving or resizing the window alone does not count.</p>
+                    <p><code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> &mdash; all editor preferences, theme selection, file defaults. It is written atomically. If it cannot be read, PrimeEdit copies it to <code>settings.json.corrupt-&lt;yyyyMMdd-hhmmss&gt;</code>, keeps the original, uses defaults, and writes nothing until you change a setting. <code>session.json</code>, named sessions and <code>macros.json</code> are handled the same way, except that <code>session.json</code> is written again only once you open or close a file, or change a bookmark, a fold or the active tab; moving or resizing the window alone does not count.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">Where are sessions stored?</div>
                 <div class="faq-answer">
-                    <p><code>~/.local/share/PrimeEdit/sessions/</code> &mdash; open tabs, cursor positions, bookmarks, fold state. Unsaved documents are cached in the <code>unsaved/</code> subdirectory; an entry that cannot be read is moved to <code>unsaved.corrupt/</code> and kept.</p>
+                    <p><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/</code> &mdash; open tabs, cursor positions, bookmarks, fold state. Unsaved documents are cached in the <code>unsaved/</code> subdirectory; an entry that cannot be read is moved to <code>unsaved.corrupt/</code> and kept.</p>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">How do I reset all settings to defaults?</div>
                 <div class="faq-answer">
-                    <p>Open <strong>Settings &gt; Preferences</strong> and click <strong>Reset to Defaults</strong>. Or delete <code>~/.config/PrimeEdit/settings.json</code> and restart.</p>
+                    <p>Open <strong>Settings &gt; Preferences</strong> and click <strong>Reset to Defaults</strong>. Or delete <code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> and restart.</p>
                 </div>
             </div>
         </div>
@@ -562,8 +562,8 @@
                     <p>Try these steps:</p>
                     <ul>
                         <li>Run from terminal to see error messages: <code>./build/PrimeEdit</code></li>
-                        <li>Move settings aside: <code>mv ~/.config/PrimeEdit/settings.json ~/settings.json.bak</code></li>
-                        <li>Do not delete <code>~/.local/share/PrimeEdit/sessions/</code>: its <code>unsaved/</code> folder holds your unsaved drafts. Move it aside instead if you must.</li>
+                        <li>Move settings aside: <code>mv ~/.config/PrimeEdit/PrimeEdit/settings.json ~/settings.json.bak</code></li>
+                        <li>Do not delete <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/</code>: its <code>unsaved/</code> folder holds your unsaved drafts. Move it aside instead if you must.</li>
                         <li>Verify Qt is installed: <code>qmake6 --version</code> or <code>qmake --version</code></li>
                     </ul>
                 </div>
@@ -586,7 +586,7 @@
             <div class="faq-item">
                 <div class="faq-question">Theme changes don't apply</div>
                 <div class="faq-answer">
-                    <p>Theme changes should apply instantly. If they don't: (1) make sure you clicked <strong>Apply</strong> or <strong>OK</strong> in Preferences, (2) try restarting PrimeEdit, (3) delete <code>~/.config/PrimeEdit/settings.json</code> and restart to reset to defaults.</p>
+                    <p>Theme changes should apply instantly. If they don't: (1) make sure you clicked <strong>Apply</strong> or <strong>OK</strong> in Preferences, (2) try restarting PrimeEdit, (3) delete <code>~/.config/PrimeEdit/PrimeEdit/settings.json</code> and restart to reset to defaults.</p>
                 </div>
             </div>
         </div>

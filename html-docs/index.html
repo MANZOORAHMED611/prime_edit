@@ -1375,7 +1375,7 @@ make -j$(nproc)
                 <div class="feature-card">
                     <div class="card-icon">&#9881;</div>
                     <h3>Server Configuration</h3>
-                    <p>Per-language server config via <code>~/.config/PrimeEdit/lsp-servers.json</code>. Built-in support for 5 servers.</p>
+                    <p>Per-language server config via <code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code>. Built-in support for 5 servers.</p>
                 </div>
             </div>
 
@@ -1446,7 +1446,7 @@ make -j$(nproc)
             </ol>
 
             <h3>Endpoint Configuration</h3>
-            <p>Stored in <code>~/.config/PrimeEdit/eval-endpoint.json</code>. Configurable via <strong>Tools &gt; Configure Endpoint</strong>.</p>
+            <p>Stored in <code>~/.config/PrimeEdit/PrimeEdit/eval-endpoint.json</code>. Configurable via <strong>Tools &gt; Configure Endpoint</strong>.</p>
             <table>
                 <thead><tr><th>Field</th><th>Default</th><th>Description</th></tr></thead>
                 <tbody>
@@ -1542,7 +1542,7 @@ make -j$(nproc)
                 <div class="feature-card">
                     <div class="card-icon">&#9881;</div>
                     <h3>Plugin Management</h3>
-                    <p>Plugin management dialog with enable/disable toggles. Plugins are loaded from <code>~/.config/PrimeEdit/plugins/</code> and <code>/usr/lib/prime-edit/plugins/</code>.</p>
+                    <p>Plugin management dialog with enable/disable toggles. Plugins are loaded from <code>~/.config/PrimeEdit/PrimeEdit/plugins/</code> and <code>/usr/lib/prime-edit/plugins/</code>.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-icon">&#128737;</div>
@@ -1590,7 +1590,7 @@ make -j$(nproc)
                 <strong>Signature feature:</strong> This is the Notepad++ behavior users love most. Untitled and modified documents survive application close without prompting.
             </div>
             <ul>
-                <li><strong>Untitled tabs with content</strong> are silently serialized to <code>~/.local/share/PrimeEdit/sessions/unsaved/</code></li>
+                <li><strong>Untitled tabs with content</strong> are silently serialized to <code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved/</code></li>
                 <li><strong>Named files with unsaved changes</strong> have their modified content cached alongside the file path</li>
                 <li><strong>No save prompt on quit</strong> &mdash; everything is persisted. The prompt only appears for explicit tab close (<kbd>Ctrl</kbd>+<kbd>W</kbd>)</li>
                 <li><strong>Recovery dialog</strong> on startup if crash-recovery files are detected</li>
@@ -1785,14 +1785,14 @@ make -j$(nproc)
             <table>
                 <thead><tr><th>File</th><th>Location</th><th>Purpose</th></tr></thead>
                 <tbody>
-                    <tr><td>LSP servers</td><td><code>~/.config/PrimeEdit/lsp-servers.json</code></td><td>Per-language LSP server command and arguments</td></tr>
-                    <tr><td>Eval endpoint</td><td><code>~/.config/PrimeEdit/eval-endpoint.json</code></td><td>LLM endpoint URL, model, API key, system prompt</td></tr>
-                    <tr><td>Remote connections</td><td><code>~/.config/PrimeEdit/remote-connections.json</code></td><td>Saved SSH connection profiles</td></tr>
-                    <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/sessions/</code></td><td>Open tabs, cursor positions, fold state, bookmarks</td></tr>
-                    <tr><td>Unsaved cache</td><td><code>~/.local/share/PrimeEdit/sessions/unsaved/</code></td><td>Persistent unsaved document content</td></tr>
-                    <tr><td>Recovery data</td><td><code>~/.local/share/PrimeEdit/recovery/</code></td><td>Auto-save crash recovery files (5s interval)</td></tr>
-                    <tr><td>Custom themes</td><td><code>~/.local/share/PrimeEdit/themes/</code></td><td>User-created JSON theme files</td></tr>
-                    <tr><td>Plugins</td><td><code>~/.config/PrimeEdit/plugins/</code></td><td>User-installed plugin shared libraries</td></tr>
+                    <tr><td>LSP servers</td><td><code>~/.config/PrimeEdit/PrimeEdit/lsp-servers.json</code></td><td>Per-language LSP server command and arguments</td></tr>
+                    <tr><td>Eval endpoint</td><td><code>~/.config/PrimeEdit/PrimeEdit/eval-endpoint.json</code></td><td>LLM endpoint URL, model, API key, system prompt</td></tr>
+                    <tr><td>Remote connections</td><td><code>~/.config/PrimeEdit/PrimeEdit.conf</code></td><td>Saved SSH connection profiles</td></tr>
+                    <tr><td>Session data</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/</code></td><td>Open tabs, cursor positions, fold state, bookmarks</td></tr>
+                    <tr><td>Unsaved cache</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/sessions/unsaved/</code></td><td>Persistent unsaved document content</td></tr>
+                    <tr><td>Recovery data</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/recovery/</code></td><td>Auto-save crash recovery files (5s interval)</td></tr>
+                    <tr><td>Custom themes</td><td><code>~/.local/share/PrimeEdit/PrimeEdit/themes/</code></td><td>User-created JSON theme files</td></tr>
+                    <tr><td>Plugins</td><td><code>~/.config/PrimeEdit/PrimeEdit/plugins/</code></td><td>User-installed plugin shared libraries</td></tr>
                 </tbody>
             </table>
         </section>

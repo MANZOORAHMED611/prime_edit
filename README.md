@@ -65,7 +65,7 @@ PrimeEdit fills that gap — and goes further.
 - Go-to-definition (F12), find references (Shift+F12), rename symbol (F2)
 - Hover documentation, inline diagnostics (wave underlines)
 - LSP-powered completions replace word-list completions when a server is active
-- Per-language server configuration via `~/.config/PrimeEdit/lsp-servers.json`
+- Per-language server configuration via `~/.config/PrimeEdit/PrimeEdit/lsp-servers.json`
 
 ### Git Integration
 - Gutter indicators: green (added), yellow (modified), red (deleted)
@@ -82,7 +82,7 @@ PrimeEdit fills that gap — and goes further.
 - C++ shared library API with full EditorAPI (buffer, file, UI, settings)
 - Event hooks: file opened/saved/closed, text changed, cursor moved
 - Plugin management dialog, crash isolation per plugin
-- Plugin directories: `~/.config/PrimeEdit/plugins/`
+- Plugin directories: `~/.config/PrimeEdit/PrimeEdit/plugins/`
 
 ### Remote File Editing
 - SSH/SCP-based connection manager
@@ -152,7 +152,7 @@ make -j$(nproc)
 
 ## LSP Setup
 
-Create `~/.config/PrimeEdit/lsp-servers.json`:
+Create `~/.config/PrimeEdit/PrimeEdit/lsp-servers.json`:
 
 ```json
 {
@@ -273,11 +273,11 @@ Select any text and press **Ctrl+Shift+E** to send it to a configured LLM endpoi
 
 | File | Location | Purpose |
 |------|----------|---------|
-| LSP servers | `~/.config/PrimeEdit/lsp-servers.json` | Language server commands |
-| Eval endpoint | `~/.config/PrimeEdit/eval-endpoint.json` | LLM endpoint for AI editing |
-| Session data | `~/.local/share/PrimeEdit/sessions/` | Open tabs, cursor positions |
-| Custom themes | `~/.local/share/PrimeEdit/themes/` | JSON theme files |
-| Plugins | `~/.config/PrimeEdit/plugins/` | Plugin shared libraries |
+| LSP servers | `~/.config/PrimeEdit/PrimeEdit/lsp-servers.json` | Language server commands |
+| Eval endpoint | `~/.config/PrimeEdit/PrimeEdit/eval-endpoint.json` | LLM endpoint for AI editing |
+| Session data | `~/.local/share/PrimeEdit/PrimeEdit/sessions/` | Open tabs, cursor positions |
+| Custom themes | `~/.local/share/PrimeEdit/PrimeEdit/themes/` | JSON theme files |
+| Plugins | `~/.config/PrimeEdit/PrimeEdit/plugins/` | Plugin shared libraries |
 
 ---
 
