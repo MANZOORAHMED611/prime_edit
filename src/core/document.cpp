@@ -271,10 +271,12 @@ SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
 
 SaveResult Document::writeAtomic(const QString &path, const QByteArray &data, WriteMode mode)
 {
-    // QSaveFile::commit() fdatasyncs the temp file before the rename (checked
-    // with strace on Qt 6.2.4), so no extra fsync is needed here.
+    // Unbuffered: QSaveFile's 16 KiB buffer hides a failed write(2) and commits
+    // the truncated temp file (spec P1.12). Qt's commit() calls fdatasync but
+    // does not check the result (Qt 6.2.4, verified with an LD_PRELOAD shim),
+    // so this helper syncs and checks itself before the rename.
     QSaveFile file(path);
-    if (!file.open(QIODevice::WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Unbuffered)) {
         m_lastError = file.errorString();
         const bool exists = QFileInfo::exists(path);
         // Only after the user confirmed, and through writeDirect, which never
@@ -287,7 +289,16 @@ SaveResult Document::writeAtomic(const QString &path, const QByteArray &data, Wr
         m_directWriteAvailable = exists && !targetWritable(dir);
         return SaveResult::IoError;
     }
-    if (file.write(data) != data.size() || !file.commit()) {
+    // Qt sets no error after a short write ("Unknown error"), so the message
+    // comes from errno, captured before anything else can change it.
+    errno = 0;
+    if (file.write(data) != data.size() || ::fdatasync(file.handle()) != 0) {
+        const int error = errno;
+        m_lastError = error != 0 ? qt_error_string(error) : file.errorString();
+        file.cancelWriting();
+        return SaveResult::IoError;
+    }
+    if (!file.commit()) {
         m_lastError = file.errorString();
         file.cancelWriting();
         return SaveResult::IoError;
@@ -362,9 +373,9 @@ void Document::restoreOriginal(int fd, const QString &path, const QByteArray &or
         + QUuid::createUuid().toString(QUuid::WithoutBraces);
     if (!QDir().mkpath(dir) || !FileUtils::writeFileAtomic(copy, original))
         return;
-    // writeFileAtomic's buffered QSaveFile can commit a short write and still
-    // report success (seen under RLIMIT_FSIZE on Qt 6.2), so check the size
-    // before telling the user the old contents are safe there.
+    // writeFileAtomic reports a failed write or sync (spec P1.12); the size
+    // check stays as a cheap second proof before telling the user the old
+    // contents are safe there.
     if (QFileInfo(copy).size() == original.size())
         m_recoveryCopyPath = copy;
     else
