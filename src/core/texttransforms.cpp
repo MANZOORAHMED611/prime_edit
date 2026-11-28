@@ -213,6 +213,12 @@ QString trimBothAndEolToSpace(const QString &text)
     return eolToSpace(trimBoth(text));
 }
 
+QString formatDateTime(const QDateTime &when, const QLocale &locale, bool longFormat)
+{
+    return locale.toString(when.time(), QLocale::ShortFormat) + QLatin1Char(' ')
+           + locale.toString(when.date(), longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+}
+
 QString tabsToSpaces(const QString &text, int tabWidth)
 {
     const int width = qMax(1, tabWidth);

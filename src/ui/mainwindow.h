@@ -320,6 +320,10 @@ private:
     void setupEolMenu();
     void setupSortMenu(QMenu *menu);
     void setupCommentAndIndentMenus();
+    void setupInsertAndClipboardMenus();
+    void insertDateTime(bool longFormat);
+    enum class PathPart { FullPath, FileName, Directory };
+    void copyPathToClipboard(PathPart part);
     // Null, with a notification, when the current language has no comments.
     Editor *commentableEditor(bool needBlock);
     QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,

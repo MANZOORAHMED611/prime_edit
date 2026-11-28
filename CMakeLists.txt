@@ -69,6 +69,7 @@ set(UI_SOURCES
     src/ui/mainwindow_extended.cpp
     src/ui/mainwindow_npp.cpp
     src/ui/mainwindow_npp_format.cpp
+    src/ui/mainwindow_npp_tools.cpp
     src/ui/tabwidget.cpp
     src/ui/editor.cpp
     src/ui/editor_transforms.cpp

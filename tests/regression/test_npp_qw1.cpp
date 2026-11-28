@@ -9,6 +9,9 @@
 #include "ui/editor.h"
 #include "ui/mainwindow.h"
 
+#include <QAction>
+#include <QClipboard>
+#include <QDir>
 #include <QTextDocument>
 
 using namespace TextTransforms;
@@ -21,6 +24,18 @@ const QString kArabic = QStringLiteral("مرحبا");  // "marhaban"
 QTextDocument *textDoc(Editor &editor)
 {
     return static_cast<QPlainTextEdit &>(editor).document();
+}
+
+// Triggers the menu action with this exact text; false when there is none.
+bool trigger(MainWindow &mw, const QString &text)
+{
+    for (QAction *action : mw.findChildren<QAction *>()) {
+        if (action->text() == text) {
+            action->trigger();
+            return true;
+        }
+    }
+    return false;
 }
 
 } // namespace
@@ -481,6 +496,48 @@ private slots:
         QCOMPARE(editor.commentSyntax().blockEnd, QStringLiteral("*/"));
         editor.setLanguage(QStringLiteral("Python"));
         QCOMPARE(editor.commentSyntax().line, QStringLiteral("#"));
+    }
+
+    // ---- group 5: insert and clipboard ------------------------------------
+    // Notepad++ order: time (no seconds), then the short or long date.
+    void formatDateTime()
+    {
+        const QDateTime when(QDate(2026, 11, 28), QTime(14, 5, 9));
+        const QLocale us(QLocale::English, QLocale::UnitedStates);
+        const QLocale de(QLocale::German, QLocale::Germany);
+        QCOMPARE(TextTransforms::formatDateTime(when, us, false), QStringLiteral("2:05 PM 11/28/26"));
+        QCOMPARE(TextTransforms::formatDateTime(when, us, true),
+                 QStringLiteral("2:05 PM Saturday, November 28, 2026"));
+        QCOMPARE(TextTransforms::formatDateTime(when, de, false), QStringLiteral("14:05 28.11.26"));
+        QCOMPARE(TextTransforms::formatDateTime(when, de, true),
+                 QStringLiteral("14:05 Samstag, 28. November 2026"));
+    }
+    void copyPathsAndInsertDateTime()
+    {
+        regression::TempDir tmp;
+        QVERIFY(QDir(tmp.path()).mkdir(QStringLiteral("sub")));
+        const QString path = tmp.filePath(QStringLiteral("sub/note.txt"));
+        QVERIFY(regression::writeBytes(path, "x"));
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.openFile(path);
+        QVERIFY(editor);
+
+        QVERIFY(trigger(mw, QStringLiteral("Current Full File Path to Clipboard")));
+        QCOMPARE(QGuiApplication::clipboard()->text(), path);
+        QVERIFY(trigger(mw, QStringLiteral("Current Filename to Clipboard")));
+        QCOMPARE(QGuiApplication::clipboard()->text(), QStringLiteral("note.txt"));
+        QVERIFY(trigger(mw, QStringLiteral("Current Dir. Path to Clipboard")));
+        QCOMPARE(QGuiApplication::clipboard()->text(), tmp.filePath(QStringLiteral("sub")));
+
+        editor->moveCursor(QTextCursor::End);
+        QVERIFY(trigger(mw, QStringLiteral("Date Time (long)")));
+        const QString expectedDate = QLocale::system().toString(QDate::currentDate(), QLocale::LongFormat);
+        QVERIFY2(editor->toPlainText().startsWith(QLatin1Char('x')), qPrintable(editor->toPlainText()));
+        QVERIFY2(editor->toPlainText().endsWith(expectedDate), qPrintable(editor->toPlainText()));
+        QVERIFY(editor->document()->isModified());
+        editor->undo();
+        QCOMPARE(editor->toPlainText(), QStringLiteral("x"));
     }
 
     // Qt's text controls claim some Ctrl letters on X11 (Ctrl+K deletes to the
