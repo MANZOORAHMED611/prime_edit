@@ -16,7 +16,8 @@ class LargeFileReader;
 enum class SaveResult { Ok, PartialView, EncodeLossy, ReadOnly, IoError };
 
 // Atomic is the default. AllowDirect is passed only after the user confirms a
-// non-atomic write, because a direct write can truncate the original on failure.
+// non-atomic write: a direct write restores the original when it fails, but a
+// crash in the middle of one can still leave the file mixed.
 enum class WriteMode { Atomic, AllowDirect };
 
 class Document : public QObject
@@ -160,8 +161,11 @@ private:
     bool m_mixedLineEndings = false;
     bool m_decodedLossily = false;
     QString m_forcedEncoding;  // set only while reloadWithEncoding runs load()
+    DiskState m_lastDiskState = DiskState::Unchanged;
+    QString m_recoveryCopyPath;
     static qint64 s_mediumThreshold;
     static qint64 s_largeThreshold;
+    static bool s_reserveSpace;
 
     QString decodeLoaded(const QByteArray &data);
     QString adoptLineEndings(const QString &text);
@@ -169,6 +173,8 @@ private:
     SaveResult refusalFor() const;
     SaveResult writeAtomic(const QString &path, const QByteArray &data, WriteMode mode);
     SaveResult writeDirect(const QString &path, const QByteArray &data);
+    bool reserveSpace(int fd, const QString &path, const QByteArray &original, qint64 size);
+    void restoreOriginal(int fd, const QString &path, const QByteArray &original);
     void finishSave(const QString &path, const QByteArray &written);
     static LineEnding detectLineEnding(const QString &text, bool *mixed);
     static LineEnding defaultLineEnding();

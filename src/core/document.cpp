@@ -1,6 +1,7 @@
 #include "document.h"
 #include "charsetdetector.h"
 #include "largefile.h"
+#include "utils/fileutils.h"
 #include "utils/settings.h"
 #include <QApplication>
 #include <QFile>
@@ -11,6 +12,8 @@
 #include <QSaveFile>
 #include "textcodec.h"
 
+#include <cerrno>
+#include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -169,6 +172,39 @@ bool targetWritable(const QString &path)
     return ::access(QFile::encodeName(path).constData(), W_OK) == 0;
 }
 
+// Writes all of data from offset 0, looping on short writes. On false, errno
+// says why.
+bool writeAllFromStart(int fd, const QByteArray &data)
+{
+    qint64 done = 0;
+    while (done < data.size()) {
+        const ssize_t n = ::pwrite(fd, data.constData() + done,
+                                   static_cast<size_t>(data.size() - done), static_cast<off_t>(done));
+        if (n < 0 && errno == EINTR)
+            continue;
+        if (n <= 0) {
+            if (n == 0)
+                errno = EIO;
+            return false;
+        }
+        done += n;
+    }
+    return true;
+}
+
+// The file holds exactly data, on disk.
+bool overwriteWith(int fd, const QByteArray &data)
+{
+    return writeAllFromStart(fd, data) && ::ftruncate(fd, static_cast<off_t>(data.size())) == 0
+        && ::fsync(fd) == 0;
+}
+
+// Closes a POSIX descriptor on scope exit.
+struct FdCloser {
+    int fd;
+    ~FdCloser() { ::close(fd); }
+};
+
 } // namespace
 
 SaveResult Document::save(WriteMode mode)
@@ -195,6 +231,8 @@ SaveResult Document::saveAs(const QString &filePath, WriteMode mode)
 {
     m_directWriteAvailable = false;
     m_lastSaveWasDirect = false;
+    m_lastDiskState = DiskState::Unchanged;
+    m_recoveryCopyPath.clear();
     const SaveResult refusal = refusalFor();
     if (refusal != SaveResult::Ok) {
         m_lastError = refusal == SaveResult::PartialView
@@ -236,16 +274,17 @@ SaveResult Document::writeAtomic(const QString &path, const QByteArray &data, Wr
     // QSaveFile::commit() fdatasyncs the temp file before the rename (checked
     // with strace on Qt 6.2.4), so no extra fsync is needed here.
     QSaveFile file(path);
-    // Only after the user confirmed: QSaveFile then writes in place when it
-    // cannot create its temp file next to the target.
-    file.setDirectWriteFallback(mode == WriteMode::AllowDirect);
     if (!file.open(QIODevice::WriteOnly)) {
         m_lastError = file.errorString();
+        const bool exists = QFileInfo::exists(path);
+        // Only after the user confirmed, and through writeDirect, which never
+        // truncates before the new bytes are written (spec P1.11 F1).
+        if (exists && mode == WriteMode::AllowDirect)
+            return writeDirect(path, data);
         // Offered only when the directory refused the temp file and the target
-        // (already checked writable) exists. Never after ENOSPC or another
-        // error, where a direct write would truncate the original.
+        // (already checked writable) exists.
         const QString dir = QFileInfo(path).absolutePath();
-        m_directWriteAvailable = QFileInfo::exists(path) && !targetWritable(dir);
+        m_directWriteAvailable = exists && !targetWritable(dir);
         return SaveResult::IoError;
     }
     if (file.write(data) != data.size() || !file.commit()) {
@@ -256,19 +295,80 @@ SaveResult Document::writeAtomic(const QString &path, const QByteArray &data, Wr
     return SaveResult::Ok;
 }
 
+// In-place write (spec P1.11 §3.1): reserve the space, overwrite from offset
+// 0, trim, fsync. Nothing truncates the file before the new bytes are on disk,
+// and a failed write puts the original bytes back.
 SaveResult Document::writeDirect(const QString &path, const QByteArray &data)
 {
-    QFile file(path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        m_lastError = file.errorString();
+    QFile in(path);
+    if (!in.open(QIODevice::ReadOnly)) {
+        m_lastError = in.errorString();
         return SaveResult::IoError;
     }
-    const bool ok = file.write(data) == data.size() && file.flush()
-        && ::fsync(file.handle()) == 0;
-    if (!ok)
-        m_lastError = file.errorString();
-    file.close();
-    return ok ? SaveResult::Ok : SaveResult::IoError;
+    const QByteArray original = in.readAll();
+    if (in.error() != QFileDevice::NoError) {
+        m_lastError = in.errorString();
+        return SaveResult::IoError;
+    }
+    in.close();
+    const int fd = ::open(QFile::encodeName(path).constData(), O_WRONLY | O_CLOEXEC);
+    if (fd < 0) {
+        m_lastError = qt_error_string(errno);
+        return SaveResult::IoError;
+    }
+    const FdCloser closer{fd};
+    if (data.size() > original.size() && !reserveSpace(fd, path, original, data.size()))
+        return SaveResult::IoError;
+    if (overwriteWith(fd, data))
+        return SaveResult::Ok;
+    m_lastError = qt_error_string(errno);
+    restoreOriginal(fd, path, original);
+    return SaveResult::IoError;
+}
+
+// The fallocate syscall, never posix_fallocate: glibc emulates that on
+// filesystems without fallocate by writing a NUL per block past EOF, which
+// could leave the file padded. EOPNOTSUPP continues unreserved; the restore
+// step still protects the original. Returns false when the save must stop.
+bool Document::reserveSpace(int fd, const QString &path, const QByteArray &original, qint64 size)
+{
+    if (!s_reserveSpace || ::fallocate(fd, 0, 0, static_cast<off_t>(size)) == 0
+        || errno == EOPNOTSUPP) {
+        return true;
+    }
+    m_lastError = qt_error_string(errno);
+    // A failed fallocate can leave part of the range allocated and the size grown.
+    struct stat st {};
+    if (::ftruncate(fd, static_cast<off_t>(original.size())) == 0 && ::fstat(fd, &st) == 0
+        && st.st_size == original.size()) {
+        return false;
+    }
+    restoreOriginal(fd, path, original);
+    return false;
+}
+
+// The original's blocks are still allocated, so writing it back needs no new
+// space on a non-CoW filesystem. If even that fails, keep a copy beside the
+// draft cache so the old contents are not lost with the file.
+void Document::restoreOriginal(int fd, const QString &path, const QByteArray &original)
+{
+    if (overwriteWith(fd, original)) {
+        m_lastDiskState = DiskState::Restored;
+        return;
+    }
+    m_lastDiskState = DiskState::Damaged;
+    const QString dir = FileUtils::unsavedCacheBase() + QStringLiteral(".recovered");
+    const QString copy = dir + QLatin1Char('/') + QFileInfo(path).fileName() + QLatin1Char('.')
+        + QUuid::createUuid().toString(QUuid::WithoutBraces);
+    if (!QDir().mkpath(dir) || !FileUtils::writeFileAtomic(copy, original))
+        return;
+    // writeFileAtomic's buffered QSaveFile can commit a short write and still
+    // report success (seen under RLIMIT_FSIZE on Qt 6.2), so check the size
+    // before telling the user the old contents are safe there.
+    if (QFileInfo(copy).size() == original.size())
+        m_recoveryCopyPath = copy;
+    else
+        QFile::remove(copy);
 }
 
 void Document::finishSave(const QString &path, const QByteArray &written)
@@ -298,16 +398,17 @@ bool Document::lastSaveWasDirect() const
 
 Document::DiskState Document::lastSaveDiskState() const
 {
-    return DiskState::Unchanged;
+    return m_lastDiskState;
 }
 
 QString Document::recoveryCopyPath() const
 {
-    return QString();
+    return m_recoveryCopyPath;
 }
 
-void Document::setReserveSpaceForTest(bool)
+void Document::setReserveSpaceForTest(bool reserve)
 {
+    s_reserveSpace = reserve;
 }
 
 bool Document::isFormatDirty() const
@@ -391,6 +492,7 @@ bool Document::reloadWithEncoding(const QString &name)
 
 qint64 Document::s_mediumThreshold = Document::MEDIUM_FILE_THRESHOLD;
 qint64 Document::s_largeThreshold = Document::LARGE_FILE_THRESHOLD;
+bool Document::s_reserveSpace = true;
 
 // Tests force Medium mode on small fixtures. Pass MEDIUM_FILE_THRESHOLD and
 // LARGE_FILE_THRESHOLD to restore the production values.
