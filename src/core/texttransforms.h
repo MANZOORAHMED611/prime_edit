@@ -3,6 +3,7 @@
 
 #include <QDateTime>
 #include <QLocale>
+#include <QSet>
 #include <QString>
 #include <QStringList>
 
@@ -85,6 +86,23 @@ QString uncommentLines(const QString &text, const CommentSyntax &syntax);
 QString blockComment(const QString &text, const CommentSyntax &syntax);
 // Removes one pair of block delimiters; nullopt when the text is not wrapped.
 std::optional<QString> blockUncomment(const QString &text, const CommentSyntax &syntax);
+
+// Bookmarked-line operations. Lines are 0-based indices into splitLines();
+// indices past the last line are ignored.
+QString keepLines(const QString &text, const QSet<int> &lines, bool keepListed);
+// The listed lines in order, each followed by the text's EOL.
+QString copyLines(const QString &text, const QSet<int> &lines);
+// Each listed line becomes the replacement's lines (its EOLs converted to the
+// text's, a trailing one dropped).
+QString replaceLines(const QString &text, const QSet<int> &lines, const QString &replacement);
+
+// The brace ( ) [ ] { } at pos, or else just before it, and its match.
+struct BracePair {
+    int brace = -1;
+    int match = -1;
+    bool isValid() const { return brace >= 0 && match >= 0; }
+};
+BracePair matchingBrace(const QString &text, int pos);
 
 // Notepad++ Insert Date Time: the time without seconds, a space, then the
 // date, both in the locale's format (short date, or long date for longFormat).

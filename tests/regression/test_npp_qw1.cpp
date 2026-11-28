@@ -9,6 +9,7 @@
 #include "core/texttransforms.h"
 #include "ui/editor.h"
 #include "ui/mainwindow.h"
+#include "ui/searchdialog.h"
 
 #include <QAction>
 #include <QClipboard>
@@ -29,6 +30,13 @@ const QString kArabic = QStringLiteral("مرحبا");  // "marhaban"
 QTextDocument *textDoc(Editor &editor)
 {
     return static_cast<QPlainTextEdit &>(editor).document();
+}
+
+// The Find dialog, created the way Search > Find creates it.
+SearchDialog *searchDialog(MainWindow &mw)
+{
+    QMetaObject::invokeMethod(&mw, "find", Qt::DirectConnection);
+    return mw.findChild<SearchDialog *>();
 }
 
 // Triggers the menu action with this exact text; false when there is none.
@@ -646,6 +654,160 @@ private slots:
         QCOMPARE(editor->toPlainText(), QStringLiteral("bm90IGJhc2U2NCE="));
         QVERIFY(trigger(mw, QStringLiteral("Base64 Decode")));
         QCOMPARE(editor->toPlainText(), QStringLiteral("not base64!"));
+    }
+
+    // ---- group 7: search and navigation -----------------------------------
+    void matchingBrace()
+    {
+        const QString text = QStringLiteral("a(b[c]d)e");
+        QCOMPARE(TextTransforms::matchingBrace(text, 1).match, 7);
+        QCOMPARE(TextTransforms::matchingBrace(text, 8).brace, 7);   // just after ')'
+        QCOMPARE(TextTransforms::matchingBrace(text, 8).match, 1);
+        QCOMPARE(TextTransforms::matchingBrace(text, 4).match, 5);   // 'c' is no brace; '[' before it is
+        QVERIFY(!TextTransforms::matchingBrace(text, 0).isValid());
+        QVERIFY(!TextTransforms::matchingBrace(QStringLiteral("((a)"), 0).isValid());
+        QVERIFY(!TextTransforms::matchingBrace(QString(), 0).isValid());
+        QCOMPARE(TextTransforms::matchingBrace(QStringLiteral("{[}]"), 0).match, 2);
+    }
+    void bookmarkedLineFunctions()
+    {
+        QCOMPARE(keepLines(QStringLiteral("a\nb\nc\n"), {0, 2}, true), QStringLiteral("a\nc\n"));
+        QCOMPARE(keepLines(QStringLiteral("a\nb\nc\n"), {0, 2}, false), QStringLiteral("b\n"));
+        QCOMPARE(keepLines(QStringLiteral("a\nb"), {0, 1}, false), QString());
+        QCOMPARE(keepLines(QStringLiteral("a\r\nb\r\nc"), {1, 9}, true), QStringLiteral("b"));
+        QCOMPARE(copyLines(QStringLiteral("a\r\nb\r\nc"), {0, 2}), QStringLiteral("a\r\nc\r\n"));
+        QCOMPARE(copyLines(QStringLiteral("a\nb"), {}), QString());
+        QCOMPARE(replaceLines(QStringLiteral("a\nb\nc"), {1}, QStringLiteral("X\r\nY\r\n")),
+                 QStringLiteral("a\nX\nY\nc"));
+        QCOMPARE(replaceLines(QStringLiteral("a\nb\nc"), {0, 2}, QStringLiteral("Z")), QStringLiteral("Z\nb\nZ"));
+        QCOMPARE(replaceLines(kArabic, {0}, QString()), QString());
+    }
+    void selectAndFindNextUsesWordUnderCursor()
+    {
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.currentEditor();
+        editor->setPlainText(QStringLiteral("foo bar Foo foo"));
+        QTextCursor cursor = editor->textCursor();
+        cursor.setPosition(1);
+        editor->setTextCursor(cursor);
+        QVERIFY(trigger(mw, QStringLiteral("Select and Find Next")));
+        QCOMPARE(editor->textCursor().selectionStart(), 12);  // case-sensitive: skips "Foo"
+        QCOMPARE(editor->textCursor().selectedText(), QStringLiteral("foo"));
+        QVERIFY(trigger(mw, QStringLiteral("Select and Find Previous")));
+        QCOMPARE(editor->textCursor().selectionStart(), 0);
+        // Backward wrap: from the first match, Previous goes round to the last.
+        // Editor::findNext used to restart a backward search at position 0.
+        QVERIFY(trigger(mw, QStringLiteral("Select and Find Previous")));
+        QCOMPARE(editor->textCursor().selectionStart(), 12);
+    }
+    void selectAllBetweenMatchingBraces()
+    {
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.currentEditor();
+        editor->setPlainText(QStringLiteral("x(a(b)c)y"));
+        QTextCursor cursor = editor->textCursor();
+        cursor.setPosition(1);
+        editor->setTextCursor(cursor);
+        QVERIFY(trigger(mw, QStringLiteral("Select All between Matching Braces")));
+        QCOMPARE(editor->textCursor().selectedText(), QStringLiteral("(a(b)c)"));
+    }
+    void bookmarkLineOperations()
+    {
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.currentEditor();
+        editor->setPlainText(QStringLiteral("l1\nl2\nl3\nl4"));
+        editor->setBookmarks({2, 4});
+        QVERIFY(trigger(mw, QStringLiteral("Copy Bookmarked Lines")));
+        QCOMPARE(QGuiApplication::clipboard()->text(), QStringLiteral("l2\nl4\n"));
+        QVERIFY(trigger(mw, QStringLiteral("Inverse Bookmark")));
+        QCOMPARE(editor->bookmarks(), (QSet<int>{1, 3}));
+        QVERIFY(trigger(mw, QStringLiteral("Remove Unmarked Lines")));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("l1\nl3"));
+        QCOMPARE(editor->bookmarks(), (QSet<int>{1, 2}));
+        editor->undo();
+        QCOMPARE(editor->toPlainText(), QStringLiteral("l1\nl2\nl3\nl4"));
+
+        editor->setBookmarks({1, 3});
+        QGuiApplication::clipboard()->setText(QStringLiteral("A\nB\n"));
+        QVERIFY(trigger(mw, QStringLiteral("Paste to (Replace) Bookmarked Lines")));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("A\nB\nl2\nA\nB\nl4"));
+        QCOMPARE(editor->bookmarks(), (QSet<int>{1, 4}));
+        QVERIFY(trigger(mw, QStringLiteral("Cut Bookmarked Lines")));
+        QCOMPARE(QGuiApplication::clipboard()->text(), QStringLiteral("A\nA\n"));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("B\nl2\nB\nl4"));
+        QVERIFY(editor->bookmarks().isEmpty());
+        editor->setBookmarks({4});
+        QVERIFY(trigger(mw, QStringLiteral("Remove Bookmarked Lines")));
+        QCOMPARE(editor->toPlainText(), QStringLiteral("B\nl2\nB"));
+    }
+    void replaceAndCountInSelection()
+    {
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.currentEditor();
+        editor->setPlainText(QStringLiteral("a a\na a"));
+        QTextCursor cursor = editor->textCursor();
+        cursor.setPosition(4);
+        cursor.setPosition(7, QTextCursor::KeepAnchor);
+        editor->setTextCursor(cursor);
+        SearchDialog *dialog = searchDialog(mw);
+        QVERIFY(dialog);
+        dialog->setSearchText(QStringLiteral("a"));
+        dialog->setReplaceText(QStringLiteral("b"));
+        dialog->setInSelection(true);
+        emit dialog->replaceAll();
+        QCOMPARE(editor->toPlainText(), QStringLiteral("a a\nb b"));
+        editor->undo();
+        QCOMPARE(editor->toPlainText(), QStringLiteral("a a\na a"));
+        editor->selectAll();
+        dialog->setInSelection(false);
+        emit dialog->replaceAll();
+        QCOMPARE(editor->toPlainText(), QStringLiteral("b b\nb b"));
+    }
+    void markInSelection()
+    {
+        MainWindow mw;
+        mw.show();
+        Editor *editor = mw.currentEditor();
+        editor->setPlainText(QStringLiteral("a a\na a"));
+        QTextCursor cursor = editor->textCursor();
+        cursor.setPosition(0);
+        cursor.setPosition(3, QTextCursor::KeepAnchor);
+        editor->setTextCursor(cursor);
+        SearchDialog *dialog = searchDialog(mw);
+        dialog->showTab(3);
+        dialog->setSearchText(QStringLiteral("a"));
+        dialog->setInSelection(true);
+        emit dialog->markAll();
+        QCOMPARE(editor->markCount(), 2);
+        dialog->setInSelection(false);
+        emit dialog->markAll();
+        QCOMPARE(editor->markCount(), 4);
+    }
+    // In memory only: a file-backed document is changed in its editor and
+    // marked modified, and its file on disk is left alone.
+    void replaceAllInAllOpenedDocuments()
+    {
+        regression::TempDir tmp;
+        const QString path = tmp.filePath(QStringLiteral("disk.txt"));
+        QVERIFY(regression::writeBytes(path, "x on disk\n"));
+        MainWindow mw;
+        mw.show();
+        Editor *first = mw.currentEditor();
+        first->setPlainText(QStringLiteral("x1 x"));
+        Editor *second = mw.openFile(path);
+        QVERIFY(second && second != first);
+        SearchDialog *dialog = searchDialog(mw);
+        dialog->setSearchText(QStringLiteral("x"));
+        dialog->setReplaceText(QStringLiteral("y"));
+        emit dialog->replaceAllInAllOpen();
+        QCOMPARE(first->toPlainText(), QStringLiteral("y1 y"));
+        QCOMPARE(second->toPlainText(), QStringLiteral("y on disk\n"));
+        QVERIFY(second->document()->isModified());
+        QCOMPARE(regression::readBytes(path), QByteArray("x on disk\n"));
     }
 
     // Qt's text controls claim some Ctrl letters on X11 (Ctrl+K deletes to the

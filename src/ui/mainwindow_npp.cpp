@@ -28,11 +28,15 @@ bool MainWindow::transformCurrent(TransformScope scope, const TextTransform &fn)
     if (!editor)
         return false;
     if (editor->isReadOnly()) {
-        showNotification(tr("'%1' is read-only, so it was not changed.")
-                             .arg(editor->document()->displayName()));
+        notifyReadOnly(editor);
         return false;
     }
     return editor->applyTextTransform(scope, fn);
+}
+
+void MainWindow::notifyReadOnly(const Editor *editor)
+{
+    showNotification(tr("'%1' is read-only, so it was not changed.").arg(editor->document()->displayName()));
 }
 
 void MainWindow::removeEmptyLines()

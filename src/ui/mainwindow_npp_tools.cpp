@@ -45,8 +45,7 @@ void MainWindow::insertDateTime(bool longFormat)
     if (!editor)
         return;
     if (editor->isReadOnly()) {
-        showNotification(tr("'%1' is read-only, so it was not changed.")
-                             .arg(editor->document()->displayName()));
+        notifyReadOnly(editor);
         return;
     }
     const QString stamp = TextTransforms::formatDateTime(QDateTime::currentDateTime(),

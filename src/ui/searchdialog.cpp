@@ -21,6 +21,7 @@ SearchDialog::SearchDialog(QWidget *parent)
     setupReplaceTab();
     setupFindInFilesTab();
     setupMarkTab();
+    setupNppOptions();
 
     // Status label
     m_statusLabel = new QLabel(this);
@@ -296,6 +297,54 @@ void SearchDialog::setupMarkTab()
     connect(closeBtn, &QPushButton::clicked, this, &QDialog::close);
 
     m_tabWidget->addTab(markTab, tr("Mark"));
+}
+
+// Notepad++ additions, placed into the tabs built above: an "In selection"
+// box on Find, Replace and Mark (one option, kept in step), and a Replace All
+// in All Opened Documents button after Replace All.
+void SearchDialog::setupNppOptions()
+{
+    auto *findOptions = qobject_cast<QVBoxLayout *>(m_matchCase->parentWidget()->layout());
+    auto *replaceGrid = qobject_cast<QGridLayout *>(m_replaceCombo->parentWidget()->layout());
+    auto *markGrid = qobject_cast<QGridLayout *>(m_markFindCombo->parentWidget()->layout());
+    Q_ASSERT(findOptions && replaceGrid && markGrid);  // built by the setup*Tab functions
+
+    for (QWidget *owner : {m_matchCase->parentWidget(), m_replaceCombo->parentWidget(),
+                           m_markFindCombo->parentWidget()}) {
+        QCheckBox *box = new QCheckBox(tr("In select&ion"), owner);
+        m_inSelectionChecks.append(box);
+        connect(box, &QCheckBox::toggled, this, &SearchDialog::setInSelection);
+    }
+    findOptions->addWidget(m_inSelectionChecks.at(0));
+    replaceGrid->addWidget(m_inSelectionChecks.at(1), 3, 0, 1, 3);
+    markGrid->addWidget(m_inSelectionChecks.at(2), 1, 2);
+
+    // Row 2 of the Replace tab is its button row: Find Next, Replace, Replace All, ...
+    auto *buttons = qobject_cast<QHBoxLayout *>(replaceGrid->itemAtPosition(2, 0)->layout());
+    Q_ASSERT(buttons);
+    QPushButton *allOpen = new QPushButton(tr("Replace All in All &Opened Documents"),
+                                           m_replaceCombo->parentWidget());
+    buttons->insertWidget(3, allOpen);
+    connect(allOpen, &QPushButton::clicked, this, [this]() {
+        addToHistory(m_replaceFindCombo->currentText());
+        emit replaceAllInAllOpen();
+    });
+}
+
+bool SearchDialog::inSelection() const
+{
+    return !m_inSelectionChecks.isEmpty() && m_inSelectionChecks.first()->isChecked();
+}
+
+void SearchDialog::setInSelection(bool on)
+{
+    for (QCheckBox *box : m_inSelectionChecks)
+        box->setChecked(on);  // no toggled signal when already in that state
+}
+
+void SearchDialog::setReplaceText(const QString &text)
+{
+    m_replaceCombo->setCurrentText(text);
 }
 
 void SearchDialog::setSearchText(const QString &text)

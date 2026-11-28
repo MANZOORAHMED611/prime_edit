@@ -410,6 +410,7 @@ void MainWindow::setupMenus()
     m_prevBookmarkAction->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_F2));
 
     m_clearBookmarksAction = m_searchMenu->addAction(tr("Clear All Book&marks"), this, &MainWindow::clearAllBookmarks);
+    setupNppSearchMenu();  // Select and Find, braces, bookmarked-line operations
 
     // ============================================================
     // View menu
@@ -688,13 +689,6 @@ void MainWindow::setupStatusBar()
 
 void MainWindow::setupShortcuts()
 {
-    // Bracket matching: Ctrl+B jumps to matching bracket
-    QShortcut *bracketShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_B), this);
-    connect(bracketShortcut, &QShortcut::activated, this, [this]() {
-        Editor *e = currentEditor();
-        if (e) e->jumpToMatchingBracket();
-    });
-
     // Go to Definition (F12)
     QShortcut *gotoDefShortcut = new QShortcut(QKeySequence(Qt::Key_F12), this);
     connect(gotoDefShortcut, &QShortcut::activated,
@@ -1597,47 +1591,8 @@ void MainWindow::toLowerCase()
 
 void MainWindow::find()
 {
-    if (!m_searchDialog) {
-        m_searchDialog = new SearchDialog(this);
-        connect(m_searchDialog, &SearchDialog::findNext, this, &MainWindow::findNext);
-        connect(m_searchDialog, &SearchDialog::findPrevious, this, &MainWindow::findPrevious);
-        connect(m_searchDialog, &SearchDialog::replaceOne, this, [this]() {
-            Editor *e = currentEditor();
-            if (!e || !m_searchDialog) return;
-            if (!e->selectedText().isEmpty()) {
-                e->insertPlainText(m_searchDialog->replaceText());
-            }
-            findNext();
-        });
-        connect(m_searchDialog, &SearchDialog::replaceAll, this, [this]() {
-            Editor *e = currentEditor();
-            if (!e || !m_searchDialog) return;
-            SearchEngine engine;
-            QString result = engine.replaceInText(  // rawText keeps U+00A0 and U+2028 (D11)
-                e->rawText(), m_searchDialog->searchText(),
-                m_searchDialog->replaceText(), m_searchDialog->searchOptions());
-            e->selectAll();
-            e->insertPlainText(result);
-        });
-        connect(m_searchDialog, &SearchDialog::countRequested, this, &MainWindow::onCountRequested);
-        connect(m_searchDialog, &SearchDialog::findAllInCurrent, this, &MainWindow::onFindAllInCurrent);
-        connect(m_searchDialog, &SearchDialog::findAllInAllOpen, this, &MainWindow::onFindAllInAllOpen);
-        connect(m_searchDialog, &SearchDialog::findInFiles, this, &MainWindow::onFindInFiles);
-        connect(m_searchDialog, &SearchDialog::markAll, this, [this]() {
-            Editor *e = currentEditor();
-            if (e && m_searchDialog) {
-                e->markAll(m_searchDialog->searchText(), m_searchDialog->searchOptions());
-            }
-        });
-        connect(m_searchDialog, &SearchDialog::clearMarks, this, [this]() {
-            Editor *e = currentEditor();
-            if (e) e->clearMarks();
-        });
-    }
-    Editor *e = currentEditor();
-    if (e && !e->selectedText().isEmpty()) {
-        m_searchDialog->setSearchText(e->selectedText());
-    }
+    ensureSearchDialog();
+    fillSearchFromSelection();
     m_searchDialog->showTab(0);
     m_searchDialog->show();
     m_searchDialog->raise();
@@ -1678,19 +1633,12 @@ void MainWindow::findPrevious()
 
 void MainWindow::replace()
 {
-    if (!m_searchDialog) {
-        find();
-    }
-    if (m_searchDialog) {
-        Editor *e = currentEditor();
-        if (e && !e->selectedText().isEmpty()) {
-            m_searchDialog->setSearchText(e->selectedText());
-        }
-        m_searchDialog->showTab(1);
-        m_searchDialog->show();
-        m_searchDialog->raise();
-        m_searchDialog->activateWindow();
-    }
+    ensureSearchDialog();
+    fillSearchFromSelection();
+    m_searchDialog->showTab(1);
+    m_searchDialog->show();
+    m_searchDialog->raise();
+    m_searchDialog->activateWindow();
 }
 
 void MainWindow::showIncrementalSearch()
@@ -1792,9 +1740,11 @@ void MainWindow::onCountRequested()
 {
     Editor *e = currentEditor();
     if (!e || !m_searchDialog) return;
+    const std::optional<QString> text = searchScopeText(e);  // whole text, or "In selection"
+    if (!text) return;
 
     SearchEngine engine;
-    int count = engine.matchCount(e->toPlainText(),
+    int count = engine.matchCount(*text,
                                    m_searchDialog->searchText(),
                                    m_searchDialog->searchOptions());
     QMessageBox::information(this, tr("Count"),

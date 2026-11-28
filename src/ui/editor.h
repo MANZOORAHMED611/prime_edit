@@ -88,7 +88,8 @@ public:
                    QTextDocument::FindFlags flags = QTextDocument::FindFlags());
 
     // Mark system
-    void markAll(const QString &pattern, const SearchEngine::Options &opts);
+    // Marks matches that lie within [from, to); to < 0 means the end.
+    void markAll(const QString &pattern, const SearchEngine::Options &opts, int from = 0, int to = -1);
     void clearMarks();
     int markCount() const { return m_markSelections.size(); }
 
@@ -127,6 +128,9 @@ public:
     QString textInRange(int start, int end) const;
     void replaceRange(int start, int end, const QString &text, bool selectResult);
     void insertBlankLine(bool above);
+    void setBookmarks(const QSet<int> &lines);  // 1-based line numbers
+    QString selectWordIfNoSelection();
+    bool selectBetweenMatchingBraces();
     // The current language's comment delimiters (empty for plain text).
     TextTransforms::CommentSyntax commentSyntax() const;
 

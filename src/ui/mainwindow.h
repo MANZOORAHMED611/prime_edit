@@ -333,6 +333,24 @@ private:
     void showTextHash(const QString &name, CodecTransforms::HashAlgorithm algorithm);
     void showFileHashes(const QString &name, CodecTransforms::HashAlgorithm algorithm);
     void showHashResult(const QString &title, const QString &result);
+    void notifyReadOnly(const Editor *editor);
+
+    // Search additions (mainwindow_npp_search.cpp, mainwindow_npp_find.cpp)
+    void setupNppSearchMenu();
+    void selectAndFind(bool backward);
+    bool copyBookmarkedLines();
+    void cutBookmarkedLines();
+    void pasteToBookmarkedLines();
+    void removeBookmarkedLines();
+    void removeUnmarkedLines();
+    void inverseBookmark();
+    void ensureSearchDialog();
+    void fillSearchFromSelection();
+    std::optional<QString> searchScopeText(Editor *e);
+    int replaceAllIn(Editor *e, TransformScope scope);
+    void replaceAllInCurrent();
+    void replaceAllInAllOpen();
+    void markAllFromDialog();
     // Null, with a notification, when the current language has no comments.
     Editor *commentableEditor(bool needBlock);
     QAction *addTransformAction(QMenu *menu, const QString &text, TransformScope scope,

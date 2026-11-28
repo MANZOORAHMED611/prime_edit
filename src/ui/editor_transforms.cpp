@@ -3,6 +3,7 @@
 // read and writes their result back. textInRange and replaceRange are the only
 // places that touch QTextDocument, so the Scintilla port rewrites only them.
 #include "editor.h"
+#include "linenumberarea.h"
 #include "syntax/highlighter.h"
 
 #include <QTextBlock>
@@ -41,7 +42,8 @@ QPair<int, int> Editor::scopeRange(TransformScope scope) const
     const QTextDocument *doc = QPlainTextEdit::document();
     if (scope == TransformScope::Selection)
         return {cursor.selectionStart(), cursor.selectionEnd()};
-    if (!cursor.hasSelection() && scope == TransformScope::LinesOrDocument)
+    if (scope == TransformScope::Document
+        || (!cursor.hasSelection() && scope == TransformScope::LinesOrDocument))
         return {0, doc->characterCount() - 1};
 
     const QTextBlock first = doc->findBlock(cursor.selectionStart());
@@ -65,6 +67,37 @@ void Editor::insertBlankLine(bool above)
     QTextCursor cursor = textCursor();
     cursor.setPosition(above ? at : at + 1);
     setTextCursor(cursor);
+}
+
+void Editor::setBookmarks(const QSet<int> &lines)
+{
+    m_bookmarks = lines;
+    m_lineNumberArea->update();
+}
+
+// Notepad++ Select and Find Next: with nothing selected, the word under the
+// cursor becomes the selection.
+QString Editor::selectWordIfNoSelection()
+{
+    QTextCursor cursor = textCursor();
+    if (!cursor.hasSelection()) {
+        cursor.select(QTextCursor::WordUnderCursor);
+        setTextCursor(cursor);
+    }
+    return textInRange(cursor.selectionStart(), cursor.selectionEnd());
+}
+
+// Selects from the brace at (or before) the cursor to its match, both included.
+bool Editor::selectBetweenMatchingBraces()
+{
+    const TextTransforms::BracePair pair = TextTransforms::matchingBrace(rawText(), textCursor().position());
+    if (!pair.isValid())
+        return false;
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(qMin(pair.brace, pair.match));
+    cursor.setPosition(qMax(pair.brace, pair.match) + 1, QTextCursor::KeepAnchor);
+    setTextCursor(cursor);
+    return true;
 }
 
 TextTransforms::CommentSyntax Editor::commentSyntax() const

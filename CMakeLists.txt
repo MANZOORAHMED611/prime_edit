@@ -63,6 +63,7 @@ set(CORE_SOURCES
     src/core/texttransforms_sort.cpp
     src/core/texttransforms_comment.cpp
     src/core/codectransforms.cpp
+    src/core/texttransforms_lines.cpp
 )
 
 set(UI_SOURCES
@@ -71,6 +72,8 @@ set(UI_SOURCES
     src/ui/mainwindow_npp.cpp
     src/ui/mainwindow_npp_format.cpp
     src/ui/mainwindow_npp_tools.cpp
+    src/ui/mainwindow_npp_search.cpp
+    src/ui/mainwindow_npp_find.cpp
     src/ui/tabwidget.cpp
     src/ui/editor.cpp
     src/ui/editor_transforms.cpp

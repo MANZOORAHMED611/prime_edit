@@ -638,8 +638,10 @@ bool Editor::findNext(const QString &text, QTextDocument::FindFlags flags)
 
     QTextCursor cursor = QPlainTextEdit::document()->find(text, textCursor(), flags);
     if (cursor.isNull()) {
-        // Wrap around
-        cursor = QPlainTextEdit::document()->find(text, 0, flags);
+        // Wrap around: a backward search restarts from the end, not from 0
+        const int restart = (flags & QTextDocument::FindBackward)
+                                ? QPlainTextEdit::document()->characterCount() - 1 : 0;
+        cursor = QPlainTextEdit::document()->find(text, restart, flags);
     }
 
     if (!cursor.isNull()) {
@@ -1238,8 +1240,9 @@ void Editor::updateExtraSelections()
     setExtraSelections(allSelections);
 }
 
-void Editor::markAll(const QString &pattern, const SearchEngine::Options &opts)
+void Editor::markAll(const QString &pattern, const SearchEngine::Options &opts, int from, int to)
 {
+    const int end = to < 0 ? QPlainTextEdit::document()->characterCount() : to;
     m_markSelections.clear();
 
     if (pattern.isEmpty()) {
@@ -1258,6 +1261,8 @@ void Editor::markAll(const QString &pattern, const SearchEngine::Options &opts)
 
         QTextBlock block = QPlainTextEdit::document()->findBlockByNumber(r.line - 1);
         if (!block.isValid()) continue;
+        const int start = block.position() + r.column;
+        if (start < from || start + r.length > end) continue;
 
         sel.cursor = QTextCursor(block);
         sel.cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, r.column);
