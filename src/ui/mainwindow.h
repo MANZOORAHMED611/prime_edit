@@ -470,6 +470,13 @@ private:
     void setupSessionAutosave();
     QTimer *m_sessionAutosaveTimer = nullptr;
     static int s_sessionAutosaveIntervalMs;
+
+    // Draft-cache backup every 30 s (spec P1.11 3.2, 3.3): objectName
+    // "draftBackupTimer", started and stopped with the session autosave.
+    void backupDrafts();
+    bool confirmQuitWithoutDrafts();
+    QTimer *m_draftBackupTimer = nullptr;
+    bool m_draftCacheFailing = false;
 };
 
 #endif // MAINWINDOW_H
